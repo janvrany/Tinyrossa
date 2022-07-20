@@ -1,0 +1,27 @@
+# Local customizations
+GNUmakefile.local
+
+# Pharo 
+pharo/pharo*
+pharo/Pharo*
+pharo/icon-packs
+pharo/progress.log
+pharo/*.image
+pharo/*.changes
+pharo/*Test.xml
+pharo/bin
+pharo/lib
+pharo/Pharo*.zip
+
+# Smalltalk/X
+stx/stx
+stx/package-cache
+stx/*Test.xml
+
+# opcodesgen by-products
+opcodesgen/opcodes.m4
+opcodesgen/opcodes.st
+
+# git merge by-products
+*.orig
+
