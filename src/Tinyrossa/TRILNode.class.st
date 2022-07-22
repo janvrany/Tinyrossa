@@ -12,11 +12,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-TRILNode class >> opcode: opcode arguments: arguments [
-	"Create a new node with given opcode and arguments.
-	 Not to be used directly, use TRILBuilder instead."
+TRILNode class >> new [
+	^ self shouldNotImplement. "Use opcode:symbol:constant:children instead"
+]
 
-	^ self new initializeWithOpcode: opcode arguments: arguments
+{ #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
+	^ self basicNew initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg
 ]
 
 { #category : #accessing }
@@ -46,24 +48,16 @@ TRILNode >> constant [
 ]
 
 { #category : #initialization }
-TRILNode >> initializeWithOpcode: opcodeArg arguments: arguments [
-	opcode := opcodeArg.
-
-	opcode isLoadConst ifTrue: [ 
-		self assert: arguments isCollection not description: 'Invalid arguments'.
-		opcode validateConstant: arguments.
-		constant := arguments.
-	] ifFalse: [  
-		self assert: arguments isCollection description: 'Invalid arguments'.
-		opcode validateChildren: arguments.
-		children := arguments.
-		children do: [:each | each parent: self ]
-	].
-
-	self assert: (constant isNil or: [ symbol isNil ])
+TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
+	self assert: (constantArg isNil or: [ symbolArg isNil ])
 		description: 'Node cannot have both a constant and a symbol'.
-	self assert: (constant isNil or: [ children isEmptyOrNil ])
+	self assert: (constantArg isNil or: [ childrenArg isEmptyOrNil ])
 		description: 'Node cannot have both constant and children'.
+
+	opcode := opcodeArg.
+	symbol := symbolArg.
+	constant := constantArg.
+	children := childrenArg.
 ]
 
 { #category : #accessing }

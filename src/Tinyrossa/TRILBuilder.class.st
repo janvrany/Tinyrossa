@@ -653,7 +653,26 @@ TRILBuilder >> bucmplt: arguments [
 
 { #category : #'building-private' }
 TRILBuilder >> build: opcode arguments: arguments [
-	^ TRILNode opcode: opcode arguments: arguments
+	| symbol constant children node |
+
+	opcode isLoadConst ifTrue: [ 
+		self assert: arguments isCollection not description: 'Invalid arguments'.
+		opcode validateConstant: arguments.
+		constant := arguments.
+	] ifFalse: [ (opcode hasSymbolRef and: [ opcode hasChildren not ]) ifTrue: [
+		self assert: arguments isString description: 'Invalid arguments'.
+		"opcode validateSymbol: WTF?"
+		symbol := arguments.
+	] ifFalse: [  
+		self assert: arguments isCollection description: 'Invalid arguments'.
+		opcode validateChildren: arguments.
+		children := arguments.
+	]]. 
+
+	node := TRILNode opcode: opcode symbol: symbol constant: constant children: children.
+	children notNil ifTrue:[ children do: [:each | each parent: node ] ].
+
+	^ node
 ]
 
 { #category : #building }
