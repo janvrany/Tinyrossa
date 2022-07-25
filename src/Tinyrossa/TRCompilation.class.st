@@ -2,6 +2,7 @@ Class {
 	#name : #TRCompilation,
 	#superclass : #Object,
 	#instVars : [
+		'symbolManager',
 		'il',
 		'codeBuffer'
 	],
@@ -38,7 +39,8 @@ TRCompilation >> compile [
 
 	codegen := self codegen.
 	codeBuffer := codegen codeBuffer.
-	codegen selectInstructions: il.
+	codegen generatePrologue.
+	codegen generateCode: il.
 	codegen allocateRegisters.
 ]
 
@@ -52,6 +54,7 @@ TRCompilation >> initialize [
 	"Invoked when a new instance is created."
 
 	il := OrderedCollection new.
+	symbolManager := TRSymbolManager new
 ]
 
 { #category : #optimizing }
@@ -60,4 +63,9 @@ TRCompilation >> optimize [
 
 	simplifier := TRILSimplifier forCompilation: self.
 	simplifier simplify.
+]
+
+{ #category : #accessing }
+TRCompilation >> symbolManager [
+	^ symbolManager
 ]

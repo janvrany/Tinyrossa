@@ -37,7 +37,7 @@ TRILSimplifier class >> new [
 
 { #category : #accessing }
 TRILSimplifier >> builder [
-	^ TRILBuilder new
+	^ TRILBuilder forCompilation: compilation
 ]
 
 { #category : #evaluation }

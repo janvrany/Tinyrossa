@@ -49,6 +49,8 @@ TRILNode >> constant [
 
 { #category : #initialization }
 TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
+	self assert: (symbolArg isNil or:[symbolArg isTRSymbol]).
+	self assert: (constantArg isNil or:[constantArg isNumber]).
 	self assert: (constantArg isNil or: [ symbolArg isNil ])
 		description: 'Node cannot have both a constant and a symbol'.
 	self assert: (constantArg isNil or: [ childrenArg isEmptyOrNil ])

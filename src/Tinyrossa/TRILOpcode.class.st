@@ -131,5 +131,18 @@ TRILOpcode >> validateChildren: aCollection [
 
 { #category : #validation }
 TRILOpcode >> validateConstant: aNumber [
-	type validateConstant: aNumber.
+	self isLoadConst ifTrue: [
+		type validateConstant: aNumber.
+	] ifFalse: [ 
+		self assert: aNumber isNil.
+	].
+]
+
+{ #category : #validation }
+TRILOpcode >> validateSymbol: aTRSymbol [
+	self hasSymbolRef ifTrue: [ 
+		self assert: aTRSymbol notNil.
+	] ifFalse: [ 
+		self assert: aTRSymbol isNil.
+	].
 ]

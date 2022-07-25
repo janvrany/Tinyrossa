@@ -1,21 +1,8 @@
 Class {
 	#name : #TRILFunctionBuilder,
 	#superclass : #TRILBuilder,
-	#instVars : [
-		'compilation'
-	],
 	#category : #'Tinyrossa-IL'
 }
-
-{ #category : #'instance creation' }
-TRILFunctionBuilder class >> forCompilation: aTRCompilation [
-	^ self basicNew initializeWithCompilation: aTRCompilation
-]
-
-{ #category : #'instance creation' }
-TRILFunctionBuilder class >> new [
-	self shouldNotImplement. "Use #forCompilation:"
-]
 
 { #category : #'building-private' }
 TRILFunctionBuilder >> build: opcode arguments: arguments [
@@ -28,7 +15,7 @@ TRILFunctionBuilder >> build: opcode arguments: arguments [
 	^ node.
 ]
 
-{ #category : #initialization }
-TRILFunctionBuilder >> initializeWithCompilation: aTRCompilation [
-	compilation := aTRCompilation.
+{ #category : #'defining symbols' }
+TRILFunctionBuilder >> defineParameter: name type: type [
+	compilation symbolManager defineParameter: name type: type
 ]
