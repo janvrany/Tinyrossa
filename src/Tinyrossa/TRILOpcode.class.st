@@ -7,7 +7,11 @@ Class {
 		'props1',
 		'props2',
 		'props3',
-		'children'
+		'children',
+		'swapChildrenOpcode',
+		'reverseBranchOpcode',
+		'booleanCompareOpcode',
+		'ifCompareOpcode'
 	],
 	#pools : [
 		'TRILOpcodeProps1',
@@ -16,11 +20,6 @@ Class {
 	],
 	#category : #'Tinyrossa-IL'
 }
-
-{ #category : #private }
-TRILOpcode class >> from: anArray [
-	^ anArray changeClassTo: self
-]
 
 { #category : #accessing }
 TRILOpcode class >> named: aString [
@@ -33,6 +32,11 @@ TRILOpcode class >> named: aString [
 	"
 ]
 
+{ #category : #accessing }
+TRILOpcode >> booleanCompareOpcode [
+	^ booleanCompareOpcode
+]
+
 { #category : #testing }
 TRILOpcode >> hasChildren [
 	^ children isNil or:[children notEmpty]
@@ -41,6 +45,23 @@ TRILOpcode >> hasChildren [
 { #category : #testing }
 TRILOpcode >> hasSymbolRef [
 	^ props1 bitTest: HasSymbolRef
+]
+
+{ #category : #accessing }
+TRILOpcode >> ifCompareOpcode [
+	^ ifCompareOpcode
+]
+
+{ #category : #initialization }
+TRILOpcode >> initializeFrom: anArray [
+	"
+	Private - initialize opcode from specification. Only to be called
+	from TRILOpcodes class >> initialize!
+	"
+	self assert: anArray size == self class instSize.
+	1 to: anArray size do: [:instIndex | 
+		self instVarAt: instIndex put: (anArray at: instIndex).
+	].
 ]
 
 { #category : #inspecting }
@@ -55,6 +76,16 @@ TRILOpcode >> inspectorExtraAttributes [
 { #category : #testing }
 TRILOpcode >> isArithmetic [
 	^ props1 bitTest: (Add | Sub | Mul | Div | Rem)
+]
+
+{ #category : #testing }
+TRILOpcode >> isCompare [
+	^ props1 bitTest: BooleanCompare
+]
+
+{ #category : #testing }
+TRILOpcode >> isInvalid [
+	^ name = 'invalid'
 ]
 
 { #category : #testing }
@@ -105,6 +136,16 @@ TRILOpcode >> printProps: propsPool value: propsValue on: stream [
 			stream nextPutAll: propName.
 		].
 	].
+]
+
+{ #category : #accessing }
+TRILOpcode >> reverseBranchOpcode [
+	^ reverseBranchOpcode
+]
+
+{ #category : #accessing }
+TRILOpcode >> swapChildrenOpcode [
+	^ swapChildrenOpcode
 ]
 
 { #category : #accessing }
