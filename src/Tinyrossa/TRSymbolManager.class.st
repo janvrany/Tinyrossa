@@ -20,6 +20,12 @@ TRSymbolManager >> define: aTRSymbol [
 	self assert: (self hasSymbolNamed: aTRSymbol name) not.
 
 	symbols add: aTRSymbol.
+	^ aTRSymbol
+]
+
+{ #category : #defining }
+TRSymbolManager >> defineLabel: block [
+	^ self define: (self newLabel: block)
 ]
 
 { #category : #defining }
@@ -27,7 +33,7 @@ TRSymbolManager >> defineParameter: name type: type [
 	| index |
 
 	index := (symbols count: [ :symbol | symbol isTRParameterSymbol ]) + 1.
-	self define: (self newParameter: name type: type index: index)
+	^ self define: (self newParameter: name type: type index: index)
 ]
 
 { #category : #queries }
@@ -42,6 +48,13 @@ TRSymbolManager >> initialize [
 ]
 
 { #category : #lookup }
+TRSymbolManager >> lookupLabelByBlock: aTRILBlock [
+	^ symbols 
+		detect: [:symbol | symbol isTRLabelSymbol and:[symbol block == aTRILBlock ] ]
+		ifNone: [ nil ]
+]
+
+{ #category : #lookup }
 TRSymbolManager >> lookupSymbolByName: aString [ 
 	^ symbols 
 		detect: [:symbol | symbol name = aString ]
@@ -51,6 +64,11 @@ TRSymbolManager >> lookupSymbolByName: aString [
 { #category : #lookup }
 TRSymbolManager >> lookupSymbolsByType: symbolClass [
 	^ symbols select: [ :symbol | symbol isKindOf: symbolClass ].
+]
+
+{ #category : #creating }
+TRSymbolManager >> newLabel: block [ 
+	^ TRLabelSymbol block: block
 ]
 
 { #category : #creating }

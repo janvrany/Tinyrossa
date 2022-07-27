@@ -42,6 +42,19 @@ TRCompilationExamples >> example01_meaningOfLife [
 		{ builder iadd: 
 			{ builder iconst: 31 .
 			  builder iconst: 11 } }.
+
+	compilation buildFinished. "Indicate we're done building/"
+
+	compilation il. "Only convenience inspection."
+
+	compilation optimize.
+	compilation il. "Only convenience inspection."
+
+	compilation compile.
+	compilation codeBuffer. "Only convenience inspection."
+
+	self halt.
+]
 	compilation il. "Only convenience inspection."
 
 	compilation optimize.

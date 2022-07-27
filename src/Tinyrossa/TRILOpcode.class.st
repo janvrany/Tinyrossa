@@ -79,6 +79,11 @@ TRILOpcode >> isArithmetic [
 ]
 
 { #category : #testing }
+TRILOpcode >> isBranch [
+	^ props1 bitTest: Branch
+]
+
+{ #category : #testing }
 TRILOpcode >> isCompare [
 	^ props1 bitTest: BooleanCompare
 ]
@@ -91,6 +96,11 @@ TRILOpcode >> isInvalid [
 { #category : #testing }
 TRILOpcode >> isLoadConst [
 	^ props1 bitTest: LoadConst
+]
+
+{ #category : #testing }
+TRILOpcode >> isReturn [
+	^ props1 bitTest: Return
 ]
 
 { #category : #testing }
@@ -181,9 +191,9 @@ TRILOpcode >> validateConstant: aNumber [
 
 { #category : #validation }
 TRILOpcode >> validateSymbol: aTRSymbol [
-	self hasSymbolRef ifTrue: [ 
+	(self hasSymbolRef or: [self isBranch]) ifTrue: [ 
 		self assert: aTRSymbol notNil.
-	] ifFalse: [ 
+	] ifFalse: [
 		self assert: aTRSymbol isNil.
 	].
 ]

@@ -6,7 +6,8 @@ Class {
 		'symbol',
 		'constant',
 		'children',
-		'parent'
+		'parent',
+		'block'
 	],
 	#category : #'Tinyrossa-IL'
 }
@@ -19,6 +20,17 @@ TRILNode class >> new [
 { #category : #'instance creation' }
 TRILNode class >> opcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
 	^ self basicNew initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg
+]
+
+{ #category : #accessing }
+TRILNode >> block [
+	^ block
+]
+
+{ #category : #accessing }
+TRILNode >> block:aTRILBlock [
+	self assert: block isNil.
+	block := aTRILBlock.
 ]
 
 { #category : #accessing }
@@ -74,9 +86,24 @@ TRILNode >> parent [
 
 { #category : #accessing }
 TRILNode >> parent:aTRILNode [
-	self assert: parent isNil.
-	self assert: aTRILNode notNil.
+	self assert: opcode isTreeTop not description: 'Cannot set parent of a treetop'.
+	self assert: aTRILNode notNil description: 'Parent already set'.
 	parent := aTRILNode.
+	self block: parent block.
+]
+
+{ #category : #'printing & storing' }
+TRILNode >> printOn:aStream [
+	"append a printed representation of the receiver to the argument, aStream"
+
+	super printOn:aStream.
+	aStream nextPut:$(.
+	opcode name printOn:aStream.
+	(opcode name = 'bbstart' or: [ opcode name = 'bbend' ]) ifTrue:[
+		aStream nextPutAll:' ('; nextPutAll: block name; nextPut:$).
+	] ifFalse: [
+		aStream nextPutAll:': { ... }'.
+	]
 ]
 
 { #category : #rewriting }
@@ -104,7 +131,7 @@ TRILNode >> replaceWith: anotherNode [
 
 { #category : #accessing }
 TRILNode >> symbol [
-	self assert: opcode hasSymbolRef.
+	self assert: (opcode hasSymbolRef or: [ opcode isBranch ]).
 	^ symbol
 ]
 

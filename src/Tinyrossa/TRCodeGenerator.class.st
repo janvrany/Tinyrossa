@@ -109,6 +109,44 @@ TRCodeGenerator >> allocateRegisters [
 	].
 ]
 
+{ #category : #evaluation }
+TRCodeGenerator >> evaluate_bbend: node [
+	"Nothing to do"
+]
+
+{ #category : #evaluation }
+TRCodeGenerator >> evaluate_bbstart: node [
+	"Nothing to do"
+]
+
+{ #category : #evaluation }
+TRCodeGenerator >> evaluate_ireturn: node [
+	| retReg |
+
+	retReg := self evaluate: node child1.
+	self generateEpilogue: retReg.
+]
+
+{ #category : #relocation }
+TRCodeGenerator >> fixupBranchTargets [    
+	^ self shouldImplement
+]
+
+{ #category : #'code generation' }
+TRCodeGenerator >> generateCode: il [
+   il do: [:node | self evaluate: node ].
+]
+
+{ #category : #'code generation' }
+TRCodeGenerator >> generateEpilogue: retReg [
+	self subclassResponsibility
+]
+
+{ #category : #'code generation' }
+TRCodeGenerator >> generatePrologue [
+	self subclassResponsibility
+]
+
 { #category : #initialization }
 TRCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	compilation := aTRCompilation.
@@ -120,18 +158,13 @@ TRCodeGenerator >> instructions [
 	self subclassResponsibility
 ]
 
-{ #category : #'instruction selection' }
-TRCodeGenerator >> selectInstructions: il [
-	il do: [:top | self evaluate: top ].
-]
-
 { #category : #registers }
 TRCodeGenerator >> virtualRegistersUsedBy: instruction [
 	| used |
 
 	used := Set new.
 	instruction externalBindingValues do: [ :value |
-		(value isAST and: [ value isSymbolic ]) ifTrue: [ 
+		(value isAST and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [ 
 			| vReg |
 
 			vReg := virtualRegisters at: value sym ifAbsent: nil.

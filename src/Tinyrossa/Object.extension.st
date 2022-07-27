@@ -1,6 +1,11 @@
 Extension { #name : #Object }
 
 { #category : '*Tinyrossa' }
+Object >> isTRLabelSymbol [
+	^ false
+]
+
+{ #category : #'*Tinyrossa' }
 Object >> isTRParameterSymbol [
 	^ false
 ]
