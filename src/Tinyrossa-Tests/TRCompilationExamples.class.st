@@ -1,6 +1,9 @@
 Class {
 	#name : #TRCompilationExamples,
 	#superclass : #TestCase,
+	#pools : [
+		'TRDataTypes'
+	],
 	#category : #'Tinyrossa-Compile-Examples'
 }
 
@@ -81,6 +84,34 @@ TRCompilationExamples >> example02_add2 [
 
 	self halt.
 ]
+
+{ #category : #examples }
+TRCompilationExamples >> example03_signum [
+	| compilation builder |
+
+	compilation := TRCompilation new.
+
+	builder := compilation builder.
+	builder defineParameter: 'x' type: Int32.   
+	builder 
+		if: (builder icmplt: 
+			 {  builder iload: 'x' .
+				builder iconst: 0  })
+		then:[ :builder | 
+				builder ireturn: 
+					{ builder iconst: -1 } ]
+		else:[ :builder |
+				builder if: (builder icmpgt: 
+							 {  builder iload: 'x' .
+								builder iconst: 0  })
+						then:[ :builder |
+								builder ireturn: 
+									{ builder iconst: 1 } ]
+						else:[ :builder |
+								builder ireturn: 
+									{ builder iconst: 0 } ] ].
+
+	compilation buildFinished. "Indicate we're done building/"
 
 	compilation il. "Only convenience inspection."
 

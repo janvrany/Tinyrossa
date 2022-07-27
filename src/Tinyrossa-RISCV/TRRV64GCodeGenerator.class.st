@@ -368,13 +368,6 @@ TRRV64GCodeGenerator >> evaluate_band: node [
 ]
 
 { #category : #evaluation }
-TRRV64GCodeGenerator >> evaluate_bbend: node [
-	"superclass TRILEvaluator says that I am responsible to implement this method"
-
-	^ self shouldImplement
-]
-
-{ #category : #evaluation }
 TRRV64GCodeGenerator >> evaluate_bbitpermute: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 
@@ -383,9 +376,12 @@ TRRV64GCodeGenerator >> evaluate_bbitpermute: node [
 
 { #category : #evaluation }
 TRRV64GCodeGenerator >> evaluate_bbstart: node [
-	"superclass TRILEvaluator says that I am responsible to implement this method"
+	| label |
 
-	^ self shouldImplement
+	label := compilation symbolManager lookupLabelByBlock: node block.
+	label notNil ifTrue: [ 
+		generate label: label name.
+	].
 ]
 
 { #category : #evaluation }
@@ -1700,6 +1696,8 @@ TRRV64GCodeGenerator >> evaluate_icmpset: node [
 TRRV64GCodeGenerator >> evaluate_iconst: node [
 	| dstReg |
 
+	node constant == 0 ifTrue: [ ^ zero ].
+
 	dstReg := self allocateRegister.
 
 	generate 
@@ -2018,9 +2016,12 @@ TRRV64GCodeGenerator >> evaluate_ificmpeq: node [
 
 { #category : #evaluation }
 TRRV64GCodeGenerator >> evaluate_ificmpge: node [
-	"superclass TRILEvaluator says that I am responsible to implement this method"
+	| src1Reg src2Reg |
 
-	^ self shouldImplement
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	^ generate 
+		bge: src1Reg, src2Reg, node symbol
 ]
 
 { #category : #evaluation }
@@ -2032,9 +2033,12 @@ TRRV64GCodeGenerator >> evaluate_ificmpgt: node [
 
 { #category : #evaluation }
 TRRV64GCodeGenerator >> evaluate_ificmple: node [
-	"superclass TRILEvaluator says that I am responsible to implement this method"
+	| src1Reg src2Reg |
 
-	^ self shouldImplement
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	^ generate 
+		bge: src2Reg, src1Reg, node symbol
 ]
 
 { #category : #evaluation }
@@ -2422,17 +2426,6 @@ TRRV64GCodeGenerator >> evaluate_irem: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 
 	^ self shouldImplement
-]
-
-{ #category : #evaluation }
-TRRV64GCodeGenerator >> evaluate_ireturn: node [
-	| retReg retInsn |
-
-	retReg := self evaluate: node child1.
-	retInsn := generate
-		jalr: zero, ra, 0.
-
-	retReg constrainTo: a0 atInstruction: retInsn.
 ]
 
 { #category : #evaluation }
@@ -3686,6 +3679,11 @@ TRRV64GCodeGenerator >> evaluate_zerochk: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 
 	^ self shouldImplement
+]
+
+{ #category : #relocation }
+TRRV64GCodeGenerator >> fixupBranchTargets [    
+	self codeBuffer fixupBranchTargets
 ]
 
 { #category : #'code generation' }

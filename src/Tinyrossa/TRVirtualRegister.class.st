@@ -67,6 +67,11 @@ TRVirtualRegister >> initializeWithName: aString [
 	name := aString
 ]
 
+{ #category : #testing }
+TRVirtualRegister >> isTRVirtualRegister [
+	^ true
+]
+
 { #category : #accessing }
 TRVirtualRegister >> name [
 	^ name

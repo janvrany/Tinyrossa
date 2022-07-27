@@ -88,6 +88,7 @@ TRCompilation >> compile [
 	codegen generatePrologue.
 	codegen generateCode: self il.
 	codegen allocateRegisters.
+	codegen fixupBranchTargets.
 ]
 
 { #category : #accessing }
