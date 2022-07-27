@@ -10,9 +10,14 @@ Object >> isTRParameterSymbol [
 	^ false
 ]
 
-{ #category : '*Tinyrossa' }
+{ #category : #'*Tinyrossa' }
 Object >> isTRSymbol [
 	"return false here; to be redefined in subclass(es)"
 
+	^ false
+]
+
+{ #category : #'*Tinyrossa' }
+Object >> isTRVirtualRegister [
 	^ false
 ]

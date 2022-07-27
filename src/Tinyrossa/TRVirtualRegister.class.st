@@ -23,6 +23,17 @@ TRVirtualRegister >> allocation: realReg [
 ]
 
 { #category : #constraints }
+TRVirtualRegister >> constrainTo: reg [ 
+	"
+	Ensure this virtual register maps to `reg`.
+	"
+	self assert: (reg isKindOf: AcDSLRegister).
+
+	constraints isNil ifTrue: [ constraints := Dictionary new ].
+	constraints at: nil put: reg.
+]
+
+{ #category : #constraints }
 TRVirtualRegister >> constrainTo: reg atInstruction: insn [
 	"
 	Ensure this virtual register maps to `reg` for instruction `insn`.

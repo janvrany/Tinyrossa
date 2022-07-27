@@ -2300,7 +2300,16 @@ TRRV64GCodeGenerator >> evaluate_ilbit: node [
 TRRV64GCodeGenerator >> evaluate_iload: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 
-	^ self shouldImplement
+	| location |
+
+	location := node symbol location.
+	self assert: location notNil.
+
+	location isTRVirtualRegister ifTrue: [ 
+		^ location
+	] ifFalse: [ 
+		self notYetImplemented
+	].
 ]
 
 { #category : #evaluation }
@@ -3677,6 +3686,42 @@ TRRV64GCodeGenerator >> evaluate_zerochk: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 
 	^ self shouldImplement
+]
+
+{ #category : #'code generation' }
+TRRV64GCodeGenerator >> generateEpilogue: valReg [
+	| retReg retInsn |
+
+	retReg := self allocateRegister.
+
+	retInsn := generate
+		addi: retReg, valReg, 0; "Move value to ABI return register"
+		jalr: zero, ra, 0.       "Return"
+
+	retReg constrainTo: a0 atInstruction: retInsn.
+]
+
+{ #category : #'code generation' }
+TRRV64GCodeGenerator >> generatePrologue [
+	| parameters parameterRegs |
+
+	parameters := compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
+
+	"FIXME: following is bogus, does not follow RISC-V ABI,
+	 does not handle floating point, does not handle stack-passed
+	 parameters. Bogus!"
+
+	parameterRegs := { a0 . a1 . a2 . a3 . a4 . a5 . a6 . a7 }.
+	parameters do: [:parameter | 
+		| rReg vReg |
+
+		rReg := parameterRegs at: parameter index.
+
+		vReg := self allocateRegister.
+		vReg constrainTo: rReg.
+
+		parameter setLocation: vReg.
+	].
 ]
 
 { #category : #initialization }

@@ -55,6 +55,33 @@ TRCompilationExamples >> example01_meaningOfLife [
 
 	self halt.
 ]
+
+{ #category : #examples }
+TRCompilationExamples >> example02_add2 [
+	| compilation builder |
+
+	compilation := TRCompilation new.
+
+	builder := compilation builder.
+	builder defineParameter: 'x' type: Int32.
+	builder ireturn: 
+		{ builder iadd: 
+			{ builder iload: 'x' .
+			  builder iconst: 2 } }.
+
+	compilation buildFinished. "Indicate we're done building/"
+
+	compilation il. "Only convenience inspection."
+
+	compilation optimize.
+	compilation il. "Only convenience inspection."
+
+	compilation compile.
+	compilation codeBuffer. "Only convenience inspection."
+
+	self halt.
+]
+
 	compilation il. "Only convenience inspection."
 
 	compilation optimize.
