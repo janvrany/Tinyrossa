@@ -1,8 +1,8 @@
 # Tinyrossa
 
 *Tinyrossa* is pure-Smalltalk (very) experimental compiler backend
-based on Testarossa intermediate representation [1](1), Pharo-ArchC [2](2)
-and MachineArithmetic [3](4).
+based on [Testarossa intermediate representation][1], [ArchC][2]
+and [MachineArithmetic][3].
 
 ## Beware...
 
@@ -52,13 +52,13 @@ compilation codeBuffer.
 ### ...into Smalltalk/X
 
 **NOTE**: The following instructions assume you have
-a recent [Smalltalk/X jv-branch][2], i.e., a version newer than 2022-06-01.
+a recent [Smalltalk/X jv-branch][3], i.e., a version newer than 2022-06-01.
 
 
- 1. Load [MachineArithmetic](4). Follow instructions in
+ 1. Load [MachineArithmetic][4]. Follow instructions in
     [README.md](https://github.com/shingarov/MachineArithmetic/blob/pure-z3/README.md#into-smalltalkx)
 
- 2. Load [Pharo-ArchC](2). Follow instructions in
+ 2. Load [Pharo-ArchC][2]. Follow instructions in
     [README.md](https://github.com/shingarov/Pharo-ArchC/blob/pure-z3/README.md#into-smalltalkx)
 
 
