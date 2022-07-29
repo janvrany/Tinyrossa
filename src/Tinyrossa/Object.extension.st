@@ -1,6 +1,13 @@
 Extension { #name : #Object }
 
 { #category : '*Tinyrossa' }
+Object >> isTRILBlock [
+	"return false here; to be redefined in subclass(es)"
+
+	^ false
+]
+
+{ #category : #'*Tinyrossa' }
 Object >> isTRLabelSymbol [
 	^ false
 ]
