@@ -1,7 +1,7 @@
 # Tinyrossa
 
 *Tinyrossa* is pure-Smalltalk (very) experimental compiler backend
-based on [Testarossa intermediate representation][1], [ArchC][2]
+based on [Testarossa Intermediate Language][1], [ArchC][2]
 and [MachineArithmetic][3].
 
 ## Beware...
@@ -9,7 +9,7 @@ and [MachineArithmetic][3].
 ...that "nothing works!"
 
 At the moment, this is just an experiment, a result of couple afternoons
-of hacking to see how it might look and to get initial feedback from the community.
+of hacking to see what it might look like and to get initial feedback from the community.
 Pretty much every part is either incomplete or plain wrong and the API is not great
 either.
 
