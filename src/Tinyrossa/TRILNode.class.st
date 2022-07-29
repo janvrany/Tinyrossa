@@ -59,6 +59,26 @@ TRILNode >> constant [
 	^ constant
 ]
 
+{ #category : #displaying }
+TRILNode >> displayOn: aStream [
+	opcode name printOn: aStream.
+	aStream space.
+	(opcode name = 'bbstart' or: [ opcode name = 'bbend' ]) ifTrue:[
+		aStream nextPut:$<.
+		opcode name = 'bbend' ifTrue: [ aStream nextPut:$/ ].
+		aStream nextPutAll: block name; 
+				nextPut:$>.
+	] ifFalse: [ 
+		symbol notNil ifTrue: [ 
+			aStream nextPutAll: symbol name
+		] ifFalse: [ 
+			constant notNil ifTrue: [ 
+				constant displayOn: aStream.
+			].
+		].
+	].
+]
+
 { #category : #initialization }
 TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
 	self assert: (symbolArg isNil or:[symbolArg isTRSymbol]).
