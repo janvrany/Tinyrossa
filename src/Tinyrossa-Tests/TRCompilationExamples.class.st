@@ -38,6 +38,11 @@ TRCompilationExamples class >> isTestSelector:aSelector [
 TRCompilationExamples >> example01_meaningOfLife [
 	| compilation builder |
 
+	"Compilation object (an instance of TRCompilation) is
+	 an entry point to the while compilation pipeline.
+	 Compilation objects are not to be reused, create
+	 new one for each function (method) you compile."
+
 	compilation := TRCompilation new.
 
 	builder := compilation builder.
