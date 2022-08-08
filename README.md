@@ -51,6 +51,12 @@ compilation codeBuffer.
 
 ### ...into Smalltalk/X
 
+#### Using provided makefile*
+
+    make -C stx run
+
+#### Manually from workspace
+
 **NOTE**: The following instructions assume you have
 a recent [Smalltalk/X jv-branch][3], i.e., a version newer than 2022-06-01.
 

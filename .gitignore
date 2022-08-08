@@ -18,6 +18,9 @@ stx/stx
 stx/package-cache
 stx/*Test.xml
 
+# External dependencies
+3rdparty
+
 # opcodesgen by-products
 opcodesgen/opcodes.m4
 opcodesgen/opcodes.st
