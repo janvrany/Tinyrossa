@@ -2,7 +2,8 @@ Class {
 	#name : #TRRV64GCodeGenerator,
 	#superclass : #TRCodeGenerator,
 	#instVars : [
-		'generate'
+		'generate',
+		'currentNode'
 	],
 	#pools : [
 		'TRRV64GRegisters'
@@ -22,6 +23,16 @@ TRRV64GCodeGenerator >> allocatableRegisters [
 { #category : #accessing }
 TRRV64GCodeGenerator >> codeBuffer [
 	^ generate memory
+]
+
+{ #category : #evaluation }
+TRRV64GCodeGenerator >> evaluate: node [
+	| savedNode |
+
+	savedNode := currentNode.
+	currentNode := node.
+	^ [ super evaluate: node ] 
+		ensure: [ currentNode := savedNode.].
 ]
 
 { #category : #evaluation }
@@ -3722,10 +3733,22 @@ TRRV64GCodeGenerator >> generatePrologue [
 	].
 ]
 
+{ #category : #private }
+TRRV64GCodeGenerator >> ground: aProcessorInstruction [
+	| insn |
+
+	insn := aProcessorInstruction as: TRRV64GInstruction.
+	aProcessorInstruction class ~~ TRRV64GInstruction ifTrue: [
+		insn node: currentNode.
+	].
+	^ insn
+]
+
 { #category : #initialization }
 TRRV64GCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	super initializeWithCompilation: aTRCompilation.
 	generate := AcDSLRV64GAssembler new.
+	generate grounder: self
 ]
 
 { #category : #accessing }
