@@ -162,6 +162,10 @@ TRCodeGenerator >> instructions [
 TRCodeGenerator >> virtualRegistersUsedBy: instruction [
 	| used |
 
+	instruction isPseudoInstruction "such as label" ifTrue: [ 
+		^ #()
+	].
+
 	used := Set new.
 	instruction externalBindingValues do: [ :value |
 		(value isAST and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [ 
