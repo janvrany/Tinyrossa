@@ -20,14 +20,6 @@ ManifestBaselineOfTinyrossa class >> mandatoryPreRequisites [
 	)
 ]
 
-{ #category : #'description - actions' }
-ManifestBaselineOfTinyrossa class >> postLoadAction [
-	"invoked after loading a project"
-
-	(Smalltalk at: #AcDSLAssemblerGenerator) 
-		generate: (Smalltalk at:#AcDSLRV64GAssembler).
-]
-
 { #category : #'stx - description' }
 ManifestBaselineOfTinyrossa class >> referencedPreRequisites [
 	"list packages which are a prerequisite, because they contain

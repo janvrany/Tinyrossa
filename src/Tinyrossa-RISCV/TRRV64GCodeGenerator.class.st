@@ -3734,11 +3734,22 @@ TRRV64GCodeGenerator >> generatePrologue [
 ]
 
 { #category : #private }
-TRRV64GCodeGenerator >> ground: aProcessorInstruction [
+TRRV64GCodeGenerator >> ground: instruction using: encoding [
 	| insn |
 
-	insn := aProcessorInstruction as: TRRV64GInstruction.
-	aProcessorInstruction class ~~ TRRV64GInstruction ifTrue: [
+	insn := instruction as: TRRV64GInstruction.
+	insn setBinaryEncoding: encoding
+	   "Set the TRIL node that caused this instruction to be generated - if not
+	   already set (which happens when you ground a partially grounded
+	   instruction).
+	   It's bit tricky, but this is the API that ArchC provides at the moment.
+	  ".
+	"Set the TRIL node that caused this instruction to be generated - if not
+	 already set (which happens when you ground a partially grounded 
+	 instruction). 
+	 It's bit tricky, but this is the API that ArchC provides at the moment.
+	"
+	insn node isNil ifTrue: [ 
 		insn node: currentNode.
 	].
 	^ insn
