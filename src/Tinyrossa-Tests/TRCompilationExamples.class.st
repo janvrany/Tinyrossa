@@ -4,34 +4,12 @@ Class {
 	#pools : [
 		'TRDataTypes'
 	],
-	#category : #'Tinyrossa-Compile-Examples'
+	#category : #'Tinyrossa-Tests-Examples'
 }
 
-{ #category : #documentation }
-TRCompilationExamples class >> documentation [
-"
-	documentation to be added.
-
-	[author:]
-		Jan Vrany <jan.vrany@labware.com>
-
-	[instance variables:]
-
-	[class variables:]
-
-	[see also:]
-
-"
-]
-
 { #category : #accessing }
-TRCompilationExamples class >> isTestSelector:aSelector [
-	^ (super isTestSelector: aSelector)
-		or:[aSelector notNil and:[aSelector beginsWith:'example']]
-
-	"Created: / 06-08-2006 / 11:46:17 / cg"
-	"Modified: / 05-12-2009 / 18:50:57 / Jan Vrany <jan.vrany@fit.cvut.cz>"
-	"Modified: / 02-08-2011 / 17:46:51 / cg"
+TRCompilationExamples class >> testSelectors [
+	^ self selectors select: [ :each | each beginsWith:'example' ]
 ]
 
 { #category : #examples }
@@ -60,8 +38,6 @@ TRCompilationExamples >> example01_meaningOfLife [
 
 	compilation compile.
 	compilation codeBuffer. "Only convenience inspection."
-
-	self halt.
 ]
 
 { #category : #examples }
@@ -86,8 +62,6 @@ TRCompilationExamples >> example02_add2 [
 
 	compilation compile.
 	compilation codeBuffer. "Only convenience inspection."
-
-	self halt.
 ]
 
 { #category : #examples }
@@ -125,8 +99,6 @@ TRCompilationExamples >> example03_signum [
 
 	compilation compile.
 	compilation codeBuffer. "Only convenience inspection."
-
-	self halt.
 ]
 
 { #category : #running }
