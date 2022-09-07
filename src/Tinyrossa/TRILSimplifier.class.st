@@ -77,8 +77,8 @@ TRILSimplifier >> simplify: original [
 { #category : #optimizing }
 TRILSimplifier >> simplifyArithmetic: node [    
 	((ArithmeticSimplificationTable includesKey: node opcode)
-		and: [ node child1 opcode isLoadConst ]
-		and: [ node child2 opcode isLoadConst ]) ifTrue: [
+		and: [ node child1 opcode isLoadConst 
+		and: [ node child2 opcode isLoadConst ]]) ifTrue: [
 			| const1 const2 reduceOp reducedConst simplified |
 
 			const1 := node child1 constant.

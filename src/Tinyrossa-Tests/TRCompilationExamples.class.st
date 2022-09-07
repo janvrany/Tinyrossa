@@ -27,7 +27,7 @@ TRCompilationExamples class >> documentation [
 { #category : #accessing }
 TRCompilationExamples class >> isTestSelector:aSelector [
 	^ (super isTestSelector: aSelector)
-		or:[aSelector notNil and:[aSelector startsWith:'example']]
+		or:[aSelector notNil and:[aSelector beginsWith:'example']]
 
 	"Created: / 06-08-2006 / 11:46:17 / cg"
 	"Modified: / 05-12-2009 / 18:50:57 / Jan Vrany <jan.vrany@fit.cvut.cz>"
