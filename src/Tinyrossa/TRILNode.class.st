@@ -50,7 +50,7 @@ TRILNode >> child3 [
 
 { #category : #accessing }
 TRILNode >> children [
-	^ children ? #()
+	^ children isNil ifTrue: [ #() ] ifFalse: [ children ]
 ]
 
 { #category : #accessing }
@@ -130,7 +130,7 @@ TRILNode >> printOn:aStream [
 TRILNode >> replace: childNode with: anotherNode [
 	| newChildren |
 
-	self assert: children notEmptyOrNil.
+	self assert: children isEmptyOrNil not.
 	self assert: (children includes: childNode).
 
 	newChildren := children copy.

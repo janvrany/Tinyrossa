@@ -67,7 +67,7 @@ TRILBlock >> hasReturned [
 TRILBlock >> initialize [
 	super initialize.
 
-	name := String streamContents: [:s | s nextPutAll: 'BB_'. IdCounter printOn: s base: 10 size: 3 fill: $0. IdCounter := IdCounter + 1. ].
+	name := String streamContents: [:s | s nextPutAll: 'BB_'; nextPutAll: (IdCounter printPaddedWith: $0 to: 3 base: 10). IdCounter := IdCounter + 1].
 	treetops := OrderedCollection new.
 
 	"Modified: / 25-07-2022 / 11:37:39 / Jan Vrany <jan.vrany@labware.com>"
