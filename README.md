@@ -47,32 +47,38 @@ machine code."
 compilation codeBuffer.
 ```
 
+For more examples, see class `TRCompilationExamples`.
+
 ## How to load
 
 ### ...into Smalltalk/X
 
-#### Using provided makefile*
+#### The easy way
 
+The easiest way to try out Tinyrossa is to use provided
+makefile that automatically downloads all the dependencies
+(including Smalltalk/X) and loads them into running environment:
+
+    git clone https://github.com/janvrany/Tinyrossa.git
+    cd Tinyrossa
     make -C stx run
 
-#### Manually from workspace
+#### The hard(er) way
 
-**NOTE**: The following instructions assume you have
-a recent [Smalltalk/X jv-branch][3], i.e., a version newer than 2022-06-01.
+**NOTE**: The following instructions assume you have a recent
+[Smalltalk/X jv-branch][3], i.e., a version newer than 2022-06-01.
 
+ 1. Clone the repository into some directory (say `/where/you/cloned/it/Tinyrossa`)
 
- 1. Load [MachineArithmetic][4]. Follow instructions in
-    [README.md](https://github.com/shingarov/MachineArithmetic/blob/pure-z3/README.md#into-smalltalkx)
+        git clone https://github.com/janvrany/Tinyrossa.git /where/you/cloned/it/Tinyrossa
 
- 2. Load [Pharo-ArchC][2]. Follow instructions in
-    [README.md](https://github.com/shingarov/Pharo-ArchC/blob/pure-z3/README.md#into-smalltalkx)
+ 2. Install / clone dependencies:
 
+    1. Load [MachineArithmetic][4]. Follow instructions in
+       [README.md](https://github.com/shingarov/MachineArithmetic/blob/pure-z3/README.md#into-smalltalkx)
 
- 3. Clone the repository:
-
-    ````
-    git clone https://github.com/janvrany/Tinyrossa.git
-    ````
+    2. Load [Pharo-ArchC][2]. Follow instructions in
+       [README.md](https://github.com/shingarov/Pharo-ArchC/blob/pure-z3/README.md#into-smalltalkx)
 
  3. In Smalltalk/X, execute:
 
@@ -81,14 +87,21 @@ a recent [Smalltalk/X jv-branch][3], i.e., a version newer than 2022-06-01.
     Smalltalk packagePath add: '/where/you/cloned/it/Tinyrossa'.
 
     "/ Load Tinyrossa
-    Smalltalk loadPackage: 'Tinyrossa'.
-    Smalltalk loadPackage: 'Tinyrossa-RISCV'.
-    Smalltalk loadPackage: 'Tinyrossa-Tests'.
-
-    "/ Generate RV64G assembler"
-    (Smalltalk at: #AcDSLAssemblerGenerator) generate: (Smalltalk at:#AcDSLRV64GAssembler).
+    Smalltalk loadPackage: 'BaselineOfTinyrossa'.
     ```
 
+### ...into Pharo
+
+#### The easy way
+
+The easiest way to try out Tinyrossa is to use provided
+makefile that automatically downloads all the dependencies
+(including Pharo) and builds an image with everything loaded:
+
+    git clone https://github.com/janvrany/Tinyrossa.git
+    cd Tinyrossa/pharo
+    make
+    
 
 [1]: https://github.com/eclipse/omr/tree/master/doc/compiler/il
 [2]: https://github.com/shingarov/Pharo-ArchC
