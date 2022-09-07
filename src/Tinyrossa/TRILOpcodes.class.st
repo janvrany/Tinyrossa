@@ -537,7 +537,11 @@ Class {
 TRILOpcodes class >> all [
 	"Return all available TRIL opcodes"
 
-	^ self classVarNames collect: [ :name | self classVarAt: name ]
+	| opcodes |
+
+	opcodes := Set new: 550.
+	self bindingsDo: [ :binding | opcodes add: binding value ].
+	^ opcodes
 
 	"
 	TRILOpcodes all

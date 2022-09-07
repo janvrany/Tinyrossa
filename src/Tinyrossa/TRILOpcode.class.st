@@ -23,9 +23,14 @@ Class {
 
 { #category : #accessing }
 TRILOpcode class >> named: aString [
-	^ TRILOpcodes 
-		classVarAt: aString 
-		ifAbsent: [ self error: 'No such opcode: ', aString ].
+	| binding |
+
+	binding := TRILOpcodes bindingOf: aString.
+	binding notNil ifTrue: [
+		^ binding value
+	] ifFalse: [
+		self error: 'No such opcode: ', aString 
+	].
 
 	"
 	TRILOpcode named: 'iadd'

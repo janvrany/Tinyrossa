@@ -6,9 +6,14 @@ Class {
 
 { #category : #accessing }
 TRDataType class >> named: aString [
-	^ TRDataTypes
-		classVarAt: aString 
-		ifAbsent: [ self error: 'No such data type: ', aString ].
+	| binding |
+
+	binding := TRDataTypes bindingOf: aString.
+	binding notNil ifTrue: [
+		^ binding value
+	] ifFalse: [
+		self error: 'No such datatype: ', aString 
+	].
 
 	"
 	TRDataType named: 'Int32'
