@@ -1,0 +1,59 @@
+name: Check
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events...
+  push:
+    branches: [ master]
+  pull_request:
+    branches: [ master]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  Z3_DOWNLOAD_URL_WINDOWS: https://github.com/Z3Prover/z3/releases/download/z3-4.8.17/z3-4.8.17-x64-win.zip
+
+jobs:
+  tests:
+    name: "Tests - ${{matrix.dialect}}, ${{matrix.os}}"
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest ] #, windows-latest]
+        dialect: [ pharo , stx ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Add MSYS2 to PATH (Windows only)
+        if: matrix.os == 'windows-latest'
+        run: echo "C:\msys64\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Install required tools (Windows only)
+        if: matrix.os == 'windows-latest'
+        run: pacman --noconfirm -Syu wget make unzip
+
+      - name: Install Z3 (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install libz3-4 libz3-dev
+
+      - name: Install Z3 (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd pharo
+          wget --quiet --output-document=z3.zip ${{env.Z3_DOWNLOAD_URL_WINDOWS}}
+          unzip z3.zip
+          cp z3*win/bin/*.dll .
+
+      - name: Fetch commits so that Iceberg doesn't crash
+        run: git fetch --unshallow
+
+      - name: Build
+        run: |
+          make -C ${{matrix.dialect}}
+
+      - name: Test
+        run: |
+          make -C ${{matrix.dialect}} test
