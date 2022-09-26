@@ -1,6 +1,6 @@
 Class {
 	#name : #TRCodeGenerator,
-	#superclass : #TRILEvaluator,
+	#superclass : #Object,
 	#instVars : [
 		'compilation',
 		'virtualRegisters'
@@ -109,22 +109,9 @@ TRCodeGenerator >> allocateRegisters [
 	].
 ]
 
-{ #category : #evaluation }
-TRCodeGenerator >> evaluate_bbend: node [
-	"Nothing to do"
-]
-
-{ #category : #evaluation }
-TRCodeGenerator >> evaluate_bbstart: node [
-	"Nothing to do"
-]
-
-{ #category : #evaluation }
-TRCodeGenerator >> evaluate_ireturn: node [
-	| retReg |
-
-	retReg := self evaluate: node child1.
-	self generateEpilogue: retReg.
+{ #category : #accessing }
+TRCodeGenerator >> evaluatorClass [
+	self subclassResponsibility
 ]
 
 { #category : #relocation }
@@ -134,7 +121,10 @@ TRCodeGenerator >> fixupBranchTargets [
 
 { #category : #'code generation' }
 TRCodeGenerator >> generateCode: il [
-   il do: [:node | self evaluate: node ].
+	| evaluator |
+
+	evaluator := self evaluatorClass forCodeGenerator: self.
+	il do: [:node | evaluator evaluate: node ].
 ]
 
 { #category : #'code generation' }
