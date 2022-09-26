@@ -2,6 +2,7 @@ Class {
 	#name : #TRCompilation,
 	#superclass : #Object,
 	#instVars : [
+		'config',
 		'symbolManager',
 		'entry',
 		'codeBuffer'
@@ -10,10 +11,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-TRCompilation class >> new [
-	"return an initialized instance"
+TRCompilation class >> forConfig: aTRCompilationConfig [
+	^ self basicNew initializeWithConfig: aTRCompilationConfig
+]
 
-	^ self basicNew initialize.
+{ #category : #'instance creation' }
+TRCompilation class >> new [
+	self shouldNotImplement. "Use #forConfig:"
 ]
 
 { #category : #'building IL' }
@@ -74,9 +78,7 @@ TRCompilation >> codeBuffer [
 
 { #category : #accessing }
 TRCompilation >> codegen [
-	
-	"FIXME: This should depend on compilation target!"
-	^ (Smalltalk at:#TRRV64GCodeGenerator) forCompilation: self
+	^config codeGeneratorClass forCompilation: self
 ]
 
 { #category : #compiling }
@@ -89,6 +91,11 @@ TRCompilation >> compile [
 	codegen generateCode: self il.
 	codegen allocateRegisters.
 	codegen fixupBranchTargets.
+]
+
+{ #category : #accessing }
+TRCompilation >> config [
+	^ config
 ]
 
 { #category : #accessing }
@@ -107,11 +114,10 @@ TRCompilation >> il [
 ]
 
 { #category : #initialization }
-TRCompilation >> initialize [
-	"Invoked when a new instance is created."
+TRCompilation >> initializeWithConfig: aTRCompilationConfig [
 
+	config := aTRCompilationConfig.
 	symbolManager := TRSymbolManager new.
-
 	TRILBlock initialize. "FIXME: Temporary, to reset counter"
 	entry := TRILBlock new.
 ]
