@@ -76,16 +76,11 @@ TRCompilation >> codeBuffer [
 	^ codeBuffer
 ]
 
-{ #category : #accessing }
-TRCompilation >> codegen [
-	^config codeGeneratorClass forCompilation: self
-]
-
 { #category : #compiling }
 TRCompilation >> compile [
 	| codegen |
 
-	codegen := self codegen.
+	codegen := self config codeGeneratorClass forCompilation: self.
 	codeBuffer := codegen codeBuffer.
 	codegen generatePrologue.
 	codegen generateCode: self il.

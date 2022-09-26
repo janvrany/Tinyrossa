@@ -21,7 +21,7 @@ TRCompilationExamples >> example01_meaningOfLife [
 	 Compilation objects are not to be reused, create
 	 new one for each function (method) you compile."
 
-	compilation := TRCompilation new.
+	compilation := TRCompilation forConfig: TRCompilationConfig forRV64G.
 
 	builder := compilation builder.
 	builder ireturn: 
@@ -44,7 +44,7 @@ TRCompilationExamples >> example01_meaningOfLife [
 TRCompilationExamples >> example02_add2 [
 	| compilation builder |
 
-	compilation := TRCompilation new.
+	compilation := TRCompilation forConfig: TRCompilationConfig forRV64G.
 
 	builder := compilation builder.
 	builder defineParameter: 'x' type: Int32.
@@ -68,7 +68,7 @@ TRCompilationExamples >> example02_add2 [
 TRCompilationExamples >> example03_signum [
 	| compilation builder |
 
-	compilation := TRCompilation new.
+	compilation := TRCompilation forConfig: TRCompilationConfig forRV64G.
 
 	builder := compilation builder.
 	builder defineParameter: 'x' type: Int32.   
