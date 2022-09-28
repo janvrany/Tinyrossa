@@ -31,14 +31,22 @@ TRRV64GCodeEvaluator >> evaluate_bbstart: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_goto: node [
+	generate
+		jal: zero, node symbol
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_iadd: node [
 	| src1Reg src2Reg dstReg |
 
+	"FIXME: if second operand is iconst,
+	 use addi"
 	src1Reg := self evaluate: node child1.
 	src2Reg := self evaluate: node child2.
 	dstReg := self codegen allocateRegister.
 	generate
-		add: dstReg, src1Reg, src2Reg.
+		addw: dstReg, src1Reg, src2Reg.
 
 	^ dstReg
 ]
@@ -68,6 +76,16 @@ TRRV64GCodeEvaluator >> evaluate_ificmpge: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmpgt: node [
+	| src1Reg src2Reg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	^ generate 
+		blt: src2Reg, src1Reg, node symbol
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_ificmple: node [
 	| src1Reg src2Reg |
 
@@ -81,32 +99,62 @@ TRRV64GCodeEvaluator >> evaluate_ificmple: node [
 TRRV64GCodeEvaluator >> evaluate_iload: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 
-	| location |
+	| dstReg |
 
-	location := node symbol register.
-	self assert: location notNil.
-
-	location isTRVirtualRegister ifTrue: [ 
-		^ location
+	dstReg := node symbol register.
+	dstReg notNil ifTrue: [ 
+		"Nothing"
 	] ifFalse: [ 
 		self notYetImplemented
 	].
+
+	^ dstReg
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_imul: node [
+	| src1Reg src2Reg dstReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	dstReg := self codegen allocateRegister.
+	generate
+		mulw: dstReg, src1Reg, src2Reg.
+
+	^ dstReg
 ]
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_istore: node [
-	| location |
+	| srcReg dstReg |
 
-	self halt.
+	srcReg := self evaluate: node child1.
+	dstReg := node symbol register.
 
-	location := node symbol location.
-	self assert: location notNil.
 
-	location isTRVirtualRegister ifTrue: [ 
-		^ location
+	dstReg notNil ifTrue: [ 
+		generate
+			addi: dstReg, srcReg, 0
 	] ifFalse: [ 
 		self notYetImplemented
 	].
+
+	^ dstReg
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_isub: node [
+	| src1Reg src2Reg dstReg |
+
+	"FIXME: if second operand is iconst,
+	 use addi"
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	dstReg := self codegen allocateRegister.
+	generate
+		subw: dstReg, src1Reg, src2Reg.
+
+	^ dstReg
 ]
 
 { #category : #private }
