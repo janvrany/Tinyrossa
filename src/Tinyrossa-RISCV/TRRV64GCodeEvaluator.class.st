@@ -83,6 +83,22 @@ TRRV64GCodeEvaluator >> evaluate_iload: node [
 
 	| location |
 
+	location := node symbol register.
+	self assert: location notNil.
+
+	location isTRVirtualRegister ifTrue: [ 
+		^ location
+	] ifFalse: [ 
+		self notYetImplemented
+	].
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_istore: node [
+	| location |
+
+	self halt.
+
 	location := node symbol location.
 	self assert: location notNil.
 

@@ -1,10 +1,10 @@
 Class {
-	#name : #TRParameterSymbol,
+	#name : #TRAutomaticSymbol,
 	#superclass : #TRRegisterMappedSymbol,
 	#category : #'Tinyrossa-IL-Symbols'
 }
 
 { #category : #testing }
-TRParameterSymbol >> isTRParameterSymbol [
+TRAutomaticSymbol >> isTRAutomaticSymbol [
 	^ true
 ]

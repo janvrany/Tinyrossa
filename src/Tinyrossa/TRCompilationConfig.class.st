@@ -2,7 +2,8 @@ Class {
 	#name : #TRCompilationConfig,
 	#superclass : #Object,
 	#instVars : [
-		'codeGeneratorClass'
+		'codeGeneratorClass',
+		'linkageClass'
 	],
 	#category : #'Tinyrossa-Compile'
 }
@@ -16,4 +17,14 @@ TRCompilationConfig >> codeGeneratorClass [
 TRCompilationConfig >> codeGeneratorClass:aClass [
 	self assert: (aClass inheritsFrom: TRCodeGenerator).
 	codeGeneratorClass := aClass.
+]
+
+{ #category : #options }
+TRCompilationConfig >> linkageClass [
+	^ linkageClass
+]
+
+{ #category : #options }
+TRCompilationConfig >> linkageClass:something [
+	linkageClass := something.
 ]

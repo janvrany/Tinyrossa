@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'symbols'
 	],
-	#category : #'Tinyrossa-IL'
+	#category : #'Tinyrossa-IL-Symbols'
 }
 
 { #category : #'instance creation' }
@@ -21,6 +21,19 @@ TRSymbolManager >> define: aTRSymbol [
 
 	symbols add: aTRSymbol.
 	^ aTRSymbol
+]
+
+{ #category : #defining }
+TRSymbolManager >> defineAutomatic: name type: type [
+	| index |
+
+	index := (symbols count: [ :symbol | symbol isTRAutomaticSymbol ]) + 1.
+	^ self define: (self newAutomatic: name type: type index: index)
+]
+
+{ #category : #defining }
+TRSymbolManager >> defineFunction: name type: type linkage: linkageClass [
+	^ self define: (self newFunction: name type: type linkage: linkageClass)
 ]
 
 { #category : #defining }
@@ -64,6 +77,16 @@ TRSymbolManager >> lookupSymbolByName: aString [
 { #category : #lookup }
 TRSymbolManager >> lookupSymbolsByType: symbolClass [
 	^ symbols select: [ :symbol | symbol isKindOf: symbolClass ].
+]
+
+{ #category : #creating }
+TRSymbolManager >> newAutomatic: name type: type index: index [
+	^ TRAutomaticSymbol name: name type: type index: index
+]
+
+{ #category : #creating }
+TRSymbolManager >> newFunction: name type: type linkage: linkageClass [
+	^ TRFunctionSymbol name: name type: type linkage: linkageClass
 ]
 
 { #category : #creating }

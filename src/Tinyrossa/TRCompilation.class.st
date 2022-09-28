@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'config',
 		'symbolManager',
+		'functionSymbol',
 		'entry',
-		'codeBuffer'
+		'codegen'
 	],
 	#category : #'Tinyrossa-Compile'
 }
@@ -53,7 +54,7 @@ TRCompilation >> buildFinished [
 			| builder |
 
 			builder := TRILBuilder forCompilation: self block: block.
-			builder goto: block successor1 name.
+			builder goto: block successor1.
 		].
 		block := block next.
 	].
@@ -73,24 +74,44 @@ TRCompilation >> builder [
 
 { #category : #accessing }
 TRCompilation >> codeBuffer [
-	^ codeBuffer
+	^ self codegen codeBuffer
+]
+
+{ #category : #accessing }
+TRCompilation >> codegen [    
+	codegen isNil ifTrue:[
+		codegen := config codeGeneratorClass forCompilation: self.
+	].
+	^ codegen
 ]
 
 { #category : #compiling }
 TRCompilation >> compile [
-	| codegen |
+	| cg |
 
-	codegen := self config codeGeneratorClass forCompilation: self.
-	codeBuffer := codegen codeBuffer.
-	codegen generatePrologue.
-	codegen generateCode: self il.
-	codegen allocateRegisters.
-	codegen fixupBranchTargets.
+	cg := self codegen.
+	cg
+		generatePrologue;
+		generateCode: self il;
+		allocateRegisters;
+		fixupBranchTargets.
 ]
 
 { #category : #accessing }
 TRCompilation >> config [
 	^ config
+]
+
+{ #category : #accessing }
+TRCompilation >> functionSymbol [
+	"Return a symbol representing currently compiled function."
+	^ functionSymbol
+]
+
+{ #category : #accessing }
+TRCompilation >> functionType [
+	"Return currently compiled function return type"
+	^ functionSymbol type
 ]
 
 { #category : #accessing }
@@ -123,6 +144,14 @@ TRCompilation >> optimize [
 
 	simplifier := TRILSimplifier forCompilation: self.
 	simplifier simplify.
+]
+
+{ #category : #initialization }
+TRCompilation >> setFunctionSymbol: aTRFunctionSymbol [
+	self assert: aTRFunctionSymbol isTRFunctionSymbol.
+	self assert: functionSymbol isNil.
+
+	functionSymbol := aTRFunctionSymbol
 ]
 
 { #category : #accessing }
