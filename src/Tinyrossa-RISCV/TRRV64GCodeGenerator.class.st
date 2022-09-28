@@ -64,14 +64,13 @@ TRRV64GCodeGenerator >> generateEpilogue: valReg [
 
 { #category : #'code generation' }
 TRRV64GCodeGenerator >> generatePrologue [
-	| parameters parameterRegs |
+	| parameters parameterRegs automatics |
 
 	parameters := compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
 
 	"FIXME: following is bogus, does not follow RISC-V ABI,
 	 does not handle floating point, does not handle stack-passed
 	 parameters. Bogus!"
-
 	parameterRegs := { a0 . a1 . a2 . a3 . a4 . a5 . a6 . a7 }.
 	parameters do: [:parameter | 
 		| rReg vReg |
@@ -82,6 +81,18 @@ TRRV64GCodeGenerator >> generatePrologue [
 		vReg constrainTo: rReg.
 
 		parameter setRegister: vReg.
+	].
+
+	automatics := compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
+
+	"FIXME: following is bogus as we force all automatics to
+	 registers. We need to defer to linages to build a frame
+	 and manage spills / reloads."
+	automatics do: [:automatic | 
+		| vReg |
+
+		vReg := self allocateRegister.
+		automatic setRegister: vReg.
 	].
 ]
 
