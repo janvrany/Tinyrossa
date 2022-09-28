@@ -81,7 +81,7 @@ TRRV64GCodeGenerator >> generatePrologue [
 		vReg := self allocateRegister.
 		vReg constrainTo: rReg.
 
-		parameter setLocation: vReg.
+		parameter setRegister: vReg.
 	].
 ]
 

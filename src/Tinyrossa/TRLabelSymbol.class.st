@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'block'
 	],
-	#category : #'Tinyrossa-IL'
+	#category : #'Tinyrossa-IL-Symbols'
 }
 
 { #category : #'instance creation' }
