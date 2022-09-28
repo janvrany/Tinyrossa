@@ -3792,6 +3792,7 @@ TRILBuilder >> while: conditionNode do: bodyBlockOrClosure [
 
 	self build: conditionOp reverseBranchOpcode ifCompareOpcode arguments: { conditionNode child1 . conditionNode child2 . nextBlock }.
 	loopBlock setSuccessor1: bodyBlock.
+	loopBlock setSuccessor2: nextBlock.
 	bodyBlock setSuccessor1: loopBlock.
 
 	block := nextBlock.

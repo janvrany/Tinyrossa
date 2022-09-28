@@ -133,7 +133,9 @@ TRCompilationExamples >> example04_factorial_i [
 					builder iload: 'x' . 
 					builder iconst: 1 }) .
 				'x' }
-		].
+		];
+		ireturn: {
+			builder iload: 'r' }.
 
 	compilation buildFinished. "Indicate we're done building/"
 
