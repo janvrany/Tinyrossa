@@ -5,6 +5,22 @@ Class {
 }
 
 { #category : #'stx - description' }
+ManifestBaselineOfTinyrossa class >> includedInPreRequisites [
+	"list packages which are to be implicitely included in the prerequisites list,
+	 even if not found by the automatic search.
+	 Redefine this, if classes from other packages are referred to via reflection
+	 or by constructing names dynamically (i.e. the search cannot find it)"
+
+	^ #(
+		#'BaselineOfArchC'
+		#'Tinyrossa'
+		#'Tinyrossa-Tests'
+		#'Tinyrossa-RISCV'
+		#'Tinyrossa-Tools-SmalltalkX'
+	)
+]
+
+{ #category : #'stx - description' }
 ManifestBaselineOfTinyrossa class >> mandatoryPreRequisites [
 	"list packages which are mandatory as a prerequisite.
 	 This are packages containing superclasses of my classes and classes which
@@ -17,25 +33,5 @@ ManifestBaselineOfTinyrossa class >> mandatoryPreRequisites [
 	^ #(
 		#'stx:libbasic'    "Object - superclass of ManifestBaselineOfTinyrossa"
 		#'stx:libcompat'    "PackageManifest - superclass of ManifestBaselineOfTinyrossa"
-	)
-]
-
-{ #category : #'stx - description' }
-ManifestBaselineOfTinyrossa class >> referencedPreRequisites [
-	"list packages which are a prerequisite, because they contain
-	 classes which are referenced by my classes.
-	 These packages are NOT needed as a prerequisite for compiling or loading,
-	 however, a class from it may be referenced during execution and having it
-	 unloaded then may lead to a runtime doesNotUnderstand error, unless the caller
-	 includes explicit checks for the package being present.
-	 This method is generated automatically,
-	 by searching all classes (and their packages) which are referenced by my classes.
-	 Please also take a look at the #mandatoryPreRequisites method"
-
-	^ #(
-		#'BaselineOfArchC'
-		#'Tinyrossa'
-		#'Tinyrossa-Tests'
-		#'Tinyrossa-RISCV'
 	)
 ]
