@@ -12,6 +12,13 @@ Class {
 
 { #category : #initialization }
 TRILEvaluator class >> initialize [
+
+	"Sigh, we have to make sure TRILOpcodes are initialized
+	 here because Pharo makes no guarantees this is called
+	 after `TRILOpcodes class >> #initialize`.
+	 This is recurring problem yet nobody seem to be bother 
+	 to solve it :-("
+	TRILOpcodes initialize.
 	EvaluatorTable := IdentityDictionary new: 550.
 	TRILOpcodes bindingsDo: [:binding | 
 		EvaluatorTable at: binding value put: ('evaluate_', binding value name, ':') asSymbol.
