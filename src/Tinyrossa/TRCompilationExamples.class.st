@@ -1,10 +1,16 @@
 Class {
 	#name : #TRCompilationExamples,
 	#superclass : #TestCase,
+	#instVars : [
+		'compilation'
+	],
+	#classVars : [
+		'Shell'
+	],
 	#pools : [
 		'TRDataTypes'
 	],
-	#category : #'Tinyrossa-Tests-Examples'
+	#category : #'Tinyrossa-Compile-Examples'
 }
 
 { #category : #accessing }
@@ -14,14 +20,20 @@ TRCompilationExamples class >> testSelectors [
 
 { #category : #examples }
 TRCompilationExamples >> example01_meaningOfLife [
-	| compilation builder |
+	| builder |
 
 	"Compilation object (an instance of TRCompilation) is
 	 an entry point to the while compilation pipeline.
 	 Compilation objects are not to be reused, create
-	 new one for each function (method) you compile."
+	 new one for each function (method) you compile.
 
+	 The compilation object is created in #setUp, but if
+	 you want to try different targets and/or configs,
+	 just uncomment and modify the following line.
+	"
+	"
 	compilation := TRCompilation forConfig: TRCompilationConfig forRV64G.
+	"
 
 	builder := compilation builder.
 	builder defineName: 'MeaningOfLife' type: Int32.
@@ -43,9 +55,7 @@ TRCompilationExamples >> example01_meaningOfLife [
 
 { #category : #examples }
 TRCompilationExamples >> example02_add2 [
-	| compilation builder |
-
-	compilation := TRCompilation forConfig: TRCompilationConfig forRV64G.
+	| builder |
 
 	builder := compilation builder.
 	builder defineName: 'add2' type: Int32.
@@ -68,9 +78,7 @@ TRCompilationExamples >> example02_add2 [
 
 { #category : #examples }
 TRCompilationExamples >> example03_signum [
-	| compilation builder |
-
-	compilation := TRCompilation forConfig: TRCompilationConfig forRV64G.
+	| builder |
 
 	builder := compilation builder.
 	builder defineName: 'signum' type: Int32.
@@ -106,36 +114,41 @@ TRCompilationExamples >> example03_signum [
 
 { #category : #examples }
 TRCompilationExamples >> example04_factorial_i [
-	| compilation builder |
-
-	compilation := TRCompilation forConfig: TRCompilationConfig forRV64G.
+	| builder |
 
 	builder := compilation builder.
 	builder defineName: 'factorial_i' type: Int32.
 	builder defineParameter: 'x' type: Int32.   
 	builder defineAutomatic: 'r' type: Int32.
 
+	"
+	def factorial_i(x):
+		r = 1
+		while x > 0:
+			r = r * x
+			x = x - 1
+		return r
+	"
+
 	builder 
+		"r = 1"
 		istore: { 
 			builder iconst: 1 . 
 			'r' };
-		while: (builder icmple: 
-				{  builder iload: 'x' .
-				   builder iconst: 1  })
-		do:[ :builder |
+
+		"while x > 0:"
+		while: (builder icmpgt: { builder iload: 'x' . builder iconst: 0  }) do: [:builder |
+			"r = r * x"
 			builder istore: {
-				(builder imul: { 
-					builder iload: 'r' . 
-					builder iload: 'x' }) .
+				(builder imul: { builder iload: 'r' . builder iload: 'x' }) .
 				'r' }.
+			"x = x - 1"
 			builder istore: {
-				(builder isub: { 
-					builder iload: 'x' . 
-					builder iconst: 1 }) .
+				(builder isub: { builder iload: 'x' . builder iconst: 1 }) .
 				'x' }
 		];
-		ireturn: {
-			builder iload: 'r' }.
+		"return r"
+		ireturn: { builder iload: 'r' }.
 
 	compilation buildFinished. "Indicate we're done building/"
 
@@ -151,9 +164,8 @@ TRCompilationExamples >> example04_factorial_i [
 
 { #category : #running }
 TRCompilationExamples >> setUp [
-	"common setup - invoked before testing."
-
-	super setUp
+	super setUp.
+	compilation := TRCompilation forConfig: TRCompilationConfig forRV64GLinux
 ]
 
 { #category : #running }

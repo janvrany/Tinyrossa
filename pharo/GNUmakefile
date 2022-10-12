@@ -35,7 +35,7 @@ run: $(PROJECT).image $(PHARO_VM)
 
 test: $(PROJECT).image $(PHARO_VM)
 	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(PHARO_VM_HEADLESS) $< test --fail-on-failure \
-		"$(PROJECT).*Tests.*"
+		"$(PROJECT)"
 
 clean::
 	rm -f $(PROJECT).image $(PROJECT).changes *Test.xml *.fuel
