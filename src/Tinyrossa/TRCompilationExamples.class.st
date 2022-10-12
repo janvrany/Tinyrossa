@@ -226,10 +226,3 @@ TRCompilationExamples >> setUp [
 	super setUp.
 	compilation := TRCompilation forConfig: TRCompilationConfig forRV64GLinux
 ]
-
-{ #category : #running }
-TRCompilationExamples >> tearDown [
-	"common cleanup - invoked after testing."
-
-	super tearDown
-]

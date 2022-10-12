@@ -30,6 +30,10 @@ stx/*.s
 opcodesgen/opcodes.m4
 opcodesgen/opcodes.st
 
+# test shell by-products
+shell.o
+shell-*
+
 # git merge by-products
 *.orig
 

@@ -11,7 +11,7 @@ PHARO_VERSION ?= 80
 include ../3rdparty.gmk
 include ../pharo.gmk
 
-build: $(PROJECT).image
+build: $(PROJECT).image shells
 	@echo ""
 	@echo "To open Pharo $(PROJECT) image run:"
 	@echo ""
@@ -37,10 +37,13 @@ test: build
 	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(PHARO_VM_HEADLESS) $(PROJECT).image test --fail-on-failure \
 		"$(PROJECT)"
 
+shells:
+	make -C ../shell
+
 clean::
 	rm -f $(PROJECT).image $(PROJECT).changes *Test.xml *.fuel
 	rm -fr pharo-local
 
 mrproper:: clean
 
-.PHONY: all build run test clean mrproper
+.PHONY: all build run test shells clean mrproper
