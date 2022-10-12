@@ -17,6 +17,11 @@ TRCompilation class >> forConfig: aTRCompilationConfig [
 ]
 
 { #category : #'instance creation' }
+TRCompilation class >> forTarget: aTRCompilationTarget [
+	^ self forConfig: (TRCompilationConfig forTarget: aTRCompilationTarget)
+]
+
+{ #category : #'instance creation' }
 TRCompilation class >> new [
 	self shouldNotImplement. "Use #forConfig:"
 ]

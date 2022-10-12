@@ -1,9 +1,6 @@
 Extension { #name : #TRCompilationConfig }
 
-{ #category : '*Tinyrossa-RISCV' }
-TRCompilationConfig class >> forRV64G [
-	^ self new
-		codeGeneratorClass: TRRV64GCodeGenerator;
-		linkageClass: TRRV64GPSABILinkage;
-		yourself.
+{ #category : #'*Tinyrossa-RISCV' }
+TRCompilationConfig class >> forRV64GLinux [
+	^ self forTarget: TRRV64GLinux default
 ]

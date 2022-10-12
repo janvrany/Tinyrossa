@@ -2,29 +2,32 @@ Class {
 	#name : #TRCompilationConfig,
 	#superclass : #Object,
 	#instVars : [
-		'codeGeneratorClass',
-		'linkageClass'
+		'target'
 	],
 	#category : #'Tinyrossa-Compile'
 }
 
-{ #category : #options }
-TRCompilationConfig >> codeGeneratorClass [
-	^ codeGeneratorClass
+{ #category : #'instance creation' }
+TRCompilationConfig class >> forTarget: aTRCompilationTarget [
+	^ self basicNew initializeWithTarget: aTRCompilationTarget
+]
+
+{ #category : #'instance creation' }
+TRCompilationConfig class >> new [
+	self shouldNotImplement. "Use #forConfig:"
 ]
 
 { #category : #options }
-TRCompilationConfig >> codeGeneratorClass:aClass [
-	self assert: (aClass inheritsFrom: TRCodeGenerator).
-	codeGeneratorClass := aClass.
+TRCompilationConfig >> codeGeneratorClass [
+	^ target codeGeneratorClass
+]
+
+{ #category : #initialization }
+TRCompilationConfig >> initializeWithTarget: aTRCompilationTarget [
+	target := aTRCompilationTarget
 ]
 
 { #category : #options }
 TRCompilationConfig >> linkageClass [
-	^ linkageClass
-]
-
-{ #category : #options }
-TRCompilationConfig >> linkageClass:something [
-	linkageClass := something.
+	^ target systemLinkageClass
 ]
