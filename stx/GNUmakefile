@@ -29,7 +29,7 @@ test: $(STX) $(MACHINEARITHMETIC_DIR) $(ARCHC_DIR) $(ARCHC_PDL_DIR)
 		--package-path .. \
 		--load BaselineOf$(PROJECT) \
 		--run Builder::ReportRunner -r Builder::TestReport --fail-on-failure \
-			-p $(PROJECT)-Tests
+			-p $(PROJECT)
 
 clean::
 	rm -rf *Test.xml package-cache
