@@ -10,15 +10,6 @@ Class {
 	#category : #'Tinyrossa-RISCV-Codegen'
 }
 
-{ #category : #registers }
-TRRV64GCodeGenerator >> allocatableRegisters [
-	"Return a collection of machine registers that can be
-	 allocated"
-
-	"FIXME: bogus!"
-	^ { t0 . t1 . t2 . t3 . t4 . t5 . t6 . a0 . a1 . a2 }
-]
-
 { #category : #private }
 TRRV64GCodeGenerator >> assembler [
 	 ^ generate
