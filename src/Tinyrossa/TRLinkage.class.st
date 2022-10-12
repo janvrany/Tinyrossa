@@ -12,6 +12,14 @@ TRLinkage class >> forCodeGenerator: aTRCodeGenerator [
 	^ self basicNew initializeWithCodeGenerator: aTRCodeGenerator
 ]
 
+{ #category : #accessing }
+TRLinkage >> allocatableRegisters [
+	"Return an (ordered) list of registers that are available
+	 for register allocation - in order of preference"
+
+	^ self subclassResponsibility
+]
+
 { #category : #initialization }
 TRLinkage >> initializeWithCodeGenerator: aTRCodeGenerator [
 	codegen := aTRCodeGenerator

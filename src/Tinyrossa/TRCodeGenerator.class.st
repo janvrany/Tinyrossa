@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'compilation',
-		'virtualRegisters'
+		'virtualRegisters',
+		'linkage'
 	],
 	#category : #'Tinyrossa-Codegen'
 }
@@ -16,14 +17,6 @@ TRCodeGenerator class >> forCompilation: aTRCompilation [
 { #category : #'instance creation' }
 TRCodeGenerator class >> new [
 	self shouldNotImplement. "Use #forCompilation:"
-]
-
-{ #category : #registers }
-TRCodeGenerator >> allocatableRegisters [
-	"Return a collection of machine registers that can be
-	 allocated"
-
-	self subclassResponsibility.
 ]
 
 { #category : #registers }
@@ -50,7 +43,7 @@ TRCodeGenerator >> allocateRegisters [
 	| realRegisters insns solver |
 
 	insns := self instructions.
-	realRegisters := self allocatableRegisters.
+	realRegisters := linkage allocatableRegisters.
 	solver := Z3Solver new.
 
 	"
@@ -141,11 +134,17 @@ TRCodeGenerator >> generatePrologue [
 TRCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	compilation := aTRCompilation.
 	virtualRegisters := Dictionary new.
+	linkage := self linkageClass forCodeGenerator: self.
 ]
 
 { #category : #accessing }
 TRCodeGenerator >> instructions [
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+TRCodeGenerator >> linkageClass [
+	^ compilation functionSymbol linkageClass
 ]
 
 { #category : #registers }
@@ -157,7 +156,7 @@ TRCodeGenerator >> virtualRegistersUsedBy: instruction [
 	].
 
 	used := Set new.
-	instruction externalBindingValues do: [ :value |
+	instruction externalBindings do: [ :value |
 		(value isAST and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [ 
 			| vReg |
 

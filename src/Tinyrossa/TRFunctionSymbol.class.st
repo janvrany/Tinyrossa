@@ -23,3 +23,8 @@ TRFunctionSymbol >> initializeWithName:nameArg type:typeArg linkage: linkageClas
 TRFunctionSymbol >> isTRFunctionSymbol [
 	^ true
 ]
+
+{ #category : #'accessing-config' }
+TRFunctionSymbol >> linkageClass [
+	^ linkageClass
+]
