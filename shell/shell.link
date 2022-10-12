@@ -1,0 +1,6 @@
+SECTIONS
+{
+  .nzone 0x00080000 : {  }
+}
+INSERT AFTER .text;
+

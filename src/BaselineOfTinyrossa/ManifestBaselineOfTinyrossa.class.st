@@ -16,10 +16,11 @@ ManifestBaselineOfTinyrossa class >> includedInPreRequisites [
 	included := #(
 		#'BaselineOfArchC'
 		#'Tinyrossa'
-		#'Tinyrossa-Tests'
 		#'Tinyrossa-RISCV'
+		#'Tinyrossa-Tests'
+		#'Tinyrossa-Tests-RISCV'
 	).
-
+	
 	(Smalltalk getPackageDirectoryForPackage:#'jv:vdb') notNil ifTrue:[
 		included := included copyWith: #'Tinyrossa-Tools-SmalltalkX'
 	].

@@ -42,7 +42,7 @@ jobs:
 
       - name: Install required tools (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install libz3-4 libz3-dev crossbuild-essential-riscv64
+        run: sudo apt-get install libz3-4 libz3-dev crossbuild-essential-riscv64 qemu-user-static
 
       - name: Fetch commits so that Iceberg doesn't crash
         run: git fetch --unshallow

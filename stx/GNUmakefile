@@ -6,7 +6,7 @@ include GNUmakefile.local
 include ../3rdparty.gmk
 include ../stx.gmk
 
-build: $(STX) $(MACHINEARITHMETIC_DIR) $(ARCHC_DIR) $(ARCHC_PDL_DIR) $(LIBGDBS_DIR)
+build: $(STX) $(MACHINEARITHMETIC_DIR) $(ARCHC_DIR) $(ARCHC_PDL_DIR) $(LIBGDBS_DIR) shells
 	@echo "To run Smalltalk/X with $(PROJECT) loaded, run:"
 	@echo ""
 	@echo "    make run"
@@ -31,11 +31,15 @@ test: build
 		--package-path ../src \
 		--load BaselineOf$(PROJECT) \
 		--run Builder::ReportRunner -r Builder::TestReport --fail-on-failure \
-			-p $(PROJECT)
+			-p $(PROJECT) \
+			-p $(PROJECT)-Tests-RISCV
+
+shells:
+	make -C ../shell
 
 clean::
 	rm -rf *Test.xml package-cache
 
 mrproper:: clean
 
-.PHONY: all build run test clean mrproper
+.PHONY: all build run test shells clean mrproper
