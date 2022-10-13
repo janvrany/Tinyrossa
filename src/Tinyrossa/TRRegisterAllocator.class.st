@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'codegen'
 	],
-	#category : #'Tinyrossa-Codegen'
+	#category : #'Tinyrossa-Codegen-Register Allocation'
 }
 
 { #category : #'instance creation' }

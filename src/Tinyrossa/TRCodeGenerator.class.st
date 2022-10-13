@@ -105,6 +105,20 @@ TRCodeGenerator >> virtualRegisters [
 ]
 
 { #category : #registers }
+TRCodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
+	 "Evaluate block for each virtual register modified by
+	  given instruction."  
+	^ self subclassResponsibility
+]
+
+{ #category : #registers }
+TRCodeGenerator >> virtualRegistersReadBy: instruction do: block [
+	 "Evaluate block for each virtual register read by
+	  given instruction."  
+	^ self subclassResponsibility
+]
+
+{ #category : #registers }
 TRCodeGenerator >> virtualRegistersUsedBy: instruction [
 	| used |
 
@@ -113,13 +127,6 @@ TRCodeGenerator >> virtualRegistersUsedBy: instruction [
 	].
 
 	used := Set new.
-	instruction externalBindings do: [ :value |
-		(value isAST and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [ 
-			| vReg |
-
-			vReg := virtualRegisters at: value sym ifAbsent: nil.
-			vReg notNil ifTrue: [ used add: vReg ]
-		].
-	].
-	^ used
+	self virtualRegistersReadBy: instruction do: [ :vReg | used add: vReg ].
+	self virtualRegistersModifiedBy: instruction do: [ :vReg | used add: vReg ].
 ]
