@@ -15,6 +15,11 @@ TRVirtualRegister class >> named: aString [
 ]
 
 { #category : #accessing }
+TRVirtualRegister >> allocation [
+	^ allocation
+]
+
+{ #category : #accessing }
 TRVirtualRegister >> allocation: realReg [
 	self assert: allocation isNil.
 	self assert: (realReg isKindOf: AcDSLRegister).
@@ -49,6 +54,11 @@ TRVirtualRegister >> constrainTo: reg atInstruction: insn [
 TRVirtualRegister >> constraints [
 	constraints isNil ifTrue: [ ^ Dictionary new ].
 	^ constraints
+]
+
+{ #category : #queries }
+TRVirtualRegister >> hasConstraints [
+	^ constraints notNil and: [ constraints notEmpty ]
 ]
 
 { #category : #initialization }
