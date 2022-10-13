@@ -31,3 +31,8 @@ TRCompilationConfig >> initializeWithTarget: aTRCompilationTarget [
 TRCompilationConfig >> linkageClass [
 	^ target systemLinkageClass
 ]
+
+{ #category : #options }
+TRCompilationConfig >> registerAllocatorClass [
+	^ TRLinearScanRegisterAllocator
+]
