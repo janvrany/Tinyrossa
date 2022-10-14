@@ -64,12 +64,12 @@ TRCodeGenerator >> generateCode: il [
 
 { #category : #'code generation' }
 TRCodeGenerator >> generateEpilogue: retReg [
-	self subclassResponsibility
+	self linkage generateEpilogue: retReg
 ]
 
 { #category : #'code generation' }
 TRCodeGenerator >> generatePrologue [
-	self subclassResponsibility
+	self linkage generatePrologue
 ]
 
 { #category : #initialization }
