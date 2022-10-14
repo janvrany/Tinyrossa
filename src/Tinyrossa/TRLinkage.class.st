@@ -20,6 +20,16 @@ TRLinkage >> allocatableRegisters [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'code generation' }
+TRLinkage >> generateEpilogue: valReg [
+	^ self subclassResponsibility
+]
+
+{ #category : #'code generation' }
+TRLinkage >> generatePrologue [
+	self subclassResponsibility
+]
+
 { #category : #initialization }
 TRLinkage >> initializeWithCodeGenerator: aTRCodeGenerator [
 	codegen := aTRCodeGenerator
