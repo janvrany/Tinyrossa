@@ -95,11 +95,7 @@ TRCompilation >> compile [
 	| cg |
 
 	cg := self codegen.
-	cg
-		generatePrologue;
-		generateCode: self il;
-		allocateRegisters;
-		fixupBranchTargets.
+	cg generate: self il.
 ]
 
 { #category : #accessing }

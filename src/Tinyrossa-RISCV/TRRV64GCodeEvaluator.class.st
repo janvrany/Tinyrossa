@@ -157,6 +157,16 @@ TRRV64GCodeEvaluator >> evaluate_isub: node [
 	^ dstReg
 ]
 
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_return: node [
+	| retReg |
+
+	self assert: codegen compilation functionType == node child1 type.
+
+	retReg := self evaluate: node child1.
+	generate leave: retReg
+]
+
 { #category : #private }
 TRRV64GCodeEvaluator >> ground: instruction using: encoding [ 
 	| insn |
