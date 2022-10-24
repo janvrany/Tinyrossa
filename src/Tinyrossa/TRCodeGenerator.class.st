@@ -28,7 +28,7 @@ TRCodeGenerator >> allocateRegister [
 	^ reg
 ]
 
-{ #category : #registers }
+{ #category : #'code gen-phases' }
 TRCodeGenerator >> allocateRegisters [
 	| allocator insns |
 
@@ -49,27 +49,56 @@ TRCodeGenerator >> evaluatorClass [
 	self subclassResponsibility
 ]
 
-{ #category : #relocation }
+{ #category : #'code gen-phases' }
 TRCodeGenerator >> fixupBranchTargets [    
 	^ self shouldImplement
 ]
 
-{ #category : #'code generation' }
+{ #category : #'code gen' }
+TRCodeGenerator >> generate: il [
+	"Given the TRIL, generate the code into a code buffer.
+
+	This is the main entrypoint that performs all the code generation
+	tasks:
+
+	 * instruction selection
+	 * register allocation
+	 * branch expansion and relocation
+	"
+
+	self
+		mapParametersAndAutomatics;
+		generateCode: il;
+		allocateRegisters;
+
+		generatePrologue;
+		generateEpilogues;
+
+		fixupBranchTargets.
+]
+
+{ #category : #'code gen-phases' }
 TRCodeGenerator >> generateCode: il [
+	"Given the TRIL, generate instruction for it.
+
+	 This is just an instruction selection phase,
+	 prologue / epilogues are generated at different
+	 phases.
+	"
 	| evaluator |
 
 	evaluator := self evaluatorClass forCodeGenerator: self.
 	il do: [:node | evaluator evaluate: node ].
 ]
 
-{ #category : #'code generation' }
-TRCodeGenerator >> generateEpilogue: retReg [
-	self linkage generateEpilogue: retReg
+{ #category : #'code gen-phases' }
+TRCodeGenerator >> generateEpilogues [
+	self subclassResponsibility
 ]
 
-{ #category : #'code generation' }
+{ #category : #'code gen-phases' }
 TRCodeGenerator >> generatePrologue [
-	self linkage generatePrologue
+	self subclassResponsibility
 ]
 
 { #category : #initialization }
@@ -92,6 +121,16 @@ TRCodeGenerator >> linkage [
 { #category : #'accessing - config' }
 TRCodeGenerator >> linkageClass [
 	^ compilation functionSymbol linkageClass
+]
+
+{ #category : #'code gen-phases' }
+TRCodeGenerator >> mapParametersAndAutomatics [
+	"Godegen phase: map parameters and automatics to
+	 stack slots."
+
+	linkage
+		mapParameters;
+		mapAutomatics.
 ]
 
 { #category : #'accessing - config' }

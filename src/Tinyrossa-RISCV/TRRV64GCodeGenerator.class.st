@@ -40,15 +40,32 @@ TRRV64GCodeGenerator >> fixupBranchTargets [
 	self codeBuffer fixupBranchTargets
 ]
 
-{ #category : #accessing }
-TRRV64GCodeGenerator >> generate [
-	^ generate
+{ #category : #'code gen-phases' }
+TRRV64GCodeGenerator >> generateEpilogues [
+	| insns |
+
+	insns := generate memory instructions.
+	insns size to: 1 by: -1 do: [:i | 
+		| insn |
+
+		insn := insns at: i.
+		insn isLeaveInstruction ifTrue: [ 
+			generate cursor: i.
+			self linkage generateEpilogue: insn value
+		].
+	].
+]
+
+{ #category : #'code gen-phases' }
+TRRV64GCodeGenerator >> generatePrologue [
+	generate cursor: 0.
+	self linkage generatePrologue
 ]
 
 { #category : #initialization }
 TRRV64GCodeGenerator >> initializeWithCompilation: aTRCompilation [
-	super initializeWithCompilation: aTRCompilation.
 	generate := self assemblerClass new.
+	super initializeWithCompilation: aTRCompilation.
 ]
 
 { #category : #'accessing-config' }

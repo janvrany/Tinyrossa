@@ -25,14 +25,42 @@ TRRV64GPSABILinkage >> allocatableRegisters [
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generateEpilogue: valReg [
-	codegen generate
+	generate
 		addi: a0, valReg, 0; "Move value to ABI return register"
-		jalr: zero, ra, 0.       "Return"
+		jalr: zero, ra, 0.   "Return"
 ]
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generatePrologue [
-	| parameters parameterRegs automatics |
+	"Nothing to do now as for now, we force
+	 all in registers and do not support calls!"
+]
+
+{ #category : #initialization }
+TRRV64GPSABILinkage >> initializeWithCodeGenerator: aTRCodeGenerator [ 
+	super initializeWithCodeGenerator: aTRCodeGenerator.
+	generate := codegen assembler
+]
+
+{ #category : #mapping }
+TRRV64GPSABILinkage >> mapAutomatics [
+	| automatics |
+
+	automatics := codegen compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
+
+	"FIXME: following is bogus as we force all automatics to
+	 registers. "
+	automatics do: [:automatic | 
+		| vReg |
+
+		vReg := codegen allocateRegister.
+		automatic setRegister: vReg.
+	].
+]
+
+{ #category : #mapping }
+TRRV64GPSABILinkage >> mapParameters [
+	| parameters parameterRegs |
 
 	parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
 
@@ -50,22 +78,4 @@ TRRV64GPSABILinkage >> generatePrologue [
 
 		parameter setRegister: vReg.
 	].
-
-	automatics := codegen compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
-
-	"FIXME: following is bogus as we force all automatics to
-	 registers. We need to defer to linages to build a frame
-	 and manage spills / reloads."
-	automatics do: [:automatic | 
-		| vReg |
-
-		vReg := codegen allocateRegister.
-		automatic setRegister: vReg.
-	].
-]
-
-{ #category : #initialization }
-TRRV64GPSABILinkage >> initializeWithCodeGenerator: aTRCodeGenerator [ 
-	super initializeWithCodeGenerator: aTRCodeGenerator.
-	generate := codegen assembler
 ]

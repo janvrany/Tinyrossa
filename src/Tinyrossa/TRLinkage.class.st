@@ -34,3 +34,13 @@ TRLinkage >> generatePrologue [
 TRLinkage >> initializeWithCodeGenerator: aTRCodeGenerator [
 	codegen := aTRCodeGenerator
 ]
+
+{ #category : #mapping }
+TRLinkage >> mapAutomatics [
+	^ self subclassResponsibility
+]
+
+{ #category : #mapping }
+TRLinkage >> mapParameters [
+	^ self subclassResponsibility
+]
