@@ -1,6 +1,6 @@
 Extension { #name : #AcInstruction }
 
-{ #category : '*Tinyrossa' }
+{ #category : #'*Tinyrossa' }
 AcInstruction >> isLeaveInstruction [
 	^ false
 ]
