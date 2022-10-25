@@ -30,18 +30,10 @@ TRCodeGenerator >> allocateRegister [
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> allocateRegisters [
-	| allocator insns |
+	| allocator |
 
 	allocator := self registerAllocatorClass forCodeGenerator: self.
 	allocator allocateRegisters.
-	"
-	Now, we just walk over instructions and replace symbolic 
-	registers with allocated ones.
-	"
-	insns := self instructions.
-	1 to: insns size do: [:i | 
-		insns at: i put: ((insns at: i) inEnvironment: virtualRegisters)
-	].
 ]
 
 { #category : #'accessing - config' }
@@ -50,8 +42,18 @@ TRCodeGenerator >> evaluatorClass [
 ]
 
 { #category : #'code gen-phases' }
-TRCodeGenerator >> fixupBranchTargets [    
-	^ self shouldImplement
+TRCodeGenerator >> fixupBranches [
+	^ self subclassResponsibility
+]
+
+{ #category : #'code gen-phases' }
+TRCodeGenerator >> fixupOffsets [
+	^ self subclassResponsibility
+]
+
+{ #category : #'code gen-phases' }
+TRCodeGenerator >> fixupRegisters [
+	^ self subclassResponsibility
 ]
 
 { #category : #'code gen' }
@@ -67,14 +69,16 @@ TRCodeGenerator >> generate: il [
 	"
 
 	self
-		mapParametersAndAutomatics;
 		generateCode: il;
 		allocateRegisters;
 
+		mapStack;
 		generatePrologue;
 		generateEpilogues;
 
-		fixupBranchTargets.
+		fixupRegisters;
+		fixupOffsets;
+		fixupBranches.
 ]
 
 { #category : #'code gen-phases' }
@@ -124,13 +128,11 @@ TRCodeGenerator >> linkageClass [
 ]
 
 { #category : #'code gen-phases' }
-TRCodeGenerator >> mapParametersAndAutomatics [
-	"Godegen phase: map parameters and automatics to
-	 stack slots."
+TRCodeGenerator >> mapStack [
+	"Godegen phase: compute frame size and map parameters, automatics 
+	 and spills to stack slots."
 
-	linkage
-		mapParameters;
-		mapAutomatics.
+	linkage mapStack
 ]
 
 { #category : #'accessing - config' }

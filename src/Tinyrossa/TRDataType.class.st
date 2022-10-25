@@ -26,6 +26,13 @@ TRDataType >> isCompatibleWith: anotherType [
 	^ self == anotherType
 ]
 
+{ #category : #testing }
+TRDataType >> isIntegerType [
+	"Return true, if receiver is integer type (of any width)"
+
+	^ false
+]
+
 { #category : #accessing }
 TRDataType >> name [
 	self subclassResponsibility
