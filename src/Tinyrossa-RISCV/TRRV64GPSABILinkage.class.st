@@ -9,7 +9,8 @@ Class {
 	#superclass : #TRLinkage,
 	#instVars : [
 		'generate',
-		'frameSize'
+		'frameSize',
+		'framePreservedOffset'
 	],
 	#pools : [
 		'TRRV64GRegisters'
@@ -19,24 +20,46 @@ Class {
 
 { #category : #accessing }
 TRRV64GPSABILinkage >> allocatableRegisters [
+	"^ { t0 . t1 . t2 . t3 . t4 . t5 . t6 }"
+	^ self preservedRegisters
+]
 
-	"FIXME: bogus!"
-	^ { t0 . t1 . t2 . t3 . t4 . t5 . t6 }
+{ #category : #accessing }
+TRRV64GPSABILinkage >> allocatedPreservedRegisters [
+	| allocated |
+
+	allocated := self allocatedRegisters.
+	^ self preservedRegisters select: [:e | allocated includes: e ]
 ]
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generateEpilogue: valReg [
+	| preserved offset |
+
+	"Move value to ABI return register...
+	 ...and reload link register."
 	generate
-		addi: a0, valReg, 0;    "Move value to ABI return register"
-		ld: ra, sp, 0;          "Reload link register"
+		addi: a0, valReg, 0;
+		ld: ra, sp, 0.      
+
+	"Restore preserved registers"
+	offset := framePreservedOffset.
+	preserved := self allocatedPreservedRegisters.
+	preserved do: [:preservedReg | 
+		generate ld: preservedReg, sp, offset.
+		offset := offset + 8.
+	].  
+
+	"Destroy the frame...
+	 and return."
+	generate
 		addi: sp, sp, frameSize;"Destroy the frame"
 		jalr: zero, ra, 0.      "Return"
 ]
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generatePrologue [
-
-	| parameters |
+	| parameters preserved offset |
 
 	"Allocate frame"
 	generate addi: sp, sp, frameSize negated.
@@ -50,7 +73,13 @@ TRRV64GPSABILinkage >> generatePrologue [
 		generate sd: sp, paramReg, parameter offset.
 	].
 
-	"FIXME: Save preserved registers"
+	"Save preserved registers"
+	offset := framePreservedOffset.
+	preserved := self allocatedPreservedRegisters.
+	preserved do: [:preservedReg | 
+		generate sd: sp, preservedReg, offset.
+		offset := offset + 8.
+	].
 ]
 
 { #category : #initialization }
@@ -60,6 +89,7 @@ TRRV64GPSABILinkage >> initializeWithCodeGenerator: aTRCodeGenerator [
 
 	"Always save link register."    
 	frameSize := 8.
+	framePreservedOffset := nil.
 ]
 
 { #category : #mapping }
@@ -115,7 +145,7 @@ TRRV64GPSABILinkage >> mapStack [
 	 For simplicity, all slots are 8 bytes.    
 	"
 
-	| offset automatics parameters |
+	| offset automatics preserved parameters |
 
 	offset := 8. "Slot at offset 0 is for link register"
 
@@ -125,7 +155,9 @@ TRRV64GPSABILinkage >> mapStack [
 		offset := offset + 8.
 	].
 
-	"FIXME: Compute size for saved registers."
+	framePreservedOffset := offset.
+	preserved := self allocatedPreservedRegisters.
+	offset := offset + (preserved size * 8).
 
 	parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
 	parameters do: [:parameter | 
@@ -139,4 +171,9 @@ TRRV64GPSABILinkage >> mapStack [
 { #category : #accessing }
 TRRV64GPSABILinkage >> parameterRegisters [
 	^ { a0 . a1 . a2 . a3 . a4 . a5 . a6 . a7 }
+]
+
+{ #category : #accessing }
+TRRV64GPSABILinkage >> preservedRegisters [
+	^ { s0 . s1 . s2 . s3 . s4 . s5 . s6 . s7 . s8 . s9 . s10 . s11 }
 ]

@@ -20,6 +20,14 @@ TRLinkage >> allocatableRegisters [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+TRLinkage >> allocatedRegisters [
+	"Return the set of machine registers that are actually 
+	 used (have been assigned by RA)."
+
+	^ codegen virtualRegisters collect: [ :vReg | vReg allocation ]
+]
+
 { #category : #'code generation' }
 TRLinkage >> generateEpilogue: valReg [
 	^ self subclassResponsibility

@@ -1,6 +1,6 @@
 Extension { #name : #AcDSLAssembler }
 
-{ #category : '*Tinyrossa' }
+{ #category : #'*Tinyrossa' }
 AcDSLAssembler >> leave: aTRVirtualRegister [
 	| insn |
 
