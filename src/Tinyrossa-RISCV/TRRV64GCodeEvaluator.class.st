@@ -99,14 +99,15 @@ TRRV64GCodeEvaluator >> evaluate_ificmple: node [
 TRRV64GCodeEvaluator >> evaluate_iload: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 
-	| dstReg |
+	| symbol dstReg |
 
-	dstReg := node symbol register.
-	dstReg notNil ifTrue: [ 
-		"Nothing"
-	] ifFalse: [ 
-		self notYetImplemented
+	symbol := node symbol.
+	dstReg := symbol register.
+	dstReg isNil ifTrue: [ 
+		dstReg := codegen allocateRegister.
+		symbol setRegister: dstReg.
 	].
+	generate lw: dstReg, sp, (AcDSLSymbol value: symbol name).
 
 	^ dstReg
 ]
@@ -126,20 +127,21 @@ TRRV64GCodeEvaluator >> evaluate_imul: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_istore: node [
-	| srcReg dstReg |
+	| symbol srcReg dstReg |
 
+	symbol := node symbol.
 	srcReg := self evaluate: node child1.
-	dstReg := node symbol register.
-
-
-	dstReg notNil ifTrue: [ 
-		generate
-			addi: dstReg, srcReg, 0
-	] ifFalse: [ 
-		self notYetImplemented
+	dstReg := symbol register.
+	dstReg isNil ifTrue: [
+		dstReg := srcReg.
+		symbol setRegister: dstReg.
 	].
+	srcReg ~~ dstReg ifTrue: [ 
+		generate addi: dstReg, srcReg, 0.
+	].
+	generate sw: sp, srcReg, (AcDSLSymbol value: symbol name).
 
-	^ dstReg
+	^ nil
 ]
 
 { #category : #evaluation }

@@ -4,6 +4,11 @@ Class {
 	#category : #'Tinyrossa-Datatypes'
 }
 
+{ #category : #testing }
+TRDataTypeAddress >> isIntegerType [
+	^ true
+]
+
 { #category : #accessing }
 TRDataTypeAddress >> name [
 	^ 'Address'

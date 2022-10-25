@@ -4,6 +4,11 @@ Class {
 	#category : #'Tinyrossa-Datatypes'
 }
 
+{ #category : #testing }
+TRDataTypeInt64 >> isIntegerType [
+	^ true
+]
+
 { #category : #accessing }
 TRDataTypeInt64 >> name [
 	^ 'Int64'

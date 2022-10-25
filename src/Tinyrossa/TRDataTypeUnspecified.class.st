@@ -9,6 +9,11 @@ TRDataTypeUnspecified >> isCompatibleWith: anotherType [
 	^ true "Any type matches unspecified type"
 ]
 
+{ #category : #testing }
+TRDataTypeUnspecified >> isIntegerType [
+	self shouldNotImplement
+]
+
 { #category : #accessing }
 TRDataTypeUnspecified >> name [
 	^ 'Unspecified'

@@ -36,11 +36,8 @@ TRLinkage >> initializeWithCodeGenerator: aTRCodeGenerator [
 ]
 
 { #category : #mapping }
-TRLinkage >> mapAutomatics [
-	^ self subclassResponsibility
-]
-
-{ #category : #mapping }
-TRLinkage >> mapParameters [
+TRLinkage >> mapStack [
+	"Compute frame size and map parameters, automatics 
+	 and spills to stack slots."        
 	^ self subclassResponsibility
 ]
