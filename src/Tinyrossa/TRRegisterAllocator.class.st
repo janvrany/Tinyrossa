@@ -7,6 +7,11 @@ Class {
 	#category : #'Tinyrossa-Codegen-Register Allocation'
 }
 
+{ #category : #defaults }
+TRRegisterAllocator class >> defaultClass [
+	^ TRLinearScanRegisterAllocator
+]
+
 { #category : #'instance creation' }
 TRRegisterAllocator class >> forCodeGenerator: aTRCodeGenerator [
 	^ self basicNew initializeWithCodeGenerator: aTRCodeGenerator
