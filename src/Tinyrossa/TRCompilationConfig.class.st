@@ -21,6 +21,16 @@ TRCompilationConfig class >> new [
 ]
 
 { #category : #options }
+TRCompilationConfig >> aot [
+	^ options at: OptionAOT ifAbsent: [ false ]
+]
+
+{ #category : #options }
+TRCompilationConfig >> aot: aBoolean [
+	options at: OptionAOT put: aBoolean
+]
+
+{ #category : #options }
 TRCompilationConfig >> codeGeneratorClass [
 	^ self target codeGeneratorClass
 ]
@@ -39,6 +49,16 @@ TRCompilationConfig >> linkageClass [
 { #category : #options }
 TRCompilationConfig >> linkageClass: aClass [
 	^ options at: OptionLinkage put: aClass
+]
+
+{ #category : #options }
+TRCompilationConfig >> objectFile [
+	^ options at: OptionObjectFile ifAbsent: [ 'a.out' ]
+]
+
+{ #category : #options }
+TRCompilationConfig >> objectFile: aString [
+	options at: OptionObjectFile put: aString
 ]
 
 { #category : #options }

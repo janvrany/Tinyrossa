@@ -209,6 +209,18 @@ TRCompilationExamples >> example05_factorial_r [
 	compilation codeBuffer. "Only convenience inspection."
 ]
 
+{ #category : #examples }
+TRCompilationExamples >> example06_factorial_aot [
+
+	compilation config 
+		aot: true;
+		objectFile: 'factorial.o'.
+
+	self example05_factorial_r.
+
+	self assert: 'factorial.o' asFileReference exists
+]
+
 { #category : #running }
 TRCompilationExamples >> setUp [
 	super setUp.
