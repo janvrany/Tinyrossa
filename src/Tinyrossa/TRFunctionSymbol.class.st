@@ -2,7 +2,8 @@ Class {
 	#name : #TRFunctionSymbol,
 	#superclass : #TRSymbol,
 	#instVars : [
-		'linkageClass'
+		'linkageClass',
+		'parameters'
 	],
 	#category : #'Tinyrossa-IL-Symbols'
 }

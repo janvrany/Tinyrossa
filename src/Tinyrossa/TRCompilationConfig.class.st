@@ -2,9 +2,12 @@ Class {
 	#name : #TRCompilationConfig,
 	#superclass : #Object,
 	#instVars : [
-		'target'
+		'options'
 	],
-	#category : #'Tinyrossa-Compile'
+	#pools : [
+		'TRCompilationConfigOptions'
+	],
+	#category : #'Tinyrossa-Config'
 }
 
 { #category : #'instance creation' }
@@ -19,20 +22,36 @@ TRCompilationConfig class >> new [
 
 { #category : #options }
 TRCompilationConfig >> codeGeneratorClass [
-	^ target codeGeneratorClass
+	^ self target codeGeneratorClass
 ]
 
 { #category : #initialization }
 TRCompilationConfig >> initializeWithTarget: aTRCompilationTarget [
-	target := aTRCompilationTarget
+	options := Dictionary new.
+	options at: OptionTarget put: aTRCompilationTarget
 ]
 
 { #category : #options }
 TRCompilationConfig >> linkageClass [
-	^ target systemLinkageClass
+	^ options at: OptionLinkage ifAbsent:[ self target systemLinkageClass ]
+]
+
+{ #category : #options }
+TRCompilationConfig >> linkageClass: aClass [
+	^ options at: OptionLinkage put: aClass
 ]
 
 { #category : #options }
 TRCompilationConfig >> registerAllocatorClass [
-	^ TRLinearScanRegisterAllocator
+	^ options at: OptionRegisterAllocator ifAbsent: [ TRRegisterAllocator defaultClass ]
+]
+
+{ #category : #options }
+TRCompilationConfig >> registerAllocatorClass: aClass [
+	^ options at: OptionRegisterAllocator put: aClass
+]
+
+{ #category : #options }
+TRCompilationConfig >> target [
+	^ options at: OptionTarget ifAbsent: [ self error:'Oops, no target specified!' ]
 ]
