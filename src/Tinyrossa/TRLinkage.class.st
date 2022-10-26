@@ -29,6 +29,11 @@ TRLinkage >> allocatedRegisters [
 ]
 
 { #category : #'code generation' }
+TRLinkage >> generateCall: node [
+	^ self subclassResponsibility
+]
+
+{ #category : #'code generation' }
 TRLinkage >> generateEpilogue: valReg [
 	^ self subclassResponsibility
 ]

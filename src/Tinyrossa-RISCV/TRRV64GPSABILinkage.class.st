@@ -33,6 +33,25 @@ TRRV64GPSABILinkage >> allocatedPreservedRegisters [
 ]
 
 { #category : #'code generation' }
+TRRV64GPSABILinkage >> generateCall: node [
+	| parameterVregs parameterTypes parameterRregs retVreg|
+
+	parameterVregs := node children collect: [ :child | codegen evaluator evaluate: child ].
+	parameterTypes := node children collect: [ :child | child type ].
+	parameterRregs := self mapParameters: parameterTypes.
+
+	parameterVregs with: parameterRregs do: [:valReg :paramReg | 
+		generate addi: paramReg , valReg, 0
+	].
+
+	generate jal: ra, node symbol.
+
+	retVreg := codegen allocateRegister.
+	generate addi: retVreg , a0, 0.
+	^ retVreg
+]
+
+{ #category : #'code generation' }
 TRRV64GPSABILinkage >> generateEpilogue: valReg [
 	| preserved offset |
 
@@ -59,7 +78,7 @@ TRRV64GPSABILinkage >> generateEpilogue: valReg [
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generatePrologue [
-	| parameters preserved offset |
+	| parameters parameterTypes preserved offset |
 
 	"Allocate frame"
 	generate addi: sp, sp, frameSize negated.
@@ -69,7 +88,9 @@ TRRV64GPSABILinkage >> generatePrologue [
 
 	"Save parameters"
 	parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
-	(self mapParameters: parameters) keysAndValuesDo: [ :parameter :paramReg |
+	parameters := parameters sorted: [ :a :b | a index < b index ].
+	parameterTypes := parameters collect: [ :parameter | parameter type ].
+	parameters with: (self mapParameters: parameterTypes) do: [ :parameter :paramReg |
 		generate sd: sp, paramReg, parameter offset.
 	].
 
@@ -93,7 +114,7 @@ TRRV64GPSABILinkage >> initializeWithCodeGenerator: aTRCodeGenerator [
 ]
 
 { #category : #mapping }
-TRRV64GPSABILinkage >> mapParameters: parameters [ 
+TRRV64GPSABILinkage >> mapParameters: parameterTypes [ 
 	"Map parameters to argument registers.
 
 	 Return a Dictionary mapping parameter to either
@@ -103,12 +124,12 @@ TRRV64GPSABILinkage >> mapParameters: parameters [
 	
 	| parameterMapping |
 
-	parameterMapping := Dictionary new: parameters size.
-	parameters do: [:parameter | 
+	parameterMapping := Array new: parameterTypes size.
+	parameterTypes withIndexDo: [:type :index | 
 		"For now, only up to 8 integer parameters are supported."
-		self assert: parameter type isIntegerType.
-		self assert: parameter index <= 8.
-		parameterMapping at: parameter put: (self parameterRegisters at: parameter index)
+		self assert: type isIntegerType.
+		self assert: index <= 8.
+		parameterMapping at: index put: (self parameterRegisters at: index)
 	].
 	^ parameterMapping
 ]

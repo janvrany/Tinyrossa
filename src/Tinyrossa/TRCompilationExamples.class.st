@@ -162,6 +162,53 @@ TRCompilationExamples >> example04_factorial_i [
 	compilation codeBuffer. "Only convenience inspection."
 ]
 
+{ #category : #examples }
+TRCompilationExamples >> example05_factorial_r [
+	| builder |
+
+	builder := compilation builder.
+	builder defineName: 'factorial_r' type: Int32.
+	builder defineParameter: 'x' type: Int32.   
+
+	"
+	def factorial_r(x):
+		if x == 0:
+			return 1
+		else:
+			return x * factorial_r(x - 1)
+	"
+
+	builder 
+		"if x == 0:"
+		if: (builder icmpeq: { builder iload: 'x' . builder iconst: 0  })
+		then: [ :builder |
+			"return 1"
+			builder ireturn: 
+				{ builder iconst: 1 }
+		] else: [ :builder |
+			"return x * factorial_r(x - 1)"
+			builder ireturn: 
+				{ builder imul: 
+					{ builder iload: 'x' .
+					  builder icall: 
+						{ builder isub: 
+							{ builder iload: 'x' .
+							  builder iconst: 1 } .
+						'factorial_r' } } }
+		].
+
+	compilation buildFinished. "Indicate we're done building/"
+
+	compilation il. "Only convenience inspection."
+
+	compilation optimize.
+	compilation il. "Only convenience inspection."
+
+	compilation compile.
+
+	compilation codeBuffer. "Only convenience inspection."
+]
+
 { #category : #running }
 TRCompilationExamples >> setUp [
 	super setUp.

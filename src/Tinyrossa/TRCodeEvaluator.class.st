@@ -29,6 +29,11 @@ TRCodeEvaluator >> evaluate: node [
 ]
 
 { #category : #evaluation }
+TRCodeEvaluator >> evaluate_acall: node [
+	^ self evaluate_call: node
+]
+
+{ #category : #evaluation }
 TRCodeEvaluator >> evaluate_areturn: node [
 	self evaluate_return: node
 ]
@@ -44,8 +49,26 @@ TRCodeEvaluator >> evaluate_bbstart: node [
 ]
 
 { #category : #evaluation }
+TRCodeEvaluator >> evaluate_call: node [
+	| linkage |
+
+	linkage := codegen createLinkage: node symbol linkageClass.
+	^ linkage generateCall: node
+]
+
+{ #category : #evaluation }
+TRCodeEvaluator >> evaluate_dcall: node [
+	^ self evaluate_call: node
+]
+
+{ #category : #evaluation }
 TRCodeEvaluator >> evaluate_dreturn: node [
 	self evaluate_return: node
+]
+
+{ #category : #evaluation }
+TRCodeEvaluator >> evaluate_fcall: node [
+	^ self evaluate_call: node
 ]
 
 { #category : #evaluation }
@@ -54,8 +77,18 @@ TRCodeEvaluator >> evaluate_freturn: node [
 ]
 
 { #category : #evaluation }
+TRCodeEvaluator >> evaluate_icall: node [
+	^ self evaluate_call: node
+]
+
+{ #category : #evaluation }
 TRCodeEvaluator >> evaluate_ireturn: node [
 	self evaluate_return: node
+]
+
+{ #category : #evaluation }
+TRCodeEvaluator >> evaluate_lcall: node [
+	^ self evaluate_call: node
 ]
 
 { #category : #evaluation }
