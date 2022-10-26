@@ -96,6 +96,13 @@ TRCompilation >> compile [
 
 	cg := self codegen.
 	cg generate: self il.
+
+	config aot ifTrue: [ 
+		| objgen |    
+
+		objgen := TRELFGenerator forCompilation: self.
+		objgen generateObjectFile
+	].
 ]
 
 { #category : #accessing }

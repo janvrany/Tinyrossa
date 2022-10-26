@@ -12,11 +12,16 @@ pharo/*Test.xml
 pharo/bin
 pharo/lib
 pharo/Pharo*.zip
+pharo/*.o
+pharo/*.s
 
 # Smalltalk/X
 stx/stx
 stx/package-cache
 stx/*Test.xml
+stx/*.o
+stx/*.s
+
 
 # External dependencies
 3rdparty
