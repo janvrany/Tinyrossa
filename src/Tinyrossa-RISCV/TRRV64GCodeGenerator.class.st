@@ -92,6 +92,7 @@ TRRV64GCodeGenerator >> generateEpilogues [
 { #category : #'code gen-phases' }
 TRRV64GCodeGenerator >> generatePrologue [
 	generate cursor: 0.
+	generate label: compilation functionSymbol name.
 	self linkage generatePrologue
 ]
 

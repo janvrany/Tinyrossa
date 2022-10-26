@@ -96,6 +96,17 @@ TRRV64GCodeEvaluator >> evaluate_ificmple: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmpne: node [
+	| src1Reg src2Reg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	generate 
+		bne: src2Reg, src1Reg, node symbol.
+	^ nil
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_iload: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 

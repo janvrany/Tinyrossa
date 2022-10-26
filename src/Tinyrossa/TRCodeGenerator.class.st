@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'compilation',
 		'virtualRegisters',
-		'linkage'
+		'linkage',
+		'evaluator'
 	],
 	#category : #'Tinyrossa-Codegen'
 }
@@ -34,6 +35,21 @@ TRCodeGenerator >> allocateRegisters [
 
 	allocator := self registerAllocatorClass forCodeGenerator: self.
 	allocator allocateRegisters.
+]
+
+{ #category : #'instance creation' }
+TRCodeGenerator >> createEvaluator [
+	^ self evaluatorClass forCodeGenerator: self
+]
+
+{ #category : #'instance creation' }
+TRCodeGenerator >> createLinkage: linkageClass [
+	^ linkageClass forCodeGenerator: self
+]
+
+{ #category : #accessing }
+TRCodeGenerator >> evaluator [
+	^ evaluator
 ]
 
 { #category : #'accessing - config' }
@@ -89,9 +105,6 @@ TRCodeGenerator >> generateCode: il [
 	 prologue / epilogues are generated at different
 	 phases.
 	"
-	| evaluator |
-
-	evaluator := self evaluatorClass forCodeGenerator: self.
 	il do: [:node | evaluator evaluate: node ].
 ]
 
@@ -106,10 +119,11 @@ TRCodeGenerator >> generatePrologue [
 ]
 
 { #category : #initialization }
-TRCodeGenerator >> initializeWithCompilation: aTRCompilation [
+TRCodeGenerator >> initializeWithCompilation: aTRCompilation [ 
 	compilation := aTRCompilation.
 	virtualRegisters := Dictionary new.
-	linkage := self linkageClass forCodeGenerator: self.
+	linkage := self createLinkage: compilation functionSymbol linkageClass.
+	evaluator := self createEvaluator.
 ]
 
 { #category : #accessing }
@@ -120,11 +134,6 @@ TRCodeGenerator >> instructions [
 { #category : #accessing }
 TRCodeGenerator >> linkage [
 	^ linkage
-]
-
-{ #category : #'accessing - config' }
-TRCodeGenerator >> linkageClass [
-	^ compilation functionSymbol linkageClass
 ]
 
 { #category : #'code gen-phases' }
