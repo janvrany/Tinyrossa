@@ -17,6 +17,7 @@ ManifestTinyrossaToolsSmalltalkX class >> mandatoryPreRequisites [
 	^ #(
 		#Tinyrossa    "TRCompilation - extended"
 		#'jv:vdb'    "VDBAbstractApplication - superclass of TRILTreeApp"
+		#'jv:vdb/plugins/archc'    "VDBAbstractApplication - superclass of TRILTreeApp"
 		#'stx:libbasic'    "Object - extended"
 		#'stx:libcompat'    "PackageManifest - superclass of ManifestTinyrossaToolsSmalltalkX"
 		#'stx:libview2'    "ApplicationModel - superclass of TRCompilationExplorerApp"
