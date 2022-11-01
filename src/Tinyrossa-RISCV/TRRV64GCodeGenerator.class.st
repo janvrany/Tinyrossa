@@ -4,11 +4,21 @@ Class {
 	#instVars : [
 		'generate'
 	],
+	#classVars : [
+		'MaxItypeImm',
+		'MinItypeImm'
+	],
 	#pools : [
 		'TRRV64GRegisters'
 	],
 	#category : #'Tinyrossa-RISCV-Codegen'
 }
+
+{ #category : #initialization }
+TRRV64GCodeGenerator class >> initialize [
+	MaxItypeImm :=  16r7FF.
+	MinItypeImm := -16r800.
+]
 
 { #category : #private }
 TRRV64GCodeGenerator >> assembler [
@@ -33,6 +43,11 @@ TRRV64GCodeGenerator >> compilation [
 { #category : #'accessing-config' }
 TRRV64GCodeGenerator >> evaluatorClass [
 	^ TRRV64GCodeEvaluator
+]
+
+{ #category : #queries }
+TRRV64GCodeGenerator >> fitsInItypeImm: anInteger [
+	^ anInteger between: MinItypeImm and: MaxItypeImm
 ]
 
 { #category : #'code gen-phases' }

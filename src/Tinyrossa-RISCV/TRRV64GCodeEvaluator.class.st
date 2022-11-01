@@ -40,13 +40,17 @@ TRRV64GCodeEvaluator >> evaluate_goto: node [
 TRRV64GCodeEvaluator >> evaluate_iadd: node [
 	| src1Reg src2Reg dstReg |
 
-	"FIXME: if second operand is iconst,
-	 use addi"
-	src1Reg := self evaluate: node child1.
-	src2Reg := self evaluate: node child2.
 	dstReg := self codegen allocateRegister.
-	generate
-		addw: dstReg, src1Reg, src2Reg.
+	src1Reg := self evaluate: node child1.
+
+	(node child2 opcode isLoadConst and: [ codegen fitsInItypeImm: node child2 constant ]) ifTrue: [ 
+		generate
+			addi: dstReg, src1Reg, node child2 constant
+	] ifFalse: [
+		src2Reg := self evaluate: node child2.
+		generate
+			addw: dstReg, src1Reg, src2Reg.
+	].
 
 	^ dstReg
 ]
@@ -159,13 +163,17 @@ TRRV64GCodeEvaluator >> evaluate_istore: node [
 TRRV64GCodeEvaluator >> evaluate_isub: node [
 	| src1Reg src2Reg dstReg |
 
-	"FIXME: if second operand is iconst,
-	 use addi"
-	src1Reg := self evaluate: node child1.
-	src2Reg := self evaluate: node child2.
 	dstReg := self codegen allocateRegister.
-	generate
-		subw: dstReg, src1Reg, src2Reg.
+	src1Reg := self evaluate: node child1.
+
+	(node child2 opcode isLoadConst and: [ codegen fitsInItypeImm: node child2 constant negated ]) ifTrue: [ 
+		generate
+			addi: dstReg, src1Reg, node child2 constant negated
+	] ifFalse: [
+		src2Reg := self evaluate: node child2.
+		generate
+			subw: dstReg, src1Reg, src2Reg.
+	].
 
 	^ dstReg
 ]
