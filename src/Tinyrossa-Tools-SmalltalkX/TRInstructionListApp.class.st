@@ -27,14 +27,11 @@ TRInstructionListApp >> backgroundColorFor: aVDBPresenter [
 
 	node := self selectedNodeHolder value.
 	node notNil ifTrue: [ 
-		| dissection insn |
+		|  insn |
 
-		dissection := aVDBPresenter instruction dissection.
-		dissection notNil ifTrue: [
-			insn := dissection perform: #instruction ifNotUnderstood: nil.
-			(insn notNil and: [ insn node = node ]) ifTrue: [
-				^ (View styleSheet colorAt: #grey_bg_color default:[ Color rgbValue: 16r555555 ])
-			].
+		insn := aVDBPresenter instruction dissection.
+		(insn notNil and: [ insn isPseudoInstruction not and:[insn node = node ]]) ifTrue: [
+			^ (View styleSheet colorAt: #grey_bg_color default:[ Color rgbValue: 16r555555 ])
 		].
 	].
 
@@ -51,14 +48,8 @@ TRInstructionListApp >> delayedUpdateSelection [
 
 	super delayedUpdateSelection.
 	insn := self selectedInstructionHolder value.
-	insn notNil ifTrue: [ 
-		insn := insn dissection.
-		insn notNil ifTrue: [ 
-			insn := insn perform:#instruction ifNotUnderstood: nil.
-			insn notNil ifTrue:[
-				node := insn node.
-			].
-		]
+	(insn notNil and:[insn dissection isPseudoInstruction not and:[insn dissection node notNil]]) ifTrue: [ 
+		node := insn dissection node.
 	].
 	self selectedNodeHolder value: node.
 
@@ -77,7 +68,7 @@ TRInstructionListApp >> selectedNodeHolder [
 ]
 
 { #category : #aspects }
-TRInstructionListApp >> selectedNodeHolder:something [
+TRInstructionListApp >> selectedNodeHolder:aValueModel [
 	"set the 'selectedNodeHolder' value holder (automatically generated)"
 
 	|oldValue newValue|
@@ -86,7 +77,7 @@ TRInstructionListApp >> selectedNodeHolder:something [
 		oldValue := selectedNodeHolder value.
 		selectedNodeHolder removeDependent:self.
 	].
-	selectedNodeHolder := something.
+	selectedNodeHolder := aValueModel.
 	selectedNodeHolder notNil ifTrue:[
 		selectedNodeHolder addDependent:self.
 	].
