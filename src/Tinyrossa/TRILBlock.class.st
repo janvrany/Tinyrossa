@@ -79,6 +79,22 @@ TRILBlock >> isEmpty [
 ]
 
 { #category : #testing }
+TRILBlock >> isExtension [
+	"
+	Return `true` if this block is an 'extension' of previous block.
+
+	From https://github.com/eclipse/omr/blob/master/doc/compiler/il/IntroToTrees.md#basic-blocks: 
+
+	   | and locates blocks whose only predecessor is the 
+	   | previous block in program order. Such blocks are 
+	   | flagged as 'extensions' of the previous block
+	"
+	^ precedessors size == 1 
+		and: [ precedessors first successor1 == self
+		and: [ precedessors first next == self ] ]
+]
+
+{ #category : #testing }
 TRILBlock >> isTRILBlock [
 	^ true
 ]

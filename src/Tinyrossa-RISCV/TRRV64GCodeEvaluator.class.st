@@ -24,6 +24,21 @@ TRRV64GCodeEvaluator >> compilation [
 TRRV64GCodeEvaluator >> evaluate_bbstart: node [
 	| label |
 
+	node block isExtension ifFalse: [ 
+		| automatics parameters |
+
+
+		automatics := codegen compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
+		automatics do: [:automatic | 
+			automatic setRegister: nil.
+		].
+
+		parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
+		parameters do: [:parameter | 
+			parameter setRegister: nil.
+		].            
+	].
+
 	label := self compilation symbolManager lookupLabelByBlock: node block.
 	label notNil ifTrue: [ 
 		generate label: label name.
@@ -121,9 +136,8 @@ TRRV64GCodeEvaluator >> evaluate_iload: node [
 	dstReg isNil ifTrue: [ 
 		dstReg := codegen allocateRegister.
 		symbol setRegister: dstReg.
+		generate lw: dstReg, sp, (AcDSLSymbol value: symbol name).
 	].
-	generate lw: dstReg, sp, (AcDSLSymbol value: symbol name).
-
 	^ dstReg
 ]
 

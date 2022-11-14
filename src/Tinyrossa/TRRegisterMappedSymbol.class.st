@@ -57,7 +57,7 @@ TRRegisterMappedSymbol >> setOffset: anInteger [
 
 { #category : #initialization }
 TRRegisterMappedSymbol >> setRegister: aTRVirtualRegister [
-	self assert: register isNil.
+	self assert: (register isNil or: [ aTRVirtualRegister isNil ]).
 
 	register := aTRVirtualRegister
 ]
