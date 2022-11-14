@@ -7,6 +7,9 @@ Class {
 		'linkage',
 		'evaluator'
 	],
+	#pools : [
+		'TRRegisterKinds'
+	],
 	#category : #'Tinyrossa-Codegen'
 }
 
@@ -22,9 +25,14 @@ TRCodeGenerator class >> new [
 
 { #category : #registers }
 TRCodeGenerator >> allocateRegister [
+	^ self allocateRegister: GPR
+]
+
+{ #category : #registers }
+TRCodeGenerator >> allocateRegister: kind [
 	| reg |
 
-	reg := TRVirtualRegister named: ('VR_' , (virtualRegisters size + 1) printString).
+	reg := TRVirtualRegister named: (kind name , '_' , (virtualRegisters size + 1) printString) kind: kind.
 	virtualRegisters at: reg name put: reg.
 	^ reg
 ]

@@ -3,6 +3,7 @@ Class {
 	#superclass : #AcDSLOperand,
 	#instVars : [
 		'name',
+		'kind',
 		'constraints',
 		'allocation'
 	],
@@ -14,6 +15,11 @@ TRVirtualRegister class >> named: aString [
 	^ self basicNew initializeWithName: aString
 ]
 
+{ #category : #'instance creation' }
+TRVirtualRegister class >> named: aString kind: aTRRegisterKind [         
+	^ self basicNew initializeWithName: aString kind: aTRRegisterKind
+]
+
 { #category : #accessing }
 TRVirtualRegister >> allocation [
 	^ allocation
@@ -22,7 +28,8 @@ TRVirtualRegister >> allocation [
 { #category : #accessing }
 TRVirtualRegister >> allocation: realReg [
 	self assert: allocation isNil.
-	self assert: (realReg isKindOf: AcDSLRegister).
+	self assert: (realReg isKindOf: TRRealRegister).
+	self assert: kind == realReg kind.
 
 	allocation := realReg
 ]
@@ -62,18 +69,9 @@ TRVirtualRegister >> hasConstraints [
 ]
 
 { #category : #initialization }
-TRVirtualRegister >> initializeNamed: arg [
-	"Invoked when a new instance is created for arg."
-
-	"  please change as required (and remove these comments)"
-	"  do something with arg here (instVar-foo := arg)"
-	"  name := nil."
-
-	"  super initialize.   -- commented since inherited method does nothing"
-]
-
-{ #category : #initialization }
-TRVirtualRegister >> initializeWithName: aString [
+TRVirtualRegister >> initializeWithName: aString kind: aTRRegisterKind [
+	name := aString.
+	kind := aTRRegisterKind.
 	name := aString
 ]
 
