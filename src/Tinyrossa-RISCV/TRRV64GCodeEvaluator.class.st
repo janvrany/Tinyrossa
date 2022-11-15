@@ -1,49 +1,11 @@
 Class {
 	#name : #TRRV64GCodeEvaluator,
 	#superclass : #TRCodeEvaluator,
-	#instVars : [
-		'generate'
-	],
 	#pools : [
 		'TRRV64GRegisters'
 	],
 	#category : #'Tinyrossa-RISCV-Codegen'
 }
-
-{ #category : #accessing }
-TRRV64GCodeEvaluator >> codegen [
-	^ codegen
-]
-
-{ #category : #accessing }
-TRRV64GCodeEvaluator >> compilation [
-	^ self codegen compilation
-]
-
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_bbstart: node [
-	| label |
-
-	node block isExtension ifFalse: [ 
-		| automatics parameters |
-
-
-		automatics := codegen compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
-		automatics do: [:automatic | 
-			automatic setRegister: nil.
-		].
-
-		parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
-		parameters do: [:parameter | 
-			parameter setRegister: nil.
-		].            
-	].
-
-	label := self compilation symbolManager lookupLabelByBlock: node block.
-	label notNil ifTrue: [ 
-		generate label: label name.
-	].
-]
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_goto: node [
@@ -190,42 +152,4 @@ TRRV64GCodeEvaluator >> evaluate_isub: node [
 	].
 
 	^ dstReg
-]
-
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_return: node [
-	| retReg |
-
-	self assert: codegen compilation functionType == node child1 type.
-
-	retReg := self evaluate: node child1.
-	generate leave: retReg
-]
-
-{ #category : #private }
-TRRV64GCodeEvaluator >> ground: instruction using: encoding [ 
-	| insn |
-
-	insn := instruction as: codegen instructionClass.
-	insn setBinaryEncoding: encoding.
-	 "Set the TRIL node that caused this instruction to be generated - if not
-	 already set (which happens when you ground a partially grounded
-	 instruction).
-	 It's bit tricky, but this is the API that ArchC provides at the moment.
-	""Set the TRIL node that caused this instruction to be generated - if not
-	 already set (which happens when you ground a partially grounded
-	 instruction).
-	 It's bit tricky, but this is the API that ArchC provides at the moment.
-	"
-	insn node isNil ifTrue: [
-		insn node: currentNode.
-	].
-	^ insn
-]
-
-{ #category : #initialization }
-TRRV64GCodeEvaluator >> initializeWithCodeGenerator: aTRCodeGenerator [ 
-	super initializeWithCodeGenerator: aTRCodeGenerator.
-	generate := codegen assembler.
-	generate grounder: self.
 ]

@@ -1,7 +1,7 @@
 Class {
 	#name : #TRRV64GLinux,
 	#superclass : #TRCompilationTarget,
-	#category : #'Tinyrossa-Compile'
+	#category : #'Tinyrossa-RISCV-Compile'
 }
 
 { #category : #accessing }

@@ -14,3 +14,8 @@ TRCompilationTarget class >> default [
 	].
 	^ default
 ]
+
+{ #category : #accessing }
+TRCompilationTarget >> name [
+	^ self subclassResponsibility
+]

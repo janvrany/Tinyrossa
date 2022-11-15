@@ -8,7 +8,6 @@ Class {
 	#name : #TRRV64GPSABILinkage,
 	#superclass : #TRLinkage,
 	#instVars : [
-		'generate',
 		'frameSize',
 		'framePreservedOffset'
 	],
@@ -106,7 +105,6 @@ TRRV64GPSABILinkage >> generatePrologue [
 { #category : #initialization }
 TRRV64GPSABILinkage >> initializeWithCodeGenerator: aTRCodeGenerator [ 
 	super initializeWithCodeGenerator: aTRCodeGenerator.
-	generate := codegen assembler.
 
 	"Always save link register."    
 	frameSize := 8.
