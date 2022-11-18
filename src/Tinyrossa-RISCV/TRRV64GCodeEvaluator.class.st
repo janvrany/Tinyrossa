@@ -136,7 +136,7 @@ TRRV64GCodeEvaluator >> evaluate_iload: node [
 	dstReg isNil ifTrue: [ 
 		dstReg := codegen allocateRegister.
 		symbol setRegister: dstReg.
-		generate lw: dstReg, sp, (AcDSLSymbol value: symbol name).
+		generate lw: dstReg, (sp + (AcDSLSymbol value: symbol name)).
 	].
 	^ dstReg
 ]
@@ -168,7 +168,7 @@ TRRV64GCodeEvaluator >> evaluate_istore: node [
 	srcReg ~~ dstReg ifTrue: [ 
 		generate addi: dstReg, srcReg, 0.
 	].
-	generate sw: sp, srcReg, (AcDSLSymbol value: symbol name).
+	generate sw: srcReg, (sp + (AcDSLSymbol value: symbol name)).
 
 	^ nil
 ]

@@ -59,13 +59,13 @@ TRRV64GPSABILinkage >> generateEpilogue: valReg [
 	 ...and reload link register."
 	generate
 		addi: a0, valReg, 0;
-		ld: ra, sp, 0.      
+		ld: ra, (sp + 0).      
 
 	"Restore preserved registers"
 	offset := framePreservedOffset.
 	preserved := self allocatedPreservedRegisters.
 	preserved do: [:preservedReg | 
-		generate ld: preservedReg, sp, offset.
+		generate ld: preservedReg, (sp + offset).
 		offset := offset + 8.
 	].  
 
@@ -84,21 +84,21 @@ TRRV64GPSABILinkage >> generatePrologue [
 	generate addi: sp, sp, frameSize negated.
 
 	"Save link register"
-	generate sd: sp, ra, 0.
+	generate sd: ra, (sp + 0).
 
 	"Save parameters"
 	parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
 	parameters := parameters sorted: [ :a :b | a index < b index ].
 	parameterTypes := parameters collect: [ :parameter | parameter type ].
 	parameters with: (self mapParameters: parameterTypes) do: [ :parameter :paramReg |
-		generate sd: sp, paramReg, parameter offset.
+		generate sd: paramReg, (sp + parameter offset).
 	].
 
 	"Save preserved registers"
 	offset := framePreservedOffset.
 	preserved := self allocatedPreservedRegisters.
 	preserved do: [:preservedReg | 
-		generate sd: sp, preservedReg, offset.
+		generate sd: preservedReg, (sp + offset).
 		offset := offset + 8.
 	].
 ]
@@ -128,7 +128,7 @@ TRRV64GPSABILinkage >> mapParameters: parameterTypes [
 	parameterTypes withIndexDo: [:type :index | 
 		"For now, only up to 8 integer parameters are supported."
 		self assert: type isIntegerType.
-		self assert: index <= 8.
+		self assert: index <= self parameterRegisters size.
 		parameterMapping at: index put: (self parameterRegisters at: index)
 	].
 	^ parameterMapping
