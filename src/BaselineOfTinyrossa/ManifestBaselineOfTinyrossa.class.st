@@ -17,8 +17,10 @@ ManifestBaselineOfTinyrossa class >> includedInPreRequisites [
 		#'BaselineOfArchC'
 		#'Tinyrossa'
 		#'Tinyrossa-RISCV'
+		#'Tinyrossa-POWER'
 		#'Tinyrossa-Tests'
 		#'Tinyrossa-Tests-RISCV'
+		#'Tinyrossa-Tests-POWER'
 	).
 	
 	(Smalltalk getPackageDirectoryForPackage:#'jv:vdb') notNil ifTrue:[
