@@ -6,7 +6,7 @@ include GNUmakefile.local
 include ../3rdparty.gmk
 include ../stx.gmk
 
-build: $(STX) $(MACHINEARITHMETIC_DIR) $(ARCHC_DIR) $(ARCHC_PDL_DIR)
+build: $(STX) $(MACHINEARITHMETIC_DIR) $(ARCHC_DIR) $(ARCHC_PDL_DIR) $(LIBGDBS_DIR)
 	@echo "To run Smalltalk/X with $(PROJECT) loaded, run:"
 	@echo ""
 	@echo "    make run"

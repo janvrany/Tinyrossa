@@ -24,6 +24,24 @@ $(ARCHC_PDL_DIR): $(ARCHC_DIR)
 	(cd $(ARCHC_DIR) && ./get-pdls.sh)
 endif
 
+ifndef LIBGDBS_DIR
+LIBGDBS_DIR  = ../3rdparty/jv/libgdbs
+LIBGDBS_URL ?= https://swing.fit.cvut.cz/hg/jv-libgdbs
+
+$(LIBGDBS_DIR):
+	mkdir -p $(shell dirname $@)
+	hg clone $(LIBGDBS_URL) $@
+endif
+
+ifndef VDB_DIR
+VDB_DIR  = ../3rdparty/jv/vdb
+VDB_URL ?= https://swing.fit.cvut.cz/hg/jv-vdb
+
+$(VDB_DIR):
+	mkdir -p $(shell dirname $@)
+	hg clone $(VDB_URL) $@
+endif
+
 GNUmakefile.local::
 	@echo "# Dependecy tunables. There's no need to change anything," >> $@
 	@echo "# suitable defaults are provided." >> $@
@@ -43,3 +61,10 @@ GNUmakefile.local::
 	@echo "# it will be fetched by 'get-pdls.sh' script." >> $@
 	@echo "# ARCHC_PDL_DIR=$$\(ARCHC_DIR\)/pdl" >> $@
 	@echo "" >> $@
+	@echo "# To load libgdbs from local directory, set LIBGDBS_DIR" >> $@
+	@echo "# variable to directory where libgdbs is cloned. If unset (default)" >> $@
+	@echo "# it will be fetched from upstream repository." >> $@
+	@echo "# " >> $@
+	@echo "# NOTE: libgdbs is only used/required when using Smalltalk/X!" >> $@
+	@echo "# " >> $@
+	@echo "# LIBGDBS_DIR=$$(shell realpath $$(dir $$(STX))/../../../jv/libgdbs)" >> $@
