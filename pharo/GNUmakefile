@@ -12,6 +12,11 @@ include ../3rdparty.gmk
 include ../pharo.gmk
 
 build: $(PROJECT).image
+	@echo ""
+	@echo "To open Pharo $(PROJECT) image run:"
+	@echo ""
+	@echo "    make run"
+	@echo ""
 
 $(PROJECT).image: $(PHARO_VM) $(PHARO_IMAGE) ../src/*/*.st $(MACHINEARITHMETIC_DIR) $(ARCHC_DIR) $(ARCHC_PDL_DIR)
 	$(PHARO_VM_HEADLESS) $(PHARO_IMAGE) save $(shell pwd)/$(PROJECT)
@@ -24,17 +29,12 @@ $(PROJECT).image: $(PHARO_VM) $(PHARO_IMAGE) ../src/*/*.st $(MACHINEARITHMETIC_D
 	# Load Tinyrossa
 	$(PHARO_VM_HEADLESS) $@ eval --save "(IceRepositoryCreator new location: '..' asFileReference; createRepository) register" || rm $@
 	$(PHARO_VM_HEADLESS) $@ eval --save "Metacello new baseline: '$(PROJECT)'; repository: 'tonel://../src'; onConflictUseLoaded; load." || rm $@
-	@echo ""
-	@echo "To open Pharo $(PROJECT) image run:"
-	@echo ""
-	@echo "    ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(PHARO_VM) $(PROJECT).image"
-	@echo ""
 
-run: $(PROJECT).image $(PHARO_VM)
-	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(PHARO_VM) $<
+run: build
+	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(PHARO_VM) $(PROJECT).image
 
-test: $(PROJECT).image $(PHARO_VM)
-	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(PHARO_VM_HEADLESS) $< test --fail-on-failure \
+test: build
+	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(PHARO_VM_HEADLESS) $(PROJECT).image test --fail-on-failure \
 		"$(PROJECT)"
 
 clean::
@@ -42,3 +42,5 @@ clean::
 	rm -fr pharo-local
 
 mrproper:: clean
+
+.PHONY: all build run test clean mrproper
