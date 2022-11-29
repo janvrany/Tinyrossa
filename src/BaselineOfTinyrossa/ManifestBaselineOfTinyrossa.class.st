@@ -11,13 +11,20 @@ ManifestBaselineOfTinyrossa class >> includedInPreRequisites [
 	 Redefine this, if classes from other packages are referred to via reflection
 	 or by constructing names dynamically (i.e. the search cannot find it)"
 
-	^ #(
+	| included |
+
+	included := #(
 		#'BaselineOfArchC'
 		#'Tinyrossa'
 		#'Tinyrossa-Tests'
 		#'Tinyrossa-RISCV'
-		#'Tinyrossa-Tools-SmalltalkX'
-	)
+	).
+
+	(Smalltalk getPackageDirectoryForPackage:#'jv:vdb') notNil ifTrue:[
+		included := included copyWith: #'Tinyrossa-Tools-SmalltalkX'
+	].
+
+	^included
 ]
 
 { #category : #'stx - description' }
