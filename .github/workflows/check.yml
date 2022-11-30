@@ -42,7 +42,11 @@ jobs:
 
       - name: Install required tools (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install libz3-4 libz3-dev crossbuild-essential-riscv64 qemu-user-static
+        run: |
+          sudo apt-get install libz3-4 libz3-dev crossbuild-essential-riscv64 qemu-user-static gdb-multiarch
+          # Following is needed because by default, libgdbs uses /usr/bin/gdb
+          # which is not multiarch GDB! Nasty workaround, indeed.
+          sudo cp /usr/bin/gdb-multiarch /usr/bin/gdb
 
       - name: Fetch commits so that Iceberg doesn't crash
         run: git fetch --unshallow
