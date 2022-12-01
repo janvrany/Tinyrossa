@@ -1,39 +1,39 @@
 Class {
-	#name : #TRRV64GCodeGenerator,
+	#name : #TRPPC64CodeGenerator,
 	#superclass : #TRCodeGenerator,
 	#classVars : [
-		'MaxItypeImm',
-		'MinItypeImm'
+		'MinDFormImm',
+		'MaxDFormImm'
 	],
 	#pools : [
-		'TRRV64GRegisters'
+		'TRPPC64Registers'
 	],
-	#category : #'Tinyrossa-RISCV-Codegen'
+	#category : #'Tinyrossa-POWER-Codegen'
 }
 
 { #category : #initialization }
-TRRV64GCodeGenerator class >> initialize [
-	MaxItypeImm :=  16r7FF.
-	MinItypeImm := -16r800.
+TRPPC64CodeGenerator class >> initialize [
+	MinDFormImm := -16r8000.
+	MaxDFormImm :=  16r7FFF.
 ]
 
 { #category : #'accessing - config' }
-TRRV64GCodeGenerator >> assemblerClass [
-	^ AcDSLRV64GAssembler
+TRPPC64CodeGenerator >> assemblerClass [
+	^ AcDSLPPC64Assembler
 ]
 
 { #category : #'accessing - config' }
-TRRV64GCodeGenerator >> evaluatorClass [
-	^ TRRV64GCodeEvaluator
+TRPPC64CodeGenerator >> evaluatorClass [
+	^ TRPPC64CodeEvaluator
 ]
 
 { #category : #queries }
-TRRV64GCodeGenerator >> fitsInItypeImm: anInteger [
-	^ anInteger between: MinItypeImm and: MaxItypeImm
+TRPPC64CodeGenerator >> fitsInDFormImm: anInteger [
+	^ anInteger between: MinDFormImm and: MaxDFormImm
 ]
 
 { #category : #registers }
-TRRV64GCodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
+TRPPC64CodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
 	"Evaluate block for each virtual register modified by
 	 given instruction."
 
@@ -42,7 +42,7 @@ TRRV64GCodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
 	]. 
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
-		name = 'rd' ifTrue: [ 
+		name = 'rt' ifTrue: [ 
 			(value isBitVector and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [ 
 				| vReg |
 
@@ -54,7 +54,7 @@ TRRV64GCodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
 ]
 
 { #category : #registers }
-TRRV64GCodeGenerator >> virtualRegistersReadBy: instruction do: block [
+TRPPC64CodeGenerator >> virtualRegistersReadBy: instruction do: block [
 	"Evaluate block for each virtual register read by
 	 given instruction."
 
@@ -63,7 +63,7 @@ TRRV64GCodeGenerator >> virtualRegistersReadBy: instruction do: block [
 	]. 
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
-		(#('rs1' 'rs2' 'rs3') includes: name) ifTrue: [ 
+		(#('ra' 'rb' 'rc') includes: name) ifTrue: [ 
 			(value isBitVector and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [ 
 				| vReg |
 

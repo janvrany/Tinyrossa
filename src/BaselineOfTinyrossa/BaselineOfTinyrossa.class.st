@@ -23,6 +23,9 @@ BaselineOfTinyrossa >> baseline: spec [
 				package: #'Tinyrossa-Tests';
 				package: #'Tinyrossa-RISCV' with: [
 					spec requires: 'Tinyrossa'
+				];
+				package: #'Tinyrossa-POWER' with: [
+					spec requires: 'Tinyrossa'
 				].
 		]
 ]

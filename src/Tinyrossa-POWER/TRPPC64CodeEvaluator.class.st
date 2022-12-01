@@ -1,94 +1,117 @@
 Class {
-	#name : #TRRV64GCodeEvaluator,
+	#name : #TRPPC64CodeEvaluator,
 	#superclass : #TRCodeEvaluator,
 	#pools : [
-		'TRRV64GRegisters'
+		'TRPPC64Registers',
+		'TRPPC64RegisterKinds'
 	],
-	#category : #'Tinyrossa-RISCV-Codegen'
+	#category : #'Tinyrossa-POWER-Codegen'
 }
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_goto: node [
-	generate
-		jal: zero, node symbol
+TRPPC64CodeEvaluator >> evaluate_goto: node [
+	generate b: node symbol
 ]
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_iadd: node [
+TRPPC64CodeEvaluator >> evaluate_iadd: node [
 	| src1Reg src2Reg dstReg |
 
 	dstReg := self codegen allocateRegister.
 	src1Reg := self evaluate: node child1.
 
-	(node child2 opcode isLoadConst and: [ codegen fitsInItypeImm: node child2 constant ]) ifTrue: [ 
+	(node child2 opcode isLoadConst and: [ codegen fitsInDFormImm: node child2 constant ]) ifTrue: [ 
 		generate
 			addi: dstReg, src1Reg, node child2 constant
 	] ifFalse: [
 		src2Reg := self evaluate: node child2.
 		generate
-			addw: dstReg, src1Reg, src2Reg.
+			add: dstReg, src1Reg, src2Reg.
 	].
+	generate extsw: dstReg, dstReg.
 
 	^ dstReg
 ]
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_iconst: node [
+TRPPC64CodeEvaluator >> evaluate_iconst: node [
 	| dstReg |
-
-	node constant == 0 ifTrue: [ ^ zero ].
 
 	dstReg := self codegen allocateRegister.
 
 	generate 
-		addi: dstReg, zero, node constant.
+		li: dstReg, node constant.
 
 	^ dstReg
 ]
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmpge: node [
-	| src1Reg src2Reg |
+TRPPC64CodeEvaluator >> evaluate_ificmpge: node [
+	| src1Reg src2Reg condReg |
 
 	src1Reg := self evaluate: node child1.
 	src2Reg := self evaluate: node child2.
-	^ generate 
-		bge: src1Reg, src2Reg, node symbol
-]
+	condReg := cr0. 
 
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmpgt: node [
-	| src1Reg src2Reg |
-
-	src1Reg := self evaluate: node child1.
-	src2Reg := self evaluate: node child2.
-	^ generate 
-		blt: src2Reg, src1Reg, node symbol
-]
-
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmple: node [
-	| src1Reg src2Reg |
-
-	src1Reg := self evaluate: node child1.
-	src2Reg := self evaluate: node child2.
-	^ generate 
-		bge: src2Reg, src1Reg, node symbol
-]
-
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmpne: node [
-	| src1Reg src2Reg |
-
-	src1Reg := self evaluate: node child1.
-	src2Reg := self evaluate: node child2.
 	generate 
-		bne: src2Reg, src1Reg, node symbol.
-	^ nil
+		cmpw: condReg, src1Reg, src2Reg;
+		bge: cr0, node symbol
 ]
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_iload: node [
+TRPPC64CodeEvaluator >> evaluate_ificmpgt: node [
+	| src1Reg src2Reg condReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	condReg := cr0. 
+
+	generate 
+		cmpw: condReg, src1Reg, src2Reg;
+		bgt: cr0, node symbol
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_ificmple: node [
+	| src1Reg src2Reg condReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	condReg := cr0. 
+
+	generate 
+		cmpw: condReg, src1Reg, src2Reg;
+		ble: cr0, node symbol
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_ificmplt: node [
+	| src1Reg src2Reg condReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	condReg := cr0. 
+
+	generate 
+		cmpw: condReg, src1Reg, src2Reg;
+		blt: cr0, node symbol
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_ificmpne: node [
+	| src1Reg src2Reg condReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	condReg := cr0. 
+
+	generate 
+		cmpw: condReg, src1Reg, src2Reg;
+		bne: cr0, node symbol
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_iload: node [
 	"superclass TRILEvaluator says that I am responsible to implement this method"
 
 	| symbol dstReg |
@@ -98,26 +121,26 @@ TRRV64GCodeEvaluator >> evaluate_iload: node [
 	dstReg isNil ifTrue: [ 
 		dstReg := codegen allocateRegister.
 		symbol setRegister: dstReg.
-		generate lw: dstReg, (sp + (AcDSLSymbol value: symbol name)).
+		generate lwz: dstReg, (gr1 + (AcDSLSymbol value: symbol name)).
 	].
 	^ dstReg
 ]
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_imul: node [
+TRPPC64CodeEvaluator >> evaluate_imul: node [
 	| src1Reg src2Reg dstReg |
 
 	src1Reg := self evaluate: node child1.
 	src2Reg := self evaluate: node child2.
 	dstReg := self codegen allocateRegister.
 	generate
-		mulw: dstReg, src1Reg, src2Reg.
+		mullw: dstReg, src1Reg, src2Reg.
 
 	^ dstReg
 ]
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_istore: node [
+TRPPC64CodeEvaluator >> evaluate_istore: node [
 	| symbol srcReg dstReg |
 
 	symbol := node symbol.
@@ -130,26 +153,27 @@ TRRV64GCodeEvaluator >> evaluate_istore: node [
 	srcReg ~~ dstReg ifTrue: [ 
 		generate addi: dstReg, srcReg, 0.
 	].
-	generate sw: srcReg, (sp + (AcDSLSymbol value: symbol name)).
+	generate stw: srcReg, (gr1 + (AcDSLSymbol value: symbol name)).
 
 	^ nil
 ]
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_isub: node [
+TRPPC64CodeEvaluator >> evaluate_isub: node [
 	| src1Reg src2Reg dstReg |
 
 	dstReg := self codegen allocateRegister.
 	src1Reg := self evaluate: node child1.
 
-	(node child2 opcode isLoadConst and: [ codegen fitsInItypeImm: node child2 constant negated ]) ifTrue: [ 
+	(node child2 opcode isLoadConst and: [ codegen fitsInDFormImm: node child2 constant negated ]) ifTrue: [ 
 		generate
 			addi: dstReg, src1Reg, node child2 constant negated
 	] ifFalse: [
 		src2Reg := self evaluate: node child2.
 		generate
-			subw: dstReg, src1Reg, src2Reg.
+			subf: dstReg, src1Reg, src2Reg.
 	].
+	generate extsw: dstReg, dstReg.
 
 	^ dstReg
 ]

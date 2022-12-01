@@ -13,7 +13,7 @@ TRCompilationTestShellQEMU >> setUp [
 
 	super setUp.
 
-	qemuCmd := 'qemu-',(target name upTo:$-),'-static'.
+	qemuCmd := target qemu.
 
 	self assert: (OperatingSystem pathOfCommand: qemuCmd) notNil description: 'QEMU not found'.
 	"First, start QEMU... "

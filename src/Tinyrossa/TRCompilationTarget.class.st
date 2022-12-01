@@ -14,3 +14,18 @@ TRCompilationTarget class >> default [
 	].
 	^ default
 ]
+
+{ #category : #accessing }
+TRCompilationTarget >> codeGeneratorClass [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+TRCompilationTarget >> name [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+TRCompilationTarget >> systemLinkageClass [
+	^ self subclassResponsibility
+]

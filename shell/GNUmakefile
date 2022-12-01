@@ -3,6 +3,7 @@ ifndef ARCH
 all:
 	$(MAKE) ARCH=riscv64
 	$(MAKE) ARCH=x86_64
+	$(MAKE) ARCH=powerpc64le
 
 else
 

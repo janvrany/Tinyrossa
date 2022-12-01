@@ -18,6 +18,11 @@ TRLabelSymbol >> asAcDSLOperand [
 	^ AcDSLSymbol value: name
 ]
 
+{ #category : #converting }
+TRLabelSymbol >> asAcDSLOperandList [
+	^ self asAcDSLOperand asAcDSLOperandList
+]
+
 { #category : #accessing }
 TRLabelSymbol >> block [
 	^ block

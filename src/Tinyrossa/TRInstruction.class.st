@@ -4,21 +4,21 @@ node for which codegen emitted it.
 
 "
 Class {
-	#name : #TRRV64GInstruction,
+	#name : #TRInstruction,
 	#superclass : #ProcessorInstruction,
 	#instVars : [
 		'node'
 	],
-	#category : #'Tinyrossa-RISCV-Codegen'
+	#category : #'Tinyrossa-Codegen'
 }
 
 { #category : #accessing }
-TRRV64GInstruction >> node [
+TRInstruction >> node [
 	^ node
 ]
 
 { #category : #accessing }
-TRRV64GInstruction >> node:aTRILNode [
+TRInstruction >> node:aTRILNode [
 	self assert: node isNil.
 	node := aTRILNode.
 ]

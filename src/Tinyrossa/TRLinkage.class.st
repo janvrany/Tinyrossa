@@ -2,7 +2,8 @@ Class {
 	#name : #TRLinkage,
 	#superclass : #Object,
 	#instVars : [
-		'codegen'
+		'codegen',
+		'generate'
 	],
 	#category : #'Tinyrossa-Codegen'
 }
@@ -45,7 +46,8 @@ TRLinkage >> generatePrologue [
 
 { #category : #initialization }
 TRLinkage >> initializeWithCodeGenerator: aTRCodeGenerator [
-	codegen := aTRCodeGenerator
+	codegen := aTRCodeGenerator.
+	generate := codegen assembler.
 ]
 
 { #category : #mapping }

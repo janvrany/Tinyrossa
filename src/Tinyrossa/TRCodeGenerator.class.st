@@ -5,7 +5,11 @@ Class {
 		'compilation',
 		'virtualRegisters',
 		'linkage',
-		'evaluator'
+		'evaluator',
+		'generate'
+	],
+	#pools : [
+		'TRRegisterKinds'
 	],
 	#category : #'Tinyrossa-Codegen'
 }
@@ -22,9 +26,14 @@ TRCodeGenerator class >> new [
 
 { #category : #registers }
 TRCodeGenerator >> allocateRegister [
+	^ self allocateRegister: GPR
+]
+
+{ #category : #registers }
+TRCodeGenerator >> allocateRegister: kind [
 	| reg |
 
-	reg := TRVirtualRegister named: ('VR_' , (virtualRegisters size + 1) printString).
+	reg := TRVirtualRegister named: (kind name , '_' , (virtualRegisters size + 1) printString) kind: kind.
 	virtualRegisters at: reg name put: reg.
 	^ reg
 ]
@@ -35,6 +44,31 @@ TRCodeGenerator >> allocateRegisters [
 
 	allocator := self registerAllocatorClass forCodeGenerator: self.
 	allocator allocateRegisters.
+]
+
+{ #category : #accessing }
+TRCodeGenerator >> assembler [
+	 ^ generate
+]
+
+{ #category : #'accessing - config' }
+TRCodeGenerator >> assemblerClass [
+	^ self subclassResponsibility
+]
+
+{ #category : #accessing }
+TRCodeGenerator >> codeBuffer [
+	^ generate memory
+]
+
+{ #category : #accessing }
+TRCodeGenerator >> compilation [
+	^ compilation
+]
+
+{ #category : #'instance creation' }
+TRCodeGenerator >> createAssembler [
+	^ self assemblerClass new
 ]
 
 { #category : #'instance creation' }
@@ -59,17 +93,40 @@ TRCodeGenerator >> evaluatorClass [
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> fixupBranches [
-	^ self subclassResponsibility
+	generate memory fixupBranchTargets
 ]
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> fixupOffsets [
-	^ self subclassResponsibility
+	| parameters automatics offsets |
+
+	automatics := compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
+	parameters := compilation symbolManager lookupSymbolsByType: TRParameterSymbol.      
+
+	offsets := Dictionary new: automatics size + parameters size.
+	parameters do: [:parameter | 
+		offsets at: parameter name put: parameter offset.
+	].
+	automatics do: [:automatic | 
+		offsets at: automatic name put: automatic offset.
+	].
+
+	self fixupUsing: offsets.
 ]
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> fixupRegisters [
-	^ self subclassResponsibility
+	self fixupUsing: virtualRegisters
+]
+
+{ #category : #private }
+TRCodeGenerator >> fixupUsing: aDictionary [
+	| insns |
+
+	insns := self instructions.
+	1 to: insns size do: [:i | 
+		insns at: i put: ((insns at: i) inEnvironment: aDictionary)
+	].
 ]
 
 { #category : #'code gen' }
@@ -110,29 +167,50 @@ TRCodeGenerator >> generateCode: il [
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> generateEpilogues [
-	self subclassResponsibility
+	| insns |
+
+	insns := generate memory instructions.
+	insns size to: 1 by: -1 do: [:i | 
+		| insn |
+
+		insn := insns at: i.
+		insn isLeaveInstruction ifTrue: [ 
+			generate cursor: i.
+			self linkage generateEpilogue: insn value
+		].
+	].
 ]
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> generatePrologue [
-	self subclassResponsibility
+	generate cursor: 0.
+	generate label: compilation functionSymbol name.
+	self linkage generatePrologue
 ]
 
 { #category : #initialization }
 TRCodeGenerator >> initializeWithCompilation: aTRCompilation [ 
 	compilation := aTRCompilation.
 	virtualRegisters := Dictionary new.
-	linkage := self createLinkage: compilation functionSymbol linkageClass.
+	generate := self createAssembler.
 	evaluator := self createEvaluator.
+]
+
+{ #category : #'accessing - config' }
+TRCodeGenerator >> instructionClass [
+	^ TRInstruction
 ]
 
 { #category : #accessing }
 TRCodeGenerator >> instructions [
-	self subclassResponsibility
+	 ^ generate memory instructions
 ]
 
 { #category : #accessing }
 TRCodeGenerator >> linkage [
+	linkage isNil ifTrue: [ 
+		linkage := self createLinkage: compilation functionSymbol linkageClass.
+	].
 	^ linkage
 ]
 
@@ -141,7 +219,7 @@ TRCodeGenerator >> mapStack [
 	"Godegen phase: compute frame size and map parameters, automatics 
 	 and spills to stack slots."
 
-	linkage mapStack
+	self linkage mapStack
 ]
 
 { #category : #'accessing - config' }
