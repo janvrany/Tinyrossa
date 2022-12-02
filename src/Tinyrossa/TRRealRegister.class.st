@@ -34,6 +34,11 @@ TRRealRegister >> isTRRealRegister [
 ]
 
 { #category : #testing }
+TRRealRegister >> isTRRealRegister [
+	^ true
+]
+
+{ #category : #testing }
 TRRealRegister >> isTRRegister [
 	^ true
 ]

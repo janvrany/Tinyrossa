@@ -124,6 +124,8 @@ TRCodeGenerator >> fixupRegisters [
 TRCodeGenerator >> fixupUsing: aDictionary [
 	| insns |
 
+	aDictionary isEmpty ifTrue: [ ^ self ].
+
 	insns := self instructions.
 	1 to: insns size do: [:i | 
 		insns at: i put: ((insns at: i) inEnvironment: aDictionary)

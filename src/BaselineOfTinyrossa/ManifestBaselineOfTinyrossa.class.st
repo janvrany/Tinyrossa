@@ -15,16 +15,19 @@ ManifestBaselineOfTinyrossa class >> includedInPreRequisites [
 
 	included := #(
 		#'BaselineOfArchC'
+		#'BaselineOfAsmJit'
 		#'Tinyrossa'
 		#'Tinyrossa-RISCV'
 		#'Tinyrossa-POWER'
+		#'Tinyrossa-AMD64'
 		#'Tinyrossa-Tests'
 		#'Tinyrossa-Tests-RISCV'
 		#'Tinyrossa-Tests-POWER'
+		#'Tinyrossa-Tests-AMD64'
 	).
-	
+
 	(Smalltalk getPackageDirectoryForPackage:#'jv:vdb') notNil ifTrue:[
-		included := included copyWith: #'Tinyrossa-Tools-SmalltalkX'
+		included := included , #(#'Tinyrossa-Tools-SmalltalkX' #'Tinyrossa-Tools-SmalltalkX-AMD64')
 	].
 
 	^included

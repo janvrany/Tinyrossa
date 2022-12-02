@@ -22,6 +22,14 @@ TRLinkage >> allocatableRegisters [
 ]
 
 { #category : #accessing }
+TRLinkage >> allocatedPreservedRegisters [
+	| allocated |
+
+	allocated := self allocatedRegisters.
+	^ self preservedRegisters select: [:e | allocated includes: e ]
+]
+
+{ #category : #accessing }
 TRLinkage >> allocatedRegisters [
 	"Return the set of machine registers that are actually 
 	 used (have been assigned by RA)."

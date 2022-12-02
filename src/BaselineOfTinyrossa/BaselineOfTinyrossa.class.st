@@ -34,6 +34,10 @@ BaselineOfTinyrossa >> baseline: spec [
 				spec repository: 'github://ObjectProfile/Roassal3:v0.9.2'
 			].
 
+			spec baseline: #'AsmJit' with: [
+				spec repository: 'github://janvrany/Tinyrossa'.
+			].
+
 			spec
 				package: #'Tinyrossa' with:[
 					"LibCompat's implementation of OSProcess requires LibUnix"
@@ -56,6 +60,14 @@ BaselineOfTinyrossa >> baseline: spec [
 				];
 				package: #'Tinyrossa-Tests-POWER' with: [
 					spec requires: 'Tinyrossa-Tests'
+				];
+				package: #'Tinyrossa-AMD64' with: [
+					spec requires: 'Tinyrossa'.
+					spec requires: 'AsmJit'.
+				];
+				package: #'Tinyrossa-Tests-AMD64' with: [
+					spec requires: 'Tinyrossa-Tests'.
+					spec requires: 'Tinyrossa-AMD64'.
 				];
 				package: #'Tinyrossa-Tools-Pharo' with: [
 					spec requires: 'Tinyrossa'.
