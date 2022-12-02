@@ -1,0 +1,44 @@
+"
+I am a register used by the SSE (Streaming SIMD Extensions) for the x86 instruction set. The independent XMM registers are 128bit wide and do not overlap with any other existing registers.
+
+Depending on the instructions used the XMM registers represent different data types:
+	SSE:  4 x 32bit single precision floats
+	SSE2: 2 x 64bit double prexision floats
+	      2 x 64bit integers
+	      4 x 32bit integers
+	      8 x 16bit short integers
+	      16 x 8bit bytes/characters
+"
+Class {
+	#name : #AJxMMRegister,
+	#superclass : #AJBaseReg,
+	#category : #'AsmJit-x86-Operands'
+}
+
+{ #category : #accessing }
+AJxMMRegister >> code: aCode [
+
+	code := aCode.
+	size := 16
+]
+
+{ #category : #printing }
+AJxMMRegister >> descriptionOn: s [
+
+	s nextPutAll: 'An SSE register'.
+]
+
+{ #category : #testing }
+AJxMMRegister >> isGeneralPurpose [
+	^ false
+]
+
+{ #category : #testing }
+AJxMMRegister >> isRegisterXMM [
+	^ true
+]
+
+{ #category : #testing }
+AJxMMRegister >> isX86 [
+	^ self index < 8
+]

@@ -1,0 +1,18 @@
+"
+Maximum of Packed Signed Doubleword Integers
+"
+Class {
+	#name : #AJx86PMAXSD,
+	#superclass : #AJx86MmuRmiInstruction,
+	#category : #'AsmJit-x86-Instructions-Concrete-SSE4.1'
+}
+
+{ #category : #accessing }
+AJx86PMAXSD class >> description [
+	^ #(#pmaxsd #mmurmi "op1" 2r100000 "op2" 2r1100000 "R" 0 "C1" 16r660F383D 0 )
+]
+
+{ #category : #accessing }
+AJx86PMAXSD class >> mnemonic [
+	^ #pmaxsd
+]
