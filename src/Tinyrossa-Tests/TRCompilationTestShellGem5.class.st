@@ -26,7 +26,7 @@ TRCompilationTestShellGem5 >> setUp [
 
 	super setUp.
 
-	gem5dir := OperatingSystem getEnvironment: 'GEM5_DIR'.
+	gem5dir := Smalltalk os getEnvironment: 'GEM5_DIR'.
 
 	self assert: gem5dir notNil description: 'GEM5_DIR environment not set!'.
 	self assert: gem5dir asFileReference isDirectory description: 'GEM5_DIR not a directory!'.
