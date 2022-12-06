@@ -21,7 +21,7 @@ TRCompilationTestShellRemote class >> host: aString [
 TRCompilationTestShellRemote >> setUp [
 	super setUp.
 
-	self assert: (OperatingSystem executeCommand: 'scp ' , debugger pathName , ' ' , self class host , ':/tmp')
+	self assert: (Smalltalk os runCommand: 'scp ' , debugger pathName , ' ' , self class host , ':/tmp') == 0
 		 description: 'Cannot upload shell'.
 
 	target := GDBDebugger new.
