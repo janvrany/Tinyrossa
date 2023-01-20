@@ -60,6 +60,7 @@ GNUmakefile.local::
 	@echo "# variable to directory with PDLs. If unset (default)" >> $@
 	@echo "# it will be fetched by 'get-pdls.sh' script." >> $@
 	@echo "# ARCHC_PDL_DIR=$$\(ARCHC_DIR\)/pdl" >> $@
+ifdef STX
 	@echo "" >> $@
 	@echo "# To load libgdbs from local directory, set LIBGDBS_DIR" >> $@
 	@echo "# variable to directory where libgdbs is cloned. If unset (default)" >> $@
@@ -68,3 +69,4 @@ GNUmakefile.local::
 	@echo "# NOTE: libgdbs is only used/required when using Smalltalk/X!" >> $@
 	@echo "# " >> $@
 	@echo "# LIBGDBS_DIR=$$(shell realpath $$(dir $$(STX))/../../../jv/libgdbs)" >> $@
+endif

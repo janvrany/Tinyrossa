@@ -1,8 +1,8 @@
 PROJECT=Tinyrossa
 
-all: build
+all: GNUmakefile.local build
 
-include GNUmakefile.local
+-include GNUmakefile.local
 
 # Pharo version to use. Currently, only 8.0 is supported,
 # Pharo 9.0 and later is known to crash when using Z3.

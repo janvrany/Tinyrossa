@@ -1,8 +1,9 @@
 PROJECT=Tinyrossa
 
-all: build
+all: GNUmakefile.local build
 
-include GNUmakefile.local
+-include GNUmakefile.local
+
 include ../3rdparty.gmk
 include ../stx.gmk
 
