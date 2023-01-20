@@ -11,7 +11,5 @@ TRDataTypeFloat >> name [
 
 { #category : #validation }
 TRDataTypeFloat >> validateConstant: aNumber [
-	"superclass TRDataType says that I am responsible to implement this method"
-
-	^ self shouldImplement
+	self assert: aNumber isFloat
 ]

@@ -16,7 +16,5 @@ TRDataTypeInt64 >> name [
 
 { #category : #validation }
 TRDataTypeInt64 >> validateConstant: aNumber [
-	"superclass TRDataType says that I am responsible to implement this method"
-
-	^ self shouldImplement
+	self assert: (aNumber between: -16r8000000000000000 and: 16r7FFFFFFFFFFFFFFF) description: 'Invalid constant'
 ]
