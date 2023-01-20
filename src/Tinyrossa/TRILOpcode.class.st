@@ -49,6 +49,20 @@ TRILOpcode >> hasChildren [
 
 { #category : #testing }
 TRILOpcode >> hasSymbolRef [
+	"
+	Return true if this opcode requires symbol reference, false otherwise.
+	"
+
+	"
+	In original Testarossa, indirect loads have 'shadow array symbols'.
+	We do not have them in Tinyrossa so we do not mandate symbol so
+	for such opcodes return `false` even if `HasSymbolRef` property is set.
+	"
+	(props1 bitTest: Indirect) ifTrue: [ 
+		(props1 bitTest: Load | Store) ifTrue: [ 
+			^ false
+		].
+	].
 	^ props1 bitTest: HasSymbolRef
 ]
 
@@ -94,8 +108,18 @@ TRILOpcode >> isCompare [
 ]
 
 { #category : #testing }
+TRILOpcode >> isIndirect [
+	^ props1 bitTest: Indirect
+]
+
+{ #category : #testing }
 TRILOpcode >> isInvalid [
 	^ name = 'invalid'
+]
+
+{ #category : #testing }
+TRILOpcode >> isLoad [
+	^ props1 bitTest: Load
 ]
 
 { #category : #testing }
@@ -106,6 +130,11 @@ TRILOpcode >> isLoadConst [
 { #category : #testing }
 TRILOpcode >> isReturn [
 	^ props1 bitTest: Return
+]
+
+{ #category : #testing }
+TRILOpcode >> isStore [
+	^ props1 bitTest: Store
 ]
 
 { #category : #testing }
