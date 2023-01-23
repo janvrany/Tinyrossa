@@ -13,19 +13,16 @@ TRCompilationTestShellQEMU >> setUp [
 
 	super setUp.
 
-	qemuCmd := target qemu.
+	qemuCmd := target qemu, ' -g 1234 ', binary pathName.
 
-	self assert: (OperatingSystem pathOfCommand: qemuCmd) notNil description: 'QEMU not found'.
 	"First, start QEMU... "
-	qemu := OSProcess new command: qemuCmd , ' -g 1234 ', binary pathName.
+	qemu := OSProcess new command: qemuCmd. 
 	qemu startProcess.
 	"...and give it a time initialize itself..."
 	Delay waitForSeconds: 1.
 
-	"...then create a new GDB and connect to QEMU: "
-	debugger := GDBDebugger new.
-	debugger executable: binary.
-	debugger targetConnect: 'remote' parameters: #('localhost:1234').
+	"...then setup debugger object (using either libgdbs or ULD)"    
+	self setUpDebuggerOnHost: 'localhost' port: 1234.
 ]
 
 { #category : #running }

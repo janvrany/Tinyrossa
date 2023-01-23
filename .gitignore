@@ -37,3 +37,7 @@ shell-*
 # git merge by-products
 *.orig
 
+# Gem5 by-products
+stx/m5out
+pharo/m5out
+
