@@ -18,6 +18,14 @@ TRCompilationTestShell class >> defaultImpl [
 	^ DefaultImpl
 ]
 
+{ #category : #accessing }
+TRCompilationTestShell class >> defaultImpl: aClass [
+	"Set default shell class"
+
+	self assert: (aClass inheritsFrom: TRCompilationTestShell).
+	DefaultImpl := aClass
+]
+
 { #category : #'instance creation' }
 TRCompilationTestShell class >> forTarget: aTRCompilationTarget [
 	self == TRCompilationTestShell ifTrue: [ 
@@ -62,6 +70,15 @@ TRCompilationTestShell >> setUp [
 
 	binary := path / ('shell-' , (target name upTo: $-)).
 	self assert: binary isExecutable.
+]
+
+{ #category : #'running-private' }
+TRCompilationTestShell >> setUpDebuggerOnHost: host port: port [
+	self assert: (Smalltalk includesKey: #GDBDebugger).
+
+	debugger := (Smalltalk at: #GDBDebugger) new.
+	debugger executable: binary.
+	debugger send: 'target remote ', host , ':' , port printString
 ]
 
 { #category : #running }

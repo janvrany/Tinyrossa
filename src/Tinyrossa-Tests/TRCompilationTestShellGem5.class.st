@@ -22,19 +22,22 @@ TRCompilationTestShellGem5 class >> host: aString [
 
 { #category : #running }
 TRCompilationTestShellGem5 >> setUp [
-	| gem5cmd |
+	| gem5dir gem5exe gem5cmd |
 
 	super setUp.
 
-	self assert: (OperatingSystem getEnvironment:'GEM5_DIR') notNil
-		 description: 'GEM5_DIR environment not set!'.
+	gem5dir := OperatingSystem getEnvironment:'GEM5_DIR'.
+	self assert: gem5dir notNil description: 'GEM5_DIR environment not set!'.
 
-	self assert: ((OperatingSystem getEnvironment:'GEM5_DIR') asFilename / 'build' / 'RISCV' / 'gem5.opt') exists
-		 description: 'No RISC-V gem5 found in GEM5_DIR'.            
+	gem5exe := gem5dir asFileReference / 'build' / target gem5 / 'gem5.debug'.
+	gem5exe exists ifFalse: [ 
+		gem5exe := gem5dir asFileReference / 'build' / target gem5 / 'gem5.opt'.
+	].
 
-	gem5cmd := '%1/build/RISCV/gem5.opt "--debug-flags=Decode" %1/configs/example/se.py -c %2 --wait-gdb --param ''system.shared_backstore = "/gem5"'''
-				bindWith: (OperatingSystem getEnvironment:'GEM5_DIR')
-					with: debugger pathName.
+	self assert: gem5exe exists description: 'No gem5.debug nor gem5.bin found in GEM5_DIR/build/',target gem5.            
+
+	gem5cmd := '<1s> --listener-mode on "--debug-flags=Decode" <2s>/configs/example/se.py -c <3s> --wait-gdb --param ''system.shared_backstore = "/gem5"'''
+				expandMacrosWith: gem5exe with: gem5dir with: binary pathName.
 
 	"First, start gem5..."
 	gem5 := OSProcess new command: gem5cmd.
@@ -42,9 +45,8 @@ TRCompilationTestShellGem5 >> setUp [
 	"...and give it a time initialize itself..."
 	Delay waitForSeconds: 1.   
 
-	target := GDBDebugger new.
-	target executable: debugger.
-	target send: 'target remote localhost:7000'
+	"...then setup debugger object (using either libgdbs or ULD)"        
+	self setUpDebuggerOnHost: 'localhost' port: 7000.
 ]
 
 { #category : #running }
