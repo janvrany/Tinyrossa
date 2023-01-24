@@ -14,8 +14,14 @@ BaselineOfTinyrossa >> baseline: spec [
 				spec repository: 'github://shingarov/Pharo-ArchC:pure-z3'
 			].
 
+			spec baseline: 'OSSubprocess' with: [
+				spec repository: 'github://pharo-contributions/OSSubprocess:v1.3.0'
+			].
+
 			spec
-				package: #'Tinyrossa-Compat-Pharo';
+				package: #'Tinyrossa-Compat-Pharo' with:[
+					spec requires: 'OSSubprocess'.
+				];
 				package: #'Tinyrossa' with:[
 					spec requires: 'Tinyrossa-Compat-Pharo';
 						 requires: 'ArchC'
