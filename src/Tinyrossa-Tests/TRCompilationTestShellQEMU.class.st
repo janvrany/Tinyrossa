@@ -13,13 +13,13 @@ TRCompilationTestShellQEMU >> setUp [
 
 	super setUp.
 
-	qemuCmd := target qemu, ' -g 1234 ', binary pathName.
+	qemuCmd := target qemu, ' -g 1234 ', binary pathString.
 
 	"First, start QEMU... "
 	qemu := OSProcess new command: qemuCmd. 
 	qemu startProcess.
 	"...and give it a time initialize itself..."
-	Delay waitForSeconds: 1.
+	(Delay forSeconds: 1) wait.
 
 	"...then setup debugger object (using either libgdbs or ULD)"    
 	self setUpDebuggerOnHost: 'localhost' port: 1234.
@@ -28,7 +28,7 @@ TRCompilationTestShellQEMU >> setUp [
 { #category : #running }
 TRCompilationTestShellQEMU >> tearDown [
 	super tearDown.
-	qemu notNil ifTrue: [ 
-		qemu waitUntilFinishedWithTimeout: 1
+		(qemu notNil and:[qemu isComplete not ]) ifTrue: [ 
+		qemu terminate		
 	].
 ]

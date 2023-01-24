@@ -26,7 +26,7 @@ TRCompilationTestShellGem5 >> setUp [
 
 	super setUp.
 
-	gem5dir := OperatingSystem getEnvironment:'GEM5_DIR'.
+	gem5dir := Smalltalk os getEnvironment: 'GEM5_DIR'.
 	self assert: gem5dir notNil description: 'GEM5_DIR environment not set!'.
 
 	gem5exe := gem5dir asFileReference / 'build' / target gem5 / 'gem5.debug'.
@@ -34,16 +34,16 @@ TRCompilationTestShellGem5 >> setUp [
 		gem5exe := gem5dir asFileReference / 'build' / target gem5 / 'gem5.opt'.
 	].
 
-	self assert: gem5exe exists description: 'No gem5.debug nor gem5.bin found in GEM5_DIR/build/',target gem5.            
+	self assert: gem5exe exists description: 'No gem5.debug nor gem5.opt found in GEM5_DIR/build/',target gem5.            
 
 	gem5cmd := '<1s> --listener-mode on "--debug-flags=Decode" <2s>/configs/example/se.py -c <3s> --wait-gdb --param ''system.shared_backstore = "/gem5"'''
-				expandMacrosWith: gem5exe with: gem5dir with: binary pathName.
+				expandMacrosWith: gem5exe pathString with: gem5dir with: binary pathString.
 
 	"First, start gem5..."
 	gem5 := OSProcess new command: gem5cmd.
 	gem5 startProcess.
 	"...and give it a time initialize itself..."
-	Delay waitForSeconds: 1.   
+	(Delay forSeconds: 1) wait.   
 
 	"...then setup debugger object (using either libgdbs or ULD)"        
 	self setUpDebuggerOnHost: 'localhost' port: 7000.
@@ -52,7 +52,7 @@ TRCompilationTestShellGem5 >> setUp [
 { #category : #running }
 TRCompilationTestShellGem5 >> tearDown [
 	super tearDown.
-	gem5 notNil ifTrue: [ 
-		gem5 waitUntilFinishedWithTimeout: 1
+	(gem5 notNil and:[gem5 isComplete not ]) ifTrue: [ 
+		gem5 terminate		
 	].
 ]
