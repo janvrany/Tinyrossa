@@ -36,6 +36,44 @@ TRCompilationTestShell class >> forTarget: aTRCompilationTarget [
 ]
 
 { #category : #accessing }
+TRCompilationTestShell class >> shellDirectory [
+	"Return a directory (as file reference) containing compiled shell binaries
+	 or nil if directory cound not be found."
+	Smalltalk isSmalltalkX ifTrue:[
+		| packageDir shellDir |
+		
+		packageDir := Smalltalk getPackageDirectoryForPackage: self class package.
+		(packageDir notNil and: [packageDir exists]) ifTrue:[
+			shellDir := packageDir / '..' / '..' / 'shell'.
+			shellDir isDirectory ifTrue:[ 
+				^shellDir.
+			].
+		].
+		^nil
+	].
+	Smalltalk isPharo ifTrue:[
+		| slash package repo shellDir |
+
+		slash := #DiskStore asClass activeClass delimiter.
+		package := self package name.
+		repo := #IceRepository asClass registry
+						detect:[ :each | each loadedPackages contains: [:icep | icep name = package ] ]
+						ifNone:[ ^nil ].
+		shellDir := repo location / 'shell'.
+		shellDir isDirectory ifTrue:[ 
+			^shellDir.
+		].
+		^nil
+	].
+	self error:'Unsupported dialect'.
+	^nil.
+	
+	"
+	TRCompilationTestShell shellDirectory
+	"
+]
+
+{ #category : #accessing }
 TRCompilationTestShell >> debugger [
 	self assert: debugger notNil.
 	^ debugger
@@ -61,35 +99,64 @@ TRCompilationTestShell >> reset [
 
 { #category : #running }
 TRCompilationTestShell >> setUp [
-	| path |
+	| shellDir |
+	
+	shellDir := self class shellDirectory.	
+	self assert: shellDir notNil description:'Could not determine directory with test shells!'.
 
-	path := (Smalltalk getPackageDirectoryForPackage: self class package).
-	self assert: path notNil.
-	path := path / '..' / '..' / 'shell'.
-	self assert: path isDirectory.
-
-	binary := path / ('shell-' , (target name upTo: $-)).
+	binary := shellDir / ('shell-' , (target name readStream upTo: $-)).
 	self assert: binary isExecutable.
 ]
 
 { #category : #'running-private' }
 TRCompilationTestShell >> setUpDebuggerOnHost: host port: port [
-	self assert: (Smalltalk includesKey: #GDBDebugger).
+	Smalltalk isSmalltalkX ifTrue:[
+		"On Smalltalk/X we use jv:libgdbs to poke at shell."
+		
+		self assert: (Smalltalk includesKey: #GDBDebugger).
 
-	debugger := (Smalltalk at: #GDBDebugger) new.
-	debugger executable: binary.
-	debugger send: 'target remote ', host , ':' , port printString
+		debugger := (Smalltalk at: #GDBDebugger) new.
+		debugger executable: binary.
+		debugger send: 'target remote ', host , ':' , port printString.
+		^self
+	].
+
+	Smalltalk isPharo ifTrue:[
+		"On Pharo, we se ULD (SmallRSP) to poke at shell."
+	
+		self assert: (Smalltalk includesKey: #RemoteGDB).
+
+		debugger := (Smalltalk at: #RemoteGDB) host: host port: port.
+		^self.
+	].
+
+	self error:'Unsupported dialect'
 ]
 
 { #category : #running }
 TRCompilationTestShell >> tearDown [
-	(debugger notNil and: [ debugger isConnected ]) ifTrue: [
-		 debugger send: 'kill'.
-		 (Smalltalk includesKey: #VDBDebuggerApplication) ifTrue: [ 
-			 ((Smalltalk at: #VDBDebuggerApplication) allInstances allSatisfy:[:vdbApp | vdbApp debugger ~~ target]) ifTrue: [ 
-				 debugger send: 'quit' andWait: false.
-			 ].
-		 ].
-	 ].
-	 debugger := nil.
+	self tearDownDebugger 
+]
+
+{ #category : #'running-private' }
+TRCompilationTestShell >> tearDownDebugger [
+	Smalltalk isSmalltalkX ifTrue:[
+		"On Smalltalk/X we use jv:libgdbs to poke at shell."
+		
+		(debugger notNil and: [ debugger isConnected ]) ifTrue: [
+			debugger send: 'kill'.
+			(Smalltalk includesKey: #VDBDebuggerApplication) ifTrue: [
+				((Smalltalk at: #VDBDebuggerApplication) allInstances allSatisfy:[:vdbApp | vdbApp debugger ~~ target]) ifTrue: [ 
+					debugger send: 'quit' andWait: false.
+				].
+			].
+		].
+		
+	].
+	Smalltalk isPharo ifTrue:[
+		"On Pharo, we se ULD (SmallRSP) to poke at shell."
+		
+		debugger disconnect.
+	].
+	debugger := nil.
 ]
