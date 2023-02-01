@@ -14,6 +14,21 @@ TRILFunctionBuilder >> defineAutomatic: name type: type [
 	^ compilation symbolManager defineAutomatic: name type: type
 ]
 
+{ #category : #'defining locations' }
+TRILFunctionBuilder >> defineFile: file line: line [
+	"Define this function's source location"
+
+	self defineFile: file line: line column: 0.
+]
+
+{ #category : #'defining locations' }
+TRILFunctionBuilder >> defineFile: file line: line column: column [
+	"Define this function's source location"
+
+	self file: file line: line column: column.
+	compilation entry treetops first location: location.
+]
+
 { #category : #'defining symbols' }
 TRILFunctionBuilder >> defineName: name type: type [
 	"Define this function's name and return type"

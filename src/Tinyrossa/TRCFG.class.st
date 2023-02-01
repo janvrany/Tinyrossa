@@ -115,13 +115,17 @@ TRCFG >> linearize [
 		 is not successor1 (i.e., pass-through block), we need to inject a goto.
 		 We do this by inserting artificial pass-through block with single goto node."
 		(this isTerminated not and:[this successor1 ~~ next]) ifTrue: [ 
-			| jump |
-			jump := self addBlock.
-			jump add: (TRILNode opcode: goto symbol: (compilation symbolManager defineLabel: this successor1)).
+			| jump jumpBlock |
 
-			this setSuccessor1: jump.
-			this setNext: jump.
-			jump setNext: next.
+			jump := TRILNode opcode: goto symbol: (compilation symbolManager defineLabel: this successor1).
+			jump location: (this treetops at: this treetops size - 1) location.
+
+			jumpBlock := self addBlock.
+			jumpBlock add: jump.
+
+			this setSuccessor1: jumpBlock.
+			this setNext: jumpBlock.
+			jumpBlock setNext: next.
 		] ifFalse: [ 
 			this setNext: next.
 		].

@@ -6,6 +6,17 @@ AcInstruction >> isLeaveInstruction [
 ]
 
 { #category : #'*Tinyrossa' }
+AcInstruction >> location [
+	| node loc |
+
+	node := self node.
+	node notNil ifTrue: [
+		loc := node location.
+	].
+	^ loc
+]
+
+{ #category : #'*Tinyrossa' }
 AcInstruction >> node [
 	^ self annotationAt: TRILNode
 ]
