@@ -33,6 +33,8 @@ TRCodeEvaluator >> compilation [
 TRCodeEvaluator >> evaluate: node [
 	| savedNode |
 
+	self assert: node isUsed.
+
 	savedNode := currentNode.
 	currentNode := node.
 	^ [ super evaluate: node ] 
