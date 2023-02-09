@@ -2,11 +2,11 @@ Class {
 	#name : #TRCompilationConfigOptions,
 	#superclass : #SharedPool,
 	#classVars : [
-		'OptionTarget',
-		'OptionLinkage',
-		'OptionRegisterAllocator',
 		'OptionAOT',
-		'OptionObjectFile'
+		'OptionLinkage',
+		'OptionObjectFile',
+		'OptionRegisterAllocator',
+		'OptionTarget'
 	],
 	#category : #'Tinyrossa-Config'
 }

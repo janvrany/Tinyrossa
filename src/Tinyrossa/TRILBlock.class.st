@@ -34,6 +34,8 @@ TRILBlock >> add: aTRNode [
 	self assert: self hasReturned not description: 'Cannot add more nodes after a return'.
 
 	treetops add: aTRNode.
+	aTRNode incUseCount.
+
 	aTRNode block: self.
 	"Reset successors if we're returning from this block
 	 since they're unreachable."
@@ -174,8 +176,10 @@ TRILBlock >> treetops [
 
 	bbstartNode := (TRILNode opcode: bbstart symbol: nil constant: nil children: nil).
 	bbstartNode block: self.
+	bbstartNode incUseCount.
 	bbendNode := (TRILNode opcode: bbend symbol: nil constant: nil children: nil).
 	bbendNode block: self.
+	bbendNode incUseCount.
 
 	^ { bbstartNode } , treetops , { bbendNode }
 ]

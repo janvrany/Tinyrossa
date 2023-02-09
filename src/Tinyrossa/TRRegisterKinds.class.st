@@ -2,8 +2,8 @@ Class {
 	#name : #TRRegisterKinds,
 	#superclass : #SharedPool,
 	#classVars : [
-		'GPR',
-		'FPR'
+		'FPR',
+		'GPR'
 	],
 	#category : #'Tinyrossa-Codegen'
 }

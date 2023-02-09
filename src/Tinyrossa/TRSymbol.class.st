@@ -1,6 +1,6 @@
 Class {
 	#name : #TRSymbol,
-	#superclass : #Object,
+	#superclass : #TRUseCounted,
 	#instVars : [
 		'name',
 		'type'

@@ -1,6 +1,6 @@
 Class {
 	#name : #TRILNode,
-	#superclass : #Object,
+	#superclass : #TRUseCounted,
 	#instVars : [
 		'opcode',
 		'symbol',
@@ -59,6 +59,19 @@ TRILNode >> constant [
 	^ constant
 ]
 
+{ #category : #'ref-counting' }
+TRILNode >> decUseCount [
+   super decUseCount.
+   useCount == 0 ifTrue: [ 
+		symbol notNil ifTrue: [ 
+			symbol decUseCount.
+		].
+		children notEmptyOrNil ifTrue: [ 
+			children do: [ :child | child decUseCount ]
+		].
+	].
+]
+
 { #category : #displaying }
 TRILNode >> displayOn: aStream [
 	opcode name printOn: aStream.
@@ -79,6 +92,19 @@ TRILNode >> displayOn: aStream [
 	].
 ]
 
+{ #category : #'ref-counting' }
+TRILNode >> incUseCount [
+	super incUseCount.
+	useCount == 1 ifTrue: [ 
+		symbol notNil ifTrue: [ 
+			symbol incUseCount.
+		].
+		children notEmptyOrNil ifTrue: [ 
+			children do: [ :child | child incUseCount ]
+		].
+	].
+]
+
 { #category : #initialization }
 TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
 	self assert: (symbolArg isNil or:[symbolArg isTRSymbol]).
@@ -92,6 +118,10 @@ TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constant
 	symbol := symbolArg.
 	constant := constantArg.
 	children := childrenArg.
+
+	children notEmptyOrNil ifTrue: [
+		children do: [:child | child parent: self ]
+	].
 ]
 
 { #category : #accessing }
@@ -127,18 +157,20 @@ TRILNode >> printOn:aStream [
 ]
 
 { #category : #rewriting }
-TRILNode >> replace: childNode with: anotherNode [
+TRILNode >> replace: oldChild with: newChild [
 	| newChildren |
 
 	self assert: children isEmptyOrNil not.
-	self assert: (children includes: childNode).
+	self assert: (children includes: oldChild).
 
 	newChildren := children copy.
-	newChildren at: (children indexOf: childNode) put: anotherNode.
+	newChildren at: (children indexOf: oldChild) put: newChild.
 
 	self opcode validateChildren: newChildren.
 
 	children := newChildren.
+	oldChild decUseCount.
+	newChild incUseCount.
 ]
 
 { #category : #rewriting }
