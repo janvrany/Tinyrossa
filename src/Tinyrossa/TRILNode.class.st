@@ -18,6 +18,21 @@ TRILNode class >> new [
 ]
 
 { #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg constant: constantArg [
+	^ self opcode: opcodeArg symbol: nil constant: constantArg children: nil
+]
+
+{ #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg symbol: symbolArg [
+	^ self opcode: opcodeArg symbol: symbolArg constant: nil children: nil
+]
+
+{ #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg symbol: symbolArg children: childrenArg [   
+	^ self opcode: opcodeArg symbol: symbolArg constant: nil children: childrenArg
+]
+
+{ #category : #'instance creation-private' }
 TRILNode class >> opcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
 	^ self basicNew initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg
 ]
@@ -107,12 +122,9 @@ TRILNode >> incUseCount [
 
 { #category : #initialization }
 TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
-	self assert: (symbolArg isNil or:[symbolArg isTRSymbol]).
-	self assert: (constantArg isNil or:[constantArg isNumber]).
-	self assert: (constantArg isNil or: [ symbolArg isNil ])
-		description: 'Node cannot have both a constant and a symbol'.
-	self assert: (constantArg isNil or: [ childrenArg isEmptyOrNil ])
-		description: 'Node cannot have both constant and children'.
+	opcodeArg validateConstant: constantArg.
+	opcodeArg validateSymbol: symbolArg.
+	opcodeArg validateChildren: childrenArg.    
 
 	opcode := opcodeArg.
 	symbol := symbolArg.

@@ -739,7 +739,6 @@ TRILBuilder >> build: opcode arguments: arguments [
 
 
 	node := TRILNode opcode: opcode symbol: symbol constant: constant children: children.
-	children notNil ifTrue:[ children do: [:each | each parent: node ] ].
 
 	opcode isTreeTop ifTrue: [
 		block add: node.
