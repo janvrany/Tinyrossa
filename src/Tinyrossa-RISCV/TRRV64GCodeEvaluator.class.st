@@ -47,13 +47,25 @@ TRRV64GCodeEvaluator >> evaluate_iconst: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmpeq: node [
+	| src1Reg src2Reg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	generate 
+		beq: src1Reg, src2Reg, node symbol.
+	^ nil
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_ificmpge: node [
 	| src1Reg src2Reg |
 
 	src1Reg := self evaluate: node child1.
 	src2Reg := self evaluate: node child2.
-	^ generate 
-		bge: src1Reg, src2Reg, node symbol
+	generate 
+		bge: src1Reg, src2Reg, node symbol.
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -62,8 +74,9 @@ TRRV64GCodeEvaluator >> evaluate_ificmpgt: node [
 
 	src1Reg := self evaluate: node child1.
 	src2Reg := self evaluate: node child2.
-	^ generate 
-		blt: src2Reg, src1Reg, node symbol
+	generate 
+		blt: src2Reg, src1Reg, node symbol.
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -72,8 +85,20 @@ TRRV64GCodeEvaluator >> evaluate_ificmple: node [
 
 	src1Reg := self evaluate: node child1.
 	src2Reg := self evaluate: node child2.
-	^ generate 
-		bge: src2Reg, src1Reg, node symbol
+	generate 
+		bge: src2Reg, src1Reg, node symbol.
+	^ nil
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmplt: node [
+	| src1Reg src2Reg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	generate 
+		blt: src1Reg, src2Reg, node symbol.
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -83,7 +108,7 @@ TRRV64GCodeEvaluator >> evaluate_ificmpne: node [
 	src1Reg := self evaluate: node child1.
 	src2Reg := self evaluate: node child2.
 	generate 
-		bne: src2Reg, src1Reg, node symbol.
+		bne: src1Reg, src2Reg, node symbol.
 	^ nil
 ]
 
