@@ -1785,6 +1785,27 @@ TRILBuilder >> idiv: arguments [
 ]
 
 { #category : #'building-helpers' }
+TRILBuilder >> if: conditionNode then: thenBlockOrClosure [
+	| conditionOp thenBlock mergeBlock |
+
+	conditionOp := conditionNode opcode.
+	self assert: conditionOp isCompare.
+
+	thenBlock := self allocateBlockIfNeeded: thenBlockOrClosure.
+	mergeBlock := self allocateBlock.
+
+	self build: conditionOp reverseBranchOpcode ifCompareOpcode arguments: { conditionNode child1 . conditionNode child2 . mergeBlock }.
+	block setSuccessor1: thenBlock.
+
+	[ thenBlock successor1 notNil ] whileTrue: [ thenBlock := thenBlock successor1 ].
+	thenBlock isTerminated ifFalse: [
+		thenBlock setSuccessor1: mergeBlock.
+	]. 
+
+	block := mergeBlock.
+]
+
+{ #category : #'building-helpers' }
 TRILBuilder >> if: conditionNode then: thenBlockOrClosure else: elseBlockOrClosureOrNil [
 	| conditionOp thenBlock elseBlock elseLabel mergeBlock mergeLabel |
 
