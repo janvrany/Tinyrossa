@@ -38,6 +38,14 @@ TRILTreeApp class >> defaultWindowTitle [
 	^ self shouldImplement:'TRIL Tree'
 ]
 
+{ #category : #menu }
+TRILTreeApp >> contextMenuItemSlice [
+	^ Menu new
+
+	"Created: / 16-01-2018 / 13:37:08 / jv"
+	"Modified: / 16-01-2018 / 22:03:45 / jv"
+]
+
 { #category : #'change & update-delayed' }
 TRILTreeApp >> delayedUpdateInternalList [
 	self internalListHolder roots: self nodeListHolder value ? #().
@@ -64,6 +72,19 @@ TRILTreeApp >> delayedUpdateSelection [
 
 	nodeP := self internalSelectionHolder value.    
 	self nodeSelectionHolder value: nodeP value
+]
+
+{ #category : #'menu actions' }
+TRILTreeApp >> doInspectModel [
+	| selection |
+
+	selection := self internalSelectionHolder value.
+	selection notEmptyOrNil ifTrue:[ 
+		self doInspect: selection value
+	].
+
+	"Modified: / 05-02-2018 / 13:07:57 / Jan Vrany <jan.vrany@fit.cvut.cz>"
+	"Modified: / 17-11-2021 / 13:08:52 / Jan Vrany <jan.vrany@labware.com>"
 ]
 
 { #category : #'help texts' }
