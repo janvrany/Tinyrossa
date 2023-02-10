@@ -702,41 +702,47 @@ TRILBuilder >> bucmplt: arguments [
 
 { #category : #'building-private' }
 TRILBuilder >> build: opcode arguments: arguments [
-	| symbol constant children node |
+	| symref constant children symbol node |
 
 	opcode isLoadConst ifTrue: [ 
 		self assert: arguments isCollection not description: 'Invalid arguments'.
 		constant := arguments.
 	] ifFalse: [ ((opcode hasSymbolRef or: [opcode isBranch]) and: [ opcode hasChildren not ]) ifTrue: [
-		symbol := arguments.
-		symbol isString ifTrue: [ 
-			symbol := compilation symbolManager lookupSymbolByName: symbol.
-		] ifFalse: [ 
-			symbol isTRILBlock ifTrue: [ 
-				symbol := compilation symbolManager defineLabel: symbol
-			] ifFalse: [ 
-				self assert: false description: 'Missing or invalid symbol (not string, block nor symbol)'.
-			].
-		]. 
+		symref := arguments.
 	] ifFalse: [  
 		self assert: arguments isCollection description: 'Invalid arguments'.
 		(opcode hasSymbolRef or: [opcode isBranch]) ifTrue: [ 
-			symbol := arguments last.
-			symbol isString ifTrue: [ 
-				symbol := compilation symbolManager lookupSymbolByName: symbol.
-			] ifFalse: [ 
-				symbol isTRILBlock ifTrue: [ 
-					symbol := compilation symbolManager defineLabel: symbol
-				] ifFalse: [ 
-					self assert: false description: 'Missing or invalid symbol (not string, block nor symbol)'.
-				].
-			].
+			symref := arguments last.
 			children := arguments allButLast.
 		] ifFalse: [ 
 			children := arguments.
 		].
 	]]. 
 
+	"Resolve symbol if any"
+	symref notNil ifTrue: [
+		self assert: (opcode hasSymbolRef or: [opcode isBranch]).
+		opcode hasSymbolRef ifTrue: [ 
+			symbol := compilation symbolManager lookupSymbolByName: symref.
+		] ifFalse: [
+			symref isTRILBlock ifTrue: [ 
+				symbol := compilation symbolManager lookupLabelByBlock: symref.
+			] ifFalse: [
+				symbol := compilation symbolManager lookupLabelByName: symref.
+			].
+			symbol isNil ifTrue: [
+				"In case there's no block for given label (symref), we create one.
+				 This simplifies TRIL building in some cases (namely when building 
+				 TRIL from bytecode which is already a linear sequence with jumps).
+
+				 Note, that if such block is left empty, CFG validation should detect
+				 such dangling block and abort compilation.
+				"
+				self allocateBlockNamed: symref.
+				symbol := compilation symbolManager lookupSymbolByName: symref.
+			].
+		].
+	].
 
 	node := TRILNode opcode: opcode symbol: symbol constant: constant children: children.
 

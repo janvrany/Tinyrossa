@@ -69,8 +69,17 @@ TRSymbolManager >> initialize [
 
 { #category : #lookup }
 TRSymbolManager >> lookupLabelByBlock: aTRILBlock [
+	self assert: aTRILBlock isTRILBlock.
+
 	^ symbols 
 		detect: [:symbol | symbol isTRLabelSymbol and:[symbol block == aTRILBlock ] ]
+		ifNone: [ nil ]
+]
+
+{ #category : #lookup }
+TRSymbolManager >> lookupLabelByName: aString [    
+	^ symbols 
+		detect: [:symbol | symbol isTRLabelSymbol and:[symbol name = aString ] ]
 		ifNone: [ nil ]
 ]
 
@@ -83,6 +92,8 @@ TRSymbolManager >> lookupSymbolByName: aString [
 
 { #category : #lookup }
 TRSymbolManager >> lookupSymbolsByType: symbolClass [
+	self assert: (symbolClass inheritsFrom: TRSymbol).
+
 	^ symbols select: [ :symbol | symbol isKindOf: symbolClass ].
 ]
 
@@ -97,7 +108,9 @@ TRSymbolManager >> newFunction: name type: type linkage: linkageClass [
 ]
 
 { #category : #creating }
-TRSymbolManager >> newLabel: block [ 
+TRSymbolManager >> newLabel: block [
+	self assert: block isTRILBlock.
+
 	^ TRLabelSymbol block: block
 ]
 
