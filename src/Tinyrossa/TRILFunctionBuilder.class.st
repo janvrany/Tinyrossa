@@ -4,6 +4,11 @@ Class {
 	#category : #'Tinyrossa-IL-Builder'
 }
 
+{ #category : #'instance creation' }
+TRILFunctionBuilder class >> forCompilation: aTRCompilation [
+	^ self forCompilation: aTRCompilation block: aTRCompilation entry.
+]
+
 { #category : #'defining symbols' }
 TRILFunctionBuilder >> defineAutomatic: name type: type [
 	^ compilation symbolManager defineAutomatic: name type: type

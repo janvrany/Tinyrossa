@@ -9,23 +9,25 @@ Class {
 		'successor2',
 		'next'
 	],
-	#classVars : [
-		'IdCounter'
-	],
 	#pools : [
 		'TRILOpcodes'
 	],
 	#category : #'Tinyrossa-IL'
 }
 
-{ #category : #initialization }
-TRILBlock class >> initialize [
-	IdCounter := 0.
+{ #category : #'instance creation' }
+TRILBlock class >> forCompilation: aTRCompilation [
+	^ self forCompilation: aTRCompilation named: nil
+]
+
+{ #category : #'instance creation' }
+TRILBlock class >> forCompilation: aTRCompilation named: aStringOrNil [
+	^ self basicNew initializeWithCompilation: aTRCompilation name: aStringOrNil
 ]
 
 { #category : #'instance creation' }
 TRILBlock class >> new [
-	^ self basicNew initialize
+	^ self error: 'Use #forCompilation: or #forCompilation:named:'
 ]
 
 { #category : #'adding & removing' }

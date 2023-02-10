@@ -13,8 +13,7 @@ Class {
 
 { #category : #'instance creation' }
 TRILBuilder class >> forCompilation: aTRCompilation [
-	^ self forCompilation: aTRCompilation block: TRILBlock new.
-
+	^ self forCompilation: aTRCompilation block: (TRILBlock forCompilation: aTRCompilation)
 ]
 
 { #category : #'instance creation' }
@@ -134,7 +133,7 @@ TRILBuilder >> aladd: arguments [
 
 { #category : #'building-private' }
 TRILBuilder >> allocateBlock [
-	^ TRILBlock new
+	^ self allocateBlockNamed: nil
 ]
 
 { #category : #'building-private' }
@@ -150,6 +149,11 @@ TRILBuilder >> allocateBlockIfNeeded: blockOrClosureOrNil [
 		blockOrClosureOrNil value: builder.
 	].
 	^ allocatedBlock
+]
+
+{ #category : #'building-private' }
+TRILBuilder >> allocateBlockNamed: aString [
+	^ TRILBlock forCompilation: compilation named: aString
 ]
 
 { #category : #building }
@@ -733,10 +737,6 @@ TRILBuilder >> build: opcode arguments: arguments [
 		].
 	]]. 
 
-
-	opcode validateConstant: constant.
-	opcode validateSymbol: symbol.
-	opcode validateChildren: children.
 
 	node := TRILNode opcode: opcode symbol: symbol constant: constant children: children.
 	children notNil ifTrue:[ children do: [:each | each parent: node ] ].

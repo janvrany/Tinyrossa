@@ -14,6 +14,13 @@ TRSymbolManager class >> new [
 	^ self basicNew initialize.
 ]
 
+{ #category : #counting }
+TRSymbolManager >> countSymbolsByType: symbolClass [
+	self assert: (symbolClass inheritsFrom: TRSymbol).
+
+	^ symbols count: [ :symbol | symbol isKindOf: symbolClass ].
+]
+
 { #category : #defining }
 TRSymbolManager >> define: aTRSymbol [
 	self assert: aTRSymbol isTRSymbol.

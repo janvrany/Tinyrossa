@@ -111,6 +111,12 @@ TRCompilation >> config [
 ]
 
 { #category : #accessing }
+TRCompilation >> entry [
+	"Return function's entry block."
+	^ entry
+]
+
+{ #category : #accessing }
 TRCompilation >> functionSymbol [
 	"Return a symbol representing currently compiled function."
 	^ functionSymbol
@@ -139,11 +145,9 @@ TRCompilation >> il [
 
 { #category : #initialization }
 TRCompilation >> initializeWithConfig: aTRCompilationConfig [
-
 	config := aTRCompilationConfig.
 	symbolManager := TRSymbolManager new.
-	TRILBlock initialize. "FIXME: Temporary, to reset counter"
-	entry := TRILBlock new.
+	entry := TRILBlock forCompilation: self named: 'entry'
 ]
 
 { #category : #optimizing }
