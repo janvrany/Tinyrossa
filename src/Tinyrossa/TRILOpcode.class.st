@@ -108,6 +108,11 @@ TRILOpcode >> isCompare [
 ]
 
 { #category : #testing }
+TRILOpcode >> isGoto [
+	^ name = 'goto'
+]
+
+{ #category : #testing }
 TRILOpcode >> isIndirect [
 	^ props1 bitTest: Indirect
 ]

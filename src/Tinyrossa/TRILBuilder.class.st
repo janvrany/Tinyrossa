@@ -1812,24 +1812,29 @@ TRILBuilder >> if: conditionNode then: thenBlockOrClosure [
 
 { #category : #'building-helpers' }
 TRILBuilder >> if: conditionNode then: thenBlockOrClosure else: elseBlockOrClosureOrNil [
-	| conditionOp thenBlock elseBlock elseLabel mergeBlock mergeLabel |
+	| conditionOp thenBlock elseBlock mergeBlock |
 
 	conditionOp := conditionNode opcode.
 	self assert: conditionOp isCompare.
 
 	thenBlock := self allocateBlockIfNeeded: thenBlockOrClosure.
 	elseBlock := self allocateBlockIfNeeded: elseBlockOrClosureOrNil.
-	elseLabel := compilation symbolManager defineLabel: elseBlock.
 	mergeBlock := self allocateBlock.
-	mergeLabel := compilation symbolManager defineLabel: mergeBlock.
 
-	self build: conditionOp reverseBranchOpcode ifCompareOpcode arguments: { conditionNode child1 . conditionNode child2 . elseLabel name }.
 
+	self build: conditionOp reverseBranchOpcode ifCompareOpcode arguments: { conditionNode child1 . conditionNode child2 . elseBlock }.
 	block setSuccessor1: thenBlock.
-	block setSuccessor2: elseBlock.
 
-	thenBlock setSuccessor1: mergeBlock.
-	elseBlock setSuccessor1: mergeBlock.
+	[ thenBlock successor1 notNil ] whileTrue: [ thenBlock := thenBlock successor1 ].
+	thenBlock isTerminated ifFalse: [
+		thenBlock setSuccessor1: mergeBlock.
+	].
+
+	[ elseBlock successor1 notNil ] whileTrue: [ elseBlock := elseBlock successor1 ].    
+	elseBlock isTerminated ifFalse: [
+		elseBlock setSuccessor1: mergeBlock.
+	].
+
 
 	block := mergeBlock.
 ]
@@ -3818,7 +3823,6 @@ TRILBuilder >> while: conditionNode do: bodyBlockOrClosure [
 
 	self build: conditionOp reverseBranchOpcode ifCompareOpcode arguments: { conditionNode child1 . conditionNode child2 . nextBlock }.
 	loopBlock setSuccessor1: bodyBlock.
-	loopBlock setSuccessor2: nextBlock.
 	bodyBlock setSuccessor1: loopBlock.
 
 	block := nextBlock.

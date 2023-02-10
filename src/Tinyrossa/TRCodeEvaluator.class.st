@@ -63,7 +63,6 @@ TRCodeEvaluator >> evaluate_bbstart: node [
 	node block isExtension ifFalse: [ 
 		| automatics parameters |
 
-
 		automatics := codegen compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
 		automatics do: [:automatic | 
 			automatic setRegister: nil.
@@ -76,7 +75,7 @@ TRCodeEvaluator >> evaluate_bbstart: node [
 	].
 
 	label := self compilation symbolManager lookupLabelByBlock: node block.
-	label notNil ifTrue: [ 
+	label isUsed ifTrue: [
 		generate label: label name.
 	].
 ]

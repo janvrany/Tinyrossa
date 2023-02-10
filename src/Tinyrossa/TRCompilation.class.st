@@ -8,6 +8,9 @@ Class {
 		'entry',
 		'codegen'
 	],
+	#pools : [
+		'TRILOpcodes'
+	],
 	#category : #'Tinyrossa-Compile'
 }
 
@@ -32,34 +35,51 @@ TRCompilation >> buildFinished [
 
 	| queue seen block |
 
-	"First, linearize blocks."
+	"Linearize blocks"
 	queue := Stack with: entry.
 	seen := Set with: entry.
 	[ queue notEmpty ] whileTrue: [ 
-		| block |
+		| this next |
 
-		block := queue pop.
-		(block successor2 notNil and:[(seen includes: block successor2) not]) ifTrue: [ 
-			queue push: block successor2.
-			seen add: block successor2.
+		"First, add successors of this block to the queue"
+		this := queue pop.
+		(this successor2 notNil and:[(seen includes: this successor2) not]) ifTrue: [ 
+			queue push: this successor2.
+			seen add: this successor2.
 		].
-		(block successor1 notNil and:[(seen includes: block successor1) not]) ifTrue: [ 
-			queue push: block successor1.
-			seen add: block successor1.
+		(this successor1 notNil and:[(seen includes: this successor1) not]) ifTrue: [ 
+			queue push: this successor1.
+			seen add: this successor1.
 		].
+
+		"Second, link this to the next (i.e., establish linear order of blocks)"
 		queue notEmpty ifTrue: [ 
-			block setNext: queue top.
+			next := queue top.
+		] ifFalse:[
+			next := nil. "no more blocks"
+		].
+		"Now, if 'this' block is not terminated and 'next' (next in linear order sense)
+		 is not successor1 (i.e., pass-through block), we need to inject a goto.
+		 We do this by inserting artificial pass-through block with single goto node."
+		(this isTerminated not and:[this successor1 ~~ next]) ifTrue: [ 
+			| jump |
+			jump := TRILBlock forCompilation: self.
+			jump add: (TRILNode opcode: goto symbol: (symbolManager lookupLabelByBlock: this successor1)).
+
+			this setSuccessor1: jump.
+			this setNext: jump.
+			jump setNext: next.
+		] ifFalse: [ 
+			this setNext: next.
 		].
 	].
 
-	"Now, inject jumps where needed"
+	"Validate linear order"
 	block := entry.
 	[ block notNil ] whileTrue: [ 
-		(block successor1 notNil and:[block next ~~ block successor1]) ifTrue: [ 
-			| builder |
-
-			builder := TRILBuilder forCompilation: self block: block.
-			builder goto: block successor1.
+		block isTerminated ifFalse: [
+			self assert: block successor1 notNil.
+			self assert: block successor1 == block next.
 		].
 		block := block next.
 	].
