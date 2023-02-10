@@ -33,6 +33,30 @@ TRRV64GCodeEvaluator >> evaluate_iadd: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_icmpgt: node [
+	| src1Reg src2Reg trgReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	trgReg := codegen allocateRegister.
+	generate 
+		slt: trgReg, src2Reg, src1Reg.
+	^ trgReg
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_icmplt: node [
+	| src1Reg src2Reg trgReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	trgReg := codegen allocateRegister.
+	generate 
+		slt: trgReg, src1Reg, src2Reg.
+	^ trgReg
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_iconst: node [
 	| dstReg |
 
