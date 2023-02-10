@@ -19,6 +19,18 @@ TRRegisterLiveRange >> initialize [
 	stop := 0.
 ]
 
+{ #category : #'printing & storing' }
+TRRegisterLiveRange >> printOn:aStream [
+	"append a printed representation of the receiver to the argument, aStream"
+
+	super printOn:aStream.
+	aStream nextPutAll:'< '.
+	start printOn:aStream.
+	aStream nextPutAll:', '.
+	stop printOn:aStream.
+	aStream nextPutAll:' >'.
+]
+
 { #category : #accessing }
 TRRegisterLiveRange >> start [
 	^ start

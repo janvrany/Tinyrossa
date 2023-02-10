@@ -120,7 +120,7 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 { #category : #allocation }
 TRLinearScanRegisterAllocator >> expireOldRanges: newRange [
 	activeRanges copy do: [:activeRange | 
-		activeRange value stop >= newRange value stop ifTrue: [ ^ self ].
+		activeRange value stop >= newRange value start ifTrue: [ ^ self ].
 		activeRanges remove: activeRange.
 		availableRegisters add: activeRange key allocation.
 	].
