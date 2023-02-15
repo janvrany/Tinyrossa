@@ -32,18 +32,18 @@ Class {
 }
 
 { #category : #'instance creation' }
-TRILBlock class >> forCompilation: aTRCompilation [
-	^ self forCompilation: aTRCompilation named: nil
+TRILBlock class >> forCFG: aTRCFG [
+	^ self forCFG: aTRCFG named: nil
 ]
 
 { #category : #'instance creation' }
-TRILBlock class >> forCompilation: aTRCompilation named: aStringOrNil [
-	^ self basicNew initializeWithCompilation: aTRCompilation name: aStringOrNil
+TRILBlock class >> forCFG: aTRCFG named: aStringOrNil [
+	^ self basicNew initializeWithCFG: aTRCFG name: aStringOrNil
 ]
 
 { #category : #'instance creation' }
 TRILBlock class >> new [
-	^ self error: 'Use #forCompilation: or #forCompilation:named:'
+	^ self error: 'Use #forCFG: or #forCFG:named:'
 ]
 
 { #category : #'adding & removing' }
@@ -83,20 +83,11 @@ TRILBlock >> hasSingleGoto [
 ]
 
 { #category : #initialization }
-TRILBlock >> initializeWithCompilation: aTRCompilation name: aStringOrNil [
-	self assert: (aStringOrNil isNil or: [ aStringOrNil isString ]).
+TRILBlock >> initializeWithCFG: aTRCFG name: aString [
+	self assert: aString notNil.
 
-	aStringOrNil notNil ifTrue: [ 
-		name := aStringOrNil
-	] ifFalse: [
-		| nblocks |
-
-		nblocks := aTRCompilation symbolManager countSymbolsByType: TRLabelSymbol.
-		name := String streamContents: [:s | s nextPutAll: 'BB_'; nextPutAll: (nblocks printPaddedWith: $0 to: 3 base: 10) ].
-	].
+	name := aString.
 	treetops := OrderedCollection new.
-
-	aTRCompilation symbolManager defineLabel: self.
 ]
 
 { #category : #testing }

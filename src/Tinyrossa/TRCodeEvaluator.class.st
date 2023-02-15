@@ -75,7 +75,7 @@ TRCodeEvaluator >> evaluate_bbstart: node [
 	].
 
 	label := self compilation symbolManager lookupLabelByBlock: node block.
-	label isUsed ifTrue: [
+	(label notNil and: [label isUsed]) ifTrue: [
 		generate label: label name.
 	].
 ]

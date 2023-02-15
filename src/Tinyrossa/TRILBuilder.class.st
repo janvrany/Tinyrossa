@@ -13,7 +13,7 @@ Class {
 
 { #category : #'instance creation' }
 TRILBuilder class >> forCompilation: aTRCompilation [
-	^ self forCompilation: aTRCompilation block: (TRILBlock forCompilation: aTRCompilation)
+	^ self forCompilation: aTRCompilation block: aTRCompilation cfg addBlock
 ]
 
 { #category : #'instance creation' }
@@ -153,7 +153,11 @@ TRILBuilder >> allocateBlockIfNeeded: blockOrClosureOrNil [
 
 { #category : #'building-private' }
 TRILBuilder >> allocateBlockNamed: aString [
-	^ TRILBlock forCompilation: compilation named: aString
+	| allocated |
+
+	allocated := compilation cfg addBlockNamed: aString.
+	compilation symbolManager defineLabel: allocated.
+	^ allocated
 ]
 
 { #category : #building }
@@ -2471,6 +2475,8 @@ TRILBuilder >> ineg: arguments [
 
 { #category : #initialization }
 TRILBuilder >> initializeWithCompilation: aTRCompilation block: aTRILBlock [
+	self assert: aTRILBlock isTRILBlock.
+
 	compilation := aTRCompilation.
 	block := aTRILBlock.
 ]

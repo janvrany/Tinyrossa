@@ -6,7 +6,7 @@ Class {
 
 { #category : #'instance creation' }
 TRILFunctionBuilder class >> forCompilation: aTRCompilation [
-	^ self forCompilation: aTRCompilation block: aTRCompilation entry.
+	^ self forCompilation: aTRCompilation block: aTRCompilation cfg entry.
 ]
 
 { #category : #'defining symbols' }
