@@ -130,7 +130,7 @@ TRCodeGenerator >> fixupUsing: aDictionary [
 ]
 
 { #category : #'code gen' }
-TRCodeGenerator >> generate: il [
+TRCodeGenerator >> generate [
 	"Given the TRIL, generate the code into a code buffer.
 
 	This is the main entrypoint that performs all the code generation
@@ -142,7 +142,7 @@ TRCodeGenerator >> generate: il [
 	"
 
 	self
-		generateCode: il;
+		generateCode;
 		allocateRegisters;
 
 		mapStack;
@@ -152,6 +152,21 @@ TRCodeGenerator >> generate: il [
 		fixupRegisters;
 		fixupOffsets;
 		fixupBranches.
+]
+
+{ #category : #'code gen-phases' }
+TRCodeGenerator >> generateCode [
+	"Given the TRIL, generate instruction for it.
+
+	 This is just an instruction selection phase,
+	 prologue / epilogues are generated at different
+	 phases.
+	"
+	compilation cfg linearDo: [ :block |
+		block treetops do: [:node |
+			evaluator evaluate: node
+		]
+	].
 ]
 
 { #category : #'code gen-phases' }

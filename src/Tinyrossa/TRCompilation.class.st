@@ -64,7 +64,7 @@ TRCompilation >> compile [
 	| cg |
 
 	cg := self codegen.
-	cg generate: self il.
+	cg generate.
 
 	config aot ifTrue: [ 
 		| objgen |    

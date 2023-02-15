@@ -61,6 +61,26 @@ TRCFG >> initializeWithCompilation: aTRCompilation [
 	entry := nil.
 ]
 
+{ #category : #enumerating }
+TRCFG >> linearDo: aBlock [
+	"Traverse the CFG in linear order, starting with entry block.
+	 This may be called only after blocks are linearized (see
+	 #linearize).
+
+	 `aBlock` is evaluated exactly once for every block reachable
+	 from entry. It's not evaluated at all for blocks that are not
+	 reachable."
+	| block |        
+
+	self assert: entry notNil.
+
+	block := entry.
+	[ block notNil ] whileTrue:[
+		aBlock value: block.
+		block := block next.
+	].
+]
+
 { #category : #operations }
 TRCFG >> linearize [
 	"Order blocks into linear list."
@@ -115,5 +135,53 @@ TRCFG >> linearize [
 			self assert: block successor1 == block next.
 		].
 		block := block next.
+	].
+]
+
+{ #category : #enumerating }
+TRCFG >> postorderDo: aBlock [
+	"Traverse the CFG starting with entry block and evaluate 
+	 `aBlock` for each block in depth-first post-order manner.
+
+	 `aBlock` is evaluated exactly once for every block reachable
+	 from entry. It's not evaluated at all for blocks that are not
+	 reachable."
+
+	| preorder |
+
+	preorder := OrderedCollection new: blocks size.
+	self preorderDo: [ :block | preorder add: block ].
+	preorder reverseDo: aBlock.
+]
+
+{ #category : #enumerating }
+TRCFG >> preorderDo: aBlock [
+	"Traverse the CFG starting with entry block and evaluate 
+	 `aBlock` for each block in depth-first pre-order manner.
+
+	 `aBlock` is evaluated exactly once for every block reachable
+	 from entry. It's not evaluated at all for blocks that are not
+	 reachable."
+
+	| stack seen |
+
+	self assert: entry notNil.
+
+	stack := Stack with: entry.
+	seen := Set with: entry.
+	[ stack notEmpty ] whileTrue: [ 
+		| block |
+
+		block := stack pop.
+		aBlock value: block.
+
+		(block successor2 notNil and:[(seen includes: block successor2) not]) ifTrue: [ 
+			stack push: block successor2.
+			seen add: block successor2.
+		].
+		(block successor1 notNil and:[(seen includes: block successor1) not]) ifTrue: [ 
+			stack push: block successor1.
+			seen add: block successor1.
+		].      
 	].
 ]

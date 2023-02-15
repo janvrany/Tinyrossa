@@ -53,13 +53,9 @@ TRILSimplifier >> initializeWithCompilation: aTRCompilation [
 
 { #category : #optimizing }
 TRILSimplifier >> simplify [
-	1 to: compilation il size do: [:index | 
-		| oldNode newNode |
-
-		oldNode := compilation il at: index.
-		newNode := self evaluate: oldNode.
-		newNode ~~ oldNode ifTrue: [ 
-			compilation il at: index put: newNode.
+	compilation cfg preorderDo: [ :block |
+		block treetops do: [ :node |
+			self evaluate: node.
 		].
 	].
 ]
