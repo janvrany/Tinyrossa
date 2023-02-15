@@ -24,6 +24,21 @@ TRRV64GCompilationTests >> test_example01_meaningOfLife [
 ]
 
 { #category : #'tests - examples' }
+TRRV64GCompilationTests >> test_example03_signum [
+	| debugger |
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example03_signum.
+
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'a0' to: -5.
+	debugger c.
+	self assert: (debugger getRegister: 'a0') equals: -1.
+]
+
+{ #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example04_factorial_i [
 	| debugger |
 
