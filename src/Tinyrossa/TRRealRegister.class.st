@@ -17,6 +17,11 @@ TRRealRegister class >> value: value kind: kind [
 	^ self basicNew initializeWithValue: value kind: kind
 ]
 
+{ #category : #accessing }
+TRRealRegister >> allocation [
+	^ self
+]
+
 { #category : #initialization }
 TRRealRegister >> initializeWithValue: anAcAsmMapEntry kind: aTRRegisterKind [
 	self value: anAcAsmMapEntry.

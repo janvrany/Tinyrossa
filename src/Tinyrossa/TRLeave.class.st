@@ -29,7 +29,10 @@ TRLeave >> disassemble [
 
 	value isNil ifTrue: [ 
 		^ 'leave'
-	] ifFalse: [ 
+	] ifFalse: [
+		value allocation notNil ifTrue: [ 
+			^ 'leave returning ', value allocation name
+		].
 		^ 'leave returning ', value name
 	]
 ]
