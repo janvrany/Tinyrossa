@@ -42,14 +42,10 @@ TRCompilationExamples >> example01_meaningOfLife [
 			{ builder iconst: 31 .
 			  builder iconst: 11 } }.
 
-	compilation buildFinished. "Indicate we're done building/"
-
-	compilation il. "Only convenience inspection."
-
 	compilation optimize.
-	compilation il. "Only convenience inspection."
 
 	compilation compile.
+
 	compilation codeBuffer. "Only convenience inspection."
 ]
 
@@ -65,14 +61,10 @@ TRCompilationExamples >> example02_add2 [
 			{ builder iload: 'x' .
 			  builder iconst: 2 } }.
 
-	compilation buildFinished. "Indicate we're done building/"
-
-	compilation il. "Only convenience inspection."
-
 	compilation optimize.
-	compilation il. "Only convenience inspection."
 
 	compilation compile.
+
 	compilation codeBuffer. "Only convenience inspection."
 ]
 
@@ -101,14 +93,10 @@ TRCompilationExamples >> example03_signum [
 								builder ireturn: 
 									{ builder iconst: 0 } ] ].
 
-	compilation buildFinished. "Indicate we're done building/"
-
-	compilation il. "Only convenience inspection."
-
 	compilation optimize.
-	compilation il. "Only convenience inspection."
 
 	compilation compile.
+
 	compilation codeBuffer. "Only convenience inspection."
 ]
 
@@ -150,12 +138,7 @@ TRCompilationExamples >> example04_factorial_i [
 		"return r"
 		ireturn: { builder iload: 'r' }.
 
-	compilation buildFinished. "Indicate we're done building/"
-
-	compilation il. "Only convenience inspection."
-
 	compilation optimize.
-	compilation il. "Only convenience inspection."
 
 	compilation compile.
 
@@ -197,12 +180,7 @@ TRCompilationExamples >> example05_factorial_r [
 						'factorial_r' } } }
 		].
 
-	compilation buildFinished. "Indicate we're done building/"
-
-	compilation il. "Only convenience inspection."
-
 	compilation optimize.
-	compilation il. "Only convenience inspection."
 
 	compilation compile.
 

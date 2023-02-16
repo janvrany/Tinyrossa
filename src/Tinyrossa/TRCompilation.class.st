@@ -27,12 +27,6 @@ TRCompilation class >> new [
 ]
 
 { #category : #'building IL' }
-TRCompilation >> buildFinished [
-	"To be used by frontend to indicate that IL building is done."
-	cfg linearize
-]
-
-{ #category : #'building IL' }
 TRCompilation >> builder [
 	"Return a top-level builder to be used to build
 	 the IL. Once the frontend is done building, it MUST
@@ -61,11 +55,10 @@ TRCompilation >> codegen [
 
 { #category : #compiling }
 TRCompilation >> compile [
-	| cg |
+	"Compile generated IL to machine code."
 
-	cg := self codegen.
-	cg generate.
-
+	cfg linearize.
+	self codegen generate.
 	config aot ifTrue: [ 
 		| objgen |    
 
@@ -95,21 +88,6 @@ TRCompilation >> functionSymbol [
 TRCompilation >> functionType [
 	"Return currently compiled function return type"
 	^ functionSymbol type
-]
-
-{ #category : #accessing }
-TRCompilation >> il [
-	"Return linearized sequence of `TRILNode`s"
-
-	| il block |
-
-	il := OrderedCollection new.
-	block := cfg entry.
-	[ block notNil ] whileTrue: [
-		il addAll: block treetops.
-		block := block next.
-	].
-	^ il
 ]
 
 { #category : #initialization }

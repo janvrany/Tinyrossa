@@ -96,6 +96,11 @@ TRILNode >> displayOn: aStream [
 		opcode name = 'bbend' ifTrue: [ aStream nextPut:$/ ].
 		aStream nextPutAll: block name; 
 				nextPut:$>.
+		(opcode name = 'bbend') ifTrue: [
+			(block isTerminated not and: [ block successor1 notNil and:[block next isNil]]) ifTrue: [ 
+				aStream nextPutAll: '  <!-- pass through to '; nextPutAll: block successor1 name; nextPutAll: ' -->'
+			].
+		]
 	] ifFalse: [ 
 		symbol notNil ifTrue: [ 
 			aStream nextPutAll: symbol name
