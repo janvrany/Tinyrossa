@@ -6,7 +6,6 @@ Class {
 		'symbol',
 		'constant',
 		'children',
-		'parent',
 		'block'
 	],
 	#category : #'Tinyrossa-IL'
@@ -135,28 +134,11 @@ TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constant
 	symbol := symbolArg.
 	constant := constantArg.
 	children := childrenArg.
-
-	children notEmptyOrNil ifTrue: [
-		children do: [:child | child parent: self ]
-	].
 ]
 
 { #category : #accessing }
 TRILNode >> opcode [
 	^ opcode
-]
-
-{ #category : #accessing }
-TRILNode >> parent [
-	^ parent
-]
-
-{ #category : #accessing }
-TRILNode >> parent:aTRILNode [
-	self assert: opcode isTreeTop not description: 'Cannot set parent of a treetop'.
-	self assert: aTRILNode notNil description: 'Parent already set'.
-	parent := aTRILNode.
-	self block: parent block.
 ]
 
 { #category : #'printing & storing' }
@@ -177,7 +159,7 @@ TRILNode >> printOn:aStream [
 TRILNode >> replace: oldChild with: newChild [
 	| newChildren |
 
-	self assert: children isEmptyOrNil not.
+	self assert: children notEmptyOrNil.
 	self assert: (children includes: oldChild).
 
 	newChildren := children copy.
@@ -188,14 +170,6 @@ TRILNode >> replace: oldChild with: newChild [
 	children := newChildren.
 	oldChild decUseCount.
 	newChild incUseCount.
-]
-
-{ #category : #rewriting }
-TRILNode >> replaceWith: anotherNode [
-	self opcode isTreeTop ifFalse: [
-		self parent replace: self with: anotherNode.
-	].
-	^ anotherNode.
 ]
 
 { #category : #accessing }

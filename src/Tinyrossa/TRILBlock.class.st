@@ -164,6 +164,34 @@ TRILBlock >> removePrecedessor: aTRILBlock [
 	].
 ]
 
+{ #category : #'adding & removing' }
+TRILBlock >> replace: oldNode with: newNode [
+	| index |
+
+	self assert: oldNode opcode isTreeTop description: 'Invalid node (not a treetop)'.
+	self assert: (treetops includes: oldNode).
+	index := treetops indexOf: oldNode.
+	self assert: (index == treetops size or: [ newNode opcode isReturn not and: [ newNode opcode isBranch not ] ])
+		 description: 'Invalid replacement node (cannot replace non-last node with return or branch)'.
+
+	oldNode decUseCount.
+	treetops at: index put: newNode.
+	newNode block: self.
+	newNode incUseCount.
+
+	index == treetops size ifTrue: [ 
+		"We're replacing last node, update successors."
+		(newNode opcode isReturn or:[ newNode opcode isGoto ]) ifTrue: [
+			"Reset successor1 if we're returning or branching off since it 
+			 is unreachable from this block."
+			self setSuccessor1: nil.
+		].
+		newNode opcode isBranch ifTrue: [ 
+			self setSuccessor2: newNode symbol block.
+		].
+	].
+]
+
 { #category : #initialization }
 TRILBlock >> setNext: aTRILBlock [ 
 	"Set next block (in sense of linear order). This is used
