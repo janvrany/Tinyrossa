@@ -4,6 +4,11 @@ Class {
 	#category : #'Tinyrossa-Datatypes'
 }
 
+{ #category : #testing }
+TRDataTypeDouble >> isFloatingPointType [
+	^ true
+]
+
 { #category : #accessing }
 TRDataTypeDouble >> name [
    ^ 'Double'

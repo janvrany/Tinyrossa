@@ -27,6 +27,13 @@ TRDataType >> isCompatibleWith: anotherType [
 ]
 
 { #category : #testing }
+TRDataType >> isFloatingPointType [
+	"return false here; to be redefined in subclass(es)"
+
+	^ false
+]
+
+{ #category : #testing }
 TRDataType >> isIntegerType [
 	"Return true, if receiver is integer type (of any width)"
 

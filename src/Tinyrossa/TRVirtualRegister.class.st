@@ -81,6 +81,11 @@ TRVirtualRegister >> isTRVirtualRegister [
 ]
 
 { #category : #accessing }
+TRVirtualRegister >> kind [
+	^ kind
+]
+
+{ #category : #accessing }
 TRVirtualRegister >> name [
 	^ name
 ]

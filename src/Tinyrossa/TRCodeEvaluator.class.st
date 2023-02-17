@@ -31,14 +31,21 @@ TRCodeEvaluator >> compilation [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate: node [
-	| savedNode |
+	| result |
 
 	self assert: node isUsed.
+	self assert: (node result isNil or: [ node useCount > 1 ]).
 
-	savedNode := currentNode.
-	currentNode := node.
-	^ [ super evaluate: node ] 
-		ensure: [ currentNode := savedNode.].
+	result := node result.
+	result isNil ifTrue: [ 
+		| saved |
+
+		saved := currentNode.
+		currentNode := node.
+		result := [ super evaluate: node ] ensure: [ currentNode := saved ].
+		node setResult: result.
+	].
+	^ result.
 ]
 
 { #category : #evaluation }
@@ -48,12 +55,12 @@ TRCodeEvaluator >> evaluate_acall: node [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_areturn: node [
-	self evaluate_return: node
+	^ self evaluate_return: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_bbend: node [
-	"Nothing to do"
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -78,6 +85,7 @@ TRCodeEvaluator >> evaluate_bbstart: node [
 	(label notNil and: [label isUsed]) ifTrue: [
 		generate label: label name.
 	].
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -95,7 +103,7 @@ TRCodeEvaluator >> evaluate_dcall: node [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_dreturn: node [
-	self evaluate_return: node
+	^ self evaluate_return: node
 ]
 
 { #category : #evaluation }
@@ -105,7 +113,7 @@ TRCodeEvaluator >> evaluate_fcall: node [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_freturn: node [
-	self evaluate_return: node
+	^ self evaluate_return: node
 ]
 
 { #category : #evaluation }
@@ -115,7 +123,7 @@ TRCodeEvaluator >> evaluate_icall: node [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_ireturn: node [
-	self evaluate_return: node
+	^ self evaluate_return: node
 ]
 
 { #category : #evaluation }
@@ -125,7 +133,7 @@ TRCodeEvaluator >> evaluate_lcall: node [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_lreturn: node [
-	self evaluate_return: node
+	^ self evaluate_return: node
 ]
 
 { #category : #evaluation }
@@ -135,7 +143,14 @@ TRCodeEvaluator >> evaluate_return: node [
 	self assert: codegen compilation functionType == node child1 type.
 
 	retReg := self evaluate: node child1.
-	generate leave: retReg
+	generate leave: retReg.
+	^ retReg
+]
+
+{ #category : #evaluation }
+TRCodeEvaluator >> evaluate_treetop: node [
+	self evaluate: node child1.
+	^ nil
 ]
 
 { #category : #private }

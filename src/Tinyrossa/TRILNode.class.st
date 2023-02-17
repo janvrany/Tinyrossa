@@ -6,7 +6,12 @@ Class {
 		'symbol',
 		'constant',
 		'children',
-		'block'
+		'block',
+		'result'
+	],
+	#pools : [
+		'TRDataTypes',
+		'TRRegisterKinds'
 	],
 	#category : #'Tinyrossa-IL'
 }
@@ -170,6 +175,34 @@ TRILNode >> replace: oldChild with: newChild [
 	children := newChildren.
 	oldChild decUseCount.
 	newChild incUseCount.
+]
+
+{ #category : #accessing }
+TRILNode >> result [
+	"Return (virtual) register holding result of this
+	 node (if it has been evaluated already)."
+	^ result
+]
+
+{ #category : #initialization }
+TRILNode >> setResult: vreg [
+	opcode type == Void ifTrue: [ 
+		self assert: vreg isNil description: 'Attempting to set result for void-typed node'.
+	].
+	vreg isNil ifTrue: [
+		self assert: opcode isTreeTop.
+	] ifFalse:[
+		opcode type isIntegerType ifTrue: [ 
+			self assert: vreg notNil.
+			self assert: vreg kind == GPR
+		] ifFalse: [ 
+			self assert: vreg notNil.
+			self assert: vreg kind == FPR
+		].
+	].
+
+	self assert: result isNil description: 'Node already evaluated!'.
+	result := vreg.
 ]
 
 { #category : #accessing }
