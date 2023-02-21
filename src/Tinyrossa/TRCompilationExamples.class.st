@@ -199,6 +199,53 @@ TRCompilationExamples >> example06_factorial_aot [
 	self assert: 'factorial.o' asFileReference exists
 ]
 
+{ #category : #examples }
+TRCompilationExamples >> example09_signum_2 [
+	| builder then1 else1 then2 else2 |
+
+	"
+	This example demonstrates how to use orphan builders to
+	defer building of control-flow branches. This is an alternative
+	to using (smalltalk) blocks - see #example03_signum
+	"
+
+	builder := compilation builder.
+	builder defineName: 'signum' type: Int32.
+	builder defineParameter: 'x' type: Int32.   
+	builder defineAutomatic: 'r' type: Int32.   
+
+	then1 := builder orphan.
+	else1 := builder orphan.
+
+	builder 
+		if: (builder icmplt: 
+			 {  builder iload: 'x' .
+				builder iconst: 0  })
+		then: then1
+		else: else1;
+		ireturn: { builder iload: 'r' }.
+
+	then2 := builder orphan.
+	else2 := builder orphan.
+
+	then1 istore: { then1 iconst: -1 . 'r'}.
+	else1 if: (builder icmpgt: 
+				{  builder iload: 'x' .
+				   builder iconst: 0  }) 
+		  then: then2
+		  else: else2.
+
+
+	then2 istore: { then1 iconst: 1 . 'r' }.
+	else2 istore: { then1 iconst: 0 . 'r' }.
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. "Only convenience inspection."
+]
+
 { #category : #running }
 TRCompilationExamples >> setUp [
 	super setUp.
