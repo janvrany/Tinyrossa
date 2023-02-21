@@ -117,7 +117,7 @@ TRCFG >> linearize [
 		(this isTerminated not and:[this successor1 ~~ next]) ifTrue: [ 
 			| jump |
 			jump := self addBlock.
-			jump add: (TRILNode opcode: goto symbol: (compilation symbolManager lookupLabelByBlock: this successor1)).
+			jump add: (TRILNode opcode: goto symbol: (compilation symbolManager defineLabel: this successor1)).
 
 			this setSuccessor1: jump.
 			this setNext: jump.

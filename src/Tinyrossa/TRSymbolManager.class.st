@@ -45,7 +45,15 @@ TRSymbolManager >> defineFunction: name type: type linkage: linkageClass [
 
 { #category : #defining }
 TRSymbolManager >> defineLabel: block [
-	^ self define: (self newLabel: block)
+	| label |
+
+	self assert: block isTRILBlock.
+
+	label := self lookupLabelByBlock: block.
+	label isNil ifTrue: [ 
+		label := self define: (self newLabel: block)
+	].
+	^ label
 ]
 
 { #category : #defining }

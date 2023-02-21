@@ -733,17 +733,6 @@ TRILBuilder >> build: opcode arguments: arguments [
 			] ifFalse: [
 				symbol := compilation symbolManager lookupLabelByName: symref.
 			].
-			symbol isNil ifTrue: [
-				"In case there's no block for given label (symref), we create one.
-				 This simplifies TRIL building in some cases (namely when building 
-				 TRIL from bytecode which is already a linear sequence with jumps).
-
-				 Note, that if such block is left empty, CFG validation should detect
-				 such dangling block and abort compilation.
-				"
-				self allocateBlockNamed: symref.
-				symbol := compilation symbolManager lookupSymbolByName: symref.
-			].
 		].
 	].
 
