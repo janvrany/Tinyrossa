@@ -52,9 +52,8 @@ TRILBlock >> add: aTRNode [
 	self assert: self isClosed not description: 'Cannot add more treetops to closed block'.
 
 	treetops add: aTRNode.
+	aTRNode setBlock: self.
 	aTRNode incUseCount.
-
-	aTRNode block: self.
 
 	(aTRNode opcode isReturn or:[ aTRNode opcode isGoto ]) ifTrue: [
 		"Reset successor1 if we're returning or branching off since it 
@@ -176,7 +175,7 @@ TRILBlock >> replace: oldNode with: newNode [
 
 	oldNode decUseCount.
 	treetops at: index put: newNode.
-	newNode block: self.
+	newNode setBlock: self.
 	newNode incUseCount.
 
 	index == treetops size ifTrue: [ 
@@ -204,6 +203,7 @@ TRILBlock >> setNext: aTRILBlock [
 { #category : #initialization }
 TRILBlock >> setSuccessor1: blockOrNil [
 	self assert: (blockOrNil isNil or:[blockOrNil isTRILBlock]).
+	self assert: (blockOrNil isNil or:[self isTerminated not]).
 
 	successor1 notNil ifTrue: [ 
 		successor1 removePrecedessor: self.
@@ -217,6 +217,7 @@ TRILBlock >> setSuccessor1: blockOrNil [
 { #category : #initialization }
 TRILBlock >> setSuccessor2: blockOrNil [
 	self assert: (blockOrNil isNil or:[blockOrNil isTRILBlock]).
+	self assert: treetops last opcode isBranch.
 
 	successor2 notNil ifTrue: [ 
 		successor2 removePrecedessor: self.
@@ -242,10 +243,10 @@ TRILBlock >> treetops [
 	| bbstartNode bbendNode |
 
 	bbstartNode := (TRILNode opcode: bbstart symbol: nil constant: nil children: nil).
-	bbstartNode block: self.
+	bbstartNode setBlock: self.
 	bbstartNode incUseCount.
 	bbendNode := (TRILNode opcode: bbend symbol: nil constant: nil children: nil).
-	bbendNode block: self.
+	bbendNode setBlock: self.
 	bbendNode incUseCount.
 
 	^ { bbstartNode } , treetops , { bbendNode }

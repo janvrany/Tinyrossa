@@ -47,12 +47,6 @@ TRILNode >> block [
 ]
 
 { #category : #accessing }
-TRILNode >> block:aTRILBlock [
-	self assert: block isNil.
-	block := aTRILBlock.
-]
-
-{ #category : #accessing }
 TRILNode >> child1 [
 	^ children first
 ]
@@ -81,13 +75,14 @@ TRILNode >> constant [
 { #category : #'ref-counting' }
 TRILNode >> decUseCount [
    super decUseCount.
-   useCount == 0 ifTrue: [ 
-		symbol notNil ifTrue: [ 
-			symbol decUseCount.
-		].
-		children notEmptyOrNil ifTrue: [ 
-			children do: [ :child | child decUseCount ]
-		].
+   useCount == 0 ifTrue: [
+	   block := nil.
+	   symbol notNil ifTrue: [
+		   symbol decUseCount.
+	   ].
+	   children notEmptyOrNil ifTrue: [
+		   children do: [ :child | child decUseCount ]
+	   ].
 	].
 ]
 
@@ -182,6 +177,20 @@ TRILNode >> result [
 	"Return (virtual) register holding result of this
 	 node (if it has been evaluated already)."
 	^ result
+]
+
+{ #category : #initialization }
+TRILNode >> setBlock: aTRILBlock [
+	self assert: aTRILBlock isTRILBlock.
+
+	block isNil ifTrue: [
+		block := aTRILBlock.
+		children notEmptyOrNil ifTrue:[ 
+			children do: [:child | child setBlock: aTRILBlock ]
+		].
+	] ifFalse: [ 
+		self assert: block == aTRILBlock description: 'Nodes cannot be reused across multiple blocks'
+	].
 ]
 
 { #category : #initialization }
