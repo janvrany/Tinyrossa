@@ -74,11 +74,6 @@ TRILBlock >> addPrecedessor: aTRILBlock [
 	].
 ]
 
-{ #category : #testing }
-TRILBlock >> hasSingleGoto [
-	^ treetops size == 1 and:[ treetops first opcode == goto ]
-]
-
 { #category : #initialization }
 TRILBlock >> initializeWithCFG: aTRCFG name: aString [
 	self assert: aString notNil.
@@ -149,6 +144,11 @@ TRILBlock >> next [
 	 This is only valid after block linearization."
 
 	^ next
+]
+
+{ #category : #testing }
+TRILBlock >> notEmpty [
+	^ self isEmpty not
 ]
 
 { #category : #accessing }
@@ -252,4 +252,9 @@ TRILBlock >> successor2 [
 { #category : #accessing }
 TRILBlock >> treetops [
 	^ { bbstartNode } , treetops , { bbendNode }
+]
+
+{ #category : #accessing }
+TRILBlock >> treetopsLast [
+	^ treetops last
 ]
