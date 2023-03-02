@@ -1,9 +1,6 @@
 Class {
 	#name : #TRILSimplifier,
-	#superclass : #TRILWalker,
-	#instVars : [
-		'compilation'
-	],
+	#superclass : #TRILRewritingPass,
 	#classVars : [
 		'ArithmeticSimplificationTable'
 	],
@@ -12,11 +9,6 @@ Class {
 	],
 	#category : #'Tinyrossa-Optimizer'
 }
-
-{ #category : #'instance creation' }
-TRILSimplifier class >> forCompilation: aTRCompilation [
-	^ self basicNew initializeWithCompilation: aTRCompilation
-]
 
 { #category : #initialization }
 TRILSimplifier class >> initialize [
@@ -30,11 +22,6 @@ TRILSimplifier class >> initialize [
 		yourself
 ]
 
-{ #category : #'instance creation' }
-TRILSimplifier class >> new [
-	self shouldNotImplement. "Use #forCompilation:"
-]
-
 { #category : #accessing }
 TRILSimplifier >> builder [
 	^ TRILBuilder forCompilation: compilation
@@ -42,39 +29,7 @@ TRILSimplifier >> builder [
 
 { #category : #evaluation }
 TRILSimplifier >> evaluate: node [
-	super evaluate: node.
-	^ self simplify: node
-]
-
-{ #category : #evaluation }
-TRILSimplifier >> evaluateChildren: node [
-	node children do: [:original |
-		| simplified |
-
-		simplified := self evaluate: original.
-		simplified ~~ original ifTrue: [ 
-			node replace: original with: simplified
-		].
-	].
-]
-
-{ #category : #initialization }
-TRILSimplifier >> initializeWithCompilation: aTRCompilation [
-	compilation := aTRCompilation.
-]
-
-{ #category : #optimizing }
-TRILSimplifier >> simplify [
-	compilation cfg preorderDo: [ :block |
-		block treetops do: [ :original |
-			| simplified |
-
-			simplified := self evaluate: original.
-			simplified ~~ original ifTrue: [ 
-				block replace: original with: simplified
-			].
-		].
-	].
+	^ self simplify: (super evaluate: node)
 ]
 
 { #category : #optimizing }
@@ -83,6 +38,7 @@ TRILSimplifier >> simplify: original [
 
 	simplified := original.
 	simplified := self simplifyArithmetic: simplified.
+	simplified := self simplifyStore: simplified.
 	"Add more here..."
 	^ simplified
 ]

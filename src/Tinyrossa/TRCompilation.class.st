@@ -120,10 +120,9 @@ TRCompilation >> isJIT [
 
 { #category : #optimizing }
 TRCompilation >> optimize [
-	| simplifier |
-
-	simplifier := TRILSimplifier forCompilation: self.
-	simplifier simplify.
+	{
+		TRILSimplifier .
+	} do: [:pass | (pass forCompilation: self) run ]
 ]
 
 { #category : #initialization }
