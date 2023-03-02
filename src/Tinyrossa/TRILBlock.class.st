@@ -19,7 +19,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'name',
+		'bbstartNode',
 		'treetops',
+		'bbendNode',
 		'precedessors',
 		'successor1',
 		'successor2',
@@ -67,12 +69,8 @@ TRILBlock >> add: aTRNode [
 
 { #category : #'adding & removing' }
 TRILBlock >> addPrecedessor: aTRILBlock [
-	precedessors isNil ifTrue: [ 
-		precedessors := Array with: aTRILBlock
-	] ifFalse: [
-		(precedessors includes: aTRILBlock) ifFalse: [ 
+	(precedessors includes: aTRILBlock) ifFalse: [ 
 			precedessors := precedessors copyWith: aTRILBlock
-		].
 	].
 ]
 
@@ -86,7 +84,14 @@ TRILBlock >> initializeWithCFG: aTRCFG name: aString [
 	self assert: aString notNil.
 
 	name := aString.
+	bbstartNode := (TRILNode opcode: bbstart symbol: nil constant: nil children: nil).
+	bbstartNode setBlock: self.
+	bbstartNode incUseCount.
 	treetops := OrderedCollection new.
+	bbendNode := (TRILNode opcode: bbend symbol: nil constant: nil children: nil).
+	bbendNode setBlock: self.
+	bbendNode incUseCount.        
+	precedessors := Array new.
 ]
 
 { #category : #testing }
@@ -144,6 +149,11 @@ TRILBlock >> next [
 	 This is only valid after block linearization."
 
 	^ next
+]
+
+{ #category : #accessing }
+TRILBlock >> precedessors [
+	^ precedessors
 ]
 
 { #category : #'printing & storing' }
@@ -240,14 +250,5 @@ TRILBlock >> successor2 [
 
 { #category : #accessing }
 TRILBlock >> treetops [
-	| bbstartNode bbendNode |
-
-	bbstartNode := (TRILNode opcode: bbstart symbol: nil constant: nil children: nil).
-	bbstartNode setBlock: self.
-	bbstartNode incUseCount.
-	bbendNode := (TRILNode opcode: bbend symbol: nil constant: nil children: nil).
-	bbendNode setBlock: self.
-	bbendNode incUseCount.
-
 	^ { bbstartNode } , treetops , { bbendNode }
 ]
