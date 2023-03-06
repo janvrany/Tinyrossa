@@ -62,3 +62,19 @@ TRILSimplifier >> simplifyArithmetic: node [
 		].
 	^ node.
 ]
+
+{ #category : #optimizing }
+TRILSimplifier >> simplifyStore: node [
+	"This simplification removes unnecessary stores into automatics.
+
+	A store into automatic is unnecessary if there's no other use
+	of that automatic. We can check this by comparing automatic's
+	use count - if it's equal to 1, the it is used (the only use
+	is this very store)."
+	(node opcode isStore 
+		and:[ node symbol isTRAutomaticSymbol 
+		and:[node symbol useCount == 1 ]]) ifTrue: [ 
+		node block remove: node.
+	].
+	^ node.
+]

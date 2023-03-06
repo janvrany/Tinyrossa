@@ -170,8 +170,10 @@ TRRV64GPSABILinkage >> mapStack [
 
 	automatics := codegen compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
 	automatics do: [:automatic | 
-		automatic setOffset: offset.
-		offset := offset + 8.
+		automatic isUsed ifTrue: [
+			automatic setOffset: offset.
+			offset := offset + 8.
+		].
 	].
 
 	framePreservedOffset := offset.

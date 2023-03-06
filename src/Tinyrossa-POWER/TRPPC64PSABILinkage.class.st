@@ -176,6 +176,7 @@ TRPPC64PSABILinkage >> mapStack [
 	vectorSaveAreaSize := 0. "TODO: Bogus, but we do not yet support vector regiters!"
 
 	automatics := codegen compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
+	automatics := automatics select: [:e | e isUsed ].
 	localVariableSpaceSize := 8 * automatics size.
 
 	parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
