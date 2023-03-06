@@ -40,6 +40,11 @@ TRDataType >> isIntegerType [
 	^ false
 ]
 
+{ #category : #testing }
+TRDataType >> isVoidType [
+	^ false
+]
+
 { #category : #accessing }
 TRDataType >> name [
 	self subclassResponsibility

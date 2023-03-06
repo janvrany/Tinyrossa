@@ -4,6 +4,11 @@ Class {
 	#category : #'Tinyrossa-Datatypes'
 }
 
+{ #category : #testing }
+TRDataTypeVoid >> isVoidType [
+	^ true
+]
+
 { #category : #accessing }
 TRDataTypeVoid >> name [
 	^ 'Void'
