@@ -122,6 +122,7 @@ TRCompilation >> isJIT [
 TRCompilation >> optimize [
 	{
 		TRCFGSimplifier .
+		TRILCommoner .
 		TRILSimplifier .
 	} do: [:pass | (pass forCompilation: self) run ]
 ]
