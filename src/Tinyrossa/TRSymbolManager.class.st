@@ -106,7 +106,14 @@ TRSymbolManager >> lookupSymbolsByType: symbolClass [
 ]
 
 { #category : #creating }
-TRSymbolManager >> newAutomatic: name type: type index: index [
+TRSymbolManager >> newAutomatic: nameOrNil type: type index: index [
+	| name |
+
+	nameOrNil notNil ifTrue: [ 
+		name := nameOrNil
+	] ifFalse: [ 
+		name := '_auto' , (index printLeftPaddedWith: $0 to: 3 base: 10)
+	].
 	^ TRAutomaticSymbol name: name type: type index: index
 ]
 
