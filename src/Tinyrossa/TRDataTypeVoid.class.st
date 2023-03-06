@@ -9,9 +9,19 @@ TRDataTypeVoid >> isVoidType [
 	^ true
 ]
 
+{ #category : #queries }
+TRDataTypeVoid >> loadOpcode [
+	^ self error: 'Cannot load void!'
+]
+
 { #category : #accessing }
 TRDataTypeVoid >> name [
 	^ 'Void'
+]
+
+{ #category : #queries }
+TRDataTypeVoid >> storeOpcode [
+	^ self error: 'Cannot store void!'
 ]
 
 { #category : #validation }

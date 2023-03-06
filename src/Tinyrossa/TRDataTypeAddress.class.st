@@ -1,6 +1,9 @@
 Class {
 	#name : #TRDataTypeAddress,
 	#superclass : #TRDataType,
+	#pools : [
+		'TRILOpcodes'
+	],
 	#category : #'Tinyrossa-Datatypes'
 }
 
@@ -9,9 +12,19 @@ TRDataTypeAddress >> isIntegerType [
 	^ true
 ]
 
+{ #category : #queries }
+TRDataTypeAddress >> loadOpcode [
+	^ aload
+]
+
 { #category : #accessing }
 TRDataTypeAddress >> name [
 	^ 'Address'
+]
+
+{ #category : #queries }
+TRDataTypeAddress >> storeOpcode [
+	^ astore
 ]
 
 { #category : #validation }

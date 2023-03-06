@@ -45,6 +45,16 @@ TRDataType >> isVoidType [
 	^ false
 ]
 
+{ #category : #queries }
+TRDataType >> loadOpcode [
+	^ self subclassResponsibility
+
+	"
+	(TRDataType named:'Int32') loadOpcode
+	TRILOpcodes initialize
+	"
+]
+
 { #category : #accessing }
 TRDataType >> name [
 	self subclassResponsibility
@@ -56,6 +66,16 @@ TRDataType >> printOn:aStream [
 
 	aStream nextPutAll:'TRDataType named: '.
 	self name storeOn:aStream.
+]
+
+{ #category : #queries }
+TRDataType >> storeOpcode [
+	^ self subclassResponsibility
+
+	"
+	(TRDataType named:'Int32') storeOpcode
+	TRILOpcodes initialize
+	"
 ]
 
 { #category : #validation }
