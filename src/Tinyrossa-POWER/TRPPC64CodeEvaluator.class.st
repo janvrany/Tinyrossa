@@ -10,7 +10,8 @@ Class {
 
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_goto: node [
-	generate b: node symbol
+	generate b: node symbol.
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -55,7 +56,9 @@ TRPPC64CodeEvaluator >> evaluate_ificmpge: node [
 
 	generate 
 		cmpw: condReg, src1Reg, src2Reg;
-		bge: cr0, node symbol
+		bge: cr0, node symbol.
+
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -68,7 +71,9 @@ TRPPC64CodeEvaluator >> evaluate_ificmpgt: node [
 
 	generate 
 		cmpw: condReg, src1Reg, src2Reg;
-		bgt: cr0, node symbol
+		bgt: cr0, node symbol.
+
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -81,7 +86,9 @@ TRPPC64CodeEvaluator >> evaluate_ificmple: node [
 
 	generate 
 		cmpw: condReg, src1Reg, src2Reg;
-		ble: cr0, node symbol
+		ble: cr0, node symbol.
+
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -94,7 +101,9 @@ TRPPC64CodeEvaluator >> evaluate_ificmplt: node [
 
 	generate 
 		cmpw: condReg, src1Reg, src2Reg;
-		blt: cr0, node symbol
+		blt: cr0, node symbol.
+
+	^ nil
 ]
 
 { #category : #evaluation }
@@ -107,7 +116,9 @@ TRPPC64CodeEvaluator >> evaluate_ificmpne: node [
 
 	generate 
 		cmpw: condReg, src1Reg, src2Reg;
-		bne: cr0, node symbol
+		bne: cr0, node symbol.
+
+	^ nil
 ]
 
 { #category : #evaluation }

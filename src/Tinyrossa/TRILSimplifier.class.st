@@ -46,6 +46,18 @@ TRILSimplifier >> evaluate: node [
 	^ self simplify: node
 ]
 
+{ #category : #evaluation }
+TRILSimplifier >> evaluateChildren: node [
+	node children do: [:original |
+		| simplified |
+
+		simplified := self evaluate: original.
+		simplified ~~ original ifTrue: [ 
+			node replace: original with: simplified
+		].
+	].
+]
+
 { #category : #initialization }
 TRILSimplifier >> initializeWithCompilation: aTRCompilation [
 	compilation := aTRCompilation.
@@ -53,13 +65,14 @@ TRILSimplifier >> initializeWithCompilation: aTRCompilation [
 
 { #category : #optimizing }
 TRILSimplifier >> simplify [
-	1 to: compilation il size do: [:index | 
-		| oldNode newNode |
+	compilation cfg preorderDo: [ :block |
+		block treetops do: [ :original |
+			| simplified |
 
-		oldNode := compilation il at: index.
-		newNode := self evaluate: oldNode.
-		newNode ~~ oldNode ifTrue: [ 
-			compilation il at: index put: newNode.
+			simplified := self evaluate: original.
+			simplified ~~ original ifTrue: [ 
+				block replace: original with: simplified
+			].
 		].
 	].
 ]
@@ -89,9 +102,7 @@ TRILSimplifier >> simplifyArithmetic: node [
 
 			simplified := self builder build: node child1 opcode arguments: reducedConst.
 
-			^ node replaceWith: simplified.
-				
-
+			^ simplified.
 		].
 	^ node.
 ]

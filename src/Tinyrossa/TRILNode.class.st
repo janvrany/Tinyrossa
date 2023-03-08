@@ -6,8 +6,12 @@ Class {
 		'symbol',
 		'constant',
 		'children',
-		'parent',
-		'block'
+		'block',
+		'result'
+	],
+	#pools : [
+		'TRDataTypes',
+		'TRRegisterKinds'
 	],
 	#category : #'Tinyrossa-IL'
 }
@@ -18,6 +22,21 @@ TRILNode class >> new [
 ]
 
 { #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg constant: constantArg [
+	^ self opcode: opcodeArg symbol: nil constant: constantArg children: nil
+]
+
+{ #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg symbol: symbolArg [
+	^ self opcode: opcodeArg symbol: symbolArg constant: nil children: nil
+]
+
+{ #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg symbol: symbolArg children: childrenArg [   
+	^ self opcode: opcodeArg symbol: symbolArg constant: nil children: childrenArg
+]
+
+{ #category : #'instance creation-private' }
 TRILNode class >> opcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
 	^ self basicNew initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg
 ]
@@ -25,12 +44,6 @@ TRILNode class >> opcode: opcodeArg symbol: symbolArg constant: constantArg chil
 { #category : #accessing }
 TRILNode >> block [
 	^ block
-]
-
-{ #category : #accessing }
-TRILNode >> block:aTRILBlock [
-	self assert: block isNil.
-	block := aTRILBlock.
 ]
 
 { #category : #accessing }
@@ -62,13 +75,14 @@ TRILNode >> constant [
 { #category : #'ref-counting' }
 TRILNode >> decUseCount [
    super decUseCount.
-   useCount == 0 ifTrue: [ 
-		symbol notNil ifTrue: [ 
-			symbol decUseCount.
-		].
-		children notEmptyOrNil ifTrue: [ 
-			children do: [ :child | child decUseCount ]
-		].
+   useCount == 0 ifTrue: [
+	   block := nil.
+	   symbol notNil ifTrue: [
+		   symbol decUseCount.
+	   ].
+	   children notEmptyOrNil ifTrue: [
+		   children do: [ :child | child decUseCount ]
+	   ].
 	].
 ]
 
@@ -81,6 +95,11 @@ TRILNode >> displayOn: aStream [
 		opcode name = 'bbend' ifTrue: [ aStream nextPut:$/ ].
 		aStream nextPutAll: block name; 
 				nextPut:$>.
+		(opcode name = 'bbend') ifTrue: [
+			(block isTerminated not and: [ block successor1 notNil and:[block next isNil]]) ifTrue: [ 
+				aStream nextPutAll: '  <!-- pass through to '; nextPutAll: block successor1 name; nextPutAll: ' -->'
+			].
+		]
 	] ifFalse: [ 
 		symbol notNil ifTrue: [ 
 			aStream nextPutAll: symbol name
@@ -107,39 +126,19 @@ TRILNode >> incUseCount [
 
 { #category : #initialization }
 TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
-	self assert: (symbolArg isNil or:[symbolArg isTRSymbol]).
-	self assert: (constantArg isNil or:[constantArg isNumber]).
-	self assert: (constantArg isNil or: [ symbolArg isNil ])
-		description: 'Node cannot have both a constant and a symbol'.
-	self assert: (constantArg isNil or: [ childrenArg isEmptyOrNil ])
-		description: 'Node cannot have both constant and children'.
+	opcodeArg validateConstant: constantArg.
+	opcodeArg validateSymbol: symbolArg.
+	opcodeArg validateChildren: childrenArg.    
 
 	opcode := opcodeArg.
 	symbol := symbolArg.
 	constant := constantArg.
 	children := childrenArg.
-
-	children notEmptyOrNil ifTrue: [
-		children do: [:child | child parent: self ]
-	].
 ]
 
 { #category : #accessing }
 TRILNode >> opcode [
 	^ opcode
-]
-
-{ #category : #accessing }
-TRILNode >> parent [
-	^ parent
-]
-
-{ #category : #accessing }
-TRILNode >> parent:aTRILNode [
-	self assert: opcode isTreeTop not description: 'Cannot set parent of a treetop'.
-	self assert: aTRILNode notNil description: 'Parent already set'.
-	parent := aTRILNode.
-	self block: parent block.
 ]
 
 { #category : #'printing & storing' }
@@ -160,7 +159,7 @@ TRILNode >> printOn:aStream [
 TRILNode >> replace: oldChild with: newChild [
 	| newChildren |
 
-	self assert: children isEmptyOrNil not.
+	self assert: children notEmptyOrNil.
 	self assert: (children includes: oldChild).
 
 	newChildren := children copy.
@@ -173,12 +172,46 @@ TRILNode >> replace: oldChild with: newChild [
 	newChild incUseCount.
 ]
 
-{ #category : #rewriting }
-TRILNode >> replaceWith: anotherNode [
-	self opcode isTreeTop ifFalse: [
-		self parent replace: self with: anotherNode.
+{ #category : #accessing }
+TRILNode >> result [
+	"Return (virtual) register holding result of this
+	 node (if it has been evaluated already)."
+	^ result
+]
+
+{ #category : #initialization }
+TRILNode >> setBlock: aTRILBlock [
+	self assert: aTRILBlock isTRILBlock.
+
+	block isNil ifTrue: [
+		block := aTRILBlock.
+		children notEmptyOrNil ifTrue:[ 
+			children do: [:child | child setBlock: aTRILBlock ]
+		].
+	] ifFalse: [ 
+		self assert: block == aTRILBlock description: 'Nodes cannot be reused across multiple blocks'
 	].
-	^ anotherNode.
+]
+
+{ #category : #initialization }
+TRILNode >> setResult: vreg [
+	opcode type == Void ifTrue: [ 
+		self assert: vreg isNil description: 'Attempting to set result for void-typed node'.
+	].
+	vreg isNil ifTrue: [
+		self assert: opcode isTreeTop.
+	] ifFalse:[
+		opcode type isIntegerType ifTrue: [ 
+			self assert: vreg notNil.
+			self assert: vreg kind == GPR
+		] ifFalse: [ 
+			self assert: vreg notNil.
+			self assert: vreg kind == FPR
+		].
+	].
+
+	self assert: result isNil description: 'Node already evaluated!'.
+	result := vreg.
 ]
 
 { #category : #accessing }

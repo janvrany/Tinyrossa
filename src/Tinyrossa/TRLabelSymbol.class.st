@@ -30,10 +30,11 @@ TRLabelSymbol >> block [
 
 { #category : #initialization }
 TRLabelSymbol >> initializeWithBlock: aTRILBlock [
+	self assert: aTRILBlock isTRILBlock.
+
 	name := aTRILBlock name.
 	type := TRDataType named: 'Void'.
 	block := aTRILBlock.
-
 ]
 
 { #category : #testing }

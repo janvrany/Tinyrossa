@@ -1,6 +1,19 @@
 Extension { #name : #TRCompilation }
 
 { #category : #'*Tinyrossa-Tools-SmalltalkX' }
+TRCompilation >> il [
+	"Return linearized sequence of `TRILNode`s"
+
+	| il |
+
+	il := OrderedCollection new.
+	cfg preorderDo: [:block |
+		il addAll: block treetops.
+	].
+	^ il
+]
+
+{ #category : #'*Tinyrossa-Tools-SmalltalkX' }
 TRCompilation >> inspector2TabExplorer [
 	<inspector2Tab>
 

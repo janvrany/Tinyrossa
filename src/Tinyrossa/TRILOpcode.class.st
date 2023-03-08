@@ -108,6 +108,11 @@ TRILOpcode >> isCompare [
 ]
 
 { #category : #testing }
+TRILOpcode >> isGoto [
+	^ name = 'goto'
+]
+
+{ #category : #testing }
 TRILOpcode >> isIndirect [
 	^ props1 bitTest: Indirect
 ]
@@ -225,9 +230,15 @@ TRILOpcode >> validateConstant: aNumber [
 
 { #category : #validation }
 TRILOpcode >> validateSymbol: aTRSymbol [
-	(self hasSymbolRef or: [self isBranch]) ifTrue: [ 
+	self hasSymbolRef ifTrue: [ 
 		self assert: aTRSymbol notNil.
-	] ifFalse: [
-		self assert: aTRSymbol isNil.
+		self assert: aTRSymbol isTRLabelSymbol not.
+		^ self.
 	].
+	self isBranch ifTrue: [ 
+		self assert: aTRSymbol notNil.
+		self assert: aTRSymbol isTRLabelSymbol.
+		^ self.
+	].
+	self assert: aTRSymbol isNil.
 ]

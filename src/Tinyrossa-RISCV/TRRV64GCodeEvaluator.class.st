@@ -10,7 +10,8 @@ Class {
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_goto: node [
 	generate
-		jal: zero, node symbol
+		jal: zero, node symbol.
+	^ nil
 ]
 
 { #category : #evaluation }

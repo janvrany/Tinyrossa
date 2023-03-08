@@ -1,6 +1,9 @@
 Class {
 	#name : #TRDataTypeInt32,
 	#superclass : #TRDataType,
+	#pools : [
+		'TRILOpcodes'
+	],
 	#category : #'Tinyrossa-Datatypes'
 }
 
@@ -9,9 +12,19 @@ TRDataTypeInt32 >> isIntegerType [
 	^ true
 ]
 
+{ #category : #queries }
+TRDataTypeInt32 >> loadOpcode [
+	^ iload
+]
+
 { #category : #accessing }
 TRDataTypeInt32 >> name [
    ^ 'Int32'
+]
+
+{ #category : #queries }
+TRDataTypeInt32 >> storeOpcode [
+	^ istore
 ]
 
 { #category : #validation }

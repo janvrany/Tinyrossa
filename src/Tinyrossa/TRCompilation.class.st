@@ -5,7 +5,7 @@ Class {
 		'config',
 		'symbolManager',
 		'functionSymbol',
-		'entry',
+		'cfg',
 		'codegen'
 	],
 	#category : #'Tinyrossa-Compile'
@@ -27,54 +27,17 @@ TRCompilation class >> new [
 ]
 
 { #category : #'building IL' }
-TRCompilation >> buildFinished [
-	"To be used by frontend to indicate that IL building is done."
-
-	| queue seen block |
-
-	"First, linearize blocks."
-	queue := Stack with: entry.
-	seen := Set with: entry.
-	[ queue notEmpty ] whileTrue: [ 
-		| block |
-
-		block := queue pop.
-		(block successor2 notNil and:[(seen includes: block successor2) not]) ifTrue: [ 
-			queue push: block successor2.
-			seen add: block successor2.
-		].
-		(block successor1 notNil and:[(seen includes: block successor1) not]) ifTrue: [ 
-			queue push: block successor1.
-			seen add: block successor1.
-		].
-		queue notEmpty ifTrue: [ 
-			block setNext: queue top.
-		].
-	].
-
-	"Now, inject jumps where needed"
-	block := entry.
-	[ block notNil ] whileTrue: [ 
-		(block successor1 notNil and:[block next ~~ block successor1]) ifTrue: [ 
-			| builder |
-
-			builder := TRILBuilder forCompilation: self block: block.
-			builder goto: block successor1.
-		].
-		block := block next.
-	].
-	"
-	self il.
-	"
-]
-
-{ #category : #'building IL' }
 TRCompilation >> builder [
 	"Return a top-level builder to be used to build
 	 the IL. Once the frontend is done building, it MUST
 	 send #buildFinished to compilation."
 
-	^ TRILFunctionBuilder forCompilation: self block: entry.
+	^ TRILFunctionBuilder forCompilation: self
+]
+
+{ #category : #accessing }
+TRCompilation >> cfg [
+	^ cfg
 ]
 
 { #category : #accessing }
@@ -92,11 +55,10 @@ TRCompilation >> codegen [
 
 { #category : #compiling }
 TRCompilation >> compile [
-	| cg |
+	"Compile generated IL to machine code."
 
-	cg := self codegen.
-	cg generate: self il.
-
+	cfg linearize.
+	self codegen generate.
 	config aot ifTrue: [ 
 		| objgen |    
 
@@ -111,6 +73,12 @@ TRCompilation >> config [
 ]
 
 { #category : #accessing }
+TRCompilation >> entry [
+	"Return function's entry block."
+	^ cfg entry
+]
+
+{ #category : #accessing }
 TRCompilation >> functionSymbol [
 	"Return a symbol representing currently compiled function."
 	^ functionSymbol
@@ -122,28 +90,16 @@ TRCompilation >> functionType [
 	^ functionSymbol type
 ]
 
-{ #category : #accessing }
-TRCompilation >> il [
-	"Return linearized sequence of `TRILNode`s"
-
-	| il block |
-
-	il := OrderedCollection new.
-	block := entry.
-	[ block notNil ] whileTrue: [
-		il addAll: block treetops.
-		block := block next.
-	].
-	^ il
-]
-
 { #category : #initialization }
 TRCompilation >> initializeWithConfig: aTRCompilationConfig [
+	| entry |
 
 	config := aTRCompilationConfig.
 	symbolManager := TRSymbolManager new.
-	TRILBlock initialize. "FIXME: Temporary, to reset counter"
-	entry := TRILBlock new.
+	cfg := TRCFG forCompilation: self.
+
+	entry := cfg addBlockNamed: 'entry'.
+	symbolManager defineLabel: entry.
 ]
 
 { #category : #optimizing }

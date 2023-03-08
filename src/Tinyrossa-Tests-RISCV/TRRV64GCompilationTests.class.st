@@ -9,6 +9,26 @@ TRRV64GCompilationTests >> setUp [
 	self setUpForTarget: TRRV64GLinux default
 ]
 
+{ #category : #tests }
+TRRV64GCompilationTests >> test01_bytecode_abs [
+	| debugger |
+
+	super test01_bytecode_abs.
+	"
+	VDBDebuggerAp
+	"
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'a0' to: 2.
+
+	"
+	VDBDebuggerApplication openFor: debugger
+	"
+
+	debugger c.
+	self assert: (debugger getRegister: 'a0') equals: 2 abs.
+]
+
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example01_meaningOfLife [
 	| debugger |
@@ -66,4 +86,41 @@ TRRV64GCompilationTests >> test_example05_factorial_r [
 	debugger setRegister: 'a0' to: 5.
 	debugger c.
 	self assert: (debugger getRegister: 'a0') equals: 5 factorial.
+]
+
+{ #category : #'tests - examples' }
+TRRV64GCompilationTests >> test_example08_bytecode_compiler [
+	| debugger |
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example08_bytecode_compiler.
+	"
+	VDBDebuggerAp
+	"
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'a0' to: 2.
+
+	"
+	VDBDebuggerApplication openFor: debugger
+	"
+
+	debugger c.
+	self assert: (debugger getRegister: 'a0') equals: 2 factorial.
+]
+
+{ #category : #'tests - examples' }
+TRRV64GCompilationTests >> test_example09_signum_2 [
+	| debugger |
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example09_signum_2.
+
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'a0' to: -5.
+	debugger c.
+	self assert: (debugger getRegister: 'a0') equals: -1.
 ]

@@ -27,10 +27,32 @@ TRDataType >> isCompatibleWith: anotherType [
 ]
 
 { #category : #testing }
+TRDataType >> isFloatingPointType [
+	"return false here; to be redefined in subclass(es)"
+
+	^ false
+]
+
+{ #category : #testing }
 TRDataType >> isIntegerType [
 	"Return true, if receiver is integer type (of any width)"
 
 	^ false
+]
+
+{ #category : #testing }
+TRDataType >> isVoidType [
+	^ false
+]
+
+{ #category : #queries }
+TRDataType >> loadOpcode [
+	^ self subclassResponsibility
+
+	"
+	(TRDataType named:'Int32') loadOpcode
+	TRILOpcodes initialize
+	"
 ]
 
 { #category : #accessing }
@@ -44,6 +66,16 @@ TRDataType >> printOn:aStream [
 
 	aStream nextPutAll:'TRDataType named: '.
 	self name storeOn:aStream.
+]
+
+{ #category : #queries }
+TRDataType >> storeOpcode [
+	^ self subclassResponsibility
+
+	"
+	(TRDataType named:'Int32') storeOpcode
+	TRILOpcodes initialize
+	"
 ]
 
 { #category : #validation }

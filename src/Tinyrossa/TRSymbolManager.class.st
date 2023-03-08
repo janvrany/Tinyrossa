@@ -14,6 +14,13 @@ TRSymbolManager class >> new [
 	^ self basicNew initialize.
 ]
 
+{ #category : #counting }
+TRSymbolManager >> countSymbolsByType: symbolClass [
+	self assert: (symbolClass inheritsFrom: TRSymbol).
+
+	^ symbols count: [ :symbol | symbol isKindOf: symbolClass ].
+]
+
 { #category : #defining }
 TRSymbolManager >> define: aTRSymbol [
 	self assert: aTRSymbol isTRSymbol.
@@ -38,7 +45,15 @@ TRSymbolManager >> defineFunction: name type: type linkage: linkageClass [
 
 { #category : #defining }
 TRSymbolManager >> defineLabel: block [
-	^ self define: (self newLabel: block)
+	| label |
+
+	self assert: block isTRILBlock.
+
+	label := self lookupLabelByBlock: block.
+	label isNil ifTrue: [ 
+		label := self define: (self newLabel: block)
+	].
+	^ label
 ]
 
 { #category : #defining }
@@ -62,8 +77,17 @@ TRSymbolManager >> initialize [
 
 { #category : #lookup }
 TRSymbolManager >> lookupLabelByBlock: aTRILBlock [
+	self assert: aTRILBlock isTRILBlock.
+
 	^ symbols 
 		detect: [:symbol | symbol isTRLabelSymbol and:[symbol block == aTRILBlock ] ]
+		ifNone: [ nil ]
+]
+
+{ #category : #lookup }
+TRSymbolManager >> lookupLabelByName: aString [    
+	^ symbols 
+		detect: [:symbol | symbol isTRLabelSymbol and:[symbol name = aString ] ]
 		ifNone: [ nil ]
 ]
 
@@ -76,11 +100,20 @@ TRSymbolManager >> lookupSymbolByName: aString [
 
 { #category : #lookup }
 TRSymbolManager >> lookupSymbolsByType: symbolClass [
+	self assert: (symbolClass inheritsFrom: TRSymbol).
+
 	^ symbols select: [ :symbol | symbol isKindOf: symbolClass ].
 ]
 
 { #category : #creating }
-TRSymbolManager >> newAutomatic: name type: type index: index [
+TRSymbolManager >> newAutomatic: nameOrNil type: type index: index [
+	| name |
+
+	nameOrNil notNil ifTrue: [ 
+		name := nameOrNil
+	] ifFalse: [ 
+		name := '_auto' , (index printLeftPaddedWith: $0 to: 3 base: 10)
+	].
 	^ TRAutomaticSymbol name: name type: type index: index
 ]
 
@@ -90,7 +123,9 @@ TRSymbolManager >> newFunction: name type: type linkage: linkageClass [
 ]
 
 { #category : #creating }
-TRSymbolManager >> newLabel: block [ 
+TRSymbolManager >> newLabel: block [
+	self assert: block isTRILBlock.
+
 	^ TRLabelSymbol block: block
 ]
 
