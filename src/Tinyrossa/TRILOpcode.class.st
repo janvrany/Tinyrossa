@@ -13,6 +13,9 @@ Class {
 		'booleanCompareOpcode',
 		'ifCompareOpcode'
 	],
+	#classVars : [
+		'CompareTrueIfMask'
+	],
 	#pools : [
 		'TRILOpcodeProps1',
 		'TRILOpcodeProps2',
@@ -20,6 +23,17 @@ Class {
 	],
 	#category : #'Tinyrossa-IL'
 }
+
+{ #category : #initialization }
+TRILOpcode class >> initialize [
+	"Sigh, Pharo does not properly order class initializers
+	 so it may happen that this #initialize is called before
+	 TRILOpcodeProps3's initialize. So we have to call it here
+	 explicitly to make sure it is initialized."
+
+	TRILOpcodeProps3 initialize.
+	CompareTrueIfMask :=  CompareTrueIfLess | CompareTrueIfEqual | CompareTrueIfGreater
+]
 
 { #category : #accessing }
 TRILOpcode class >> named: aString [
@@ -105,6 +119,41 @@ TRILOpcode >> isBranch [
 { #category : #testing }
 TRILOpcode >> isCompare [
 	^ props1 anyMask: BooleanCompare
+]
+
+{ #category : #testing }
+TRILOpcode >> isCompareAndBranch [
+	^ props1 allMask: BooleanCompare | Branch
+]
+
+{ #category : #testing }
+TRILOpcode >> isCompareTrueIfEQ [
+	^ (props3 bitAnd: CompareTrueIfMask) == CompareTrueIfEqual
+]
+
+{ #category : #testing }
+TRILOpcode >> isCompareTrueIfGE [
+	^ (props3 bitAnd: CompareTrueIfMask) == (CompareTrueIfGreater | CompareTrueIfEqual)
+]
+
+{ #category : #testing }
+TRILOpcode >> isCompareTrueIfGT [
+	^ (props3 bitAnd: CompareTrueIfMask) == CompareTrueIfGreater
+]
+
+{ #category : #testing }
+TRILOpcode >> isCompareTrueIfLE [
+	^ (props3 bitAnd: CompareTrueIfMask) == (CompareTrueIfLess | CompareTrueIfEqual)
+]
+
+{ #category : #testing }
+TRILOpcode >> isCompareTrueIfLT [
+	^ (props3 bitAnd: CompareTrueIfMask) == CompareTrueIfLess
+]
+
+{ #category : #testing }
+TRILOpcode >> isCompareTrueIfNE [
+	^ (props3 bitAnd: CompareTrueIfMask) == (CompareTrueIfLess | CompareTrueIfGreater)
 ]
 
 { #category : #testing }
