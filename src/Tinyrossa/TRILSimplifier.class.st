@@ -39,6 +39,7 @@ TRILSimplifier >> simplify: original [
 	simplified := original.
 	simplified := self simplifyArithmetic: simplified.
 	simplified := self simplifyStore: simplified.
+	simplified := self simplifyIfCompare: simplified.
 	"Add more here..."
 	^ simplified
 ]
@@ -60,6 +61,52 @@ TRILSimplifier >> simplifyArithmetic: node [
 
 			^ simplified.
 		].
+	^ node.
+]
+
+{ #category : #optimizing }
+TRILSimplifier >> simplifyIfCompare: node [
+	"
+	Simplifies
+
+		ificmp<eq|ne> <label>
+		  icmp<cond>
+			<value1>
+			<value2
+		  iconst <0|1>
+
+	to
+
+		ificmp<cond> <label>
+		  <value1>
+		  <value2
+
+	"
+	| op |
+
+	op := node opcode.
+	(op isCompareAndBranch and:[ op isCompareTrueIfEQ or: [ op isCompareTrueIfNE ] ]) ifTrue: [
+		| child1 child2 |
+
+		child1 := node child1.
+		child2 := node child2.
+
+		(child1 opcode isCompare and: [ child2 opcode isLoadConst ]) ifTrue: [ 
+			| cmpOp ifCmpOp simplified |
+
+			cmpOp := child1 opcode.
+			child2 constant == 0 ifTrue: [ 
+				cmpOp := cmpOp reverseBranchOpcode.
+			].
+
+			ifCmpOp := cmpOp ifCompareOpcode.
+			op isCompareTrueIfNE ifTrue: [ 
+				ifCmpOp := ifCmpOp reverseBranchOpcode.
+			].
+			simplified := TRILNode opcode: ifCmpOp symbol: node symbol children: child1 children.
+			^ simplified
+		].
+	].
 	^ node.
 ]
 
