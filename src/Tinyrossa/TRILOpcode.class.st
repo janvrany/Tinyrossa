@@ -58,12 +58,12 @@ TRILOpcode >> hasSymbolRef [
 	We do not have them in Tinyrossa so we do not mandate symbol so
 	for such opcodes return `false` even if `HasSymbolRef` property is set.
 	"
-	(props1 bitTest: Indirect) ifTrue: [ 
-		(props1 bitTest: Load | Store) ifTrue: [ 
+	(props1 anyMask: Indirect) ifTrue: [ 
+		(props1 anyMask: Load | Store) ifTrue: [ 
 			^ false
 		].
 	].
-	^ props1 bitTest: HasSymbolRef
+	^ props1 anyMask: HasSymbolRef
 ]
 
 { #category : #accessing }
@@ -94,17 +94,17 @@ TRILOpcode >> inspectorExtraAttributes [
 
 { #category : #testing }
 TRILOpcode >> isArithmetic [
-	^ props1 bitTest: (Add | Sub | Mul | Div | Rem)
+	^ props1 anyMask: (Add | Sub | Mul | Div | Rem)
 ]
 
 { #category : #testing }
 TRILOpcode >> isBranch [
-	^ props1 bitTest: Branch
+	^ props1 anyMask: Branch
 ]
 
 { #category : #testing }
 TRILOpcode >> isCompare [
-	^ props1 bitTest: BooleanCompare
+	^ props1 anyMask: BooleanCompare
 ]
 
 { #category : #testing }
@@ -114,7 +114,7 @@ TRILOpcode >> isGoto [
 
 { #category : #testing }
 TRILOpcode >> isIndirect [
-	^ props1 bitTest: Indirect
+	^ props1 anyMask: Indirect
 ]
 
 { #category : #testing }
@@ -124,22 +124,22 @@ TRILOpcode >> isInvalid [
 
 { #category : #testing }
 TRILOpcode >> isLoad [
-	^ props1 bitTest: Load
+	^ props1 anyMask: Load
 ]
 
 { #category : #testing }
 TRILOpcode >> isLoadConst [
-	^ props1 bitTest: LoadConst
+	^ props1 anyMask: LoadConst
 ]
 
 { #category : #testing }
 TRILOpcode >> isReturn [
-	^ props1 bitTest: Return
+	^ props1 anyMask: Return
 ]
 
 { #category : #testing }
 TRILOpcode >> isStore [
-	^ props1 bitTest: Store
+	^ props1 anyMask: Store
 ]
 
 { #category : #testing }
@@ -151,7 +151,7 @@ TRILOpcode >> isTreeTop [
 	 *        a TR::TreeTop, even though it might also appear as a child of a NULLCHK
 	 *        node in another circumstance.
 	 *"
-	^ props1 bitTest: TreeTop
+	^ props1 anyMask: TreeTop
 ]
 
 { #category : #accessing }
