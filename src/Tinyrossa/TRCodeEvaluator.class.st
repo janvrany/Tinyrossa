@@ -153,30 +153,8 @@ TRCodeEvaluator >> evaluate_treetop: node [
 	^ nil
 ]
 
-{ #category : #private }
-TRCodeEvaluator >> ground: instruction using: encoding [ 
-	| insn |
-
-	insn := instruction as: codegen instructionClass.
-	insn setBinaryEncoding: encoding.
-	 "Set the TRIL node that caused this instruction to be generated - if not
-	 already set (which happens when you ground a partially grounded
-	 instruction).
-	 It's bit tricky, but this is the API that ArchC provides at the moment.
-	""Set the TRIL node that caused this instruction to be generated - if not
-	 already set (which happens when you ground a partially grounded
-	 instruction).
-	 It's bit tricky, but this is the API that ArchC provides at the moment.
-	"
-	insn node isNil ifTrue: [
-		insn node: currentNode.
-	].
-	^ insn
-]
-
 { #category : #initialization }
 TRCodeEvaluator >> initializeWithCodeGenerator: aTRCodeGenerator [
 	codegen := aTRCodeGenerator.
 	generate := codegen assembler.
-	generate grounder: self.
 ]

@@ -211,11 +211,6 @@ TRCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	evaluator := self createEvaluator.
 ]
 
-{ #category : #'accessing - config' }
-TRCodeGenerator >> instructionClass [
-	^ TRInstruction
-]
-
 { #category : #accessing }
 TRCodeGenerator >> instructions [
 	 ^ generate memory instructions
