@@ -59,7 +59,7 @@ TRCompilation >> compile [
 
 	cfg linearize.
 	self codegen generate.
-	config aot ifTrue: [ 
+	self isAOT ifTrue: [ 
 		| objgen |    
 
 		objgen := TRELFGenerator forCompilation: self.
@@ -100,6 +100,22 @@ TRCompilation >> initializeWithConfig: aTRCompilationConfig [
 
 	entry := cfg addBlockNamed: 'entry'.
 	symbolManager defineLabel: entry.
+]
+
+{ #category : #testing }
+TRCompilation >> isAOT [
+	"Return true, if this compilation is AOT compilation,
+	 false if it is JIT compilation."
+
+	^ config aot
+]
+
+{ #category : #testing }
+TRCompilation >> isJIT [
+	"Return true, if this compilation is JIT compilation,
+	 false if it is AOT compilation."
+
+	^ config aot not
 ]
 
 { #category : #optimizing }

@@ -170,17 +170,6 @@ TRCodeGenerator >> generateCode [
 ]
 
 { #category : #'code gen-phases' }
-TRCodeGenerator >> generateCode: il [
-	"Given the TRIL, generate instruction for it.
-
-	 This is just an instruction selection phase,
-	 prologue / epilogues are generated at different
-	 phases.
-	"
-	il do: [:node | evaluator evaluate: node ].
-]
-
-{ #category : #'code gen-phases' }
 TRCodeGenerator >> generateEpilogues [
 	| insns |
 
@@ -209,11 +198,6 @@ TRCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	virtualRegisters := Dictionary new.
 	generate := self createAssembler.
 	evaluator := self createEvaluator.
-]
-
-{ #category : #'accessing - config' }
-TRCodeGenerator >> instructionClass [
-	^ TRInstruction
 ]
 
 { #category : #accessing }
