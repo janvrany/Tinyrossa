@@ -4,7 +4,7 @@ Extension { #name : #AcDSLAssembler }
 AcDSLAssembler >> leave: aTRVirtualRegister [
 	| insn |
 
-	insn := TRLeave value: aTRVirtualRegister.
-	memory append: insn.
+	insn := TRLeave forValue: aTRVirtualRegister.
+	self append: insn.
 	^ insn
 ]

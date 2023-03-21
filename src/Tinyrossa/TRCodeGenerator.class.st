@@ -179,17 +179,27 @@ TRCodeGenerator >> generateEpilogues [
 
 		insn := insns at: i.
 		insn isLeaveInstruction ifTrue: [ 
-			generate cursor: i.
-			self linkage generateEpilogue: insn value
+			[ 
+				generate annotations: (Set with: insn node).
+				generate cursor: i.
+				self linkage generateEpilogue: insn value
+			] ensure: [ 
+				generate annotations: nil.
+			].
 		].
 	].
 ]
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> generatePrologue [
-	generate cursor: 0.
-	generate label: compilation functionSymbol name.
-	self linkage generatePrologue
+	[
+		generate annotations: (Set with: compilation entry treetops first).
+		generate cursor: 0.
+		generate label: compilation functionSymbol name.
+		self linkage generatePrologue    
+	] ensure: [
+		generate annotations: nil.
+	]
 ]
 
 { #category : #initialization }

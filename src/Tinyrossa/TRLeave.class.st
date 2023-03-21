@@ -13,14 +13,15 @@ Class {
 	#name : #TRLeave,
 	#superclass : #AcPseudoInstruction,
 	#instVars : [
+		'node',
 		'value'
 	],
 	#category : #'Tinyrossa-Codegen'
 }
 
 { #category : #'instance creation' }
-TRLeave class >> value: aTRVirtualRegister [
-	^ self basicNew initializeWithValue: aTRVirtualRegister
+TRLeave class >> forValue: aTRVirtualRegister [
+	^ self new initializeWithValue: aTRVirtualRegister
 ]
 
 { #category : #'encoding / decoding' }
@@ -52,6 +53,16 @@ TRLeave >> name [
 	"superclass AcInstruction says that I am responsible to implement this method"
 
 	^ '<leave subroutine>'
+]
+
+{ #category : #accessing }
+TRLeave >> node [
+	^ node
+]
+
+{ #category : #accessing }
+TRLeave >> node: aTRILNode [
+	node := aTRILNode.
 ]
 
 { #category : #accessing }

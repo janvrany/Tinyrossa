@@ -200,6 +200,87 @@ TRCompilationExamples >> example06_factorial_aot [
 ]
 
 { #category : #examples }
+TRCompilationExamples >> example07_source_locations [
+	"
+	This example demonstrates how to 'annotate' IR with corresponding 
+	source locations (file, line and - optionally - a column).
+
+	Tinyrossa automatically propagates this information down to
+	instructions so once code is compiled, consumers can (should)
+	build machine instruction to source code maps.
+
+	Note, that internally 'location' object is transparent to the
+	compiler, so one can attach any kind of location information to
+	nodes (not just source location or bytecode index, which is provided
+	both as a demonstration and convenience). The compiler only cares to
+	propagate 'location' object across various compilation phases.
+	"
+
+	| builder sourceMap currentPC |
+
+	builder := compilation builder.
+	builder defineName: 'abs' type: Int32.
+	builder defineFile: 'abs.dart' line: 2.
+	builder defineParameter: 'i' type: Int32. 
+
+	"
+	abs.dart: 
+	1 :
+	2 : int abs(int i) {
+	3 :     if (i < 0) {
+	4 :         return i * -1;
+	5 :     }
+	6 :     return i;
+	7 : }
+	8 :
+	"
+
+	builder file: 'abs.dart' line: 3.
+	builder        
+		if: (builder icmplt: 
+			 {  builder iload: 'i' .
+				builder iconst: 0  })
+		then:[ :builder |
+				builder file: 'abs.dart' line: 4.
+				builder ireturn:
+					{ builder imul: 
+						{ builder iload: 'i' .
+						  builder iconst: -1 } }].
+	builder file: 'abs.dart' line: 6.
+	builder ireturn: 
+				{ builder iload: 'i' }.
+
+	compilation optimize.
+	compilation compile.  
+
+	"
+	Following code maps native-PC of generated machine code
+	to source file and line. This what JIT might do to keep 
+	metadata for debugging.
+	"
+
+	sourceMap := OrderedCollection new.
+	currentPC := 0.
+	compilation codeBuffer instructions do: [:insn | 
+		| insnPC insnLoc |
+
+		insnPC := currentPC.
+		insn isPseudoInstruction ifFalse: [
+			insnLoc := insn location.
+			insnLoc notNil ifTrue: [
+				sourceMap add: insnPC hex -> { insnLoc file. insnLoc line }.
+			] ifFalse: [ 
+				sourceMap add: insnPC hex -> nil.
+			].
+		].
+
+		currentPC := insnPC + (insn bitWidth // 8).
+	].
+
+	sourceMap yourself.
+]
+
+{ #category : #examples }
 TRCompilationExamples >> example08_bytecode_compiler [
 	| builder
 	  bytecodeBuilders
@@ -213,6 +294,9 @@ TRCompilationExamples >> example08_bytecode_compiler [
 	  jumpFalse
 	  jumpTo
 	  returnTop
+
+	  sourceMap
+	  currentPC
 	|
 
 	"
@@ -368,7 +452,31 @@ TRCompilationExamples >> example08_bytecode_compiler [
 
 	compilation compile.
 
-	compilation codeBuffer. "Only convenience inspection."
+	"
+	Following code maps native-PC of generated machine code
+	to particular bytecde index. This what JIT might do to keep 
+	metadata for debugging.
+	"
+
+	sourceMap := OrderedCollection new.
+	currentPC := 0.
+	compilation codeBuffer instructions do: [:insn | 
+		| insnPC insnLoc |
+
+		insnPC := currentPC.
+		insn isPseudoInstruction ifFalse: [
+			insnLoc := insn location.
+			insnLoc notNil ifTrue: [
+				sourceMap add: insnPC hex -> insnLoc index.
+			] ifFalse: [ 
+				sourceMap add: insnPC hex -> nil.
+			].
+		].
+
+		currentPC := insnPC + (insn bitWidth // 8).
+	].
+
+	sourceMap yourself.
 ]
 
 { #category : #examples }

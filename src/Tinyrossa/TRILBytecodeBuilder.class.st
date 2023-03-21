@@ -9,8 +9,10 @@ Class {
 }
 
 { #category : #'building-locations' }
-TRILBytecodeBuilder >> bci: anInteger [
-	"Nothing to do"
+TRILBytecodeBuilder >> bci: index [
+	"Record current bytecode index"
+
+	self location: (TRBytecodeLocation index: index).
 ]
 
 { #category : #accessing }
@@ -39,7 +41,7 @@ TRILBytecodeBuilder >> pop [
 	self assert: currentState notNil.
 
 	value := currentState pop.
-	^ value load
+	^ value loadUsing: self.
 ]
 
 { #category : #'building-helpers' }

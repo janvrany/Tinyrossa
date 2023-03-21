@@ -3,7 +3,6 @@ Class {
 	#superclass : #TRILEvaluator,
 	#instVars : [
 		'codegen',
-		'currentNode',
 		'generate'
 	],
 	#category : #'Tinyrossa-Codegen'
@@ -40,9 +39,9 @@ TRCodeEvaluator >> evaluate: node [
 	result isNil ifTrue: [ 
 		| saved |
 
-		saved := currentNode.
-		currentNode := node.
-		result := [ super evaluate: node ] ensure: [ currentNode := saved ].
+		saved := generate annotations.
+		generate annotations: (Set with: node).
+		result := [ super evaluate: node ] ensure: [ generate annotations: saved ].
 		node setResult: result.
 	].
 	^ result.

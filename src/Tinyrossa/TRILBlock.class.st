@@ -183,10 +183,11 @@ TRILBlock >> replace: oldNode with: newNode [
 	self assert: (index == treetops size or: [ newNode opcode isReturn not and: [ newNode opcode isBranch not ] ])
 		 description: 'Invalid replacement node (cannot replace non-last node with return or branch)'.
 
-	oldNode decUseCount.
 	treetops at: index put: newNode.
 	newNode setBlock: self.
+	newNode location: oldNode location.
 	newNode incUseCount.
+	oldNode decUseCount.
 
 	index == treetops size ifTrue: [ 
 		"We're replacing last node, update successors."

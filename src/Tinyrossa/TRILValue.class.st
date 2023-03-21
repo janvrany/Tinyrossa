@@ -49,8 +49,12 @@ TRILValue >> initializeWithCompilation: compilation node: treetopNode [
 ]
 
 { #category : #utilities }
-TRILValue >> load [
-	^ TRILNode opcode: store symbol type loadOpcode symbol: store symbol.
+TRILValue >> loadUsing: aTRILBytecodeBuilder [
+	| load |
+
+	load := TRILNode opcode: store symbol type loadOpcode symbol: store symbol.
+	load location: aTRILBytecodeBuilder location.
+	^ load
 ]
 
 { #category : #utilities }

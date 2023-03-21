@@ -6,6 +6,7 @@ Class {
 		'symbol',
 		'constant',
 		'children',
+		'location',
 		'block',
 		'result'
 	],
@@ -130,10 +131,25 @@ TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constant
 	opcodeArg validateSymbol: symbolArg.
 	opcodeArg validateChildren: childrenArg.    
 
+	location := nil.
 	opcode := opcodeArg.
 	symbol := symbolArg.
 	constant := constantArg.
 	children := childrenArg.
+]
+
+{ #category : #accessing }
+TRILNode >> location [
+	^ location
+]
+
+{ #category : #accessing }
+TRILNode >> location: aTRLocation [
+	self assert: (aTRLocation isTRLocation or: [ aTRLocation isNil ]).
+
+	(location notNil and: [ aTRLocation isNil ]) ifTrue: [ self halt ].
+
+	location := aTRLocation.
 ]
 
 { #category : #accessing }
@@ -168,8 +184,10 @@ TRILNode >> replace: oldChild with: newChild [
 	self opcode validateChildren: newChildren.
 
 	children := newChildren.
-	oldChild decUseCount.
+	newChild setBlock: oldChild block.
+	newChild location: oldChild location.
 	newChild incUseCount.
+	oldChild decUseCount.
 ]
 
 { #category : #accessing }
