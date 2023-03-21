@@ -74,11 +74,6 @@ TRILBlock >> addPrecedessor: aTRILBlock [
 	].
 ]
 
-{ #category : #testing }
-TRILBlock >> hasSingleGoto [
-	^ treetops size == 1 and:[ treetops first opcode == goto ]
-]
-
 { #category : #initialization }
 TRILBlock >> initializeWithCFG: aTRCFG name: aString [
 	self assert: aString notNil.
@@ -151,6 +146,11 @@ TRILBlock >> next [
 	^ next
 ]
 
+{ #category : #testing }
+TRILBlock >> notEmpty [
+	^ self isEmpty not
+]
+
 { #category : #accessing }
 TRILBlock >> precedessors [
 	^ precedessors
@@ -164,6 +164,17 @@ TRILBlock >> printOn:aStream [
 	aStream nextPut:$(.
 	name printOn:aStream.
 	aStream nextPut:$).
+]
+
+{ #category : #'adding & removing' }
+TRILBlock >> remove: aTRNode [
+	self assert: (treetops includes: aTRNode).
+
+	treetops remove: aTRNode.
+	aTRNode decUseCount.
+	aTRNode opcode isBranch ifTrue: [ 
+		self setSuccessor2: nil
+	].
 ]
 
 { #category : #'adding & removing' }
@@ -226,14 +237,14 @@ TRILBlock >> setSuccessor1: blockOrNil [
 ]
 
 { #category : #initialization }
-TRILBlock >> setSuccessor2: blockOrNil [
-	self assert: (blockOrNil isNil or:[blockOrNil isTRILBlock]).
-	self assert: treetops last opcode isBranch.
+TRILBlock >> setSuccessor2: block [
+	self assert: (block isNil or:[block isTRILBlock]).
+	self assert: (block isNil or:[treetops last opcode isBranch]).
 
 	successor2 notNil ifTrue: [ 
 		successor2 removePrecedessor: self.
 	].
-	successor2 := blockOrNil.
+	successor2 := block.
 	successor2 notNil ifTrue: [
 		successor2 addPrecedessor: self.
 	]
@@ -252,4 +263,9 @@ TRILBlock >> successor2 [
 { #category : #accessing }
 TRILBlock >> treetops [
 	^ { bbstartNode } , treetops , { bbendNode }
+]
+
+{ #category : #accessing }
+TRILBlock >> treetopsLast [
+	^ treetops last
 ]

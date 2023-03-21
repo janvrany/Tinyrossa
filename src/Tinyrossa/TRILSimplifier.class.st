@@ -1,9 +1,6 @@
 Class {
 	#name : #TRILSimplifier,
-	#superclass : #TRILWalker,
-	#instVars : [
-		'compilation'
-	],
+	#superclass : #TRILRewritingPass,
 	#classVars : [
 		'ArithmeticSimplificationTable'
 	],
@@ -12,11 +9,6 @@ Class {
 	],
 	#category : #'Tinyrossa-Optimizer'
 }
-
-{ #category : #'instance creation' }
-TRILSimplifier class >> forCompilation: aTRCompilation [
-	^ self basicNew initializeWithCompilation: aTRCompilation
-]
 
 { #category : #initialization }
 TRILSimplifier class >> initialize [
@@ -30,11 +22,6 @@ TRILSimplifier class >> initialize [
 		yourself
 ]
 
-{ #category : #'instance creation' }
-TRILSimplifier class >> new [
-	self shouldNotImplement. "Use #forCompilation:"
-]
-
 { #category : #accessing }
 TRILSimplifier >> builder [
 	^ TRILBuilder forCompilation: compilation
@@ -42,39 +29,7 @@ TRILSimplifier >> builder [
 
 { #category : #evaluation }
 TRILSimplifier >> evaluate: node [
-	super evaluate: node.
-	^ self simplify: node
-]
-
-{ #category : #evaluation }
-TRILSimplifier >> evaluateChildren: node [
-	node children do: [:original |
-		| simplified |
-
-		simplified := self evaluate: original.
-		simplified ~~ original ifTrue: [ 
-			node replace: original with: simplified
-		].
-	].
-]
-
-{ #category : #initialization }
-TRILSimplifier >> initializeWithCompilation: aTRCompilation [
-	compilation := aTRCompilation.
-]
-
-{ #category : #optimizing }
-TRILSimplifier >> simplify [
-	compilation cfg preorderDo: [ :block |
-		block treetops do: [ :original |
-			| simplified |
-
-			simplified := self evaluate: original.
-			simplified ~~ original ifTrue: [ 
-				block replace: original with: simplified
-			].
-		].
-	].
+	^ self simplify: (super evaluate: node)
 ]
 
 { #category : #optimizing }
@@ -83,6 +38,8 @@ TRILSimplifier >> simplify: original [
 
 	simplified := original.
 	simplified := self simplifyArithmetic: simplified.
+	simplified := self simplifyStore: simplified.
+	simplified := self simplifyIfCompare: simplified.
 	"Add more here..."
 	^ simplified
 ]
@@ -104,5 +61,67 @@ TRILSimplifier >> simplifyArithmetic: node [
 
 			^ simplified.
 		].
+	^ node.
+]
+
+{ #category : #optimizing }
+TRILSimplifier >> simplifyIfCompare: node [
+	"
+	Simplifies
+
+		ificmp<eq|ne> <label>
+		  icmp<cond>
+			<value1>
+			<value2
+		  iconst <0|1>
+
+	to
+
+		ificmp<cond> <label>
+		  <value1>
+		  <value2
+
+	"
+	| op |
+
+	op := node opcode.
+	(op isCompareAndBranch and:[ op isCompareTrueIfEQ or: [ op isCompareTrueIfNE ] ]) ifTrue: [
+		| child1 child2 |
+
+		child1 := node child1.
+		child2 := node child2.
+
+		(child1 opcode isCompare and: [ child2 opcode isLoadConst ]) ifTrue: [ 
+			| cmpOp ifCmpOp simplified |
+
+			cmpOp := child1 opcode.
+			child2 constant == 0 ifTrue: [ 
+				cmpOp := cmpOp reverseBranchOpcode.
+			].
+
+			ifCmpOp := cmpOp ifCompareOpcode.
+			op isCompareTrueIfNE ifTrue: [ 
+				ifCmpOp := ifCmpOp reverseBranchOpcode.
+			].
+			simplified := TRILNode opcode: ifCmpOp symbol: node symbol children: child1 children.
+			^ simplified
+		].
+	].
+	^ node.
+]
+
+{ #category : #optimizing }
+TRILSimplifier >> simplifyStore: node [
+	"This simplification removes unnecessary stores into automatics.
+
+	A store into automatic is unnecessary if there's no other use
+	of that automatic. We can check this by comparing automatic's
+	use count - if it's equal to 1, the it is used (the only use
+	is this very store)."
+	(node opcode isStore 
+		and:[ node symbol isTRAutomaticSymbol 
+		and:[node symbol useCount == 1 ]]) ifTrue: [ 
+		node block remove: node.
+	].
 	^ node.
 ]
