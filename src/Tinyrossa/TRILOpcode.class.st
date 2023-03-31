@@ -182,6 +182,16 @@ TRILOpcode >> isLoadConst [
 ]
 
 { #category : #testing }
+TRILOpcode >> isLoadVar [
+	^ props1 anyMask: LoadVar
+]
+
+{ #category : #testing }
+TRILOpcode >> isReadBarrierLoad [
+	^ props3 anyMask: ReadBarrierLoad
+]
+
+{ #category : #testing }
 TRILOpcode >> isReturn [
 	^ props1 anyMask: Return
 ]
@@ -201,6 +211,11 @@ TRILOpcode >> isTreeTop [
 	 *        node in another circumstance.
 	 *"
 	^ props1 anyMask: TreeTop
+]
+
+{ #category : #testing }
+TRILOpcode >> isWriteBarrierStore [
+	^ props3 anyMask: WriteBarrierStore
 ]
 
 { #category : #accessing }
