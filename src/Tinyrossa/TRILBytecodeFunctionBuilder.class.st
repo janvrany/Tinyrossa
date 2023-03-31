@@ -36,14 +36,3 @@ TRILBytecodeFunctionBuilder >> initializeWithCompilation: aTRCompilation block: 
 	entryState := TRVMOperandStack new. "<<< BOGUS, client should set it!"
 	currentState := entryState copy.
 ]
-
-{ #category : #'building-blocks' }
-TRILBytecodeFunctionBuilder >> orphan [
-	"Return a new subbuilder which may be used to build 
-	 code fragments. The code has no relation to the receiver
-	 (hence the name 'orphan') so caller is responsible to pass
-	 control to orphan if it wishes (via `#goto:` or conditional
-	 jump)."
-
-	^ TRILBytecodeBuilder forCompilation: compilation block: compilation cfg addBlock.
-]
