@@ -93,9 +93,12 @@ TRSymbolManager >> lookupLabelByName: aString [
 
 { #category : #lookup }
 TRSymbolManager >> lookupSymbolByName: aString [ 
-	^ symbols 
-		detect: [:symbol | symbol name = aString ]
-		ifNone: [ self error: 'No such symbol: ' , aString ]
+	^ self lookupSymbolByName: aString ifAbsent: [ self error: 'No such symbol: ' , aString ]
+]
+
+{ #category : #lookup }
+TRSymbolManager >> lookupSymbolByName: aString ifAbsent: aBlock [
+	^ symbols detect: [:symbol | symbol name = aString ] ifNone: aBlock
 ]
 
 { #category : #lookup }
