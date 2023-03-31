@@ -45,6 +45,9 @@ BaselineOfTinyrossa >> baseline: spec [
 				package: #'Tinyrossa-Tests-POWER' with: [
 					spec requires: 'Tinyrossa-Tests'
 				];
+				package: #'Tinyrossa-Tools-Pharo' with: [
+					spec requires: 'Tinyrossa'
+				];
 				yourself.
 		]
 ]

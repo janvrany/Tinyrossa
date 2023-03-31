@@ -89,7 +89,7 @@ TRILNode >> decUseCount [
 
 { #category : #displaying }
 TRILNode >> displayOn: aStream [
-	opcode name printOn: aStream.
+	aStream nextPutAll: opcode name.
 	aStream space.
 	(opcode name = 'bbstart' or: [ opcode name = 'bbend' ]) ifTrue:[
 		aStream nextPut:$<.
@@ -106,7 +106,7 @@ TRILNode >> displayOn: aStream [
 			aStream nextPutAll: symbol name
 		] ifFalse: [ 
 			constant notNil ifTrue: [ 
-				constant displayOn: aStream.
+				aStream nextPutAll: constant displayString.
 			].
 		].
 	].
