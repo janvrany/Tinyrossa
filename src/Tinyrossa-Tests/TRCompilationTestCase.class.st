@@ -11,6 +11,11 @@ Class {
 	#category : #'Tinyrossa-Tests'
 }
 
+{ #category : #testing }
+TRCompilationTestCase class >> isAbstract [
+	^ self == TRCompilationTestCase
+]
+
 { #category : #running }
 TRCompilationTestCase >> setUpForTarget: aTRCompilationTarget [
 	compilation := TRCompilation forTarget: aTRCompilationTarget.
