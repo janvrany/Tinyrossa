@@ -5,6 +5,7 @@ Class {
 		'name',
 		'kind',
 		'constraints',
+		'assigned',
 		'allocation'
 	],
 	#category : #'Tinyrossa-Codegen'
@@ -72,7 +73,13 @@ TRVirtualRegister >> hasConstraints [
 TRVirtualRegister >> initializeWithName: aString kind: aTRRegisterKind [
 	name := aString.
 	kind := aTRRegisterKind.
-	name := aString
+	name := aString.
+	assigned := false.
+]
+
+{ #category : #testing }
+TRVirtualRegister >> isAssigned [
+	^ assigned
 ]
 
 { #category : #testing }
@@ -102,6 +109,13 @@ TRVirtualRegister >> printOn:aStream [
 		allocation printOn: aStream.
 	].
 	aStream nextPut:$).
+]
+
+{ #category : #initialization }
+TRVirtualRegister >> setAssigned [
+	" self assert: assigned == false description: 'Attempting to assign into virtual register twice!'."
+
+	assigned := true.
 ]
 
 { #category : #conversion }

@@ -215,20 +215,21 @@ TRILNode >> setBlock: aTRILBlock [
 TRILNode >> setResult: vreg [
 	opcode type == Void ifTrue: [ 
 		self assert: vreg isNil description: 'Attempting to set result for void-typed node'.
+		^ self.
 	].
-	vreg isNil ifTrue: [
-		self assert: opcode isTreeTop.
-	] ifFalse:[
-		opcode type isIntegerType ifTrue: [ 
-			self assert: vreg notNil.
-			self assert: vreg kind == GPR
-		] ifFalse: [ 
-			self assert: vreg notNil.
-			self assert: vreg kind == FPR
-		].
+	opcode isTreeTop ifTrue: [ 
+		self assert: vreg isNil description: 'Attempting to set result of tree-top'.
+		^ self.
 	].
-
+	opcode type isIntegerType ifTrue: [ 
+		self assert: vreg notNil.
+		self assert: vreg kind == GPR
+	] ifFalse: [ 
+		self assert: vreg notNil.
+		self assert: vreg kind == FPR
+	].
 	self assert: result isNil description: 'Node already evaluated!'.
+	vreg setAssigned.
 	result := vreg.
 ]
 

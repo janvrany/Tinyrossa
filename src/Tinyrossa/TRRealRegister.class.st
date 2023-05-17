@@ -32,3 +32,8 @@ TRRealRegister >> initializeWithValue: anAcAsmMapEntry kind: aTRRegisterKind [
 TRRealRegister >> kind [
 	^ kind
 ]
+
+{ #category : #initialization }
+TRRealRegister >> setAssigned [
+	"No-op, we do not track assignments to real registers"
+]

@@ -8,6 +8,16 @@ Class {
 }
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_aload: node [
+	^ self evaluate_lload: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_astore: node [
+	^ self evaluate_lstore: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_goto: node [
 	generate
 		jal: zero, node symbol.
@@ -144,12 +154,8 @@ TRRV64GCodeEvaluator >> evaluate_iload: node [
 	| symbol dstReg |
 
 	symbol := node symbol.
-	dstReg := symbol register.
-	dstReg isNil ifTrue: [ 
-		dstReg := codegen allocateRegister.
-		symbol setRegister: dstReg.
-		generate lw: dstReg, (sp + (AcDSLSymbol value: symbol name)).
-	].
+	dstReg := codegen allocateRegister.
+	generate lw: dstReg, (sp + (AcDSLSymbol value: symbol name)).
 	^ dstReg
 ]
 
@@ -168,20 +174,11 @@ TRRV64GCodeEvaluator >> evaluate_imul: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_istore: node [
-	| symbol srcReg dstReg |
+	| symbol srcReg |
 
 	symbol := node symbol.
 	srcReg := self evaluate: node child1.
-	dstReg := symbol register.
-	dstReg isNil ifTrue: [
-		dstReg := srcReg.
-		symbol setRegister: dstReg.
-	].
-	srcReg ~~ dstReg ifTrue: [ 
-		generate addi: dstReg, srcReg, 0.
-	].
 	generate sw: srcReg, (sp + (AcDSLSymbol value: symbol name)).
-
 	^ nil
 ]
 
@@ -202,4 +199,24 @@ TRRV64GCodeEvaluator >> evaluate_isub: node [
 	].
 
 	^ dstReg
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lload: node [
+	| symbol dstReg |
+
+	symbol := node symbol.
+	dstReg := codegen allocateRegister.
+	generate ld: dstReg, (sp + (AcDSLSymbol value: symbol name)).
+	^ dstReg
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lstore: node [
+	| symbol srcReg |
+
+	symbol := node symbol.
+	srcReg := self evaluate: node child1.
+	generate sd: srcReg, (sp + (AcDSLSymbol value: symbol name)).
+	^ nil
 ]
