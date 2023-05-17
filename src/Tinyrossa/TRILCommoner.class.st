@@ -2,7 +2,8 @@ Class {
 	#name : #TRILCommoner,
 	#superclass : #TRILRewritingPass,
 	#instVars : [
-		'stores'
+		'stores',
+		'loads'
 	],
 	#pools : [
 		'TRILOpcodes'
@@ -27,12 +28,18 @@ TRILCommoner >> common: node [
 			^ node.
 		].
 		(op isLoadVar and: [ op isReadBarrierLoad not]) ifTrue: [ 
-			| store |
+			| store load |
 
 			store := stores at: node symbol ifAbsent: [ nil ].
 			store notNil ifTrue: [ 
 				^ store child1
 			].
+
+			load := loads at: node symbol ifAbsent: [ nil ].
+			load notNil ifTrue: [ 
+				^ load.
+			].
+			loads at: node symbol put: node.            
 		]                
 	].
 	^ node
@@ -51,5 +58,6 @@ TRILCommoner >> evaluate: node [
 { #category : #evaluation }
 TRILCommoner >> evaluate_bbstart: node [
 	stores := Dictionary new.
+	loads := Dictionary new.
 	^ node
 ]
