@@ -2,10 +2,49 @@ Class {
 	#name : #TRRV64GCodeEvaluator,
 	#superclass : #TRCodeEvaluator,
 	#pools : [
-		'TRRV64GRegisters'
+		'TRRV64GRegisters',
+		'TRDataTypes'
 	],
 	#category : #'Tinyrossa-RISCV-Codegen'
 }
+
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_Xcmpgt: node [
+	"Handles Address, Int64 Int32, Int16 & Int8"  
+
+	| src1Reg src2Reg trgReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	trgReg := codegen allocateRegister.
+	generate 
+		slt: trgReg, src2Reg, src1Reg.
+	^ trgReg
+]
+
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_Xcmplt: node [
+	"Handles Address, Int64 Int32, Int16 & Int8"  
+
+	| src1Reg src2Reg trgReg |
+
+	src1Reg := self evaluate: node child1.
+	src2Reg := self evaluate: node child2.
+	trgReg := codegen allocateRegister.
+	generate 
+		slt: trgReg, src1Reg, src2Reg.
+	^ trgReg
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_acmpgt: node [
+	^ self evaluate_Xcmpgt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_acmplt: node [
+	^ self evaluate_Xcmplt: node
+]
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_aload: node [
@@ -45,26 +84,12 @@ TRRV64GCodeEvaluator >> evaluate_iadd: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_icmpgt: node [
-	| src1Reg src2Reg trgReg |
-
-	src1Reg := self evaluate: node child1.
-	src2Reg := self evaluate: node child2.
-	trgReg := codegen allocateRegister.
-	generate 
-		slt: trgReg, src2Reg, src1Reg.
-	^ trgReg
+	^ self evaluate_Xcmpgt: node
 ]
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_icmplt: node [
-	| src1Reg src2Reg trgReg |
-
-	src1Reg := self evaluate: node child1.
-	src2Reg := self evaluate: node child2.
-	trgReg := codegen allocateRegister.
-	generate 
-		slt: trgReg, src1Reg, src2Reg.
-	^ trgReg
+	^ self evaluate_Xcmplt: node
 ]
 
 { #category : #evaluation }
@@ -81,8 +106,10 @@ TRRV64GCodeEvaluator >> evaluate_iconst: node [
 	^ dstReg
 ]
 
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmpeq: node [
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_ifXcmpeq: node [
+	"Handles Address, Int64 Int32, Int16 & Int8"  
+
 	| src1Reg src2Reg |
 
 	src1Reg := self evaluate: node child1.
@@ -92,8 +119,10 @@ TRRV64GCodeEvaluator >> evaluate_ificmpeq: node [
 	^ nil
 ]
 
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmpge: node [
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_ifXcmpge: node [
+	"Handles Address, Int64 Int32, Int16 & Int8"  
+
 	| src1Reg src2Reg |
 
 	src1Reg := self evaluate: node child1.
@@ -103,8 +132,10 @@ TRRV64GCodeEvaluator >> evaluate_ificmpge: node [
 	^ nil
 ]
 
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmpgt: node [
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_ifXcmpgt: node [
+	"Handles Address, Int64 Int32, Int16 & Int8"  
+
 	| src1Reg src2Reg |
 
 	src1Reg := self evaluate: node child1.
@@ -114,8 +145,10 @@ TRRV64GCodeEvaluator >> evaluate_ificmpgt: node [
 	^ nil
 ]
 
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmple: node [
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_ifXcmple: node [
+	"Handles Address, Int64 Int32, Int16 & Int8"  
+
 	| src1Reg src2Reg |
 
 	src1Reg := self evaluate: node child1.
@@ -125,8 +158,10 @@ TRRV64GCodeEvaluator >> evaluate_ificmple: node [
 	^ nil
 ]
 
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmplt: node [
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_ifXcmplt: node [
+	"Handles Address, Int64 Int32, Int16 & Int8"  
+
 	| src1Reg src2Reg |
 
 	src1Reg := self evaluate: node child1.
@@ -136,8 +171,10 @@ TRRV64GCodeEvaluator >> evaluate_ificmplt: node [
 	^ nil
 ]
 
-{ #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_ificmpne: node [
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_ifXcmpne: node [
+	"Handles Address, Int64 Int32, Int16 & Int8" 
+
 	| src1Reg src2Reg |
 
 	src1Reg := self evaluate: node child1.
@@ -148,9 +185,97 @@ TRRV64GCodeEvaluator >> evaluate_ificmpne: node [
 ]
 
 { #category : #evaluation }
-TRRV64GCodeEvaluator >> evaluate_iload: node [
-	"superclass TRILEvaluator says that I am responsible to implement this method"
+TRRV64GCodeEvaluator >> evaluate_ifacmpeq: node [
+	^ self evaluate_ifXcmpeq: node
+]
 
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ifacmpge: node [
+	^ self evaluate_ifXcmpge: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ifacmpgt: node [
+	^ self evaluate_ifXcmpgt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ifacmple: node [
+	^ self evaluate_ifXcmple: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ifacmplt: node [
+	^ self evaluate_ifXcmplt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ifacmpne: node [
+	^ self evaluate_ifXcmpne: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmpeq: node [
+	^ self evaluate_ifXcmpeq: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmpge: node [
+	^ self evaluate_ifXcmpge: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmpgt: node [
+	^ self evaluate_ifXcmpgt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmple: node [
+	^ self evaluate_ifXcmple: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmplt: node [
+	^ self evaluate_ifXcmplt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ificmpne: node [
+	^ self evaluate_ifXcmpne: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iflcmpeq: node [
+	^ self evaluate_ifXcmpeq: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iflcmpge: node [
+	^ self evaluate_ifXcmpge: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iflcmpgt: node [
+	^ self evaluate_ifXcmpgt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iflcmple: node [
+	^ self evaluate_ifXcmple: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iflcmplt: node [
+	^ self evaluate_ifXcmplt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iflcmpne: node [
+	^ self evaluate_ifXcmpne: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iload: node [
 	| symbol dstReg |
 
 	symbol := node symbol.
@@ -199,6 +324,16 @@ TRRV64GCodeEvaluator >> evaluate_isub: node [
 	].
 
 	^ dstReg
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lcmpgt: node [
+	^ self evaluate_Xcmpgt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lcmplt: node [
+	^ self evaluate_Xcmplt: node
 ]
 
 { #category : #evaluation }
