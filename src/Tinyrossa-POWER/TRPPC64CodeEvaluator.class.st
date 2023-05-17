@@ -123,17 +123,11 @@ TRPPC64CodeEvaluator >> evaluate_ificmpne: node [
 
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_iload: node [
-	"superclass TRILEvaluator says that I am responsible to implement this method"
-
 	| symbol dstReg |
 
 	symbol := node symbol.
-	dstReg := symbol register.
-	dstReg isNil ifTrue: [ 
-		dstReg := codegen allocateRegister.
-		symbol setRegister: dstReg.
-		generate lwz: dstReg, (gr1 + (AcDSLSymbol value: symbol name)).
-	].
+	dstReg := codegen allocateRegister.
+	generate lwz: dstReg, (gr1 + (AcDSLSymbol value: symbol name)).
 	^ dstReg
 ]
 
@@ -152,20 +146,11 @@ TRPPC64CodeEvaluator >> evaluate_imul: node [
 
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_istore: node [
-	| symbol srcReg dstReg |
+	| symbol srcReg |
 
 	symbol := node symbol.
 	srcReg := self evaluate: node child1.
-	dstReg := symbol register.
-	dstReg isNil ifTrue: [
-		dstReg := srcReg.
-		symbol setRegister: dstReg.
-	].
-	srcReg ~~ dstReg ifTrue: [ 
-		generate addi: dstReg, srcReg, 0.
-	].
 	generate stw: srcReg, (gr1 + (AcDSLSymbol value: symbol name)).
-
 	^ nil
 ]
 

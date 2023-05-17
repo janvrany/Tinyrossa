@@ -143,7 +143,7 @@ TRCodeEvaluator >> evaluate_return: node [
 
 	retReg := self evaluate: node child1.
 	generate leave: retReg.
-	^ retReg
+	^ nil
 ]
 
 { #category : #evaluation }
