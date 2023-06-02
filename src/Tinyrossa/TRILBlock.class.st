@@ -18,6 +18,7 @@ Class {
 	#name : #TRILBlock,
 	#superclass : #Object,
 	#instVars : [
+		'cfg',
 		'name',
 		'bbstartNode',
 		'treetops',
@@ -74,10 +75,22 @@ TRILBlock >> addPrecedessor: aTRILBlock [
 	].
 ]
 
+{ #category : #accessing }
+TRILBlock >> cfg [
+	^ cfg
+]
+
+{ #category : #accessing }
+TRILBlock >> compilation [
+	^cfg compilation
+]
+
 { #category : #initialization }
 TRILBlock >> initializeWithCFG: aTRCFG name: aString [
+	self assert: aTRCFG notNil.
 	self assert: aString notNil.
 
+	cfg := aTRCFG.
 	name := aString.
 	bbstartNode := (TRILNode opcode: bbstart symbol: nil constant: nil children: nil).
 	bbstartNode setBlock: self.

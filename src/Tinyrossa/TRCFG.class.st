@@ -47,6 +47,11 @@ TRCFG >> addBlockNamed: aStringOrNil [
 ]
 
 { #category : #accessing }
+TRCFG >> compilation [
+	^compilation
+]
+
+{ #category : #accessing }
 TRCFG >> entry [
 	"Return the entry block"
 	self assert: entry notNil.

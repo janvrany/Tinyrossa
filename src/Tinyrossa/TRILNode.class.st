@@ -2,6 +2,7 @@ Class {
 	#name : #TRILNode,
 	#superclass : #TRUseCounted,
 	#instVars : [
+		'id',
 		'opcode',
 		'symbol',
 		'constant',
@@ -112,6 +113,11 @@ TRILNode >> displayOn: aStream [
 	].
 ]
 
+{ #category : #accessing }
+TRILNode >> id [
+	^ id
+]
+
 { #category : #'ref-counting' }
 TRILNode >> incUseCount [
 	super incUseCount.
@@ -163,12 +169,18 @@ TRILNode >> printOn:aStream [
 
 	super printOn:aStream.
 	aStream nextPut:$(.
-	opcode name printOn:aStream.
+	id isNil ifTrue:[
+		aStream nextPutAll:'FREE'
+	] ifFalse:[
+		aStream nextPut:$N.
+		aStream nextPutAll: (id printPaddedWith: $0 to: 3 base: 10).
+	].
+	aStream space.
+	aStream nextPutAll: opcode name.
 	(opcode name = 'bbstart' or: [ opcode name = 'bbend' ]) ifTrue:[
-		aStream nextPutAll:' ('; nextPutAll: block name; nextPut:$).
-	] ifFalse: [
-		aStream nextPutAll:': { ... }'.
-	]
+		aStream nextPutAll:' <'; nextPutAll: block name; nextPut:$>.
+	].
+	aStream nextPut:$).
 ]
 
 { #category : #rewriting }
@@ -206,6 +218,7 @@ TRILNode >> setBlock: aTRILBlock [
 		children notEmptyOrNil ifTrue:[ 
 			children do: [:child | child setBlock: aTRILBlock ]
 		].
+		id := block compilation nodeIdFor: self.
 	] ifFalse: [ 
 		self assert: block == aTRILBlock description: 'Nodes cannot be reused across multiple blocks'
 	].
