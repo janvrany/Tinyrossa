@@ -90,27 +90,7 @@ TRILNode >> decUseCount [
 
 { #category : #displaying }
 TRILNode >> displayOn: aStream [
-	aStream nextPutAll: opcode name.
-	aStream space.
-	(opcode name = 'bbstart' or: [ opcode name = 'bbend' ]) ifTrue:[
-		aStream nextPut:$<.
-		opcode name = 'bbend' ifTrue: [ aStream nextPut:$/ ].
-		aStream nextPutAll: block name; 
-				nextPut:$>.
-		(opcode name = 'bbend') ifTrue: [
-			(block isTerminated not and: [ block successor1 notNil and:[block next isNil]]) ifTrue: [ 
-				aStream nextPutAll: '  <!-- pass through to '; nextPutAll: block successor1 name; nextPutAll: ' -->'
-			].
-		]
-	] ifFalse: [ 
-		symbol notNil ifTrue: [ 
-			aStream nextPutAll: symbol name
-		] ifFalse: [ 
-			constant notNil ifTrue: [ 
-				aStream nextPutAll: constant displayString.
-			].
-		].
-	].
+	TRILNodePrinter new print: self on: aStream
 ]
 
 { #category : #accessing }
@@ -161,6 +141,28 @@ TRILNode >> location: aTRLocation [
 { #category : #accessing }
 TRILNode >> opcode [
 	^ opcode
+]
+
+{ #category : #enumerating }
+TRILNode >> postorderDo: aBlock [
+	 "Traverse the node evaluate `aBlock` for each node in post-order 
+	  manner."
+
+	children notNil ifTrue: [ 
+		children do: [:each | each postorderDo: aBlock ]
+	].
+	aBlock value: self.
+]
+
+{ #category : #enumerating }
+TRILNode >> preorderDo: aBlock [
+	 "Traverse the node evaluate `aBlock` for each node in pre-order 
+	  manner."
+
+	aBlock value: self.
+	children notNil ifTrue: [ 
+		children do: [:each | each preorderDo: aBlock ]
+	].
 ]
 
 { #category : #'printing & storing' }

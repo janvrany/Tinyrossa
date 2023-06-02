@@ -5,10 +5,10 @@ TRCompilation >> gtInspectorTRILIn: composite [
 	<gtInspectorPresentationOrder: 35> 
 	composite tree 
 		title: 'TRIL';
-		display: [ :anObject | anObject il ];
+		rootsExpanded;
+		display: [ :anObject | printer := TRILNodePrinter new. anObject il ];
 		children: [ :node | node children ];
-		format: [ :node | String streamContents: [:s| node displayOn: s] ];
-		
+		format: [ :node | printer print: node ];
 		yourself.
 
 ]

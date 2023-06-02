@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'nodeListHolder',
 		'nodeList',
-		'nodeSelectionHolder'
+		'nodeSelectionHolder',
+		'nodePrinter'
 	],
 	#category : #'Tinyrossa-Tools-SmalltalkX'
 }
@@ -35,7 +36,7 @@ TRILTreeApp class >> defaultWindowTitle [
 	 
 	 Subclasses may (must) override this method."
 
-	^ self shouldImplement:'TRIL Tree'
+	^ 'TRIL Tree'
 ]
 
 { #category : #menu }
@@ -48,6 +49,7 @@ TRILTreeApp >> contextMenuItemSlice [
 
 { #category : #'change & update-delayed' }
 TRILTreeApp >> delayedUpdateInternalList [
+	nodePrinter := TRILNodePrinter new.
 	self internalListHolder roots: self nodeListHolder value ? #().
 	self internalListHolder root recursiveDo: [ :item | item expand ]
 ]
@@ -115,7 +117,8 @@ TRILTreeApp >> internalListHolder [
 		internalListHolder application: self.
 		internalListHolder showRoot: false.
 		internalListHolder childBlock: [ :node | node children ].
-		internalListHolder root: HierarchicalItem new.
+		internalListHolder labelBlock: [ :node | node notNil ifTrue: [ nodePrinter print: node ] ifFalse:['nil']].
+		internalListHolder root: nil.
 	].
 	^ internalListHolder
 
