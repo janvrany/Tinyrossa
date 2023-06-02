@@ -194,3 +194,33 @@ TRCFG >> preorderDo: aBlock [
 		].      
 	].
 ]
+
+{ #category : #accessing }
+TRCFG >> treetops [
+	"Return a collection of treetops of every block 
+	 in this control flow graph (reachable from entry block).
+	
+	 Treetops are returned in pre-order manner, successor's 
+	 treetops before precedessor's. 
+	 "
+	| treetops |
+	
+	treetops :=OrderedCollection new.
+	self treetopsDo: [ :node | 
+		treetops add: node.
+	].
+	^treetops
+]
+
+{ #category : #'enumerating - nodes' }
+TRCFG >> treetopsDo: aBlock [
+	"Evaluate aBlock for each treetop of each block
+	 in this control flow graph  (reachable from entry block).
+	
+	 Block is evaluated in pre-order manner, successor's 
+	 treetops before precedessor's. 
+	 "
+	self preorderDo: [ :block |
+		block treetopsDo: aBlock.
+	]
+]

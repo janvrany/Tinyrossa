@@ -278,6 +278,13 @@ TRILBlock >> treetops [
 	^ { bbstartNode } , treetops , { bbendNode }
 ]
 
+{ #category : #enumerating }
+TRILBlock >> treetopsDo: aBlock [
+	aBlock value: bbstartNode.
+	treetops do: aBlock.
+	aBlock value: bbendNode.
+]
+
 { #category : #accessing }
 TRILBlock >> treetopsLast [
 	^ treetops last
