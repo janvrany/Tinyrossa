@@ -6,7 +6,8 @@ Class {
 		'symbolManager',
 		'functionSymbol',
 		'cfg',
-		'codegen'
+		'codegen',
+		'nextNodeId'
 	],
 	#category : #'Tinyrossa-Compile'
 }
@@ -95,6 +96,8 @@ TRCompilation >> initializeWithConfig: aTRCompilationConfig [
 	| entry |
 
 	config := aTRCompilationConfig.
+	nextNodeId := 0.
+	
 	symbolManager := TRSymbolManager new.
 	cfg := TRCFG forCompilation: self.
 
@@ -116,6 +119,21 @@ TRCompilation >> isJIT [
 	 false if it is AOT compilation."
 
 	^ config aot not
+]
+
+{ #category : #accessing }
+TRCompilation >> nodeIdFor: aTRILNode [
+	"Return an ID for given node. If the node has ID assigned
+	 already, return that one. If not, generate a new one and
+	 return it."
+	| id |
+	
+	id := aTRILNode id.
+	id isNil ifTrue: [    
+		id := nextNodeId.
+		nextNodeId := nextNodeId + 1.
+	].
+	^id
 ]
 
 { #category : #optimizing }

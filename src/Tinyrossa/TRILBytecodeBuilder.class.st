@@ -30,8 +30,8 @@ TRILBytecodeBuilder >> entryState: aTRVMState [
 ]
 
 { #category : #'building-blocks' }
-TRILBytecodeBuilder >> orphan [
-	^ TRILBytecodeBuilder forCompilation: compilation block: compilation cfg addBlock.
+TRILBytecodeBuilder >> orphanClass [
+	^ TRILBytecodeBuilder
 ]
 
 { #category : #'building-helpers' }

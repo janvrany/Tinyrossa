@@ -2,6 +2,7 @@ Class {
 	#name : #TRILNode,
 	#superclass : #TRUseCounted,
 	#instVars : [
+		'id',
 		'opcode',
 		'symbol',
 		'constant',
@@ -89,27 +90,12 @@ TRILNode >> decUseCount [
 
 { #category : #displaying }
 TRILNode >> displayOn: aStream [
-	opcode name printOn: aStream.
-	aStream space.
-	(opcode name = 'bbstart' or: [ opcode name = 'bbend' ]) ifTrue:[
-		aStream nextPut:$<.
-		opcode name = 'bbend' ifTrue: [ aStream nextPut:$/ ].
-		aStream nextPutAll: block name; 
-				nextPut:$>.
-		(opcode name = 'bbend') ifTrue: [
-			(block isTerminated not and: [ block successor1 notNil and:[block next isNil]]) ifTrue: [ 
-				aStream nextPutAll: '  <!-- pass through to '; nextPutAll: block successor1 name; nextPutAll: ' -->'
-			].
-		]
-	] ifFalse: [ 
-		symbol notNil ifTrue: [ 
-			aStream nextPutAll: symbol name
-		] ifFalse: [ 
-			constant notNil ifTrue: [ 
-				constant displayOn: aStream.
-			].
-		].
-	].
+	TRILNodePrinter new print: self on: aStream
+]
+
+{ #category : #accessing }
+TRILNode >> id [
+	^ id
 ]
 
 { #category : #'ref-counting' }
@@ -157,18 +143,46 @@ TRILNode >> opcode [
 	^ opcode
 ]
 
+{ #category : #enumerating }
+TRILNode >> postorderDo: aBlock [
+	 "Traverse the node evaluate `aBlock` for each node in post-order 
+	  manner."
+
+	children notNil ifTrue: [ 
+		children do: [:each | each postorderDo: aBlock ]
+	].
+	aBlock value: self.
+]
+
+{ #category : #enumerating }
+TRILNode >> preorderDo: aBlock [
+	 "Traverse the node evaluate `aBlock` for each node in pre-order 
+	  manner."
+
+	aBlock value: self.
+	children notNil ifTrue: [ 
+		children do: [:each | each preorderDo: aBlock ]
+	].
+]
+
 { #category : #'printing & storing' }
 TRILNode >> printOn:aStream [
 	"append a printed representation of the receiver to the argument, aStream"
 
 	super printOn:aStream.
 	aStream nextPut:$(.
-	opcode name printOn:aStream.
+	id isNil ifTrue:[
+		aStream nextPutAll:'FREE'
+	] ifFalse:[
+		aStream nextPut:$N.
+		aStream nextPutAll: (id printPaddedWith: $0 to: 3 base: 10).
+	].
+	aStream space.
+	aStream nextPutAll: opcode name.
 	(opcode name = 'bbstart' or: [ opcode name = 'bbend' ]) ifTrue:[
-		aStream nextPutAll:' ('; nextPutAll: block name; nextPut:$).
-	] ifFalse: [
-		aStream nextPutAll:': { ... }'.
-	]
+		aStream nextPutAll:' <'; nextPutAll: block name; nextPut:$>.
+	].
+	aStream nextPut:$).
 ]
 
 { #category : #rewriting }
@@ -206,6 +220,7 @@ TRILNode >> setBlock: aTRILBlock [
 		children notEmptyOrNil ifTrue:[ 
 			children do: [:child | child setBlock: aTRILBlock ]
 		].
+		id := block compilation nodeIdFor: self.
 	] ifFalse: [ 
 		self assert: block == aTRILBlock description: 'Nodes cannot be reused across multiple blocks'
 	].

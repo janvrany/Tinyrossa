@@ -3350,7 +3350,17 @@ TRILBuilder >> orphan [
 	 control to orphan if it wishes (via `#goto:` or conditional
 	 jump)."
 
-	^ TRILBuilder forCompilation: compilation block: compilation cfg addBlock.
+	^ self orphanClass forCompilation: compilation block: compilation cfg addBlock.
+]
+
+{ #category : #'building-blocks' }
+TRILBuilder >> orphanClass [
+	"Return the builder class for orphan builder - 
+	 method #orphan will return an instance of this class.
+
+	 See #orphan."
+
+	^ TRILBuilder
 ]
 
 { #category : #'building-blocks' }
