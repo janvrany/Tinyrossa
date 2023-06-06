@@ -26,6 +26,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
 
       - name: Add MSYS2 to PATH (Windows only)
         if: matrix.os == 'windows-latest'

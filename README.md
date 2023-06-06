@@ -59,7 +59,7 @@ The easiest way to try out Tinyrossa is to use provided
 makefile that automatically downloads all the dependencies
 (including Smalltalk/X) and loads them into running environment:
 
-    git clone https://github.com/janvrany/Tinyrossa.git
+    git clone --recurse-submodules https://github.com/janvrany/Tinyrossa.git
     cd Tinyrossa
     make -C stx run
 
@@ -70,7 +70,7 @@ makefile that automatically downloads all the dependencies
 
  1. Clone the repository into some directory (say `/where/you/cloned/it/Tinyrossa`)
 
-        git clone https://github.com/janvrany/Tinyrossa.git /where/you/cloned/it/Tinyrossa
+        git clone --recurse-submodules https://github.com/janvrany/Tinyrossa.git /where/you/cloned/it/Tinyrossa
 
  2. Install / clone dependencies:
 
@@ -98,7 +98,7 @@ The easiest way to try out Tinyrossa is to use provided
 makefile that automatically downloads all the dependencies
 (including Pharo) and builds an image with everything loaded:
 
-    git clone https://github.com/janvrany/Tinyrossa.git
+    git clone --recurse-submodules https://github.com/janvrany/Tinyrossa.git
     cd Tinyrossa/pharo
     make
     
