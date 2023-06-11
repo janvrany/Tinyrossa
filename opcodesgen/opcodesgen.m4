@@ -154,7 +154,7 @@ OPCODE_NAME($1): arguments
     ^ self build: OPCODE_NAME($1) arguments: arguments
 !
 ])
-!TRILBuilder methodsFor:'building'!
+!TRILBuilderBase methodsFor:'building'!
 include(opcodes.m4)
 !
 undefine([OPCODE_MACRO])
