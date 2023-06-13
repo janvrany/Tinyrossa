@@ -23,6 +23,16 @@ TRDataType class >> named: aString [
 	"
 ]
 
+{ #category : #queries }
+TRDataType >> constOpcode [
+	"Return opcode that can be used to load a constant of receiver's type"
+	^ ConstOpcodes at: self
+
+	"
+	(TRDataType named:'Float') constOpcode
+	"
+]
+
 { #category : #testing }
 TRDataType >> isCompatibleWith: anotherType [
 	self assert: (anotherType isKindOf: TRDataType).

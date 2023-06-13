@@ -3,7 +3,8 @@ Class {
 	#superclass : #TRSharedPool,
 	#classVars : [
 		'LoadOpcodes',
-		'StoreOpcodes'
+		'StoreOpcodes',
+		'ConstOpcodes'
 	],
 	#pools : [
 		'TRILOpcodes',
@@ -37,5 +38,16 @@ TRILOpcodeTables class >> initialize [
 		Float   . fstore .
 		Double  . dstore .
 		Void    . invalid .            
-	}
+	}.
+
+	ConstOpcodes := SmallDictionary newFromPairs: {
+		Int8    . bconst .
+		Int16   . sconst .
+		Int32   . iconst .
+		Int64   . iconst .
+		Address . aconst .
+		Float   . fconst .
+		Double  . dconst .
+		Void    . invalid .            
+	}.
 ]
