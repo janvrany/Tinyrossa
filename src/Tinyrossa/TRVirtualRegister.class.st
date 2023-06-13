@@ -1,8 +1,7 @@
 Class {
 	#name : #TRVirtualRegister,
-	#superclass : #AcDSLOperand,
+	#superclass : #AcDSLSymbol,
 	#instVars : [
-		'name',
 		'kind',
 		'constraints',
 		'assigned',
@@ -19,6 +18,16 @@ TRVirtualRegister class >> named: aString [
 { #category : #'instance creation' }
 TRVirtualRegister class >> named: aString kind: aTRRegisterKind [         
 	^ self basicNew initializeWithName: aString kind: aTRRegisterKind
+]
+
+{ #category : #arithmetic }
+TRVirtualRegister >> + offset [
+	^ AcDSLMemRef base: self offset: offset asAcDSLOperand
+]
+
+{ #category : #arithmetic }
+TRVirtualRegister >> - offset [
+	^ AcDSLMemRef base: self offset: offset negated asAcDSLOperand
 ]
 
 { #category : #accessing }
@@ -71,9 +80,8 @@ TRVirtualRegister >> hasConstraints [
 
 { #category : #initialization }
 TRVirtualRegister >> initializeWithName: aString kind: aTRRegisterKind [
-	name := aString.
+	value := aString.
 	kind := aTRRegisterKind.
-	name := aString.
 	assigned := false.
 ]
 
@@ -94,7 +102,7 @@ TRVirtualRegister >> kind [
 
 { #category : #accessing }
 TRVirtualRegister >> name [
-	^ name
+	^ value
 ]
 
 { #category : #'printing & storing' }
@@ -103,7 +111,7 @@ TRVirtualRegister >> printOn:aStream [
 
 	super printOn:aStream.
 	aStream nextPut:$(.
-	name printOn:aStream.
+	value printOn:aStream.
 	allocation notNil ifTrue: [ 
 		aStream nextPutAll: ' -> '.
 		allocation printOn: aStream.
@@ -121,11 +129,11 @@ TRVirtualRegister >> setAssigned [
 { #category : #conversion }
 TRVirtualRegister >> toBitVector: length [
 	allocation notNil ifTrue: [ ^ allocation toBitVector: length ].
-	^ name toBitVector: length
+	^ value toBitVector: length
 ]
 
 { #category : #conversion }
 TRVirtualRegister >> toInt [
 	allocation notNil ifTrue: [ ^ allocation toInt ].
-	^ name toInt
+	^ value toInt
 ]
