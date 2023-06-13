@@ -24,6 +24,28 @@ TRDataType class >> named: aString [
 ]
 
 { #category : #queries }
+TRDataType >> arithmeticOpcodeFor: arithmeticOpFlag [
+	"Return opcode for peforming arithmetic operation on two values 
+	 of receiver's type. 
+	 `arithmeticOpFlag` specifies the kind of operation wanted as 
+	 one of `Add`, `Sub`, `Mul`. `Div` or `Rem`  (see pool `TRILOpcodeProps1`).
+	"        
+	^ (ArithmeticOpcodes at: self) 
+		at: arithmeticOpFlag ifAbsent: [ self error:'No opcode for requested arithmetic operation' ]  
+
+	"
+	Add                  := 16r00000008.
+	Sub                  := 16r00000010.
+	Mul                  := 16r00000020.
+	Div                  := 16r00000040.
+	Rem                  := 16r00000080.
+	(TRDataType named: 'Int32') arithmeticOpcodeFor: 16r00000020
+	(TRDataType named: 'Address') compareOpcodeFor: 16r00000008.
+	(TRDataType named: 'Void') compareOpcodeFor: 16r00000008.
+	"
+]
+
+{ #category : #queries }
 TRDataType >> compareOpcodeFor: compareFlags [
 	"Return opcode for comparing two values of receiver's type.
 	 `compareFlags` specify the kind of comparison wanted as

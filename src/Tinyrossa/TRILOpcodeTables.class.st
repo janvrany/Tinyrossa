@@ -5,11 +5,13 @@ Class {
 		'LoadOpcodes',
 		'StoreOpcodes',
 		'ConstOpcodes',
-		'CompareOpcodes'
+		'CompareOpcodes',
+		'ArithmeticOpcodes'
 	],
 	#pools : [
 		'TRILOpcodes',
 		'TRDataTypes',
+		'TRILOpcodeProps1',
 		'TRILOpcodeProps3'
 	],
 	#category : #'Tinyrossa-IL'
@@ -126,6 +128,65 @@ TRILOpcodeTables class >> initialize [
 					GE  . invalid .
 					GT  . invalid .
 					NE  . invalid .
+				  }.
+	}.
+
+	ArithmeticOpcodes := SmallDictionary newFromPairs: {
+		Int8    . SmallDictionary newFromPairs: {
+					Add  . badd .
+					Sub  . bsub .
+					Mul  . bmul .
+					Div  . bdiv .
+					Rem  . brem .
+				  }.
+		Int16   . SmallDictionary newFromPairs: {
+					Add  . sadd .
+					Sub  . ssub .
+					Mul  . smul .
+					Div  . sdiv .
+					Rem  . srem .
+				  }.
+		Int32   . SmallDictionary newFromPairs: {
+					Add  . iadd .
+					Sub  . isub .
+					Mul  . imul .
+					Div  . idiv .
+					Rem  . irem .
+				  }.
+		Int64   . SmallDictionary newFromPairs: {
+					Add  . ladd .
+					Sub  . lsub .
+					Mul  . lmul .
+					Div  . ldiv .
+					Rem  . lrem .
+				  }.
+		Address . SmallDictionary newFromPairs: {
+					Add  . invalid .
+					Sub  . asub .
+					Mul  . invalid .
+					Div  . invalid .
+					Rem  . invalid .
+				  }.
+		Float   . SmallDictionary newFromPairs: {
+					Add  . fadd .
+					Sub  . fsub .
+					Mul  . fmul .
+					Div  . fdiv .
+					Rem  . invalid .
+				  }.
+		Double  . SmallDictionary newFromPairs: {
+					Add  . dadd .
+					Sub  . dsub .
+					Mul  . dmul .
+					Div  . ddiv .
+					Rem  . invalid .
+				  }.
+		Void    . SmallDictionary newFromPairs: {
+					Add  . invalid .
+					Sub  . invalid .
+					Mul  . invalid .
+					Div  . invalid .
+					Rem  . invalid .
 				  }.
 	}.
 ]
