@@ -65,6 +65,38 @@ TRPPC64CompilationTests >> test02_iconst_p [
 	self assert: (debugger getRegister: 'r4') equals: 16r7FEDCBA9.
 ]
 
+{ #category : #tests }
+TRPPC64CompilationTests >> test03_lconst_n [
+	| debugger |
+
+	self skip: 'Skipped since #loadConstant64:into: is not implemented for POWER'.
+
+	super test03_lconst_n.
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	 "
+	 VDBDebuggerApplication openFor: debugger
+	"
+	debugger c.
+	self assert: (debugger getRegister: 'r4') hex equals: '-7AFEAFFECAFEAFFE'.
+]
+
+{ #category : #tests }
+TRPPC64CompilationTests >> test03_lconst_p [
+	| debugger |
+
+	self skip: 'Skipped since #loadConstant64:into: is not implemented for POWER'.
+
+	super test03_lconst_p.
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	 "
+	 VDBDebuggerApplication openFor: debugger
+	"
+	debugger c.
+	self assert: (debugger getRegister: 'r4') equals: 16r7AFEAFFECAFEAFFE.
+]
+
 { #category : #'tests - examples' }
 TRPPC64CompilationTests >> test_example01_meaningOfLife [
 	| debugger |

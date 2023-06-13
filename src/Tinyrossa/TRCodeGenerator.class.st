@@ -230,6 +230,13 @@ TRCodeGenerator >> loadConstant32: value into: reg [
 	self subclassResponsibility
 ]
 
+{ #category : #utilities }
+TRCodeGenerator >> loadConstant64: value into: reg [
+	"Loads 64bit signed integer constant into given register."
+
+	self subclassResponsibility
+]
+
 { #category : #'code gen-phases' }
 TRCodeGenerator >> mapStack [
 	"Godegen phase: compute frame size and map parameters, automatics 

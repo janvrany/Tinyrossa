@@ -182,3 +182,45 @@ TRCompilationTestCase >> test02_iconst_p [
 	 TRRV64GCompilationTests debug: #test02_iconst_p
 	 TRPPC64CompilationTests debug: #test02_iconst_p"
 ]
+
+{ #category : #tests }
+TRCompilationTestCase >> test03_lconst_n [
+	| builder |
+
+	builder := compilation builder.
+	builder defineName: testSelector type: Int64.
+	builder lreturn: 
+		{ builder lconst: -16r7AFEAFFECAFEAFFE }.
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. 
+
+	"
+	TRRV64GCompilationTests debug: #test03_lconst_n 
+	TRPPC64CompilationTests debug: #test03_lconst_n 
+	"
+]
+
+{ #category : #tests }
+TRCompilationTestCase >> test03_lconst_p [
+	| builder |
+
+	builder := compilation builder.
+	builder defineName: testSelector type: Int64.
+	builder lreturn: 
+		{ builder lconst: 16r7AFEAFFECAFEAFFE }.
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. 
+
+	"
+	TRRV64GCompilationTests debug: #test03_lconst_p 
+	TRPPC64CompilationTests debug: #test03_lconst_p 
+	"
+]

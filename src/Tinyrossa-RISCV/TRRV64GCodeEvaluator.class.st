@@ -91,6 +91,12 @@ TRRV64GCodeEvaluator >> evaluate_acmplt: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_aconst: node [
+	^self evaluate_lconst: node
+
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_aload: node [
 	^ self evaluate_lload: node
 ]
@@ -397,6 +403,19 @@ TRRV64GCodeEvaluator >> evaluate_lcmpgt: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lcmplt: node [
 	^ self evaluate_Xcmplt: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lconst: node [
+	| dstReg |
+
+	node constant == 0 ifTrue: [ ^ zero ].
+
+	dstReg := self codegen allocateRegister.
+
+	codegen loadConstant64: node constant into: dstReg.
+
+	^ dstReg
 ]
 
 { #category : #evaluation }
