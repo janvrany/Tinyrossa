@@ -24,6 +24,28 @@ TRDataType class >> named: aString [
 ]
 
 { #category : #queries }
+TRDataType >> compareOpcodeFor: compareFlags [
+	"Return opcode for comparing two values of receiver's type.
+	 `compareFlags` specify the kind of comparison wanted as
+	 bit mask of `CompareTrueIfEqual`, `CompareTrueIfGreater`,  `CompareTrueIfLess`
+	 or: `CompareTrueIfUnordered` (see pool `TRILOpcodeProps3`).
+	"        
+	^ (CompareOpcodes at: self) 
+		at: compareFlags ifAbsent: [ self error:'No opcode for requested comparison' ]
+
+	"
+
+	CompareTrueIfLess           := 16r00000100. 
+	CompareTrueIfGreater        := 16r00000200. 
+	CompareTrueIfEqual          := 16r00000400. 
+	CompareTrueIfUnordered      := 16r00000800. 
+	(TRDataType named: 'Int32') compareOpcodeFor: 16r00000100 | 16r00000400.
+	(TRDataType named: 'Address') compareOpcodeFor: 16r00000100.
+	(TRDataType named: 'Void') compareOpcodeFor: 16r00000100.
+	"
+]
+
+{ #category : #queries }
 TRDataType >> constOpcode [
 	"Return opcode that can be used to load a constant of receiver's type"
 	^ ConstOpcodes at: self

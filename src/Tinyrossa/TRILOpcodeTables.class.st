@@ -4,17 +4,21 @@ Class {
 	#classVars : [
 		'LoadOpcodes',
 		'StoreOpcodes',
-		'ConstOpcodes'
+		'ConstOpcodes',
+		'CompareOpcodes'
 	],
 	#pools : [
 		'TRILOpcodes',
-		'TRDataTypes'
+		'TRDataTypes',
+		'TRILOpcodeProps3'
 	],
 	#category : #'Tinyrossa-IL'
 }
 
 { #category : #initialization }
 TRILOpcodeTables class >> initialize [
+	| LT LE EQ GE GT NE |
+
 	TRDataTypes initializeIfNotAlready. 
 	TRILOpcodes initializeIfNotAlready.
 
@@ -49,5 +53,79 @@ TRILOpcodeTables class >> initialize [
 		Float   . fconst .
 		Double  . dconst .
 		Void    . invalid .            
+	}.
+
+	LT := CompareTrueIfLess.
+	LE := CompareTrueIfLess | CompareTrueIfEqual.
+	EQ := CompareTrueIfEqual.
+	GE := CompareTrueIfGreater | CompareTrueIfEqual.
+	GE := CompareTrueIfGreater.
+	NE := CompareTrueIfLess | CompareTrueIfGreater.
+
+	CompareOpcodes := SmallDictionary newFromPairs: {
+		Int8    . SmallDictionary newFromPairs: {
+					LT  . bcmplt .
+					LE  . bcmple .
+					EQ  . bcmpeq .
+					GE  . bcmpge .
+					GT  . bcmpgt .
+					NE  . bcmpne .
+				  }.
+		Int16   . SmallDictionary newFromPairs: {
+					LT  . scmplt .
+					LE  . scmple .
+					EQ  . scmpeq .
+					GE  . scmpge .
+					GT  . scmpgt .
+					NE  . scmpne .
+				  }.
+		Int32   . SmallDictionary newFromPairs: {
+					LT  . icmplt .
+					LE  . icmple .
+					EQ  . icmpeq .
+					GE  . icmpge .
+					GT  . icmpgt .
+					NE  . icmpne .
+				  }.
+		Int64   . SmallDictionary newFromPairs: {
+					LT  . lcmplt .
+					LE  . lcmple .
+					EQ  . lcmpeq .
+					GE  . lcmpge .
+					GT  . lcmpgt .
+					NE  . lcmpne .
+				  }.
+		Address . SmallDictionary newFromPairs: {
+					LT  . acmplt .
+					LE  . acmple .
+					EQ  . acmpeq .
+					GE  . acmpge .
+					GT  . acmpgt .
+					NE  . acmpne .
+				  }.
+		Float   . SmallDictionary newFromPairs: {
+					LT  . fcmplt .
+					LE  . fcmple .
+					EQ  . fcmpeq .
+					GE  . fcmpge .
+					GT  . fcmpgt .
+					NE  . fcmpne .
+				  }.
+		Double  . SmallDictionary newFromPairs: {
+					LT  . dcmplt .
+					LE  . dcmple .
+					EQ  . dcmpeq .
+					GE  . dcmpge .
+					GT  . dcmpgt .
+					NE  . dcmpne .
+				  }.
+		Void    . SmallDictionary newFromPairs: {
+					LT  . invalid .
+					LE  . invalid .
+					EQ  . invalid .
+					GE  . invalid .
+					GT  . invalid .
+					NE  . invalid .
+				  }.
 	}.
 ]
