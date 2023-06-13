@@ -170,6 +170,22 @@ TRPPC64CompilationTests >> test_example09_signum_2 [
 	self assert: (debugger getRegister: 'r4') equals: 0.
 ]
 
+
+{ #category : #'tests - examples' }
+TRPPC64CompilationTests >> test_example10_sum_first_n_numbers [
+	| debugger |
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example10_sum_first_n_numbers.
+
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'r4' to: 10.
+	debugger c.
+	self assert: (debugger getRegister: 'r4') equals: ((0 to: 9) inject: 0 into:[ :s :i | s + i ]).
+]
+
 { #category : #'tests - examples' }
 TRPPC64CompilationTests >> test_example15_add_with_overflow_check [
 	| debugger |

@@ -5,6 +5,8 @@ Class {
 		'location'
 	],
 	#pools : [
+		'TRILOpcodeProps1',
+		'TRILOpcodeProps3',
 		'TRILOpcodes'
 	],
 	#category : #'Tinyrossa-IL-Builder'
@@ -86,6 +88,57 @@ TRILBuilder >> file: file line: line [
 { #category : #'building-locations' }
 TRILBuilder >> file: file line: line column: column [
 	self location: (TRSourceLocation file: file line: line column: column)
+]
+
+{ #category : #'building-helpers' }
+TRILBuilder >> for: variableName from: initialValue to: finalValue by: stepValue do: bodyBuilderOrClosure [
+	| variable loadOp storeOp cmpleOp addOp setupBlock condBlock bodyBuilder incrementBlock joinBlock joinLabel |
+
+	self assert: (compilation symbolManager hasSymbolNamed: variableName).
+	variable := compilation symbolManager lookupSymbolByName: variableName. 
+	self assert:(variable type = initialValue type).  
+	self assert:(variable type = finalValue type).
+	self assert:(variable type = stepValue type).
+
+	loadOp := variable type loadOpcode.    
+	storeOp := variable type storeOpcode.
+	cmpleOp := variable type compareOpcodeFor: CompareTrueIfLess.
+	addOp := variable type arithmeticOpcodeFor: Add.
+
+	setupBlock := compilation cfg addBlock.
+	condBlock := compilation cfg addBlock.
+	bodyBuilder := self orphanIfNeeded: bodyBuilderOrClosure.
+	incrementBlock := compilation cfg addBlock.
+	joinBlock := compilation cfg addBlock.
+	joinLabel := compilation symbolManager defineLabel: joinBlock.
+
+	current setSuccessor1: setupBlock.
+
+	setupBlock add: (TRILNode opcode: storeOp symbol: variable children: { initialValue }).
+	setupBlock setSuccessor1: condBlock.
+
+	condBlock add: (TRILNode opcode: cmpleOp reverseBranchOpcode ifCompareOpcode symbol: joinLabel children: {
+							TRILNode opcode: loadOp symbol: variable .
+							finalValue } ).
+	condBlock setSuccessor1: bodyBuilder entry.
+
+	bodyBuilder fallThroughToBlock: incrementBlock.
+
+	incrementBlock add: (TRILNode opcode: storeOp symbol: variable children: { 
+							TRILNode opcode: addOp children: {
+								TRILNode opcode: loadOp symbol: variable .
+								stepValue } } ).
+	incrementBlock setSuccessor1: condBlock.
+
+	current := joinBlock.
+]
+
+{ #category : #'building-helpers' }
+TRILBuilder >> for: variableName from: initialValue to: finalValue do: bodyBuilderOrClosure [
+	| stepValue |
+
+	stepValue := TRILNode opcode: initialValue type constOpcode constant: 1.
+	^ self for: variableName from: initialValue to: finalValue by: stepValue do: bodyBuilderOrClosure
 ]
 
 { #category : #'building-helpers' }

@@ -57,6 +57,11 @@ TRILOpcode >> booleanCompareOpcode [
 ]
 
 { #category : #accessing }
+TRILOpcode >> children [
+	^ children
+]
+
+{ #category : #accessing }
 TRILOpcode >> compareFlags [
 	^ props3 bitAnd: CompareTrueIfMask
 ]

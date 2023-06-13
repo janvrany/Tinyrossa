@@ -528,6 +528,33 @@ TRCompilationExamples >> example09_signum_2 [
 ]
 
 { #category : #examples }
+TRCompilationExamples >> example10_sum_first_n_numbers [
+	| builder  |
+
+	builder := compilation builder.
+	builder defineName: 'sumn' type: Int32.
+	builder defineParameter: 'n' type: Int32.   
+	builder defineAutomatic: 's' type: Int32.   
+	builder defineAutomatic: 'i' type: Int32.   
+	builder istore: { builder iconst: 0 . 's' }.
+	builder for: 'i' from: (builder iconst: 0) to: (builder iload: 'n') by: (builder iconst: 1) do:[ :body |
+		body istore: {
+			body iadd: {
+				body iload: 's'.
+				body iload: 'i'. } .
+			"-->" 's' }.
+	].
+	builder ireturn: { builder iload: 's' }.
+
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. "Only convenience inspection."
+]
+
+{ #category : #examples }
 TRCompilationExamples >> example12_call_external_function [
 	| builder |
 
