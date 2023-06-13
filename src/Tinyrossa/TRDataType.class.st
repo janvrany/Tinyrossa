@@ -1,6 +1,9 @@
 Class {
 	#name : #TRDataType,
 	#superclass : #Object,
+	#pools : [
+		'TRILOpcodeTables'
+	],
 	#category : #'Tinyrossa-Datatypes'
 }
 
@@ -47,11 +50,10 @@ TRDataType >> isVoidType [
 
 { #category : #queries }
 TRDataType >> loadOpcode [
-	^ self subclassResponsibility
+	^ LoadOpcodes at: self
 
 	"
 	(TRDataType named:'Int32') loadOpcode
-	TRILOpcodes initialize
 	"
 ]
 
@@ -70,7 +72,7 @@ TRDataType >> printOn:aStream [
 
 { #category : #queries }
 TRDataType >> storeOpcode [
-	^ self subclassResponsibility
+	^ StoreOpcodes at: self           
 
 	"
 	(TRDataType named:'Int32') storeOpcode
