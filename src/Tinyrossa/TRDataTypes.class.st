@@ -1,6 +1,6 @@
 Class {
 	#name : #TRDataTypes,
-	#superclass : #SharedPool,
+	#superclass : #TRSharedPool,
 	#classVars : [
 		'Address',
 		'Double',
@@ -16,9 +16,7 @@ Class {
 
 { #category : #initialization }
 TRDataTypes class >> initialize [
-	"Invoked at system start or when the class is dynamically loaded."
-
-	"  please change as required (and remove this comment)"
+	self isInitialized ifTrue: [ ^ self ].
 
 	Int8 := TRDataTypeInt8 new.
 	Int16 := TRDataTypeInt16 new.

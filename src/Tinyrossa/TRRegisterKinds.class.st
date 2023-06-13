@@ -1,6 +1,6 @@
 Class {
 	#name : #TRRegisterKinds,
-	#superclass : #SharedPool,
+	#superclass : #TRSharedPool,
 	#classVars : [
 		'FPR',
 		'GPR'

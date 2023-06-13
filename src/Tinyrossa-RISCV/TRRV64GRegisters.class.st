@@ -1,6 +1,6 @@
 Class {
 	#name : #TRRV64GRegisters,
-	#superclass : #SharedPool,
+	#superclass : #TRSharedPool,
 	#classVars : [
 		'zero',
 		'ra',

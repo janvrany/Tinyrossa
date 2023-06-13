@@ -1,6 +1,6 @@
 Class {
 	#name : #TRILOpcodeProps3,
-	#superclass : #SharedPool,
+	#superclass : #TRSharedPool,
 	#classVars : [
 		'Abs',
 		'ArrayLength',

@@ -1,6 +1,6 @@
 Class {
 	#name : #TRILOpcodeProps2,
-	#superclass : #SharedPool,
+	#superclass : #TRSharedPool,
 	#classVars : [
 		'BndCheck',
 		'ByteSwap',
