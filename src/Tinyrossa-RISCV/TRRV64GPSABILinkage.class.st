@@ -12,7 +12,8 @@ Class {
 		'framePreservedOffset'
 	],
 	#pools : [
-		'TRRV64GRegisters'
+		'TRRV64GRegisters',
+		'TRIntLimits'
 	],
 	#category : #'Tinyrossa-RISCV-Codegen'
 }
@@ -43,7 +44,30 @@ TRRV64GPSABILinkage >> generateCall: node [
 		generate addi: paramReg , valReg, 0
 	].
 
-	generate jal: ra, node symbol.
+	"If the call a recursive call..."
+	node symbol == codegen compilation functionSymbol ifTrue: [ 
+		"...then generate 'jal ra, <function>'..."
+		generate jal: ra, node symbol.
+	] ifFalse: [ 
+		"...otherwise, load callee's address into register 'ra'
+		 and generate 'jalr ra, ra, 0'.
+
+		 Note, that here we load address directly into 'ra' (as opposite
+		 to allocating new v-register) because will be clobbered anyways
+		 by jalr storing return address there. This lowers the pressure on
+		 RA.
+
+		 Also note that rather than this, we should generate a trampoline
+		 and call calle through it. Or relative jal if it's close enough. 
+		 But that's left as future work."
+
+		self assert: node symbol address notNil description: 'No address set for function symbol'.
+
+		codegen loadConstant64: node symbol address into: ra.
+		generate jalr: ra, ra, 0.
+	].
+
+
 
 	retVreg := codegen allocateRegister.
 	generate addi: retVreg , a0, 0.
