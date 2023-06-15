@@ -58,11 +58,11 @@ TRCFGSimplifier >> simplify [
 			modified := true.
 		].
 
-		(self tryRemove: block) ifTrue: [ 
+		(self tryCombine: block) ifTrue: [ 
 			modified := true.
 		].
 
-		(self tryCombine: block) ifTrue: [ 
+		(self tryRemove: block) ifTrue: [ 
 			modified := true.
 		].
 
