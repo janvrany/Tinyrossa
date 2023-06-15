@@ -29,6 +29,34 @@ TRRV64GCompilationTests >> test01_bytecode_abs [
 	self assert: (debugger getRegister: 'a0') equals: 2 abs.
 ]
 
+{ #category : #tests }
+TRRV64GCompilationTests >> test02_iconst_n [
+	| debugger |
+
+	super test02_iconst_n.
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	 "
+	 VDBDebuggerApplication openFor: debugger
+	"
+	debugger c.
+	self assert: (debugger getRegister: 'a0') equals: -16r7FEDCBA9.
+]
+
+{ #category : #tests }
+TRRV64GCompilationTests >> test02_iconst_p [
+	| debugger |
+
+	super test02_iconst_p.
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	 "
+	 VDBDebuggerApplication openFor: debugger
+	"
+	debugger c.
+	self assert: (debugger getRegister: 'a0') equals: 16r7FEDCBA9.
+]
+
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example01_meaningOfLife [
 	| debugger |

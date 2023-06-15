@@ -146,3 +146,39 @@ TRCompilationTestCase >> test01_bytecode_abs [
 
 	compilation codeBuffer. "Only convenience inspection."
 ]
+
+{ #category : #tests }
+TRCompilationTestCase >> test02_iconst_n [
+	| builder |
+
+	builder := compilation builder.
+	builder defineName: testSelector type: Int32.
+	builder ireturn: {
+				builder iconst: -16r7FEDCBA9
+			}.
+	compilation optimize.
+	compilation compile.
+	compilation codeBuffer.
+
+	"
+	 TRRV64GCompilationTests debug: #test02_iconst_p
+	 TRPPC64CompilationTests debug: #test02_iconst_p"
+]
+
+{ #category : #tests }
+TRCompilationTestCase >> test02_iconst_p [
+	| builder |
+
+	builder := compilation builder.
+	builder defineName: testSelector type: Int32.
+	builder ireturn: {
+				builder iconst: 16r7FEDCBA9
+			}.
+	compilation optimize.
+	compilation compile.
+	compilation codeBuffer.
+
+	"
+	 TRRV64GCompilationTests debug: #test02_iconst_p
+	 TRPPC64CompilationTests debug: #test02_iconst_p"
+]

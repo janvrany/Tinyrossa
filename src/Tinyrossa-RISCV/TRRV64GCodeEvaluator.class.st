@@ -106,6 +106,11 @@ TRRV64GCodeEvaluator >> evaluate_astore: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_bconst: node [
+	^ self evaluate_iconst: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_bloadi: node [
 	^ self evaluate_Xloadi: node
 ]
@@ -154,8 +159,7 @@ TRRV64GCodeEvaluator >> evaluate_iconst: node [
 
 	dstReg := self codegen allocateRegister.
 
-	generate 
-		addi: dstReg, zero, node constant.
+	codegen loadConstant32: node constant into: dstReg.
 
 	^ dstReg
 ]
@@ -413,6 +417,11 @@ TRRV64GCodeEvaluator >> evaluate_lstore: node [
 	srcReg := self evaluate: node child1.
 	generate sd: srcReg, (sp + (AcDSLSymbol value: symbol name)).
 	^ nil
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_sconst: node [
+	^ self evaluate_iconst: node
 ]
 
 { #category : #evaluation }
