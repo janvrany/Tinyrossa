@@ -34,6 +34,18 @@ TRILBuilder >> build: opcode arguments: arguments [
 	^ node
 ]
 
+{ #category : #'defining symbols' }
+TRILBuilder >> defineFunction: name type: type [
+	| linkage |
+	linkage := compilation config linkageClass.
+	^self defineFunction: name type: type linkage: linkage
+]
+
+{ #category : #'defining symbols' }
+TRILBuilder >> defineFunction: name type: type linkage: linkage [
+	^ compilation symbolManager defineFunction: name type: type linkage: linkage
+]
+
 { #category : #'building-blocks' }
 TRILBuilder >> fallThroughTo: anILBuilder [
 	| target |

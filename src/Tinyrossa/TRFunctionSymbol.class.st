@@ -3,7 +3,8 @@ Class {
 	#superclass : #TRSymbol,
 	#instVars : [
 		'linkageClass',
-		'parameters'
+		'parameters',
+		'address'
 	],
 	#category : #'Tinyrossa-IL-Symbols'
 }
@@ -11,6 +12,14 @@ Class {
 { #category : #'instance creation' }
 TRFunctionSymbol class >> name:name type:type linkage: linkageClass [ 
 	^ self basicNew initializeWithName:name type:type linkage: linkageClass
+]
+
+{ #category : #accessing }
+TRFunctionSymbol >> address [
+	"Return the address of this function or `nil` is address is not
+	 (yet) known."
+	
+	^address
 ]
 
 { #category : #converting }
@@ -34,4 +43,13 @@ TRFunctionSymbol >> isTRFunctionSymbol [
 { #category : #'accessing-config' }
 TRFunctionSymbol >> linkageClass [
 	^ linkageClass
+]
+
+{ #category : #initialization }
+TRFunctionSymbol >> setAddress: anInteger [
+	self assert: anInteger isInteger.
+	self assert:(anInteger between: 0 and: 16rFFFFFFFFFFFFFFFF).
+	self assert: address isNil.
+	
+	address := anInteger.
 ]
