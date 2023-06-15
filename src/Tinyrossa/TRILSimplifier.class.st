@@ -1,6 +1,9 @@
 Class {
 	#name : #TRILSimplifier,
 	#superclass : #TRILRewritingPass,
+	#instVars : [
+		'stores'
+	],
 	#classVars : [
 		'ArithmeticSimplificationTable',
 		'ConditionalBranchSimplificationTable'
@@ -56,6 +59,12 @@ TRILSimplifier class >> initialize [
 		Int64   . intComparatorTable .
 		Address . intComparatorTable .
 	}
+]
+
+{ #category : #evaluation }
+TRILSimplifier >> evaluate_bbstart: node [
+	stores := Dictionary new.
+	^ super evaluate_bbstart: node
 ]
 
 { #category : #rewriting }
@@ -200,7 +209,7 @@ TRILSimplifier >> simplifyStore: node [
 	"This simplification removes unnecessary stores into automatics and parameters.
 	 It only handles 'plain stores', i.e., does not handle not indirect  stores and write 
 	 barrier stores."
-
+	
 	({ bstore . sstore . istore . lstore . astore . fstore . dstore } includes: node opcode) ifFalse: [ 
 		^ node.
 	].
@@ -223,5 +232,34 @@ TRILSimplifier >> simplifyStore: node [
 			^node.
 		].
 	].
+
+	"Also, store in following form is unncessary:
+		
+		Xstore <symbol>
+			Xload <symbol>
+			
+	 This is somewhat patological case."
+	(({ bload . sload . iload . lload . aload . fload . dload } includes: node child1 opcode)
+		and:[node child1 symbol == node symbol]) ifTrue:[
+		node block remove: node.
+		^node
+	].
+
+	"Also, second store in following case is unncessary:
+
+		Xstore <symbol>
+			<value>
+		...
+		Xstore <symbol>
+			==> <value>
+
+	"
+	((stores includesKey: node symbol) 
+		and:[(stores at: node symbol) child1 == node child1]) ifTrue:[
+		node block remove: node.
+		^node
+	].
+	
+	stores at: node symbol put: node.
 	^ node.
 ]
