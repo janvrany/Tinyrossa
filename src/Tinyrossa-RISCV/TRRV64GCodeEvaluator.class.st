@@ -36,6 +36,50 @@ TRRV64GCodeEvaluator >> evaluate_Xcmplt: node [
 	^ trgReg
 ]
 
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> evaluate_Xloadi: node [
+	"Handles Address, Int64 Int32, Int16 & Int8"  
+
+	| dstReg baseReg offset type |
+
+	"FIXME: we can do better by checking for loads in form
+	
+	   Xloadi 
+	     aXadd
+	        ...
+	        Xconst offset
+	
+	 and check if offset fits into displacement immediate and if
+	 so, generate 
+	
+	   ld dstReg, offset ( ... )
+	
+	 But for now, this will do.
+	"
+	baseReg := self evaluate: node child1.
+	offset := 0.
+	
+	
+	dstReg := codegen allocateRegister.
+
+	type := node type.
+	(type == Address or:[type == Int64]) ifTrue:[
+		generate
+			ld: dstReg, (baseReg + offset).
+	] ifFalse:[ type == Int32 ifTrue:[
+		generate
+			lw: dstReg, (baseReg + offset).		
+	] ifFalse:[ type == Int16 ifTrue:[
+		generate
+			lh: dstReg, (baseReg + offset).		
+	] ifFalse:[ type == Int8 ifTrue:[
+		generate
+			lb: dstReg, (baseReg + offset).		
+	]]]].
+
+	^dstReg.
+]
+
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_acmpgt: node [
 	^ self evaluate_Xcmpgt: node
@@ -47,13 +91,34 @@ TRRV64GCodeEvaluator >> evaluate_acmplt: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_aconst: node [
+	^self evaluate_lconst: node
+
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_aload: node [
 	^ self evaluate_lload: node
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_aloadi: node [
+	^ self evaluate_Xloadi: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_astore: node [
 	^ self evaluate_lstore: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_bconst: node [
+	^ self evaluate_iconst: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_bloadi: node [
+	^ self evaluate_Xloadi: node
 ]
 
 { #category : #evaluation }
@@ -100,8 +165,7 @@ TRRV64GCodeEvaluator >> evaluate_iconst: node [
 
 	dstReg := self codegen allocateRegister.
 
-	generate 
-		addi: dstReg, zero, node constant.
+	codegen loadConstant32: node constant into: dstReg.
 
 	^ dstReg
 ]
@@ -285,6 +349,11 @@ TRRV64GCodeEvaluator >> evaluate_iload: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iloadi: node [
+	^ self evaluate_Xloadi: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_imul: node [
 	| src1Reg src2Reg dstReg |
 
@@ -337,6 +406,19 @@ TRRV64GCodeEvaluator >> evaluate_lcmplt: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lconst: node [
+	| dstReg |
+
+	node constant == 0 ifTrue: [ ^ zero ].
+
+	dstReg := self codegen allocateRegister.
+
+	codegen loadConstant64: node constant into: dstReg.
+
+	^ dstReg
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lload: node [
 	| symbol dstReg |
 
@@ -354,4 +436,14 @@ TRRV64GCodeEvaluator >> evaluate_lstore: node [
 	srcReg := self evaluate: node child1.
 	generate sd: srcReg, (sp + (AcDSLSymbol value: symbol name)).
 	^ nil
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_sconst: node [
+	^ self evaluate_iconst: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_sloadi: node [
+	^ self evaluate_Xloadi: node
 ]

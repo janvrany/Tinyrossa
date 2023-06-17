@@ -6,6 +6,9 @@ Class {
 		'parameters',
 		'address'
 	],
+	#pools : [
+		'TRIntLimits'
+	],
 	#category : #'Tinyrossa-IL-Symbols'
 }
 
