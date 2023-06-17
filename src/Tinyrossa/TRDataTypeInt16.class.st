@@ -12,19 +12,9 @@ TRDataTypeInt16 >> isIntegerType [
 	^ true
 ]
 
-{ #category : #queries }
-TRDataTypeInt16 >> loadOpcode [
-	^ sload
-]
-
 { #category : #accessing }
 TRDataTypeInt16 >> name [
 	^ 'Int16'
-]
-
-{ #category : #queries }
-TRDataTypeInt16 >> storeOpcode [
-	^ sstore
 ]
 
 { #category : #validation }

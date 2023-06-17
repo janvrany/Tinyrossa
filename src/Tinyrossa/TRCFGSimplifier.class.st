@@ -58,11 +58,11 @@ TRCFGSimplifier >> simplify [
 			modified := true.
 		].
 
-		(self tryRemove: block) ifTrue: [ 
+		(self tryCombine: block) ifTrue: [ 
 			modified := true.
 		].
 
-		(self tryCombine: block) ifTrue: [ 
+		(self tryRemove: block) ifTrue: [ 
 			modified := true.
 		].
 
@@ -185,6 +185,17 @@ TRCFGSimplifier >> tryRemove: block [
 		block precedessors do: [:precedessor |
 			self relink: block to: block successor1 in: precedessor
 		].
+	
+		"Handle the case we're removing (empty) entry block. 
+		 In this case we have to set CFG's entry block to
+		 successor1 - but only if there's one, otherwise we'd
+		 make CFG with no entry block which is illegal!"
+		block == compilation cfg entry ifTrue:[
+			block successor1	 notNil ifTrue:[
+				compilation cfg entry: block successor1
+			]
+		].
+	
 		^ true.
 	].
 	^ false.

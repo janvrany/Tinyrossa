@@ -41,7 +41,7 @@ TRCFG >> addBlockNamed: aStringOrNil [
 
 	block := TRILBlock forCFG: self named: name.
 	blocks add: block.
-	entry isNil ifTrue:[entry := block].
+	entry isNil ifTrue:[self entry: block].
 
 	^ block
 ]
@@ -57,6 +57,18 @@ TRCFG >> entry [
 	self assert: entry notNil.
 
 	^ entry
+]
+
+{ #category : #accessing }
+TRCFG >> entry: aTRILBlock [
+	"Set the entry block. 
+	
+	 Please note that entry block is set automatically when first block
+	 is allocated. This method is for internal use in cases one need
+	 modify entry block after TRIL is generated (for example, CFG simplifier
+	 removing empty entry block)."
+
+	entry := aTRILBlock
 ]
 
 { #category : #initialization }

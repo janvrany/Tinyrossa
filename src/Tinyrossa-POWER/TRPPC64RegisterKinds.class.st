@@ -1,6 +1,6 @@
 Class {
 	#name : #TRPPC64RegisterKinds,
-	#superclass : #SharedPool,
+	#superclass : #TRSharedPool,
 	#classVars : [
 		'GPR',
 		'FPR',

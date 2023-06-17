@@ -1,6 +1,9 @@
 Class {
 	#name : #TRDataType,
 	#superclass : #Object,
+	#pools : [
+		'TRILOpcodeTables'
+	],
 	#category : #'Tinyrossa-Datatypes'
 }
 
@@ -17,6 +20,60 @@ TRDataType class >> named: aString [
 
 	"
 	TRDataType named: 'Int32'
+	"
+]
+
+{ #category : #queries }
+TRDataType >> arithmeticOpcodeFor: arithmeticOpFlag [
+	"Return opcode for peforming arithmetic operation on two values 
+	 of receiver's type. 
+	 `arithmeticOpFlag` specifies the kind of operation wanted as 
+	 one of `Add`, `Sub`, `Mul`. `Div` or `Rem`  (see pool `TRILOpcodeProps1`).
+	"        
+	^ (ArithmeticOpcodes at: self) 
+		at: arithmeticOpFlag ifAbsent: [ self error:'No opcode for requested arithmetic operation' ]  
+
+	"
+	Add                  := 16r00000008.
+	Sub                  := 16r00000010.
+	Mul                  := 16r00000020.
+	Div                  := 16r00000040.
+	Rem                  := 16r00000080.
+	(TRDataType named: 'Int32') arithmeticOpcodeFor: 16r00000020
+	(TRDataType named: 'Address') compareOpcodeFor: 16r00000008.
+	(TRDataType named: 'Void') compareOpcodeFor: 16r00000008.
+	"
+]
+
+{ #category : #queries }
+TRDataType >> compareOpcodeFor: compareFlags [
+	"Return opcode for comparing two values of receiver's type.
+	 `compareFlags` specify the kind of comparison wanted as
+	 bit mask of `CompareTrueIfEqual`, `CompareTrueIfGreater`,  `CompareTrueIfLess`
+	 or: `CompareTrueIfUnordered` (see pool `TRILOpcodeProps3`).
+	"        
+	^ (CompareOpcodes at: self) 
+		at: compareFlags ifAbsent: [ self error:'No opcode for requested comparison' ]
+
+	"
+
+	CompareTrueIfLess           := 16r00000100. 
+	CompareTrueIfGreater        := 16r00000200. 
+	CompareTrueIfEqual          := 16r00000400. 
+	CompareTrueIfUnordered      := 16r00000800. 
+	(TRDataType named: 'Int32') compareOpcodeFor: 16r00000100 | 16r00000400.
+	(TRDataType named: 'Address') compareOpcodeFor: 16r00000100.
+	(TRDataType named: 'Void') compareOpcodeFor: 16r00000100.
+	"
+]
+
+{ #category : #queries }
+TRDataType >> constOpcode [
+	"Return opcode that can be used to load a constant of receiver's type"
+	^ ConstOpcodes at: self
+
+	"
+	(TRDataType named:'Float') constOpcode
 	"
 ]
 
@@ -47,11 +104,10 @@ TRDataType >> isVoidType [
 
 { #category : #queries }
 TRDataType >> loadOpcode [
-	^ self subclassResponsibility
+	^ LoadOpcodes at: self
 
 	"
 	(TRDataType named:'Int32') loadOpcode
-	TRILOpcodes initialize
 	"
 ]
 
@@ -70,7 +126,7 @@ TRDataType >> printOn:aStream [
 
 { #category : #queries }
 TRDataType >> storeOpcode [
-	^ self subclassResponsibility
+	^ StoreOpcodes at: self           
 
 	"
 	(TRDataType named:'Int32') storeOpcode

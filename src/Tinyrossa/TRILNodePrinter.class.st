@@ -49,8 +49,14 @@ TRILNodePrinter >> print: node on: aStream [
 		(opcode hasSymbolRef or:[opcode isBranch]) ifTrue: [ 
 			aStream nextPutAll: node symbol name
 		] ifFalse: [ 
-		   opcode isLoadConst ifTrue: [ 
-				node constant printOn: aStream.
+			opcode isLoadConst ifTrue: [
+				node type == 1 ifTrue: [
+					aStream 
+						nextPutAll: '0x';
+						nextPutAll: ( node constant printPaddedWith: $0 to: 16 base: 16).
+				] ifFalse: [
+					node constant printOn: aStream.
+				]
 			].
 		].
 	].

@@ -31,7 +31,7 @@ TRILOpcode class >> initialize [
 	 TRILOpcodeProps3's initialize. So we have to call it here
 	 explicitly to make sure it is initialized."
 
-	TRILOpcodeProps3 initialize.
+	TRILOpcodeProps3 initializeIfNotAlready.
 	CompareTrueIfMask :=  CompareTrueIfLess | CompareTrueIfEqual | CompareTrueIfGreater
 ]
 

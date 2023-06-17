@@ -526,6 +526,30 @@ TRCompilationExamples >> example09_signum_2 [
 	compilation codeBuffer. "Only convenience inspection."
 ]
 
+{ #category : #examples }
+TRCompilationExamples >> example12_call_external_function [
+	| builder |
+
+	builder := compilation builder.
+	builder defineName: 'caller' type: Int32.
+
+	"Here we define function named 'callee' returning Int32
+	 at address 0xCAFECAFECAFECAFE."
+	(builder defineFunction: 'callee' type: Int32) 
+		setAddress: 16r000000007AFECAFE.
+
+	builder ireturn: 
+		{ builder icall: 
+			{ 'callee' } }.
+
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. "Only convenience inspection."
+]
+
 { #category : #running }
 TRCompilationExamples >> setUp [
 	super setUp.

@@ -166,7 +166,7 @@ TRILBlock >> notEmpty [
 
 { #category : #accessing }
 TRILBlock >> precedessors [
-	^ precedessors
+	^ precedessors copy
 ]
 
 { #category : #'printing & storing' }
@@ -193,7 +193,7 @@ TRILBlock >> remove: aTRNode [
 { #category : #'adding & removing' }
 TRILBlock >> removePrecedessor: aTRILBlock [
 	precedessors notNil ifTrue: [ 
-		precedessors copyWithout: aTRILBlock.
+		precedessors := precedessors copyWithout: aTRILBlock.
 	].
 ]
 

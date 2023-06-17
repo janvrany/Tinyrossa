@@ -1,6 +1,6 @@
 Class {
 	#name : #TRCompilationConfigOptions,
-	#superclass : #SharedPool,
+	#superclass : #TRSharedPool,
 	#classVars : [
 		'OptionAOT',
 		'OptionLinkage',

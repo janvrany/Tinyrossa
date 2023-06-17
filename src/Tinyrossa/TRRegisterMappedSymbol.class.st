@@ -9,8 +9,7 @@ Class {
 	#superclass : #TRSymbol,
 	#instVars : [
 		'index',
-		'offset',
-		'register'
+		'offset'
 	],
 	#category : #'Tinyrossa-IL-Symbols'
 }
@@ -43,21 +42,9 @@ TRRegisterMappedSymbol >> offset [
 	^ offset
 ]
 
-{ #category : #accessing }
-TRRegisterMappedSymbol >> register [
-	^ register
-]
-
 { #category : #initialization }
 TRRegisterMappedSymbol >> setOffset: anInteger [
 	self assert: offset isNil.
 
 	offset := anInteger
-]
-
-{ #category : #initialization }
-TRRegisterMappedSymbol >> setRegister: aTRVirtualRegister [
-	self assert: (register isNil or: [ aTRVirtualRegister isNil ]).
-
-	register := aTRVirtualRegister
 ]
