@@ -34,12 +34,28 @@ TRRV64GPSABILinkage >> allocatedPreservedRegisters [
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generateCall: node [
-	| parameterVregs parameterTypes parameterRregs retVreg|
+	"Also handles indirect calls"
+	| indirect firstParameterIndex parameterVregs parameterTypes parameterRregs retVreg|
 
-	parameterVregs := node children collect: [ :child | codegen evaluator evaluate: child ].
-	parameterTypes := node children collect: [ :child | child type ].
+	indirect := node opcode isIndirect.
+	"If this is an indirect call, the first child is the address of the callee."
+	firstParameterIndex := indirect ifTrue: [ 2 ] ifFalse: [ 1 ].
+
+
+	parameterVregs := Array new: node children size - firstParameterIndex + 1.
+	parameterTypes := Array new: node children size - firstParameterIndex + 1.
+
+	firstParameterIndex to: node children size do: [:i | 
+		| parameter |
+
+		parameter := node children at: i.
+		parameterVregs at: i - firstParameterIndex + 1 
+					  put: (codegen evaluator evaluate: parameter).
+		parameterTypes at: i - firstParameterIndex + 1 
+					  put: parameter type.
+	].
+
 	parameterRregs := self mapParameters: parameterTypes.
-
 	parameterVregs with: parameterRregs do: [:valReg :paramReg | 
 		generate addi: paramReg , valReg, 0
 	].
@@ -48,30 +64,42 @@ TRRV64GPSABILinkage >> generateCall: node [
 	node symbol == codegen compilation functionSymbol ifTrue: [ 
 		"...then generate 'jal ra, <function>'..."
 		generate jal: ra, node symbol.
-	] ifFalse: [ 
-		"...otherwise, load callee's address into register 'ra'
-		 and generate 'jalr ra, ra, 0'.
+	] ifFalse: [
+		"...otherwise, load callee's address into a register `addrReg`
+		 and generate 'jalr ra, `addrReg`, 0'."
 
-		 Note, that here we load address directly into 'ra' (as opposite
-		 to allocating new v-register) because will be clobbered anyways
-		 by jalr storing return address there. This lowers the pressure on
-		 RA.
+		| addrReg |
 
-		 Also note that rather than this, we should generate a trampoline
-		 and call calle through it. Or relative jal if it's close enough. 
-		 But that's left as future work."
+		indirect ifTrue: [ 
+			addrReg := codegen evaluator evaluate: node child1.
+		] ifFalse: [ 
+			"
+			In case of 'direct' calls,  we load address directly into 'ra' 
+			(as opposite to allocating new v-register as in indirect case
+			above) because will be clobbered anyways by jalr storing return 
+			address. This lowers the pressure on RA.
 
-		self assert: node symbol address notNil description: 'No address set for function symbol'.
+			Also note that rather than this, we should generate a trampoline
+			and call calle through it. Or relative jal if it's close enough. 
+			That's left as future work.
+			"
+			self assert: node symbol address notNil description: 'No address set for function symbol'.
 
-		codegen loadConstant64: node symbol address into: ra.
-		generate jalr: ra, ra, 0.
+			codegen loadConstant64: node symbol address into: ra.
+			addrReg := ra.
+		].
+
+		generate jalr: ra, addrReg, 0.
 	].
-
-
 
 	retVreg := codegen allocateRegister.
 	generate addi: retVreg , a0, 0.
 	^ retVreg
+]
+
+{ #category : #'code generation' }
+TRRV64GPSABILinkage >> generateCallIndirect: node [
+	^ self generateCall: node
 ]
 
 { #category : #'code generation' }
