@@ -139,6 +139,11 @@ TRRV64GCodeEvaluator >> evaluate_goto: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_i2a: node [
+	^ self evaluate: node child1
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_iadd: node [
 	"Also handles ladd, aiadd and aladd"
 	| src1Reg src2Reg dstReg |
@@ -407,6 +412,9 @@ TRRV64GCodeEvaluator >> evaluate_isub: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_l2a: node [
+	^ self evaluate: node child1
+]
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_ladd: node [
