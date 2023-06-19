@@ -97,6 +97,16 @@ TRRV64GCodeEvaluator >> evaluate_aconst: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_aiadd: node [
+	^ self evaluate_iadd: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_aladd: node [
+	^ self evaluate_iadd: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_aload: node [
 	^ self evaluate_lload: node
 ]
@@ -130,6 +140,7 @@ TRRV64GCodeEvaluator >> evaluate_goto: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_iadd: node [
+	"Also handles ladd, aiadd and aladd"
 	| src1Reg src2Reg dstReg |
 
 	dstReg := self codegen allocateRegister.
@@ -393,6 +404,13 @@ TRRV64GCodeEvaluator >> evaluate_isub: node [
 	].
 
 	^ dstReg
+]
+
+{ #category : #evaluation }
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ladd: node [
+	^ self evaluate_iadd: node
 ]
 
 { #category : #evaluation }
