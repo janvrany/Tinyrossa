@@ -139,11 +139,15 @@ TRCompilation >> nodeIdFor: aTRILNode [
 
 { #category : #optimizing }
 TRCompilation >> optimize [
+	self verify.
 	{
 		TRCFGSimplifier .
 		TRILCommoner .
 		TRILSimplifier .
-	} do: [:pass | (pass forCompilation: self) run ]
+	} do: [:pass |              
+		(pass forCompilation: self) run.
+		config verifyAfterEachOptimizationPass ifTrue: [ self verify ].
+	]
 ]
 
 { #category : #initialization }

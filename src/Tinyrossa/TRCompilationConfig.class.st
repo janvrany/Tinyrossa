@@ -75,3 +75,13 @@ TRCompilationConfig >> registerAllocatorClass: aClass [
 TRCompilationConfig >> target [
 	^ options at: OptionTarget ifAbsent: [ self error:'Oops, no target specified!' ]
 ]
+
+{ #category : #options }
+TRCompilationConfig >> verifyAfterEachOptimizationPass [
+	^ options at: OptionVerifyAfterEachOptimizationPass ifAbsent:[ true ]
+]
+
+{ #category : #options }
+TRCompilationConfig >> verifyAfterEachOptimizationPass: aBoolean [
+	^ options at: OptionVerifyAfterEachOptimizationPass put: aBoolean
+]

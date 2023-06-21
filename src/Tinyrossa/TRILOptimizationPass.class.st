@@ -26,3 +26,8 @@ TRILOptimizationPass >> initializeWithCompilation: aTRCompilation [
 TRILOptimizationPass >> run [
 	compilation cfg preorderDo: [ :block | self runOn: block ].
 ]
+
+{ #category : #optimizing }
+TRILOptimizationPass >> runOn: aTRILBlock [
+	^ self subclassResponsibility
+]
