@@ -79,32 +79,66 @@ TRCompilationExplorerApp class >> windowSpec [
 	<resource: #canvas>
 
 	^ 
-	#(FullSpec
-	   name: windowSpec
-	   window: 
-	  (WindowSpec
-		 label: 'Compilation Explorer'
-		 name: 'Compilation Explorer'
-		 uuid: 'ea129330-18b0-11ed-8d2c-0021ccd5e3d3'
-		 min: (Point 10 10)
-		 bounds: (Rectangle 0 0 856 598)
+	#(#FullSpec
+	   #name: #windowSpec
+	   #window: 
+	  (#WindowSpec
+		 #label: 'Compilation Explorer'
+		 #name: 'Compilation Explorer'
+		 #uuid: 'ea129330-18b0-11ed-8d2c-0021ccd5e3d3'
+		 #min: (#Point 10 10)
+		 #bounds: (#Rectangle 0 0 856 598)
 		
-	  ) component: 
-	  (SpecCollection
-		 collection: (
-		  (VariableHorizontalPanelSpec
-			 name: 'VariableHorizontalPanel1'
-			 layout: (LayoutFrame 0 0 0 0 0 1 0 1)
-			 component: 
-			(SpecCollection
-			   collection: (
-				(TabViewSpec
-				   name: 'LeftColumn'
-				   menu: leftColumnTabs
+	  ) #component: 
+	  (#SpecCollection
+		 #collection: (
+		  (#VariableHorizontalPanelSpec
+			 #name: 'VariableHorizontalPanel1'
+			 #layout: (#LayoutFrame 0 0 0 0 0 1 0 1)
+			 #component: 
+			(#SpecCollection
+			   #collection: (
+				(#SubCanvasSpec
+				   #name: 'IL'
+				   #hasHorizontalScrollBar: false
+				   #hasVerticalScrollBar: false
+				   #clientKey: #treeApp
+				   #subAspectHolders: 
+				  (#Array 
+					(#SubChannelInfoSpec
+					   #subAspect: #nodeListHolder
+					   #aspect: #nodeListHolder
+					) 
+					(#SubChannelInfoSpec
+					   #subAspect: #nodeSelectionHolder
+					   #aspect: #selectedNodeHolder
+					)
+				  ) #createNewApplication: true
+				   #createNewBuilder: false
 				)
-				(TabViewSpec
-				   name: 'RightColumn'
-				   menu: rightColumnTabs
+				(#SubCanvasSpec
+				   #name: 'Instructions'
+				   #hasHorizontalScrollBar: false
+				   #hasVerticalScrollBar: false
+				   #miniScrollerHorizontal: false
+				   #miniScrollerVertical: false
+				   #clientKey: #instructionListApp
+				   #subAspectHolders: 
+				  (#Array 
+					(#SubChannelInfoSpec
+					   #subAspect: #instructionListHolder
+					   #aspect: #instructionListHolder
+					) 
+					(#SubChannelInfoSpec
+					   #subAspect: #selectedInstructionHolder
+					   #aspect: #selectedInstructionHolder
+					) 
+					(#SubChannelInfoSpec
+					   #subAspect: #selectedNodeHolder
+					   #aspect: #selectedNodeHolder
+					)
+				  ) #createNewApplication: true
+				   #createNewBuilder: false
 				)
 			  )
 			)
