@@ -49,8 +49,26 @@ TRILTreeApp >> contextMenuItemSlice [
 
 { #category : #'change & update-delayed' }
 TRILTreeApp >> delayedUpdateInternalList [
-	nodePrinter := TRILNodePrinter new.
-	self internalListHolder roots: self nodeListHolder value ? #().
+	| printer builder root |
+
+	printer := TRILNodePrinter new.
+	builder := [ :node | 
+		| printed item |
+
+		printed := printer hasPrinted: node.
+		item := HierarchicalItemWithLabelAndIconAndValue new.
+		item value: node.
+		item label: (printer print: node).
+		printed ifFalse: [ 
+			item children: (node children collect: builder).
+		].
+		item.
+	].
+
+	root := HierarchicalItem new.
+	root children: ((self nodeListHolder value ? #()) collect: builder).
+
+	self internalListHolder root: root.
 	self internalListHolder root recursiveDo: [ :item | item expand ]
 ]
 
@@ -106,24 +124,6 @@ TRILTreeApp >> il [
 TRILTreeApp >> il: aCollection [
 	self nodeListHolder value: aCollection.
 
-]
-
-{ #category : #'aspects-private' }
-TRILTreeApp >> internalListHolder [
-	"return/create the 'listHolder' value holder (automatically generated)"
-
-	internalListHolder isNil ifTrue:[
-		internalListHolder := PluggableHierarchicalList new. 
-		internalListHolder application: self.
-		internalListHolder showRoot: false.
-		internalListHolder childBlock: [ :node | node children ].
-		internalListHolder labelBlock: [ :node | node notNil ifTrue: [ nodePrinter print: node ] ifFalse:['nil']].
-		internalListHolder root: nil.
-	].
-	^ internalListHolder
-
-	"Created: / 20-09-2014 / 23:03:07 / Jan Vrany <jan.vrany@fit.cvut.cz>"
-	"Modified: / 06-06-2017 / 23:33:07 / Jan Vrany <jan.vrany@fit.cvut.cz>"
 ]
 
 { #category : #aspects }

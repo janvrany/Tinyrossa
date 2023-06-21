@@ -14,6 +14,14 @@ TRILNodePrinter class >> new [
 	^ self basicNew initialize.
 ]
 
+{ #category : #queries }
+TRILNodePrinter >> hasPrinted: node [
+	"Return true, if this printer has already printed given node"
+	
+	^printed includes: node
+	
+]
+
 { #category : #initialization }
 TRILNodePrinter >> initialize [
 	printed := Set new.
@@ -29,6 +37,11 @@ TRILNodePrinter >> print: node on: aStream [
 	| opcode |
 
 	opcode := node opcode.
+	
+	(self hasPrinted: node) ifTrue:[
+		aStream nextPutAll: '==> '.
+	].
+	
 
 	aStream nextPutAll: opcode name.
 	aStream space.
@@ -61,4 +74,15 @@ TRILNodePrinter >> print: node on: aStream [
 		].
 	].
 	printed add: node.
+]
+
+{ #category : #printing }
+TRILNodePrinter >> printId: node [
+	^String streamContents:[ :s | self printId: node on: s]
+]
+
+{ #category : #printing }
+TRILNodePrinter >> printId: node on: aStream [
+	aStream nextPut: $N.
+	aStream nextPutAll: (node id printPaddedWith: $0 to: 3 base: 10).
 ]
