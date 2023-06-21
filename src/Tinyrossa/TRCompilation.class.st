@@ -59,6 +59,7 @@ TRCompilation >> compile [
 	"Compile generated IL to machine code."
 
 	cfg linearize.
+	self verify.
 	self codegen generate.
 	self isAOT ifTrue: [ 
 		| objgen |    
@@ -156,4 +157,12 @@ TRCompilation >> setFunctionSymbol: aTRFunctionSymbol [
 { #category : #accessing }
 TRCompilation >> symbolManager [
 	^ symbolManager
+]
+
+{ #category : #verification }
+TRCompilation >> verify [
+	"Make sure the current TRIL is well-formed. No-op if it is,
+	 throws an error if it's not."
+
+	(TRILVerifier forCompilation: self) verify
 ]
