@@ -92,6 +92,7 @@ TRCompilationTestCase >> test01_bytecode_abs [
 	builder := TRILBytecodeFunctionBuilder forCompilation: compilation.
 	builder defineName: 'abs' type: Int32.
 	builder defineParameter: 'x' type: Int32.
+	builder defineState: TRVMOperandStack new.
 
 	temps := #('x').
 

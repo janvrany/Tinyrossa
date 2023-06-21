@@ -364,6 +364,7 @@ TRCompilationExamples >> example08_bytecode_compiler [
 	builder defineParameter: 'x' type: Int32.
 	builder defineAutomatic: 'i' type: Int32.
 	builder defineAutomatic: 'r' type: Int32.
+	builder defineState: TRVMOperandStack new.
 
 	temps := #('x' 'i' 'r').
 	bytecodeBuilders := (33 to: 53) collect: [ :i | builder orphan ].
