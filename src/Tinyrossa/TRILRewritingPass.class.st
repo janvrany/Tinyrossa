@@ -14,7 +14,7 @@ TRILRewritingPass >> evaluate: node [
 			node replace: original with: simplified
 		].
 	].
-	^ super evaluate: node
+	^ self rewrite: (super evaluate: node)
 ]
 
 { #category : #evaluation }
@@ -25,7 +25,12 @@ TRILRewritingPass >> evaluateChildren: node [
 
 { #category : #rewriting }
 TRILRewritingPass >> rewrite: aTRILNode [
-	^ aTRILNode
+	"Possibly rewrite given node and return either
+		* a new node that should be used instead of this one or,
+		* `aTRILNode` (the parameter) if this node should be left
+		  intact."
+
+	^ self subclassResponsibility
 ]
 
 { #category : #optimizing }

@@ -59,5 +59,10 @@ TRILCommoner >> evaluate: node [
 TRILCommoner >> evaluate_bbstart: node [
 	stores := Dictionary new.
 	loads := Dictionary new.
-	^ node
+	^ super evaluate_bbstart: node
+]
+
+{ #category : #rewriting }
+TRILCommoner >> rewrite: aTRILNode [
+	^ self common: aTRILNode
 ]

@@ -27,13 +27,8 @@ TRILSimplifier >> builder [
 	^ TRILBuilder forCompilation: compilation
 ]
 
-{ #category : #evaluation }
-TRILSimplifier >> evaluate: node [
-	^ self simplify: (super evaluate: node)
-]
-
-{ #category : #optimizing }
-TRILSimplifier >> simplify: original [
+{ #category : #rewriting }
+TRILSimplifier >> rewrite: original [
 	| simplified |
 
 	simplified := original.
