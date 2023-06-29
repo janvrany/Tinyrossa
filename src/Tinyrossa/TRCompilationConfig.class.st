@@ -62,6 +62,23 @@ TRCompilationConfig >> objectFile: aString [
 ]
 
 { #category : #options }
+TRCompilationConfig >> optimizationPasses [
+	^ options at: OptionOptimizationPasses ifAbsent:[ 
+		"Default optimization pipeline"
+		{
+			TRCFGSimplifier .
+			TRILCommoner .
+			TRILSimplifier .  
+		}
+	].
+]
+
+{ #category : #options }
+TRCompilationConfig >> optimizationPasses: passes [
+	options at: OptionOptimizationPasses put: passes
+]
+
+{ #category : #options }
 TRCompilationConfig >> registerAllocatorClass [
 	^ options at: OptionRegisterAllocator ifAbsent: [ TRRegisterAllocator defaultClass ]
 ]

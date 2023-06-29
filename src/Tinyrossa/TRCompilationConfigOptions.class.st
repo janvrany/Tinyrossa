@@ -5,6 +5,7 @@ Class {
 		'OptionAOT',
 		'OptionLinkage',
 		'OptionObjectFile',
+		'OptionOptimizationPasses',
 		'OptionRegisterAllocator',
 		'OptionTarget',
 		'OptionVerifyAfterEachOptimizationPass'
@@ -21,4 +22,5 @@ TRCompilationConfigOptions class >> initialize [
 	OptionAOT := #OptionAOT.
 	OptionObjectFile := #OptionObjectFile.
 	OptionVerifyAfterEachOptimizationPass := #OptionVerifyAfterEachOptimizationPass.
+	OptionOptimizationPasses := #OptionOptimizationPasses.
 ]
