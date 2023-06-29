@@ -88,7 +88,7 @@ TRCodeGenerator >> evaluator [
 
 { #category : #'accessing - config' }
 TRCodeGenerator >> evaluatorClass [
-	self subclassResponsibility
+	^ self subclassResponsibility
 ]
 
 { #category : #'code gen-phases' }
