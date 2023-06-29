@@ -2,16 +2,22 @@ Class {
 	#name : #TRILSimplifier,
 	#superclass : #TRILRewritingPass,
 	#classVars : [
-		'ArithmeticSimplificationTable'
+		'ArithmeticSimplificationTable',
+		'ConditionalBranchSimplificationTable'
 	],
 	#pools : [
-		'TRILOpcodes'
+		'TRILOpcodes',
+		'TRDataTypes',
+		'TRILOpcodeProps1',
+		'TRILOpcodeProps3'
 	],
 	#category : #'Tinyrossa-Optimizer'
 }
 
 { #category : #initialization }
 TRILSimplifier class >> initialize [
+	| intComparatorTable |
+
 	ArithmeticSimplificationTable := IdentityDictionary new
 		"FIXME: following is bogus, Xadd is defined as 2's complement wrap-around addition"
 		at: badd put: #+; 
@@ -32,7 +38,24 @@ TRILSimplifier class >> initialize [
 		at: lmul put: #*; 
 
 		"Add more here..."
-		yourself
+		yourself.
+
+	intComparatorTable := SmallDictionary newFromPairs: {
+		"LT" CompareTrueIfLess.                         #<  .
+		"LE" CompareTrueIfLess | CompareTrueIfEqual.    #<= .
+		"EQ" CompareTrueIfEqual.                        #=  .
+		"GE" CompareTrueIfGreater | CompareTrueIfEqual. #>= .
+		"GE" CompareTrueIfGreater.                      #>  .
+		"NE" CompareTrueIfLess | CompareTrueIfGreater.  #~= .   
+	}.
+
+	ConditionalBranchSimplificationTable := SmallDictionary newFromPairs: {
+		Int8    . intComparatorTable .
+		Int16   . intComparatorTable .
+		Int32   . intComparatorTable .
+		Int64   . intComparatorTable .
+		Address . intComparatorTable .
+	}
 ]
 
 { #category : #rewriting }
@@ -42,7 +65,8 @@ TRILSimplifier >> rewrite: original [
 	simplified := original.
 	simplified := self simplifyArithmetic: simplified.
 	simplified := self simplifyStore: simplified.
-	simplified := self simplifyIfCompare: simplified.
+	simplified := self simplifyIfCompare1: simplified.
+	simplified := self simplifyIfCompare2: simplified.
 	"Add more here..."
 	^ simplified
 ]
@@ -81,21 +105,21 @@ TRILSimplifier >> simplifyArithmetic: node [
 ]
 
 { #category : #optimizing }
-TRILSimplifier >> simplifyIfCompare: node [
+TRILSimplifier >> simplifyIfCompare1: node [
 	"
 	Simplifies
 
 		ificmp<eq|ne> <label>
 		  icmp<cond>
 			<value1>
-			<value2
+			<value2>
 		  iconst <0|1>
 
 	to
 
 		ificmp<cond> <label>
 		  <value1>
-		  <value2
+		  <value2>
 
 	"
 	| op |
@@ -121,6 +145,51 @@ TRILSimplifier >> simplifyIfCompare: node [
 			].
 			simplified := TRILNode opcode: ifCmpOp symbol: node symbol children: child1 children.
 			^ simplified
+		].
+	].
+	^ node.
+]
+
+{ #category : #optimizing }
+TRILSimplifier >> simplifyIfCompare2: node [
+	"
+	Simplifies conditional branches where comparison result
+	is known staticallty. For example following: 
+
+		if?cmp?? <label>
+		  ?const <v1>
+		  ?const <v2>
+
+	is simplified to either
+
+		goto <label>
+
+	(if condition always holds) or removed altogether if it does not.
+
+	Note, that this simplification makes some of the blocks unreachable,
+	opening up opportunities for further optimizations.
+
+	"
+	| op |
+
+	op := node opcode.
+	(op isCompareAndBranch and:[ node child1 opcode isLoadConst and: [ node child2 opcode isLoadConst ] ]) ifTrue: [
+		| child1Value child2Value comparator comparison |
+
+		child1Value := node child1 constant.
+		child2Value := node child2 constant.
+
+		comparator := (ConditionalBranchSimplificationTable 
+						at: node child1 type)
+						at: node opcode compareFlags.
+		comparison := child1Value perform: comparator with: child2Value.
+
+		comparison ifTrue: [ 
+			"Condition always holds"
+			^ TRILNode opcode: goto symbol: node symbol
+		] ifFalse: [
+			"Condition never holds"    
+			node block remove: node.
 		].
 	].
 	^ node.

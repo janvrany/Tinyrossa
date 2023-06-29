@@ -47,6 +47,17 @@ TRCFG >> addBlockNamed: aStringOrNil [
 ]
 
 { #category : #accessing }
+TRCFG >> blocks [
+	"Return the list of all *reachable* blocks"
+
+	| reachable |
+
+	reachable := OrderedCollection new: blocks size.
+	self preorderDo: [ :block | reachable add: block ].
+	^ reachable.
+]
+
+{ #category : #accessing }
 TRCFG >> compilation [
 	^compilation
 ]

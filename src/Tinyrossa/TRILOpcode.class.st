@@ -56,6 +56,11 @@ TRILOpcode >> booleanCompareOpcode [
 	^ booleanCompareOpcode
 ]
 
+{ #category : #accessing }
+TRILOpcode >> compareFlags [
+	^ props3 bitAnd: CompareTrueIfMask
+]
+
 { #category : #testing }
 TRILOpcode >> hasChildren [
 	^ children isNil or:[children notEmpty]

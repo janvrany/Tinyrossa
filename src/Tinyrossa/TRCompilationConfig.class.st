@@ -69,6 +69,18 @@ TRCompilationConfig >> optimizationPasses [
 			TRCFGSimplifier .
 			TRILCommoner .
 			TRILSimplifier .  
+
+			"FIXME:
+			 Since TRILSimplifier may have changed CFG, we run
+			 CFG simplifier commoner and TRIL simplifier again.
+			 In theory we may want to run them as long as they
+			 change anything, but that's left as future work.
+			 We should also do this based on hotness, if we ever
+			 get to the point of implementing it."
+
+			TRCFGSimplifier .
+			TRILCommoner .
+			TRILSimplifier .  
 		}
 	].
 ]
