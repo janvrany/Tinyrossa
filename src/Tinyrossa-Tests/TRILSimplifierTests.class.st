@@ -55,3 +55,26 @@ TRILSimplifierTests >> test_simplify_store_01 [
 	self assert: compilation cfg treetops size == 3.
 	self assert: compilation cfg treetops second opcode = ireturn.
 ]
+
+{ #category : #'tests - store' }
+TRILSimplifierTests >> test_simplify_store_02 [
+	| b |
+
+	b := TRILFunctionBuilder forCompilation: compilation.
+	b defineName: testSelector type: Int32.
+	b defineFunction: 'save' type: Int32.
+	b defineAutomatic: 'X' type: Int32.
+	b istore: { 
+		b icall: { 'save' } .
+		"-->" 'X' }.
+	b ireturn: {
+		b iconst: 2 }.
+
+	self assert: compilation cfg treetops size == 4.
+	self assert: compilation cfg treetops second opcode = istore.
+
+	compilation optimize.
+
+	self assert: compilation cfg treetops size == 4.
+	self assert: compilation cfg treetops second opcode = treetop.
+]

@@ -128,16 +128,27 @@ TRILSimplifier >> simplifyIfCompare: node [
 
 { #category : #optimizing }
 TRILSimplifier >> simplifyStore: node [
-	"This simplification removes unnecessary stores into automatics.
+	"This simplification removes unnecessary stores into automatics and parameters."
+	
+	node opcode isStore ifFalse: [ ^node ].
 
-	A store into automatic is unnecessary if there's no other use
-	of that automatic. We can check this by comparing automatic's
-	use count - if it's equal to 1, the it is used (the only use
-	is this very store)."
-	(node opcode isStore 
-		and:[ node symbol isTRAutomaticSymbol 
-		and:[node symbol useCount == 1 ]]) ifTrue: [ 
-		node block remove: node.
+	"A store into automatic (or parameter) is unnecessary if there's 
+	no other use of that automatic (or parameter). We can check this 
+	by comparing symbol's use count - if it's equal to 1, the it is 
+	used (the only use is this very store).
+	
+	We may not simply *remove* that store with all its children 
+	because it's child may have some side-effects. If so, we replace 
+	store with treetop. 
+	"
+	(node symbol useCount == 1
+		and:[node symbol isTRAutomaticSymbol or:[node symbol isTRParameterSymbol]]) ifTrue:[
+		node child1 mayHaveSideeffect ifTrue:[
+			^ TRILNode opcode: treetop children: node children.
+		] ifFalse:[
+			node block remove: node.
+			^node.
+		].
 	].
 	^ node.
 ]

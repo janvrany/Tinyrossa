@@ -117,6 +117,11 @@ TRILOpcode >> isBranch [
 ]
 
 { #category : #testing }
+TRILOpcode >> isCall [
+	^ props1 anyMask: Call
+]
+
+{ #category : #testing }
 TRILOpcode >> isCompare [
 	^ props1 anyMask: BooleanCompare
 ]
@@ -182,6 +187,11 @@ TRILOpcode >> isLoadConst [
 ]
 
 { #category : #testing }
+TRILOpcode >> isLoadOrStore [
+	^ props1 anyMask: Load | Store
+]
+
+{ #category : #testing }
 TRILOpcode >> isLoadVar [
 	^ props1 anyMask: LoadVar
 ]
@@ -216,6 +226,24 @@ TRILOpcode >> isTreeTop [
 { #category : #testing }
 TRILOpcode >> isWriteBarrierStore [
 	^ props3 anyMask: WriteBarrierStore
+]
+
+{ #category : #testing }
+TRILOpcode >> mayHaveSideeffect [
+	"Return `true` if evaluation of any node with this opcode 
+	 (regardless of node's children) may have some sideeffect 
+	 - modify state or change control flow.
+	
+	Note: indirect load is considered as having sideeffect because
+	it may cause segfault. This may be used in certain scenarios to
+	drive execution.
+	"
+	
+	^self isCall 		
+		or:[self isBranch
+		or:[(self isLoadOrStore and:[self isIndirect])]].
+		
+	
 ]
 
 { #category : #accessing }
