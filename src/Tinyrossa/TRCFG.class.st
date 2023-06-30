@@ -218,6 +218,22 @@ TRCFG >> preorderDo: aBlock [
 	].
 ]
 
+{ #category : #operations }
+TRCFG >> prune [
+	"Prune the CFG: discard all unreachable blocks."
+	
+	| unreachable |
+	
+	unreachable := blocks copy.
+	self preorderDo: [ :block | unreachable remove: block ].
+	
+	unreachable do:[ :block |
+			block removeAll. 
+			blocks remove: block.
+	]
+	
+]
+
 { #category : #accessing }
 TRCFG >> treetops [
 	"Return a collection of treetops of every block 

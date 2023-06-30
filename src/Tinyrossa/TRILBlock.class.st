@@ -191,6 +191,11 @@ TRILBlock >> remove: aTRNode [
 ]
 
 { #category : #'adding & removing' }
+TRILBlock >> removeAll [
+	treetops copy do:[:node| self remove: node].
+]
+
+{ #category : #'adding & removing' }
 TRILBlock >> removePrecedessor: aTRILBlock [
 	precedessors notNil ifTrue: [ 
 		precedessors := precedessors copyWithout: aTRILBlock.
