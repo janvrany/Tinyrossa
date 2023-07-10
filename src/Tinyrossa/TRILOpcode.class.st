@@ -203,7 +203,7 @@ TRILOpcode >> isLoadVar [
 
 { #category : #testing }
 TRILOpcode >> isReadBarrierLoad [
-	^ props3 anyMask: ReadBarrierLoad
+	^ props2 anyMask: ReadBarrierLoad
 ]
 
 { #category : #testing }
@@ -230,7 +230,7 @@ TRILOpcode >> isTreeTop [
 
 { #category : #testing }
 TRILOpcode >> isWriteBarrierStore [
-	^ props3 anyMask: WriteBarrierStore
+	^ props2 anyMask: WriteBarrierStore
 ]
 
 { #category : #testing }
