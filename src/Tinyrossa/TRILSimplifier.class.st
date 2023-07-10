@@ -197,9 +197,13 @@ TRILSimplifier >> simplifyIfCompare2: node [
 
 { #category : #optimizing }
 TRILSimplifier >> simplifyStore: node [
-	"This simplification removes unnecessary stores into automatics and parameters."
-	
-	node opcode isStore ifFalse: [ ^node ].
+	"This simplification removes unnecessary stores into automatics and parameters.
+	 It only handles 'plain stores', i.e., does not handle not indirect  stores and write 
+	 barrier stores."
+
+	({ bstore . sstore . istore . lstore . astore . fstore . dstore } includes: node opcode) ifFalse: [ 
+		^ node.
+	].
 
 	"A store into automatic (or parameter) is unnecessary if there's 
 	no other use of that automatic (or parameter). We can check this 
