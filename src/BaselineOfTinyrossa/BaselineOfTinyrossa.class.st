@@ -22,13 +22,16 @@ BaselineOfTinyrossa >> baseline: spec [
 				spec repository: 'github://pharo-contributions/OSSubprocess:v1.3.0'
 			].
 
+			spec baseline: 'LibCompat' with: [
+				spec repository: 'github://janvrany/pharo-hacks'.
+			].
+
 			spec
-				package: #'Tinyrossa-Compat-Pharo' with:[
-					spec requires: 'OSSubprocess'.
-				];
 				package: #'Tinyrossa' with:[
-					spec requires: 'Tinyrossa-Compat-Pharo';
-						 requires: 'ArchC'
+					"LibCompat requires OSSubprocess for its OSProcess implementation."
+					spec requires: 'OSSubprocess'.
+					spec requires: 'LibCompat'.
+					spec requires: 'ArchC'
 				];
 				package: #'Tinyrossa-Tests' with: [
 					spec requires: 'SmallRSP'.

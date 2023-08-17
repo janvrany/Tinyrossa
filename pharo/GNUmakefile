@@ -37,6 +37,13 @@ SMALLRSP_BRANCH ?= master
 $(eval $(call git-clone-local,SMALLRSP_DIR,$(SMALLRSP_URL),$(SMALLRSP_BRANCH)))
 endif
 
+ifndef PHARO_HACKS_DIR
+PHARO_HACKS_DIR    := ../3rdparty/pharo-hacks
+PHARO_HACKS_URL    ?= https://github.com/janvrany/pharo-hacks
+PHARO_HACKS_BRANCH ?= master
+$(eval $(call git-clone-local,PHARO_HACKS_DIR,$(PHARO_HACKS_URL),$(PHARO_HACKS_BRANCH)))
+endif
+
 build: prereq $(PROJECT).image shells
 	@echo ""
 	@echo "To open Pharo $(PROJECT) image run:"
@@ -49,6 +56,7 @@ $(PROJECT).image: ../src/*/*.st
 	$(call pharo-load-local, $@, MachineArithmetic,$(MACHINEARITHMETIC_DIR))
 	$(call pharo-load-local, $@, ArchC,            $(ARCHC_DIR)/src)
 	$(call pharo-load-local, $@, SmallRSP,         $(SMALLRSP_DIR)/src)
+	$(call pharo-load-local, $@, LibCompat,        $(PHARO_HACKS_DIR)/src)
 	$(call pharo-load-local, $@, Tinyrossa,        ../src)
 
 run: build
