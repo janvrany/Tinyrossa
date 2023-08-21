@@ -86,8 +86,10 @@ run: build
 
 test: build
 	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(PHARO_VM_HEADLESS) $(PROJECT).image test --fail-on-failure \
-		"$(PROJECT)" \
-		"$(PROJECT)-Tests"
+		$(PROJECT) \
+		$(PROJECT)-Tests \
+		$(PROJECT)-Tests-RISCV \
+		$(PROJECT)-Tests-POWER
 
 shells:
 	make -C ../shell
