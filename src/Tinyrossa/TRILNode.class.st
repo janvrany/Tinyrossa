@@ -24,6 +24,11 @@ TRILNode class >> new [
 ]
 
 { #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg children: childrenArg [   
+	^ self opcode: opcodeArg symbol: nil constant: nil children: childrenArg
+]
+
+{ #category : #'instance creation' }
 TRILNode class >> opcode: opcodeArg constant: constantArg [
 	^ self opcode: opcodeArg symbol: nil constant: constantArg children: nil
 ]
@@ -136,6 +141,17 @@ TRILNode >> location: aTRLocation [
 	(location notNil and: [ aTRLocation isNil ]) ifTrue: [ self halt ].
 
 	location := aTRLocation.
+]
+
+{ #category : #testing }
+TRILNode >> mayHaveSideeffect [
+	"Return `true` if evaluation of this node (or any of its chilren) 
+	 may have some sideeffect - modify state or change control flow."
+	
+	^opcode mayHaveSideeffect 
+		or:[children notNil and:[children anySatisfy:[:child|child mayHaveSideeffect]]]
+	
+	
 ]
 
 { #category : #accessing }

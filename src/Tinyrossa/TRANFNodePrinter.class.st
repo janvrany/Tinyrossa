@@ -9,7 +9,7 @@ Class {
 
 { #category : #printing }
 TRANFNodePrinter >> print: node on: aStream [
-	self assert: (printed includes: node) not.
+	self assert: (self hasPrinted: node) not.
 	
 	self printId: node on: aStream.
 	aStream nextPutAll: ' = '.
@@ -30,7 +30,6 @@ TRANFNodePrinter >> printId: node on: aStream [
 	(node opcode isTreeTop or: [ node opcode type == Void ]) ifTrue: [ 
 		aStream nextPutAll:'.   '
 	] ifFalse: [
-		aStream nextPut: $N.
-		aStream nextPutAll: (node id printPaddedWith: $0 to: 3 base: 10).
+		super printId: node on: aStream
 	].
 ]

@@ -47,6 +47,17 @@ TRCFG >> addBlockNamed: aStringOrNil [
 ]
 
 { #category : #accessing }
+TRCFG >> blocks [
+	"Return the list of all *reachable* blocks"
+
+	| reachable |
+
+	reachable := OrderedCollection new: blocks size.
+	self preorderDo: [ :block | reachable add: block ].
+	^ reachable.
+]
+
+{ #category : #accessing }
 TRCFG >> compilation [
 	^compilation
 ]
@@ -205,6 +216,22 @@ TRCFG >> preorderDo: aBlock [
 			seen add: block successor1.
 		].      
 	].
+]
+
+{ #category : #operations }
+TRCFG >> prune [
+	"Prune the CFG: discard all unreachable blocks."
+	
+	| unreachable |
+	
+	unreachable := blocks copy.
+	self preorderDo: [ :block | unreachable remove: block ].
+	
+	unreachable do:[ :block |
+			block removeAll. 
+			blocks remove: block.
+	]
+	
 ]
 
 { #category : #accessing }

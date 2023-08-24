@@ -136,3 +136,9 @@ TRSymbolManager >> newLabel: block [
 TRSymbolManager >> newParameter: name type: type index: index [
 	^ TRParameterSymbol name: name type: type index: index
 ]
+
+{ #category : #accessing }
+TRSymbolManager >> symbols [
+	"Return all defined symbols"
+	^symbols 
+]

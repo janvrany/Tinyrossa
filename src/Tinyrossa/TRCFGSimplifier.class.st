@@ -39,6 +39,7 @@ TRCFGSimplifier >> relink: oldSuccessor to: newSuccessor in: block [
 { #category : #optimizing }
 TRCFGSimplifier >> run [
 	[ self simplify ] whileTrue.
+	compilation cfg prune.
 ]
 
 { #category : #optimizing }

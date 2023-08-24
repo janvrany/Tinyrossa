@@ -1,17 +1,14 @@
 Class {
-	#name : #TRILTests,
+	#name : #TRILTestCase,
 	#superclass : #TestCase,
 	#instVars : [
 		'compilation'
-	],
-	#pools : [
-		'TRDataTypes'
 	],
 	#category : #'Tinyrossa-Tests'
 }
 
 { #category : #documentation }
-TRILTests class >> documentation [
+TRILTestCase class >> documentation [
 "
 	documentation to be added.
 
@@ -25,4 +22,14 @@ TRILTests class >> documentation [
 	[see also:]
 
 "
+]
+
+{ #category : #queries }
+TRILTestCase class >> isAbstract [
+	^self == TRILTestCase
+]
+
+{ #category : #running }
+TRILTestCase >> setUp [
+	compilation := TRCompilation forTarget: TRILTestTarget default
 ]

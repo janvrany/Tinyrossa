@@ -65,6 +65,7 @@ test: build
 		--load BaselineOf$(PROJECT) \
 		--run Builder::ReportRunner -r Builder::TestReport --fail-on-failure \
 			-p $(PROJECT) \
+			-p $(PROJECT)-Tests \
 			-p $(PROJECT)-Tests-RISCV \
 			-p $(PROJECT)-Tests-POWER
 

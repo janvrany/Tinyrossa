@@ -5,8 +5,10 @@ Class {
 		'OptionAOT',
 		'OptionLinkage',
 		'OptionObjectFile',
+		'OptionOptimizationPasses',
 		'OptionRegisterAllocator',
-		'OptionTarget'
+		'OptionTarget',
+		'OptionVerifyAfterEachOptimizationPass'
 	],
 	#category : #'Tinyrossa-Config'
 }
@@ -19,4 +21,6 @@ TRCompilationConfigOptions class >> initialize [
 	OptionRegisterAllocator := #RegisterAllocator.
 	OptionAOT := #OptionAOT.
 	OptionObjectFile := #OptionObjectFile.
+	OptionVerifyAfterEachOptimizationPass := #OptionVerifyAfterEachOptimizationPass.
+	OptionOptimizationPasses := #OptionOptimizationPasses.
 ]

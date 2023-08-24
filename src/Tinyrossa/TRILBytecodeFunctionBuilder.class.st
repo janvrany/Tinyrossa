@@ -30,9 +30,19 @@ TRILBytecodeFunctionBuilder >> defineParameter: name type: type [
 	^ compilation symbolManager defineParameter: name type: type
 ]
 
-{ #category : #initialization }
-TRILBytecodeFunctionBuilder >> initializeWithCompilation: aTRCompilation block: aTRILBlock [
-	super initializeWithCompilation: aTRCompilation block: aTRILBlock.
-	entryState := TRVMOperandStack new. "<<< BOGUS, client should set it!"
-	currentState := entryState copy.
+{ #category : #'defining state' }
+TRILBytecodeFunctionBuilder >> defineState: vmState [
+	"Define initial (simulated) 'VM' state, if there's any.
+
+	 Users of bytecode builders typically want to do something
+	 like:
+
+		functionBuilder defineState: TRVMOperandStack new.
+
+	 Of course, depending on the VM, VM state may be more 
+	 complicated than just (simulated interpreter) stack.
+	 Users may set initial state to any custom object as long
+	 as it conforms to API.
+	 "
+	 self entryState: vmState.
 ]

@@ -62,6 +62,35 @@ TRCompilationConfig >> objectFile: aString [
 ]
 
 { #category : #options }
+TRCompilationConfig >> optimizationPasses [
+	^ options at: OptionOptimizationPasses ifAbsent:[ 
+		"Default optimization pipeline"
+		{
+			TRCFGSimplifier .
+			TRILCommoner .
+			TRILSimplifier .  
+
+			"FIXME:
+			 Since TRILSimplifier may have changed CFG, we run
+			 CFG simplifier commoner and TRIL simplifier again.
+			 In theory we may want to run them as long as they
+			 change anything, but that's left as future work.
+			 We should also do this based on hotness, if we ever
+			 get to the point of implementing it."
+
+			TRCFGSimplifier .
+			TRILCommoner .
+			TRILSimplifier .  
+		}
+	].
+]
+
+{ #category : #options }
+TRCompilationConfig >> optimizationPasses: passes [
+	options at: OptionOptimizationPasses put: passes
+]
+
+{ #category : #options }
 TRCompilationConfig >> registerAllocatorClass [
 	^ options at: OptionRegisterAllocator ifAbsent: [ TRRegisterAllocator defaultClass ]
 ]
@@ -74,4 +103,14 @@ TRCompilationConfig >> registerAllocatorClass: aClass [
 { #category : #options }
 TRCompilationConfig >> target [
 	^ options at: OptionTarget ifAbsent: [ self error:'Oops, no target specified!' ]
+]
+
+{ #category : #options }
+TRCompilationConfig >> verifyAfterEachOptimizationPass [
+	^ options at: OptionVerifyAfterEachOptimizationPass ifAbsent:[ true ]
+]
+
+{ #category : #options }
+TRCompilationConfig >> verifyAfterEachOptimizationPass: aBoolean [
+	^ options at: OptionVerifyAfterEachOptimizationPass put: aBoolean
 ]

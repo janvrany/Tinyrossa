@@ -364,6 +364,7 @@ TRCompilationExamples >> example08_bytecode_compiler [
 	builder defineParameter: 'x' type: Int32.
 	builder defineAutomatic: 'i' type: Int32.
 	builder defineAutomatic: 'r' type: Int32.
+	builder defineState: TRVMOperandStack new.
 
 	temps := #('x' 'i' 'r').
 	bytecodeBuilders := (33 to: 53) collect: [ :i | builder orphan ].
@@ -542,6 +543,38 @@ TRCompilationExamples >> example12_call_external_function [
 		{ builder icall: 
 			{ 'callee' } }.
 
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. "Only convenience inspection."
+]
+
+{ #category : #examples }
+TRCompilationExamples >> example13_indirect_call [
+	"This example shows how to call a function indirectly,
+	 that is, when you have function's address only at runtime
+	 (passed as parameter, loaded from function table and so on).
+
+	 In this case, we provide function address as a first child
+	 of Xcalli node. However, we still must provide symbol for
+	 the called method that specifies return type, linkage (calling
+	 convention) and so on. Think of this symbol as of 'prototype' 
+	 in C / C++.
+	"
+	| builder|
+
+	builder := compilation builder.
+	builder defineName: 'caller' type: Int32.
+	builder defineFunction: 'callee' type: Int32.
+	"Note, that we do NOT provide an address of callee
+	 via setAddress:!"
+
+	builder ireturn: 
+		{ builder icalli: 
+			{ builder aconst: 16r000000007AFECAFE .
+			  'callee' } }.
 
 	compilation optimize.
 
