@@ -37,8 +37,6 @@ TRPPC64CompilationTests >> test01_bytecode_abs [
 TRPPC64CompilationTests >> test02_iconst_n [
 	| debugger |
 
-	self skip: 'Skipped since #loadConstant32:into: is not implemented for POWER'.
-
 	super test02_iconst_n.
 	debugger := shell debugger.
 	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
@@ -52,8 +50,6 @@ TRPPC64CompilationTests >> test02_iconst_n [
 { #category : #tests }
 TRPPC64CompilationTests >> test02_iconst_p [
 	| debugger |
-
-	self skip: 'Skipped since #loadConstant32:into: is not implemented for POWER'.
 
 	super test02_iconst_p.
 	debugger := shell debugger.

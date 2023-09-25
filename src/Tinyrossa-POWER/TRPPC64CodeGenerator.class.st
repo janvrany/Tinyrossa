@@ -6,7 +6,8 @@ Class {
 		'MaxDFormImm'
 	],
 	#pools : [
-		'TRPPC64Registers'
+		'TRPPC64Registers',
+		'TRIntLimits'
 	],
 	#category : #'Tinyrossa-POWER-Codegen'
 }
@@ -30,6 +31,23 @@ TRPPC64CodeGenerator >> evaluatorClass [
 { #category : #queries }
 TRPPC64CodeGenerator >> fitsInDFormImm: anInteger [
 	^ anInteger between: MinDFormImm and: MaxDFormImm
+]
+
+{ #category : #utilities }
+TRPPC64CodeGenerator >> loadConstant32: value into: reg [
+	self assert: (value between: INT32_MIN and: INT32_MAX).
+
+	(value between: INT16_MIN and: INT16_MAX) ifTrue: [ 
+		generate li: reg, value.
+	] ifFalse: [ 
+		| hi lo |
+
+		lo := (value & 16r0000FFFF).
+		hi := (value & 16rFFFFFFFF) >> 16.
+
+		generate lis: reg, hi;
+				 ori: reg, reg, lo.
+	].
 ]
 
 { #category : #registers }
