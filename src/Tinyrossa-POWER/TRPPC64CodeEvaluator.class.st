@@ -9,6 +9,16 @@ Class {
 }
 
 { #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_aconst: node [
+	^self evaluate_lconst: node
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_bconst: node [
+	^ self evaluate_iconst: node
+]
+
+{ #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_goto: node [
 	generate b: node symbol.
 	^ nil
@@ -40,8 +50,7 @@ TRPPC64CodeEvaluator >> evaluate_iconst: node [
 
 	dstReg := self codegen allocateRegister.
 
-	generate 
-		li: dstReg, node constant.
+	codegen loadConstant32: node constant into: dstReg.
 
 	^ dstReg
 ]
@@ -172,4 +181,20 @@ TRPPC64CodeEvaluator >> evaluate_isub: node [
 	generate extsw: dstReg, dstReg.
 
 	^ dstReg
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_lconst: node [
+	| dstReg |
+
+	dstReg := self codegen allocateRegister.
+
+	codegen loadConstant64: node constant into: dstReg.
+
+	^ dstReg
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_sconst: node [
+	^ self evaluate_iconst: node
 ]
