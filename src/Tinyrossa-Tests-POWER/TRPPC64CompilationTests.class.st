@@ -13,10 +13,6 @@ TRPPC64CompilationTests >> setUp [
 TRPPC64CompilationTests >> test01_bytecode_abs [
 	| debugger |
 
-	(TRPPC64CodeEvaluator >> #evaluate_icmpgt:) isNil ifTrue: [
-		self skip: 'Skipped since #evaluate_icmpgt: is not implemented for POWER'
-	].
-
 	super test01_bytecode_abs.
 	"
 	VDBDebuggerAp
@@ -140,10 +136,6 @@ TRPPC64CompilationTests >> test_example04_factorial_i [
 { #category : #'tests - examples' }
 TRPPC64CompilationTests >> test_example08_bytecode_compiler [
 	| debugger |
-
-	(TRPPC64CodeEvaluator >> #evaluate_icmpgt:) isNil ifTrue: [
-		self skip: 'Skipped since #evaluate_icmpgt: is not implemented for POWER'
-	].
 
 	TRCompilationExamples new
 		compilation: compilation;
