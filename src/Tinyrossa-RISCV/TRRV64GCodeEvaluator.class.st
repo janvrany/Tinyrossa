@@ -45,9 +45,9 @@ TRRV64GCodeEvaluator >> evaluate_Xloadi: node [
 	"FIXME: we can do better by checking for loads in form
 	
 	   Xloadi 
-	     aXadd
-	        ...
-	        Xconst offset
+		 aXadd
+			...
+			Xconst offset
 	
 	 and check if offset fits into displacement immediate and if
 	 so, generate 
@@ -482,6 +482,64 @@ TRRV64GCodeEvaluator >> evaluate_lstore: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lsub: node [
 	^self emitBin: node opcodeR: 'sub' opcodeI: 'addi'
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_overflowchk: node [
+	| operationNode src1Reg src2Reg |
+
+	self assert: node child1 opcode mayOverflow.  
+	self assert: node child1 child1 == node child2.
+	self assert: node child1 child2 == node child3.
+
+	operationNode := node child1.
+	src1Reg := self evaluate: operationNode child1.
+	src2Reg := self evaluate: operationNode child2.      
+
+	operationNode opcode isAdd ifTrue: [ 
+		operationNode type == Int32 ifTrue: [ 
+			| dstReg tmpReg |
+
+			dstReg := self evaluate: operationNode.
+			tmpReg := self codegen allocateRegister.
+
+			generate
+				add: tmpReg, src1Reg, src2Reg;
+				bne: dstReg, tmpReg, node symbol.
+
+			^ nil.            
+		].
+	].
+	operationNode opcode isMul ifTrue: [ 
+		operationNode type == Int32 ifTrue: [ 
+			| dstReg tmpReg |
+
+			dstReg := self evaluate: operationNode.
+			tmpReg := self codegen allocateRegister.
+
+			generate
+				mul: tmpReg, src1Reg, src2Reg;
+				bne: dstReg, tmpReg, node symbol.
+
+			^ nil.            
+		].
+		operationNode type == Int64 ifTrue: [
+			| dstReg tmp1Reg tmp2Reg |
+
+			dstReg := self evaluate: operationNode.
+			tmp1Reg := self codegen allocateRegister.      
+			tmp2Reg := self codegen allocateRegister.      
+
+			generate
+				mulh: tmp1Reg, src1Reg, src2Reg;
+				srai: tmp2Reg, dstReg, 63;
+				bne: tmp1Reg, tmp2Reg, node symbol.
+
+			^ nil
+		]
+
+	].
+	self error: 'Operation or type not yet supported'
 ]
 
 { #category : #evaluation }

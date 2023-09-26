@@ -169,3 +169,48 @@ TRPPC64CompilationTests >> test_example09_signum_2 [
 	debugger c.
 	self assert: (debugger getRegister: 'r4') equals: 0.
 ]
+
+{ #category : #'tests - examples' }
+TRPPC64CompilationTests >> test_example15_add_with_overflow_check [
+	| debugger |
+
+	(TRPPC64CodeEvaluator methodDictionary at: #evaluate_overflowchk: ifAbsent:[nil]) isNil ifTrue: [
+		self skip: 'Skipped since #evaluate_overflowchk: is not implemented for POWER'
+	].
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example15_add_with_overflow_check.
+
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'r4' to: 0x7FFFFFFE.
+	debugger setRegister: 'r5' to:          2.
+	debugger c.
+	self assert: (debugger getRegister: 'gr4') equals: 0.
+]
+
+{ #category : #'tests - examples' }
+TRPPC64CompilationTests >> test_example16_factorial_i_with_overflow [
+	| debugger |
+
+	(TRPPC64CodeEvaluator methodDictionary at: #evaluate_overflowchk: ifAbsent:[nil]) isNil ifTrue: [
+		self skip: 'Skipped since #evaluate_overflowchk: is not implemented for POWER'
+	].
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example16_factorial_i_with_overflow.
+
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'r4' to: 13.
+	debugger c.
+	self assert: (debugger getRegister: 'r4') equals: -1.
+
+
+	"
+	13 factorial > 0x7FFFFFFF
+	22 factorial > 0x7FFFFFFFFFFFFFFF
+	"
+]

@@ -180,3 +180,40 @@ TRRV64GCompilationTests >> test_example09_signum_2 [
 	debugger c.
 	self assert: (debugger getRegister: 'a0') equals: -1.
 ]
+
+{ #category : #'tests - examples' }
+TRRV64GCompilationTests >> test_example15_add_with_overflow_check [
+	| debugger |
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example15_add_with_overflow_check.
+
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'a0' to: 16r7FFFFFFE.
+	debugger setRegister: 'a1' to:          2.
+	debugger c.
+	self assert: (debugger getRegister: 'a0') equals: 0.
+]
+
+{ #category : #'tests - examples' }
+TRRV64GCompilationTests >> test_example16_factorial_i_with_overflow [
+	| debugger |
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example16_factorial_i_with_overflow.
+
+	debugger := shell debugger.
+	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
+	debugger setRegister: 'a0' to: 13.
+	debugger c.
+	self assert: (debugger getRegister: 'a0') equals: -1.
+
+
+	"
+	13 factorial > 0x7FFFFFFF
+	22 factorial > 0x7FFFFFFFFFFFFFFF
+	"
+]
