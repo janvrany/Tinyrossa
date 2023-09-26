@@ -584,6 +584,92 @@ TRCompilationExamples >> example13_indirect_call [
 ]
 
 { #category : #examples }
+TRCompilationExamples >> example15_add_with_overflow_check [
+	| builder handler add |
+
+	"Define function add_with_overflow which adds two integers
+	 (`a` and `b`) and returns its sum or zero, of addition overflows."
+
+	builder := compilation builder.
+	builder defineName: 'add_with_overflow_check' type: Int32.
+	builder defineParameter: 'a' type: Int32.
+	builder defineParameter: 'b' type: Int32.
+	builder defineAutomatic: 't' type: Int32.
+
+	"First, define overflow handler:"
+	handler := builder orphan.
+	handler ireturn: { handler iconst: 0 }.
+
+	"Now, build the main body"
+	add := builder iadd: { builder iload:'a' . builder iload: 'b' }.
+	builder overflowchk: { add . add child1 . add child2 . handler }.
+	builder ireturn: { add }.
+
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. "Only convenience inspection."
+]
+
+{ #category : #examples }
+TRCompilationExamples >> example16_factorial_i_with_overflow [
+	"Like #example04_factorial_i but return -1 on overflow"
+
+	| builder handler |
+
+	builder := compilation builder.
+	builder defineName: 'factorial_i' type: Int32.
+	builder defineParameter: 'x' type: Int32.   
+	builder defineAutomatic: 'r' type: Int32.
+
+	"
+	def factorial_i(x):
+		r = 1
+		while x > 0:
+			r = r * x
+			x = x - 1
+		return r
+	"
+
+	handler := builder orphan.
+
+	builder 
+		"r = 1"
+		istore: { 
+			builder iconst: 1 . 
+			'r' };
+
+		"while x > 0:"
+		while: (builder icmpgt: { builder iload: 'x' . builder iconst: 0  }) do: [:builder |
+			| rMx |
+
+			"r = r * x on overflow go to handler"
+
+			rMx := (builder imul: { builder iload: 'r' . builder iload: 'x' }).
+			builder overflowchk: { rMx . rMx child1 . rMx child2 . "on overflow go to" handler }.            
+			builder istore: {
+				rMx .
+				'r' }.
+			"x = x - 1"
+			builder istore: {
+				(builder isub: { builder iload: 'x' . builder iconst: 1 }) .
+				'x' }
+		];
+		"return r"
+		ireturn: { builder iload: 'r' }.
+
+	handler ireturn: { handler iconst: -1 }.
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. "Only convenience inspection."
+]
+
+{ #category : #examples }
 TRCompilationExamples >> example17_call_external_function_in_aot_mode [
 	| builder |
 
