@@ -59,7 +59,7 @@ TRILNodePrinter >> print: node on: aStream [
 			].
 		]
 	] ifFalse: [ 
-		(opcode hasSymbolRef or:[opcode isBranch]) ifTrue: [ 
+		(opcode hasSymbolRef or:[opcode isBranching]) ifTrue: [ 
 			aStream nextPutAll: node symbol name
 		] ifFalse: [ 
 			opcode isLoadConst ifTrue: [

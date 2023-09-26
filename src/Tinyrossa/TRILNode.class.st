@@ -129,6 +129,11 @@ TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constant
 	children := childrenArg.
 ]
 
+{ #category : #testing }
+TRILNode >> isTRILNode [
+	^true
+]
+
 { #category : #accessing }
 TRILNode >> location [
 	^ location
@@ -266,7 +271,7 @@ TRILNode >> setResult: vreg [
 
 { #category : #accessing }
 TRILNode >> symbol [
-	self assert: (opcode hasSymbolRef or: [ opcode isBranch ]).
+	self assert: (opcode hasSymbolRef or: [ opcode isBranching ]).
 	^ symbol
 ]
 

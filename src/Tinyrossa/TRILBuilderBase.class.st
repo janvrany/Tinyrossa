@@ -663,11 +663,11 @@ TRILBuilderBase >> build: opcode arguments: arguments [
 	opcode isLoadConst ifTrue: [ 
 		self assert: arguments isCollection not description: 'Invalid arguments'.
 		constant := arguments.
-	] ifFalse: [ ((opcode hasSymbolRef or: [opcode isBranch]) and: [ opcode hasChildren not ]) ifTrue: [
+	] ifFalse: [ ((opcode hasSymbolRef or: [opcode isBranching]) and: [ opcode hasChildren not ]) ifTrue: [
 		symref := arguments.
 	] ifFalse: [  
 		self assert: arguments isCollection description: 'Invalid arguments'.
-		(opcode hasSymbolRef or: [opcode isBranch]) ifTrue: [ 
+		(opcode hasSymbolRef or: [opcode isBranching]) ifTrue: [ 
 			symref := arguments last.
 			children := arguments allButLast.
 		] ifFalse: [ 
@@ -678,13 +678,13 @@ TRILBuilderBase >> build: opcode arguments: arguments [
 	"Resolve symbol if any"
 	symref notNil ifTrue: [
 		self assert: (opcode hasSymbolRef or: [opcode isBranch]).
-		opcode hasSymbolRef ifTrue: [ 
-			symbol := compilation symbolManager lookupSymbolByName: symref.
-		] ifFalse: [
+		opcode isBranching ifTrue: [ 
 			| target |
 
 			target := self transferTo: symref.
 			symbol := compilation symbolManager defineLabel: target.
+		] ifFalse: [
+			symbol := compilation symbolManager lookupSymbolByName: symref.
 		].
 	].
 
