@@ -112,6 +112,11 @@ TRILOpcode >> inspectorExtraAttributes [
 ]
 
 { #category : #testing }
+TRILOpcode >> isAdd [
+	^ props1 anyMask: Add
+]
+
+{ #category : #testing }
 TRILOpcode >> isArithmetic [
 	^ props1 anyMask: (Add | Sub | Mul | Div | Rem)
 ]
@@ -215,6 +220,11 @@ TRILOpcode >> isLoadVar [
 ]
 
 { #category : #testing }
+TRILOpcode >> isMul [
+	^ props1 anyMask: Mul
+]
+
+{ #category : #testing }
 TRILOpcode >> isReadBarrierLoad [
 	^ props2 anyMask: ReadBarrierLoad
 ]
@@ -227,6 +237,11 @@ TRILOpcode >> isReturn [
 { #category : #testing }
 TRILOpcode >> isStore [
 	^ props1 anyMask: Store
+]
+
+{ #category : #testing }
+TRILOpcode >> isSub [
+	^ props1 anyMask: Sub
 ]
 
 { #category : #testing }
@@ -260,6 +275,13 @@ TRILOpcode >> mayHaveSideeffect [
 	^self isCall                
 		or:[self isBranching
 		or:[(self isLoadOrStore and:[self isIndirect])]].
+]
+
+{ #category : #testing }
+TRILOpcode >> mayOverflow [
+	"Return true, if this opcode may cause arithmetic overflow or underflow"
+
+	^ props1 anyMask: Add | Sub | Mul
 ]
 
 { #category : #accessing }
