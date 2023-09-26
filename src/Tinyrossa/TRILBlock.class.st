@@ -9,9 +9,10 @@ It might be nil if there's no branch in block's treetops.
 
 A block `#isTerminated` if last treetop is either return or unconditional 
 branch. In this case, no more treetops can be added. 
-A block `#isClosed` if last treetop is either return or branch (regardless
-whether conditional or unconditional). No more treetops can be added to
-closed blocks.
+
+A block `#isBranching` if it contains 'branching' node (either branch or check
+node, see `TRILNode >> #isBranch` and `#isCheck`. Each block may contain
+at most one 'branching' node, but it need not be the last one.
 
 "
 Class {
@@ -52,7 +53,8 @@ TRILBlock class >> new [
 { #category : #'adding & removing' }
 TRILBlock >> add: aTRNode [
 	self assert: aTRNode opcode isTreeTop description: 'Invalid node (not a treetop)'.
-	self assert: self isClosed not description: 'Cannot add more treetops to closed block'.
+	self assert: self isTerminated not description: 'Cannot add more treetops to closed block'.
+	self assert:(aTRNode opcode isBranching not or: [ self isBranching not ]) description: 'Cannot add another branching node to block which already branches'.
 
 	treetops add: aTRNode.
 	aTRNode setBlock: self.
@@ -63,7 +65,7 @@ TRILBlock >> add: aTRNode [
 		 is unreachable from this block."
 		self setSuccessor1: nil.
 	].
-	aTRNode opcode isBranch ifTrue: [ 
+	aTRNode opcode isBranching ifTrue: [ 
 		self setSuccessor2: aTRNode symbol block.
 	].
 ]
@@ -103,12 +105,11 @@ TRILBlock >> initializeWithCFG: aTRCFG name: aString [
 ]
 
 { #category : #testing }
-TRILBlock >> isClosed [
-	| last |
+TRILBlock >> isBranching [
+	| branching |
 
-	treetops isEmpty ifTrue: [ ^ false ].
-	last := treetops last.
-	^ last opcode isReturn or: [ last opcode isBranch ]
+	branching := treetops contains: [:node | node opcode isBranching ].
+	^ branching
 ]
 
 { #category : #testing }
@@ -190,7 +191,7 @@ TRILBlock >> remove: aTRNode [
 
 	treetops remove: aTRNode.
 	aTRNode decUseCount.
-	aTRNode opcode isBranch ifTrue: [ 
+	aTRNode opcode isBranching ifTrue: [ 
 		self setSuccessor2: nil
 	].
 ]
@@ -213,26 +214,30 @@ TRILBlock >> replace: oldNode with: newNode [
 
 	self assert: oldNode opcode isTreeTop description: 'Invalid node (not a treetop)'.
 	self assert: (treetops includes: oldNode).
+	self assert:((oldNode opcode isBranching == newNode opcode isBranching == true) "we're either replacing branch with branch..."
+				 or:[(newNode opcode isBranching and:[ self isBranching not])       "...or we're creating branch in non-branching block..."
+				 or:[ newNode opcode isBranching not ]])                           "...or we're replacing with non-branching node."
+		description: 'Invalid node (block can contain at most one branching node)'.
+
 	index := treetops indexOf: oldNode.
-	self assert: (index == treetops size or: [ newNode opcode isReturn not and: [ newNode opcode isBranch not ] ])
-		 description: 'Invalid replacement node (cannot replace non-last node with return or branch)'.
+	self assert:(index == treetops size or: [newNode opcode isReturn not and:[ newNode opcode isGoto not]])
+		description: 'Invalid node (cannot replace non-last node with return or goto)'.
 
 	treetops at: index put: newNode.
 	newNode setBlock: self.
 	newNode location: oldNode location.
 	newNode incUseCount.
 	oldNode decUseCount.
-
-	index == treetops size ifTrue: [ 
-		"We're replacing last node, update successors."
-		(newNode opcode isReturn or:[ newNode opcode isGoto ]) ifTrue: [
-			"Reset successor1 if we're returning or branching off since it 
-			 is unreachable from this block."
-			self setSuccessor1: nil.
-		].
-		newNode opcode isBranch ifTrue: [ 
-			self setSuccessor2: newNode symbol block.
-		].
+	oldNode opcode isBranching ifTrue: [ 
+		self setSuccessor2: nil.
+	].
+	newNode opcode isBranching ifTrue: [ 
+		self setSuccessor2: newNode symbol block.
+	].
+	(newNode opcode isReturn or:[ newNode opcode isGoto ]) ifTrue: [
+		"Reset successor1 if we're returning or branching off since it 
+		 is unreachable from this block."
+		self setSuccessor1: nil.
 	].
 ]
 
@@ -262,7 +267,7 @@ TRILBlock >> setSuccessor1: blockOrNil [
 { #category : #initialization }
 TRILBlock >> setSuccessor2: block [
 	self assert: (block isNil or:[block isTRILBlock]).
-	self assert: (block isNil or:[treetops last opcode isBranch]).
+	self assert: (block isNil or:[treetops contains:[:node | node opcode isBranching]]).
 
 	successor2 notNil ifTrue: [ 
 		successor2 removePrecedessor: self.

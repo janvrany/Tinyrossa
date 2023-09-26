@@ -75,4 +75,9 @@ TRILVerifier >> verifyNode: aTRILNode [
 	
 	self assert: (allInProcessedBlocks includes: aTRILNode) not
 	description: 'Nodes shared across basic blocks'.
+		
+	aTRILNode opcode isBranching ifTrue:[
+		self assert: (allInCurrentBlock contains:[:node | node opcode isBranching]) not
+		description: 'Two branching nodes in single block'
+	].
 ]

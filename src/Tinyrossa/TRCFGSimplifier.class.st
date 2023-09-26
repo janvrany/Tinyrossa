@@ -26,13 +26,13 @@ TRCFGSimplifier >> relink: oldSuccessor to: newSuccessor in: block [
 		block setSuccessor1: newSuccessor.
 	].
 	block successor2 == oldSuccessor ifTrue: [ 
-		| label last |
+		| label branch |
 
 		self assert: newSuccessor notNil.
 
 		label := compilation symbolManager defineLabel: newSuccessor.            
-		last := block treetops at:(block treetops size - 1).
-		block replace: last with: (TRILNode opcode: last opcode symbol: label children: last children).
+		branch := block treetops detect:[:node | node opcode isBranching].
+		block replace: branch with: (TRILNode opcode: branch opcode symbol: label children: branch children).
 
 		self assert: block successor2 == newSuccessor.
 	].
@@ -85,13 +85,14 @@ TRCFGSimplifier >> tryCombine: block [
 	 See Engineering A Compiler, 2nd Edition by Cooper and Torczon,
 		 Section 10.2, page 547.
 	"
-
-
-	"If block has only successor1 and that successor1 has only one
-	 precedessor..."
-	(block successor1 notNil 
-		and: [ block successor2 isNil
-		and: [ block successor1 precedessors size == 1 ]]) ifTrue: [ 
+			
+	"If 1. block has successor1 and
+		2. at most of block and its successor1 contains branch and
+		3. blocks successor1 has only one precedessor..."
+	
+	("1"block successor1 notNil 
+	 "2" and: [ (block isBranching and:[block successor1 isBranching]) not
+	 "3" and: [ block successor1 precedessors size == 1 ]]) ifTrue: [ 
 		"...then block and its successor1 can be combined"
 		| first second treetops |
 

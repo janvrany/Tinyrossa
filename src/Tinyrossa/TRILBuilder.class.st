@@ -29,6 +29,18 @@ TRILBuilder class >> new [
 TRILBuilder >> build: opcode arguments: arguments [
 	| node |
 
+	"If the opcode to be added to current block is branching
+	 and current block already constins branch, we cannot add it
+	 to the current block..."
+	(opcode isBranch and:[current isBranching]) ifTrue:[
+		"...then create new block and transfer to it."
+		| continue |
+
+		continue := compilation cfg addBlock.
+		self fallThroughToBlock: continue.
+		current := continue.
+	].
+
 	node := super build: opcode arguments: arguments.
 	node location: location.
 	^ node

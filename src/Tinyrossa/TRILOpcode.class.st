@@ -122,8 +122,21 @@ TRILOpcode >> isBranch [
 ]
 
 { #category : #testing }
+TRILOpcode >> isBranching [
+	"Return true, if this opcode creates branching in CFG, false
+	 otherwise."
+
+	^ self isBranch or: [ self isCheck ]
+]
+
+{ #category : #testing }
 TRILOpcode >> isCall [
 	^ props1 anyMask: Call
+]
+
+{ #category : #testing }
+TRILOpcode >> isCheck [
+	^ props2 anyMask: Check
 ]
 
 { #category : #testing }
@@ -244,11 +257,9 @@ TRILOpcode >> mayHaveSideeffect [
 	drive execution.
 	"
 	
-	^self isCall 		
-		or:[self isBranch
+	^self isCall                
+		or:[self isBranching
 		or:[(self isLoadOrStore and:[self isIndirect])]].
-		
-	
 ]
 
 { #category : #accessing }
@@ -327,14 +338,14 @@ TRILOpcode >> validateConstant: aNumber [
 
 { #category : #validation }
 TRILOpcode >> validateSymbol: aTRSymbol [
+	self isBranching ifTrue: [ 
+		self assert: aTRSymbol notNil.
+		self assert: aTRSymbol isTRLabelSymbol.
+		^ self.
+	].
 	self hasSymbolRef ifTrue: [ 
 		self assert: aTRSymbol notNil.
 		self assert: aTRSymbol isTRLabelSymbol not.
-		^ self.
-	].
-	self isBranch ifTrue: [ 
-		self assert: aTRSymbol notNil.
-		self assert: aTRSymbol isTRLabelSymbol.
 		^ self.
 	].
 	self assert: aTRSymbol isNil.
