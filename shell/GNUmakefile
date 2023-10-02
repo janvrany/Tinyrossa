@@ -13,7 +13,7 @@ CROSS?=$(ARCH)-linux-gnu-
 all: shell-$(ARCH)
 
 shell-$(ARCH): shell.c shell.link
-	$(CROSS)gcc -ggdb2 -O2 -static -T shell.link -o $@ $<
+	$(CROSS)gcc -ggdb2 -O0 -static -T shell.link -o $@ $<
 
 endif
 
