@@ -142,13 +142,18 @@ TRILBuilder >> location: aTRLocation [
 
 { #category : #'building-blocks' }
 TRILBuilder >> orphan [
+	^ self orphan: nil
+]
+
+{ #category : #'building-blocks' }
+TRILBuilder >> orphan: nameOrNil [
 	"Return a new subbuilder which may be used to build 
 	 code fragments. The code has no relation to the receiver
 	 (hence the name 'orphan') so caller is responsible to pass
 	 control to orphan if it wishes (via `#goto:` or conditional
 	 jump)."
 
-	^ self orphanClass forCompilation: compilation block: compilation cfg addBlock.
+	^ self orphanClass forCompilation: compilation block: (compilation cfg addBlockNamed: nameOrNil).
 ]
 
 { #category : #'building-blocks' }
