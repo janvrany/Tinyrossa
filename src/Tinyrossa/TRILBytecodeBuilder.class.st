@@ -1,10 +1,6 @@
 Class {
 	#name : #TRILBytecodeBuilder,
 	#superclass : #TRILBuilder,
-	#instVars : [
-		'entryState',
-		'currentState'
-	],
 	#category : #'Tinyrossa-IL-Builder-Bytecode'
 }
 
@@ -16,17 +12,18 @@ TRILBytecodeBuilder >> bci: index [
 ]
 
 { #category : #accessing }
+TRILBytecodeBuilder >> currentState [
+	^ current currentState
+]
+
+{ #category : #accessing }
 TRILBytecodeBuilder >> entryState [
-	^ entryState
+	^ entry startState
 ]
 
 { #category : #accessing }
 TRILBytecodeBuilder >> entryState: aTRVMState [
-	self assert: entryState isNil.
-	self assert: currentState isNil.
-
-	entryState := aTRVMState.
-	currentState := aTRVMState copy.
+	entry startState: aTRVMState
 ]
 
 { #category : #'building-blocks' }
@@ -38,9 +35,9 @@ TRILBytecodeBuilder >> orphanClass [
 TRILBytecodeBuilder >> pop [
 	| value |
 
-	self assert: currentState notNil.
+	self assert: self currentState notNil.
 
-	value := currentState pop.
+	value := self currentState pop.
 	^ value loadUsing: self.
 ]
 
@@ -48,27 +45,28 @@ TRILBytecodeBuilder >> pop [
 TRILBytecodeBuilder >> push: aTRILNode [
 	| value |
 
-	self assert: currentState notNil.
+	self assert: self currentState notNil.
 	self assert: aTRILNode opcode isTreeTop not.
 
 	value := TRILValue forCompilation: compilation node: (self treetop: { aTRILNode }).
-	currentState push: value
+	self currentState push: value
+]
 ]
 
 { #category : #'building-private' }
-TRILBytecodeBuilder >> transferTo: aTRILBuilder [
+TRILBytecodeBuilder >> transferTo: aTRILBlock [ 
 	| target |
 
-	target := aTRILBuilder entry.
-	currentState notNil ifTrue: [ 
-		aTRILBuilder entryState isNil ifTrue: [ 
-			aTRILBuilder entryState: currentState.
-		] ifFalse: [ 
+	target := super transferTo: aTRILBlock.
+	self currentState notNil ifTrue: [
+		aTRILBlock startState isNil ifTrue: [
+			aTRILBlock startState: self currentState.
+		] ifFalse: [
 			| mergeBuilder |
 
 			mergeBuilder := self orphan.
-			currentState mergeInto: aTRILBuilder entryState using: mergeBuilder.
-			mergeBuilder fallThroughToBlock: aTRILBuilder entry.
+			self currentState mergeInto: aTRILBlock startState using: mergeBuilder.
+			mergeBuilder current setSuccessor1: target.
 			target := mergeBuilder entry.
 		].
 	].

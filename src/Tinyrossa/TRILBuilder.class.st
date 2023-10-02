@@ -48,21 +48,21 @@ TRILBuilder >> defineFunction: name type: type linkage: linkage [
 
 { #category : #'building-blocks' }
 TRILBuilder >> fallThroughTo: anILBuilder [
-	| target |
-
-	target := self transferTo: anILBuilder.
-	^ self fallThroughToBlock: target
+	self fallThroughToBlock: anILBuilder entry
 ]
 
 { #category : #'building-blocks' }
 TRILBuilder >> fallThroughToBlock: block [
-	self assert: block isTRILBlock.
+	| target |
 
+	self assert: block isTRILBlock.   
+
+	target := self transferTo: block.     
 	current isTerminated ifFalse: [ 
 		current successor1 notNil ifTrue: [ 
-			block setSuccessor1: current successor1.
+			target setSuccessor1: current successor1.
 		].
-		current setSuccessor1: block.
+		current setSuccessor1: target.
 	].
 ]
 
@@ -174,7 +174,7 @@ TRILBuilder >> orphanIfNeeded: builderOrClosure [
 
 	builderOrClosure isBlock ifTrue: [
 		builder := self orphan.
-		self transferTo: builder.
+		self transferTo: builder entry.
 		builderOrClosure value: builder.
 	] ifFalse: [
 		builder := builderOrClosure.

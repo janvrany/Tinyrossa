@@ -13,6 +13,12 @@ A block `#isClosed` if last treetop is either return or branch (regardless
 whether conditional or unconditional). No more treetops can be added to
 closed blocks.
 
+To facilitate integration with other part of high-level virtual machine, block
+contains references to 'initial' VM state (state upon entry to the block) and
+'current' VM state, the state of the VM upon execution of the last node in a block).
+To the block, VM state is completely transparent opaque object - it is the IR builder
+who is responsible for managing states (if needed at all). See TRILBytecodeBuilder.
+
 "
 Class {
 	#name : #TRILBlock,
@@ -26,7 +32,9 @@ Class {
 		'precedessors',
 		'successor1',
 		'successor2',
-		'next'
+		'next',
+		'startState',
+		'currentState'
 	],
 	#pools : [
 		'TRILOpcodes'
@@ -83,6 +91,11 @@ TRILBlock >> cfg [
 { #category : #accessing }
 TRILBlock >> compilation [
 	^cfg compilation
+]
+
+{ #category : #'accessing - VM state' }
+TRILBlock >> currentState [
+	^ currentState
 ]
 
 { #category : #initialization }
@@ -271,6 +284,20 @@ TRILBlock >> setSuccessor2: block [
 	successor2 notNil ifTrue: [
 		successor2 addPrecedessor: self.
 	]
+]
+
+{ #category : #'accessing - VM state' }
+TRILBlock >> startState [
+	^ startState
+]
+
+{ #category : #'accessing - VM state' }
+TRILBlock >> startState: aTRVMState [
+	self assert: startState isNil.
+	self assert: currentState isNil.
+
+	startState := aTRVMState.
+	currentState := aTRVMState copy.
 ]
 
 { #category : #accessing }
