@@ -75,3 +75,21 @@ TRVMOperandStack >> push: aTRILValue [
 TRVMOperandStack >> slots [
 	^ values
 ]
+
+{ #category : #operations }
+TRVMOperandStack >> top [
+	"Return top of the (virtual) stack, without removing it"
+
+	^self top: 1
+]
+
+{ #category : #operations }
+TRVMOperandStack >> top: index [
+	"Return nth element from the top of the stack. Indexing
+	 starts from one - the top most element (lastly pushed) is at index
+	 1, previous one at 2 and so on."
+
+	self assert: (values size + 1 - index) > 0.
+
+	^ values at: values size + 1 - index.
+]

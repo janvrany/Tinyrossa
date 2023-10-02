@@ -51,6 +51,24 @@ TRILBytecodeBuilder >> push: aTRILNode [
 	value := TRILValue forCompilation: compilation node: (self treetop: { aTRILNode }).
 	self currentState push: value
 ]
+
+{ #category : #'building-helpers' }
+TRILBytecodeBuilder >> top [
+	"Return top of the (virtual) stack, without removing it"
+	^ self top: 1
+]
+
+{ #category : #'building-helpers' }
+TRILBytecodeBuilder >> top: index [
+	"Return nth element from the top of the (virtual) stack. Indexing
+	 starts from one - the top most element (lastly pushed) is at index
+	 1, previous one at 2 and so on."
+	| value |
+
+	self assert: self currentState notNil.
+
+	value := self currentState top: index.
+	^ value loadUsing: self.
 ]
 
 { #category : #'building-private' }
