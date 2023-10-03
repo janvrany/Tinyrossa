@@ -74,12 +74,14 @@ TRGASGenerator >> generateInstruction: insn on: asm [
 		asm nextPutAll: insn symbol; nextPut: $:.
 	] ifFalse: [ 
 	insn isProcessorInstruction ifTrue: [ 
-		asm nextPutAll: '        '.
+		asm nextPutAll: '        '. 
+		"
 		asm nextPutAll: ' /* '; nextPutAll: insn disassemble; nextPutAll: ' */'.
 		asm nextPutAll: ' .byte '.
 		insn asByteArray do: [:byte | asm nextPutAll:'0x'. byte printOn: asm base: 16 ]
 				separatedBy: [ asm nextPutAll: ', ' ].
-
+		"
+		asm nextPutAll: insn disassemble        
 	]].
 ]
 

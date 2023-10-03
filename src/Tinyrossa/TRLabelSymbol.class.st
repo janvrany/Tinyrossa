@@ -31,8 +31,17 @@ TRLabelSymbol >> block [
 { #category : #initialization }
 TRLabelSymbol >> initializeWithBlock: aTRILBlock [
 	self assert: aTRILBlock isTRILBlock.
-
-	name := aTRILBlock name.
+		
+	aTRILBlock compilation isAOT ifTrue:[	
+		"In AOT mode to generate and object file we use external 
+	 	 assembler (just like GCC) which treats labels prefixed with
+	   '.L' as local (intra-procedural) labels and does not put them
+	   into symbol table. We do the same here:"	
+		name := '.L_' , aTRILBlock name.	
+	] ifFalse: [
+		name := aTRILBlock name.	
+	].
+		
 	type := TRDataType named: 'Void'.
 	block := aTRILBlock.
 ]

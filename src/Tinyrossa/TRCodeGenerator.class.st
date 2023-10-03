@@ -93,6 +93,17 @@ TRCodeGenerator >> evaluatorClass [
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> fixupBranches [
+	compilation isAOT ifTrue: [
+		"Currently AOT generate assembler source (like GCC) to which is in turn
+		 assembled into an ELF object file. In this case, we let assembler to 
+		 fixup branch offsets.
+
+		 This is especially important on RISC-V as GNU GAS has no option to disable
+		 compressed instructions so if we do fixups manually, branch targets would
+		 be off!
+		"
+		^ self    
+	].
 	generate memory fixupBranchTargets
 ]
 
