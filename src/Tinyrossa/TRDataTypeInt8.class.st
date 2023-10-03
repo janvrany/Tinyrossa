@@ -17,6 +17,11 @@ TRDataTypeInt8 >> name [
    ^ 'Int8'
 ]
 
+{ #category : #queries }
+TRDataTypeInt8 >> sizeInBytes [
+	^1
+]
+
 { #category : #validation }
 TRDataTypeInt8 >> validateConstant: aNumber [
 	self assert: (aNumber between: -16r80 and: 16r7F) description: 'Invalid constant'

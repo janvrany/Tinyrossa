@@ -19,6 +19,11 @@ TRDataTypeUnspecified >> name [
 	^ 'Unspecified'
 ]
 
+{ #category : #queries }
+TRDataTypeUnspecified >> sizeInBytes [
+	^self shouldNotImplement  
+]
+
 { #category : #validation }
 TRDataTypeUnspecified >> validateConstant: aNumber [
 	^ self shouldNotImplement
