@@ -3,7 +3,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'compilation',
-		'files'
+		'files',
+		'file',
+		'bci'
 	],
 	#category : #'Tinyrossa-AOT'
 }
@@ -46,14 +48,18 @@ TRGASGenerator >> generateInstruction: insn on: asm [
 	location isTRSourceLocation ifTrue: [ 
 		| fileNo |
 
-		fileNo := files indexOf: location file.
-		fileNo == 0 ifTrue: [ 
-			files add: location file.
-			fileNo := files size.
-			asm nextPutAll: '        .file '.
-			fileNo printOn: asm.
-			asm space.
-			location file printOn: asm.
+		file ~= location file ifTrue: [
+			fileNo := files indexOf: location file.
+			fileNo == 0 ifTrue: [ 
+				files add: location file.
+				fileNo := files size.
+				asm nextPutAll: '        .file '.
+				fileNo printOn: asm.
+				asm space.
+				location file printOn: asm.
+				asm lf.
+			].
+			file := location file.
 		].
 		asm nextPutAll: '        .loc '.
 		fileNo printOn: asm.
@@ -67,6 +73,17 @@ TRGASGenerator >> generateInstruction: insn on: asm [
 			asm nextPutAll: ' is_stmt 1'.
 		] ifFalse: [ 
 			asm nextPutAll: ' is_stmt 0'.
+		].
+		asm lf.
+	].
+	location isTRBytecodeLocation ifTrue: [ 
+		bci ~= location index ifTrue: [
+			asm lf.    
+			asm nextPutAll: '         /* BCI '.
+			location index printOn: asm.
+			asm nextPutAll: ' */'.
+			asm lf.
+			bci := location index.
 		].
 	].
 

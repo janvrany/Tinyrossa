@@ -24,6 +24,11 @@ TRBytecodeLocation >> initializeWithIndex: indexArg [
 	index := indexArg.
 ]
 
+{ #category : #testing }
+TRBytecodeLocation >> isTRBytecodeLocation [
+	^ true
+]
+
 { #category : #'printing & storing' }
 TRBytecodeLocation >> printOn:aStream [
 	"append a printed representation of the receiver to the argument, aStream"
