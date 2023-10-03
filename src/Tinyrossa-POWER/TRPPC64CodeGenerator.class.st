@@ -2,12 +2,12 @@ Class {
 	#name : #TRPPC64CodeGenerator,
 	#superclass : #TRCodeGenerator,
 	#classVars : [
-		'MinDFormImm',
-		'MaxDFormImm'
+		'MaxDFormImm',
+		'MinDFormImm'
 	],
 	#pools : [
-		'TRPPC64Registers',
-		'TRIntLimits'
+		'TRIntLimits',
+		'TRPPC64Registers'
 	],
 	#category : #'Tinyrossa-POWER-Codegen'
 }

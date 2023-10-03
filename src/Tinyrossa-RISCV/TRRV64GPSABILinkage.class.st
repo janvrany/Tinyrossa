@@ -12,8 +12,8 @@ Class {
 		'framePreservedOffset'
 	],
 	#pools : [
-		'TRRV64GRegisters',
-		'TRIntLimits'
+		'TRIntLimits',
+		'TRRV64GRegisters'
 	],
 	#category : #'Tinyrossa-RISCV-Codegen'
 }

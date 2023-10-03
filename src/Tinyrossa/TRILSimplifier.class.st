@@ -9,10 +9,10 @@ Class {
 		'ConditionalBranchSimplificationTable'
 	],
 	#pools : [
-		'TRILOpcodes',
 		'TRDataTypes',
 		'TRILOpcodeProps1',
-		'TRILOpcodeProps3'
+		'TRILOpcodeProps3',
+		'TRILOpcodes'
 	],
 	#category : #'Tinyrossa-Optimizer'
 }

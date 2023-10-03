@@ -17,12 +17,12 @@ Class {
 		'BackChainOffset',
 		'CRSaveWordOffset',
 		'LRSaveDoublewordOffset',
-		'TOCPointerDoublewordOffset',
-		'ParameterSaveAreaOffset'
+		'ParameterSaveAreaOffset',
+		'TOCPointerDoublewordOffset'
 	],
 	#pools : [
-		'TRPPC64Registers',
-		'TRDataTypes'
+		'TRDataTypes',
+		'TRPPC64Registers'
 	],
 	#category : #'Tinyrossa-POWER-Codegen'
 }

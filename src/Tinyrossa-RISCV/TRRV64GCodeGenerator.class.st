@@ -2,9 +2,9 @@ Class {
 	#name : #TRRV64GCodeGenerator,
 	#superclass : #TRCodeGenerator,
 	#pools : [
-		'TRRV64GRegisters',
 		'TRIntLimits',
-		'TRRV64GISALimits'
+		'TRRV64GISALimits',
+		'TRRV64GRegisters'
 	],
 	#category : #'Tinyrossa-RISCV-Codegen'
 }

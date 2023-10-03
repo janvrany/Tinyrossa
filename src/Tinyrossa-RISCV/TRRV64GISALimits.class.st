@@ -3,8 +3,8 @@ Class {
 	#superclass : #TRSharedPool,
 	#classVars : [
 		'RISCV_IMM_BITS',
-		'RISCV_IMM_MIN',
-		'RISCV_IMM_MAX'
+		'RISCV_IMM_MAX',
+		'RISCV_IMM_MIN'
 	],
 	#category : #'Tinyrossa-RISCV-Codegen'
 }

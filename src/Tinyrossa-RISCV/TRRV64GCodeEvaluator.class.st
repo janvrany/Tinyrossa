@@ -2,8 +2,8 @@ Class {
 	#name : #TRRV64GCodeEvaluator,
 	#superclass : #TRCodeEvaluator,
 	#pools : [
-		'TRRV64GRegisters',
-		'TRDataTypes'
+		'TRDataTypes',
+		'TRRV64GRegisters'
 	],
 	#category : #'Tinyrossa-RISCV-Codegen'
 }
@@ -455,6 +455,21 @@ TRRV64GCodeEvaluator >> evaluate_lload: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lmul: node [
+	^self emitMul: node.
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lor: node [
+	^self emitBin: node opcodeR: 'or' opcodeI: 'ori'
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lshr: node [
+	^self emitShr: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lstore: node [
 	| symbol srcReg |
 
@@ -462,6 +477,11 @@ TRRV64GCodeEvaluator >> evaluate_lstore: node [
 	srcReg := self evaluate: node child1.
 	generate sd: srcReg, (sp + (AcDSLSymbol value: symbol name)).
 	^ nil
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lsub: node [
+	^self emitBin: node opcodeR: 'sub' opcodeI: 'addi'
 ]
 
 { #category : #evaluation }

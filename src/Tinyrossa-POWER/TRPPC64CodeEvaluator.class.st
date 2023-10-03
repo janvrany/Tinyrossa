@@ -2,8 +2,8 @@ Class {
 	#name : #TRPPC64CodeEvaluator,
 	#superclass : #TRCodeEvaluator,
 	#pools : [
-		'TRPPC64Registers',
-		'TRPPC64RegisterKinds'
+		'TRPPC64RegisterKinds',
+		'TRPPC64Registers'
 	],
 	#category : #'Tinyrossa-POWER-Codegen'
 }
