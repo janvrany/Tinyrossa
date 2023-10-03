@@ -125,6 +125,11 @@ TRDataType >> printOn:aStream [
 ]
 
 { #category : #queries }
+TRDataType >> sizeInBytes [
+	^self subclassResponsibility 
+]
+
+{ #category : #queries }
 TRDataType >> storeOpcode [
 	^ StoreOpcodes at: self           
 

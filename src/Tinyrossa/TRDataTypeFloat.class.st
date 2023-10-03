@@ -17,6 +17,11 @@ TRDataTypeFloat >> name [
 	^ 'Float'
 ]
 
+{ #category : #queries }
+TRDataTypeFloat >> sizeInBytes [
+	^4
+]
+
 { #category : #validation }
 TRDataTypeFloat >> validateConstant: aNumber [
 	self assert: aNumber isFloat
