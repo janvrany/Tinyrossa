@@ -9,6 +9,145 @@ Class {
 }
 
 { #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonBin: node opcodeR: opR opcodeI: opI [
+	"Common helper for binary operation using R-type instruction or I-type
+	 instruction. The I-type instruction is used when second operand is a load
+	 constant and constant value fits into I-type instruction immediate,
+	 Otherwise, R-type instruction is used."
+	
+	| child1 child2 src1Reg src2Reg dstReg |
+	
+	child1 := node child1.
+	child2 := node child2.
+	
+	src1Reg := self evaluate: child1.
+	dstReg := self codegen allocateRegister.
+	
+	(child2 opcode isLoadConst and: [ opI notNil and:[ codegen fitsInItypeImm: child2 constant ]]) ifTrue:[
+		| value |
+		
+		value := child2 constant.
+		(opR = 'sub' or:[opR = 'subw']) ifTrue:[
+			generate addi: dstReg , src1Reg , value negated.
+		] ifFalse:[
+			generate append: opI operands: dstReg , src1Reg , value
+		].	
+	] ifFalse: [ 
+		src2Reg := self evaluate: child2.
+		generate append: opR operands: dstReg , src1Reg , src2Reg
+	].
+
+
+	^ dstReg
+]
+
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonMul: node [
+	"Handles imul and lmul"
+	
+	| child1 child2 src1Reg src2Reg dstReg |
+	
+	child1 := node child1.
+	child2 := node child2.
+	
+	src1Reg := self evaluate: child1.
+		
+	(child2 opcode isLoadConst and: [child2 constant between: -1 and: 1]) ifTrue:[
+		child2 constant == 0 ifTrue:[
+			dstReg := zero
+		] ifFalse:[
+		child2 constant == 1 ifTrue:[
+			dstReg := src1Reg.
+		] ifFalse:[
+		child2 constant == -1 ifTrue:[
+			dstReg := self codegen allocateRegister.
+			generate sub: dstReg, zero, src1Reg 							
+		]]].		
+	] ifFalse:[
+		src2Reg := self evaluate: child2.		
+		dstReg := self codegen allocateRegister.
+		node type == Int64 ifTrue:[
+			generate mul: dstReg, src1Reg , src2Reg 
+		] ifFalse:[
+			generate mulw: dstReg, src1Reg , src2Reg 
+		].				
+	].
+
+	^dstReg
+
+]
+
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonShl: node [
+	"Handles ishl and lshl"
+	
+	| width child1 child2 src1Reg src2Reg dstReg |
+	
+	width := node type sizeInBytes * 8.
+	
+	child1 := node child1.
+	child2 := node child2.
+	
+	src1Reg := self evaluate: child1.
+		
+	(child2 opcode isLoadConst) ifTrue:[
+		| shamt |
+		
+		shamt := child2 constant bitAnd: width - 1.
+		shamt == 0 ifTrue:[
+			dstReg := src1Reg.	
+		] ifFalse: [
+			dstReg := self codegen allocateRegister.
+			generate slli: dstReg, src1Reg, shamt.
+		].
+	] ifFalse:[	
+		src2Reg := self evaluate: child2.		
+		dstReg := self codegen allocateRegister.
+		node type == Int64 ifTrue:[
+			generate sll: dstReg, src1Reg , src2Reg 
+		].
+	].
+
+	^dstReg
+
+]
+
+{ #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonShr: node [
+	"Handles ishr and lshr"
+	
+	| width child1 child2 src1Reg src2Reg dstReg |
+	
+	width := node type sizeInBytes * 8.
+	
+	child1 := node child1.
+	child2 := node child2.
+	
+	src1Reg := self evaluate: child1.
+		
+	(child2 opcode isLoadConst) ifTrue:[
+		| shamt |
+		
+		shamt := child2 constant bitAnd: width - 1.
+		shamt == 0 ifTrue:[
+			dstReg := src1Reg.	
+		] ifFalse: [
+			dstReg := self codegen allocateRegister.
+			generate srai: dstReg, src1Reg, shamt.
+		].
+	] ifFalse:[	
+		src2Reg := self evaluate: child2.		
+		dstReg := self codegen allocateRegister.
+		node type == Int64 ifTrue:[
+			generate sra: dstReg, src1Reg , src2Reg 
+		].
+	].
+
+	^dstReg
+
+]
+
+{ #category : #'evaluation-helpers' }
 TRRV64GCodeEvaluator >> evaluate_Xcmpgt: node [
 	"Handles Address, Int64 Int32, Int16 & Int8"  
 
@@ -81,6 +220,11 @@ TRRV64GCodeEvaluator >> evaluate_Xloadi: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_a2l: node [
+	^ self evaluate: node child1
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_acmpgt: node [
 	^ self evaluate_Xcmpgt: node
 ]
@@ -98,12 +242,12 @@ TRRV64GCodeEvaluator >> evaluate_aconst: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_aiadd: node [
-	^ self evaluate_iadd: node
+	^ self commonBin: node opcodeR: 'add' opcodeI: 'addi'
 ]
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_aladd: node [
-	^ self evaluate_iadd: node
+	^ self commonBin: node opcodeR: 'add' opcodeI: 'addi'
 ]
 
 { #category : #evaluation }
@@ -145,22 +289,12 @@ TRRV64GCodeEvaluator >> evaluate_i2a: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_iadd: node [
-	"Also handles ladd, aiadd and aladd"
-	| src1Reg src2Reg dstReg |
+	^self commonBin: node opcodeR: 'addw' opcodeI: 'addiw'
+]
 
-	dstReg := self codegen allocateRegister.
-	src1Reg := self evaluate: node child1.
-
-	(node child2 opcode isLoadConst and: [ codegen fitsInItypeImm: node child2 constant ]) ifTrue: [ 
-		generate
-			addi: dstReg, src1Reg, node child2 constant
-	] ifFalse: [
-		src2Reg := self evaluate: node child2.
-		generate
-			addw: dstReg, src1Reg, src2Reg.
-	].
-
-	^ dstReg
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iand: node [
+	^self commonBin: node opcodeR: 'andw' opcodeI: 'andiw'
 ]
 
 { #category : #evaluation }
@@ -371,15 +505,22 @@ TRRV64GCodeEvaluator >> evaluate_iloadi: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_imul: node [
-	| src1Reg src2Reg dstReg |
+	^self commonMul: node.
+]
 
-	src1Reg := self evaluate: node child1.
-	src2Reg := self evaluate: node child2.
-	dstReg := self codegen allocateRegister.
-	generate
-		mulw: dstReg, src1Reg, src2Reg.
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ior: node [
+	^self commonBin: node opcodeR: 'orw' opcodeI: 'oriw'
+]
 
-	^ dstReg
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ishl: node [
+	^self commonShl: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ishr: node [
+	^self commonShr: node
 ]
 
 { #category : #evaluation }
@@ -394,21 +535,7 @@ TRRV64GCodeEvaluator >> evaluate_istore: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_isub: node [
-	| src1Reg src2Reg dstReg |
-
-	dstReg := self codegen allocateRegister.
-	src1Reg := self evaluate: node child1.
-
-	(node child2 opcode isLoadConst and: [ codegen fitsInItypeImm: node child2 constant negated ]) ifTrue: [ 
-		generate
-			addi: dstReg, src1Reg, node child2 constant negated
-	] ifFalse: [
-		src2Reg := self evaluate: node child2.
-		generate
-			subw: dstReg, src1Reg, src2Reg.
-	].
-
-	^ dstReg
+	^self commonBin: node opcodeR: 'subw' opcodeI: 'addiw'
 ]
 
 { #category : #evaluation }
@@ -418,7 +545,12 @@ TRRV64GCodeEvaluator >> evaluate_l2a: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_ladd: node [
-	^ self evaluate_iadd: node
+	^self commonBin: node opcodeR: 'add' opcodeI: 'addi'
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_land: node [
+	^self commonBin: node opcodeR: 'and' opcodeI: 'andi'
 ]
 
 { #category : #evaluation }
@@ -456,17 +588,22 @@ TRRV64GCodeEvaluator >> evaluate_lload: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lmul: node [
-	^self emitMul: node.
+	^self commonMul: node.
 ]
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lor: node [
-	^self emitBin: node opcodeR: 'or' opcodeI: 'ori'
+	^self commonBin: node opcodeR: 'or' opcodeI: 'ori'
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lshl: node [
+	^self commonShl: node
 ]
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lshr: node [
-	^self emitShr: node
+	^self commonShr: node
 ]
 
 { #category : #evaluation }
@@ -481,7 +618,7 @@ TRRV64GCodeEvaluator >> evaluate_lstore: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lsub: node [
-	^self emitBin: node opcodeR: 'sub' opcodeI: 'addi'
+	^self commonBin: node opcodeR: 'sub' opcodeI: 'addi'
 ]
 
 { #category : #evaluation }
