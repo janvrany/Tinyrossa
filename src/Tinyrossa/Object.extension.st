@@ -6,6 +6,11 @@ Object >> isTRAutomaticSymbol [
 ]
 
 { #category : #'*Tinyrossa' }
+Object >> isTRBytecodeLocation [
+	^false
+]
+
+{ #category : #'*Tinyrossa' }
 Object >> isTRFunctionSymbol [
 	^ false
 ]
