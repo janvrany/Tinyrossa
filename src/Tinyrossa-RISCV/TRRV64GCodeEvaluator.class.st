@@ -288,6 +288,11 @@ TRRV64GCodeEvaluator >> evaluate_i2a: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_i2l: node [
+	^ self evaluate: node child1
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_iadd: node [
 	^self commonBin: node opcodeR: 'addw' opcodeI: 'addiw'
 ]
