@@ -30,6 +30,13 @@ TRCompilation >> gtInspectorANFIn: composite [
 ]
 
 { #category : #'*Tinyrossa-Tools-Pharo' }
+TRCompilation >> gtInspectorCFGIn: composite [
+	<gtInspectorPresentationOrder: 80>
+
+	cfg gtInspectorCFGIn: composite.
+]
+
+{ #category : #'*Tinyrossa-Tools-Pharo' }
 TRCompilation >> gtInspectorInstructionsIn: composite [
 	<gtInspectorPresentationOrder: 60>
 	
