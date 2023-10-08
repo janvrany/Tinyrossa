@@ -2,9 +2,9 @@ Class {
 	#name : #TRPPC64RegisterKinds,
 	#superclass : #TRSharedPool,
 	#classVars : [
-		'GPR',
+		'CCR',
 		'FPR',
-		'CCR'
+		'GPR'
 	],
 	#category : #'Tinyrossa-POWER-Codegen'
 }

@@ -14,6 +14,7 @@ pharo/lib
 pharo/Pharo*.zip
 pharo/*.o
 pharo/*.s
+pharo/github-cache
 
 # Smalltalk/X
 stx/stx
@@ -38,6 +39,5 @@ shell-*
 *.orig
 
 # Gem5 by-products
-stx/m5out
-pharo/m5out
+m5out
 

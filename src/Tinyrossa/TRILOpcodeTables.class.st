@@ -2,17 +2,17 @@ Class {
 	#name : #TRILOpcodeTables,
 	#superclass : #TRSharedPool,
 	#classVars : [
-		'LoadOpcodes',
-		'StoreOpcodes',
-		'ConstOpcodes',
+		'ArithmeticOpcodes',
 		'CompareOpcodes',
-		'ArithmeticOpcodes'
+		'ConstOpcodes',
+		'LoadOpcodes',
+		'StoreOpcodes'
 	],
 	#pools : [
-		'TRILOpcodes',
 		'TRDataTypes',
 		'TRILOpcodeProps1',
-		'TRILOpcodeProps3'
+		'TRILOpcodeProps3',
+		'TRILOpcodes'
 	],
 	#category : #'Tinyrossa-IL'
 }
