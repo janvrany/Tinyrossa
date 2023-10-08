@@ -56,6 +56,7 @@ $(PROJECT).image: ../src/*/*.st
 	$(call pharo-load-local, $@, MachineArithmetic,$(MACHINEARITHMETIC_DIR))
 	$(call pharo-load-local, $@, ArchC,            $(ARCHC_DIR)/src)
 	$(call pharo-load-local, $@, SmallRSP,         $(SMALLRSP_DIR)/src)
+	$(call pharo-load-local, $@, LibUnix,          $(PHARO_HACKS_DIR)/src)
 	$(call pharo-load-local, $@, LibCompat,        $(PHARO_HACKS_DIR)/src)
 	$(call pharo-load-local, $@, Tinyrossa,        ../src)
 

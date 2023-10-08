@@ -18,18 +18,18 @@ BaselineOfTinyrossa >> baseline: spec [
 				spec repository: 'github://shingarov/SmallRSP:microwatt'
 			].
 
-			spec baseline: 'OSSubprocess' with: [
-				spec repository: 'github://pharo-contributions/OSSubprocess:v1.3.0'
+			spec baseline: 'LibCompat' with: [
+				spec repository: 'github://janvrany/pharo-hacks'.
 			].
 
-			spec baseline: 'LibCompat' with: [
+			spec baseline: 'LibUnix' with: [
 				spec repository: 'github://janvrany/pharo-hacks'.
 			].
 
 			spec
 				package: #'Tinyrossa' with:[
-					"LibCompat requires OSSubprocess for its OSProcess implementation."
-					spec requires: 'OSSubprocess'.
+					"LibCompat's implementation of OSProcess requires LibUnix"
+					spec requires: 'LibUnix'.
 					spec requires: 'LibCompat'.
 					spec requires: 'ArchC'
 				];
