@@ -583,6 +583,34 @@ TRCompilationExamples >> example13_indirect_call [
 	compilation codeBuffer. "Only convenience inspection."
 ]
 
+{ #category : #examples }
+TRCompilationExamples >> example17_call_external_function_in_aot_mode [
+	| builder |
+
+	builder := compilation builder.
+	builder defineName: 'call_exit' type: Int32.
+	builder defineParameter: 'status' type: Int32.
+
+	(builder defineFunction: 'exit' type: Void). 
+
+	"Note, what we need to anchor call in a treetop otherwise
+	 it would not be referenced from tree. Future versions of IL builder
+	 may do this automatically."
+
+	builder treetop: { builder call: { builder iload: 'status' . 'exit' } }.
+	builder ireturn: { builder iconst: 0 }.
+
+	compilation config
+		aot: true;
+		objectFile:'call_exit.o'.
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer. "Only convenience inspection."
+]
+
 { #category : #running }
 TRCompilationExamples >> setUp [
 	super setUp.
