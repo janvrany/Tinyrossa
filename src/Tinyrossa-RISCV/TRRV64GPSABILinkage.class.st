@@ -12,6 +12,7 @@ Class {
 		'framePreservedOffset'
 	],
 	#pools : [
+		'TRDataTypes',
 		'TRIntLimits',
 		'TRRV64GRegisters'
 	],
@@ -92,8 +93,12 @@ TRRV64GPSABILinkage >> generateCall: node [
 		generate jalr: ra, addrReg, 0.
 	].
 
-	retVreg := codegen allocateRegister.
-	generate addi: retVreg , a0, 0.
+	node symbol type == Void ifTrue:[
+		retVreg := nil.
+	] ifFalse:[
+		retVreg := codegen allocateRegister.
+		generate addi: retVreg , a0, 0.
+	].
 	^ retVreg
 ]
 
