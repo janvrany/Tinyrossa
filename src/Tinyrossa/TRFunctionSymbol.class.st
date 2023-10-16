@@ -30,6 +30,11 @@ TRFunctionSymbol >> asAcDSLOperand [
 	^ AcDSLSymbol value: name
 ]
 
+{ #category : #converting }
+TRFunctionSymbol >> asAcDSLOperandList [
+	^ self asAcDSLOperand asAcDSLOperandList
+]
+
 { #category : #initialization }
 TRFunctionSymbol >> initializeWithName:nameArg type:typeArg linkage: linkageClassArg [
 	name := nameArg.

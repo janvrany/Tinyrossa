@@ -61,36 +61,41 @@ TRRV64GPSABILinkage >> generateCall: node [
 		generate addi: paramReg , valReg, 0
 	].
 
-	"If the call a recursive call..."
-	node symbol == codegen compilation functionSymbol ifTrue: [ 
-		"...then generate 'jal ra, <function>'..."
-		generate jal: ra, node symbol.
-	] ifFalse: [
-		"...otherwise, load callee's address into a register `addrReg`
-		 and generate 'jalr ra, `addrReg`, 0'."
-
+	indirect ifTrue: [ 
 		| addrReg |
 
-		indirect ifTrue: [ 
-			addrReg := codegen evaluator evaluate: node child1.
-		] ifFalse: [ 
-			"
-			In case of 'direct' calls,  we load address directly into 'ra' 
-			(as opposite to allocating new v-register as in indirect case
-			above) because will be clobbered anyways by jalr storing return 
-			address. This lowers the pressure on RA.
-
-			Also note that rather than this, we should generate a trampoline
-			and call calle through it. Or relative jal if it's close enough. 
-			That's left as future work.
-			"
-			self assert: node symbol address notNil description: 'No address set for function symbol'.
-
-			codegen loadConstant64: node symbol address into: ra.
-			addrReg := ra.
-		].
-
+		addrReg := codegen evaluator evaluate: node child1.
 		generate jalr: ra, addrReg, 0.
+	] ifFalse: [
+		"If the call a recursive call..."
+		node symbol == codegen compilation functionSymbol ifTrue: [ 
+			"...then generate 'jal ra, <function>'..."
+			generate jal: ra, node symbol.
+		] ifFalse: [
+			"...otherwise..."
+			codegen compilation isAOT ifTrue: [ 
+				"
+				In AOT mode we generate call and let the (runtime) linker 
+				to properly relocate it.
+				"
+				generate call: node symbol
+			] ifFalse: [ 
+				"
+				In JIT mode we load address directly into 'ra' 
+				(as opposite to allocating new v-register as in indirect case
+				above) because will be clobbered anyways by jalr storing return 
+				address. This lowers the pressure on RA.
+
+				Also note that rather than this, we should generate a trampoline
+				and call calle through it. Or relative jal if it's close enough. 
+				That's left as future work.
+				"
+				self assert: node symbol address notNil description: 'No address set for function symbol'.
+
+				codegen loadConstant64: node symbol address into: ra.
+				generate jalr: ra, ra, 0.
+			].
+		].
 	].
 
 	node symbol type == Void ifTrue:[
