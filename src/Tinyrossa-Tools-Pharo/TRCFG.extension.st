@@ -8,7 +8,7 @@ TRCFG >> gtInspectorCFGIn: composite [
 		
 		canvas := RSCanvas new.
 		blocksG := RSGroup new.
-		blocks do:[:block | 
+		self preorderDo:[:block | 
 			| box label node |
 			
 			label := RSLabel new text: block name.
@@ -25,19 +25,15 @@ TRCFG >> gtInspectorCFGIn: composite [
 			canvas add: node
 		].
 
-		edges := RSEdgeBuilder verticalBezier.
+		edges := RSEdgeBuilder arrowedLine
+							attachPoint: RSBorderAttachPoint new;
+							yourself. 
 		
-		"
-		edges shape markerEnd:	((RSShapeFactory arrow
-			size: 20;
-			color: Color black;
-			yourself) asMarker offsetRatio: 1.0).
-		"
 		edges
-			canvas: canvas; moveBehind; width: 2;
+			canvas: canvas; "moveBehind;" width: 2;
 		 	shapes: blocksG; connectToAll: #successors.
 
-		RSSugiyamaLayout on: blocksG. 
+		RSVerticalLineLayout on: blocksG. 
 		canvas @ RSCanvasController 
 	]
 ]
