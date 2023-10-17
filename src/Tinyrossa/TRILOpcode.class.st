@@ -260,7 +260,7 @@ TRILOpcode >> name [
 TRILOpcode >> printOn:aStream [
 	"append a printed representation of the receiver to the argument, aStream"
 
-	self class name printOn: aStream.
+	aStream nextPutAll: self class name.
 	aStream nextPutAll:' named: '.
 	name storeOn:aStream.
 ]

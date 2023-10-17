@@ -25,6 +25,10 @@ BaselineOfTinyrossa >> baseline: spec [
 			spec baseline: 'LibUnix' with: [
 				spec repository: 'github://janvrany/pharo-hacks'.
 			].
+			
+			spec baseline: 'Roassal3' with: [
+				spec repository: 'github://ObjectProfile/Roassal3:v0.9.2'
+			].
 
 			spec
 				package: #'Tinyrossa' with:[
@@ -49,7 +53,8 @@ BaselineOfTinyrossa >> baseline: spec [
 					spec requires: 'Tinyrossa-Tests'
 				];
 				package: #'Tinyrossa-Tools-Pharo' with: [
-					spec requires: 'Tinyrossa'
+					spec requires: 'Tinyrossa'.
+					spec requires: 'Roassal3'.
 				];
 				yourself.
 		]

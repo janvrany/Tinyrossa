@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'compilation',
 		'blocks',
-		'entry'
+		'entry',
+		'nextBlockId'
 	],
 	#pools : [
 		'TRILOpcodes'
@@ -34,8 +35,9 @@ TRCFG >> addBlockNamed: aStringOrNil [
 	aStringOrNil notNil ifTrue: [ 
 		name := aStringOrNil.
 	] ifFalse: [ 
-		name := 'BB_' , (blocks size printLeftPaddedWith: $0 to: 3 base: 10)
+		name := 'BB_' , (nextBlockId printLeftPaddedWith: $0 to: 3 base: 10)
 	].
+	nextBlockId := nextBlockId + 1.
 
 	self assert: (blocks contains: [:e | e name = name ]) not.
 
@@ -87,6 +89,7 @@ TRCFG >> initializeWithCompilation: aTRCompilation [
 	compilation := aTRCompilation.
 	blocks := Set new.
 	entry := nil.
+	nextBlockId := 0.
 ]
 
 { #category : #enumerating }

@@ -279,6 +279,17 @@ TRILBlock >> successor2 [
 ]
 
 { #category : #accessing }
+TRILBlock >> successors [
+	successor2 isNil ifTrue:[
+		successor1 isNil ifTrue:[ ^#() ].
+		^ { successor1 }
+	].
+
+	successor1 isNil ifTrue:[ ^ { successor2 } ].
+	^ { successor1 . successor2 }
+]
+
+{ #category : #accessing }
 TRILBlock >> treetops [
 	^ { bbstartNode } , treetops , { bbendNode }
 ]
