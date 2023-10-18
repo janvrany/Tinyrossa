@@ -1,6 +1,43 @@
 Extension { #name : #TRILBlock }
 
 { #category : #'*Tinyrossa-Tools-Pharo' }
+TRILBlock >> gtInspectorANFIn: composite [
+	<gtInspectorPresentationOrder: 90>
+
+	| printer |
+
+	composite fastTreeTable
+		title: 'ANF';
+		rootsExpanded;
+		display: [ :block |
+			| nodes |
+
+			printer := TRANFNodePrinter new.
+			nodes := OrderedCollection new.
+			treetops do:[:tt |
+				tt postorderDo: [ :node |
+					(nodes includes: node) ifFalse:[
+						nodes add: node
+					]
+				]
+			].
+			nodes collect:[:node | { node . printer print: node } ]
+		];
+		children: [ :node | #() ];
+		column: 'Node' evaluated: [ :item | item second ];
+		column: 'Location' evaluated: [ :item |
+			| node |
+			
+			node := item first.
+			node location notNil ifTrue:[
+				node	location gtDisplayString 
+			] ifFalse:[
+				''
+			]];
+		yourself.
+]
+
+{ #category : #'*Tinyrossa-Tools-Pharo' }
 TRILBlock >> gtInspectorTRILIn: composite [
 	<gtInspectorPresentationOrder: 35>
 
