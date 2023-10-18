@@ -232,7 +232,7 @@ TRILBlock >> replace: oldNode with: newNode [
 
 	treetops at: index put: newNode.
 	newNode setBlock: self.
-	newNode location: oldNode location.
+	newNode locationIfNotSet: oldNode location.	
 	newNode incUseCount.
 	oldNode decUseCount.
 

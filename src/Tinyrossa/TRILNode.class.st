@@ -143,6 +143,17 @@ TRILNode >> location: aTRLocation [
 	location := aTRLocation.
 ]
 
+{ #category : #accessing }
+TRILNode >> locationIfNotSet: aTRLocation [
+	"Set location if this node if no location is already set. 
+	 Otherwise, no-op."
+	
+	location isNil ifTrue:[
+		self location: aTRLocation 
+	]
+	
+]
+
 { #category : #testing }
 TRILNode >> mayHaveSideeffect [
 	"Return `true` if evaluation of this node (or any of its chilren) 
@@ -215,7 +226,7 @@ TRILNode >> replace: oldChild with: newChild [
 
 	children := newChildren.
 	newChild setBlock: oldChild block.
-	newChild location: oldChild location.
+	newChild locationIfNotSet: oldChild location.
 	newChild incUseCount.
 	oldChild decUseCount.
 ]
