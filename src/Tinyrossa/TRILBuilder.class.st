@@ -153,7 +153,11 @@ TRILBuilder >> orphan: nameOrNil [
 	 control to orphan if it wishes (via `#goto:` or conditional
 	 jump)."
 
-	^ self orphanClass forCompilation: compilation block: (compilation cfg addBlockNamed: nameOrNil).
+	| orphan |
+	
+	orphan := self orphanClass forCompilation: compilation block: (compilation cfg addBlockNamed: nameOrNil).
+	orphan location: location.
+	^orphan
 ]
 
 { #category : #'building-blocks' }
