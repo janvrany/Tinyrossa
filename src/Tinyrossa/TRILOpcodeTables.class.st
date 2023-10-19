@@ -28,7 +28,7 @@ TRILOpcodeTables class >> initialize [
 		Int8    . bload .
 		Int16   . sload .
 		Int32   . iload .
-		Int64   . iload .
+		Int64   . lload .
 		Address . aload .
 		Float   . fload .
 		Double  . dload .
@@ -39,7 +39,7 @@ TRILOpcodeTables class >> initialize [
 		Int8    . bstore .
 		Int16   . sstore .
 		Int32   . istore .
-		Int64   . istore .
+		Int64   . lstore .
 		Address . astore .
 		Float   . fstore .
 		Double  . dstore .
@@ -50,7 +50,7 @@ TRILOpcodeTables class >> initialize [
 		Int8    . bconst .
 		Int16   . sconst .
 		Int32   . iconst .
-		Int64   . iconst .
+		Int64   . lconst .
 		Address . aconst .
 		Float   . fconst .
 		Double  . dconst .
