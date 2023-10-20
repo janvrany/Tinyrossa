@@ -175,6 +175,33 @@ TRRV64GCodeEvaluator >> commonShr: node [
 ]
 
 { #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonStore: node [
+	"Handles astore, lstore, istore, sstore & bstore"  
+
+	| srcReg offset type |
+
+	offset := (AcDSLSymbol value: node symbol name).
+	srcReg := self evaluate: node child1.
+
+	type := node type.
+	(type == Address or:[type == Int64]) ifTrue:[
+		generate
+			sd: srcReg, (sp + offset).
+	] ifFalse:[ type == Int32 ifTrue:[
+		generate
+			sw: srcReg, (sp + offset).             
+	] ifFalse:[ type == Int16 ifTrue:[
+		generate
+			sh: srcReg, (sp + offset).             
+	] ifFalse:[ type == Int8 ifTrue:[
+		generate
+			sb: srcReg, (sp + offset).             
+	]]]].
+
+	^nil.
+]
+
+{ #category : #'evaluation-helpers' }
 TRRV64GCodeEvaluator >> evaluate_Xcmpgt: node [
 	"Handles Address, Int64 Int32, Int16 & Int8"  
 
@@ -289,7 +316,7 @@ TRRV64GCodeEvaluator >> evaluate_aloadi: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_astore: node [
-	^ self evaluate_lstore: node
+	^ self commonStore: node
 ]
 
 { #category : #evaluation }
@@ -305,6 +332,11 @@ TRRV64GCodeEvaluator >> evaluate_bload: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_bloadi: node [
 	^ self evaluate_Xloadi: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_bstore: node [
+	^ self commonStore: node
 ]
 
 { #category : #evaluation }
@@ -557,12 +589,7 @@ TRRV64GCodeEvaluator >> evaluate_ishr: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_istore: node [
-	| symbol srcReg |
-
-	symbol := node symbol.
-	srcReg := self evaluate: node child1.
-	generate sw: srcReg, (sp + (AcDSLSymbol value: symbol name)).
-	^ nil
+	^ self commonStore: node
 ]
 
 { #category : #evaluation }
@@ -635,12 +662,7 @@ TRRV64GCodeEvaluator >> evaluate_lshr: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lstore: node [
-	| symbol srcReg |
-
-	symbol := node symbol.
-	srcReg := self evaluate: node child1.
-	generate sd: srcReg, (sp + (AcDSLSymbol value: symbol name)).
-	^ nil
+	^ self commonStore: node
 ]
 
 { #category : #evaluation }
@@ -719,4 +741,9 @@ TRRV64GCodeEvaluator >> evaluate_sload: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_sloadi: node [
 	^ self evaluate_Xloadi: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_sstore: node [
+	^ self commonStore: node
 ]
