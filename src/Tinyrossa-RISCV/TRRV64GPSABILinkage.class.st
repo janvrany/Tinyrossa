@@ -21,8 +21,19 @@ Class {
 
 { #category : #accessing }
 TRRV64GPSABILinkage >> allocatableRegisters [
-	"^ { t0 . t1 . t2 . t3 . t4 . t5 . t6 }"
-	^ self preservedRegisters
+	codegen linkRegisterKilled ifFalse:[
+		"For leaf methods, we prefer volatile registers over preserved 
+		 registers. This saves us a need to save / reload (preserved) 
+		 registers in prologue / epilogue."
+
+		^ self volatileRegisters , self preservedRegisters
+	] ifTrue:[
+		"FIXME: For non-leaf methods, we only allow to use preserved registers 
+		 because as of now, there's no support for spilling / reloading 
+		 registers in the code (only in prologue / epilogue)."
+
+		^ self preservedRegisters
+	]
 ]
 
 { #category : #accessing }
@@ -266,4 +277,9 @@ TRRV64GPSABILinkage >> parameterRegisters [
 { #category : #accessing }
 TRRV64GPSABILinkage >> preservedRegisters [
 	^ { s0 . s1 . s2 . s3 . s4 . s5 . s6 . s7 . s8 . s9 . s10 . s11 }
+]
+
+{ #category : #accessing }
+TRRV64GPSABILinkage >> volatileRegisters [
+	^ { t0 . t1 . t2 . t3 . t4 . t5 . t6 }
 ]
