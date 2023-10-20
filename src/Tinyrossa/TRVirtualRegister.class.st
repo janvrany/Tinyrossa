@@ -91,6 +91,11 @@ TRVirtualRegister >> isAssigned [
 ]
 
 { #category : #testing }
+TRVirtualRegister >> isTRRegister [
+	^ true
+]
+
+{ #category : #testing }
 TRVirtualRegister >> isTRVirtualRegister [
 	^ true
 ]

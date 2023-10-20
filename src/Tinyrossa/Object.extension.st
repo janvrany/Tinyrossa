@@ -33,6 +33,11 @@ Object >> isTRParameterSymbol [
 ]
 
 { #category : #'*Tinyrossa' }
+Object >> isTRRegister [
+	^ false
+]
+
+{ #category : #'*Tinyrossa' }
 Object >> isTRSourceLocation [
 	^ false
 ]
