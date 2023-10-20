@@ -98,6 +98,9 @@ TRRV64GPSABILinkage >> generateCall: node [
 		].
 	].
 
+	"Note that link register has been overwritten"
+	codegen linkRegisterKilled: true.
+	
 	node symbol type == Void ifTrue:[
 		retVreg := nil.
 	] ifFalse:[
@@ -116,11 +119,13 @@ TRRV64GPSABILinkage >> generateCallIndirect: node [
 TRRV64GPSABILinkage >> generateEpilogue: valReg [
 	| preserved offset |
 
-	"Move value to ABI return register...
-	 ...and reload link register."
-	generate
-		addi: a0, valReg, 0;
-		ld: ra, (sp + 0).      
+	"Move value to ABI return register..."
+	generate addi: a0, valReg, 0.
+
+	"...and reload link register if needed."
+	codegen linkRegisterKilled ifTrue:[
+		generate ld: ra, (sp + 0).
+	].
 
 	"Restore preserved registers"
 	offset := framePreservedOffset.
@@ -145,7 +150,9 @@ TRRV64GPSABILinkage >> generatePrologue [
 	generate addi: sp, sp, frameSize negated.
 
 	"Save link register"
-	generate sd: ra, (sp + 0).
+	codegen linkRegisterKilled ifTrue:[
+		generate sd: ra, (sp + 0).
+	].
 
 	"Save parameters"
 	parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.

@@ -6,7 +6,8 @@ Class {
 		'virtualRegisters',
 		'linkage',
 		'evaluator',
-		'generate'
+		'generate',
+		'linkRegisterKilled'
 	],
 	#pools : [
 		'TRRegisterKinds'
@@ -219,11 +220,26 @@ TRCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	virtualRegisters := Dictionary new.
 	generate := self createAssembler.
 	evaluator := self createEvaluator.
+	linkRegisterKilled := false
 ]
 
 { #category : #accessing }
 TRCodeGenerator >> instructions [
 	 ^ generate memory instructions
+]
+
+{ #category : #accessing }
+TRCodeGenerator >> linkRegisterKilled [
+	"Return true, if code contains a call (and therefore 
+	 overwrites link register if any)."
+	^linkRegisterKilled
+]
+
+{ #category : #accessing }
+TRCodeGenerator >> linkRegisterKilled: aBoolean [
+	"Note whether code contains a call (and therefore
+	 overwrites a link register if any)."
+	linkRegisterKilled := aBoolean
 ]
 
 { #category : #accessing }
