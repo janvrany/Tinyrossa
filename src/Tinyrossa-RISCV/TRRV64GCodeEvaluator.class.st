@@ -42,6 +42,33 @@ TRRV64GCodeEvaluator >> commonBin: node opcodeR: opR opcodeI: opI [
 ]
 
 { #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonLoad: node [
+	"Handles aload, lload, iload, sload & bload"  
+
+	| dstReg offset type |
+
+	offset := (AcDSLSymbol value: node symbol name).
+	dstReg := codegen allocateRegister.
+
+	type := node type.
+	(type == Address or:[type == Int64]) ifTrue:[
+		generate
+			ld: dstReg, (sp + offset).
+	] ifFalse:[ type == Int32 ifTrue:[
+		generate
+			lw: dstReg, (sp + offset).             
+	] ifFalse:[ type == Int16 ifTrue:[
+		generate
+			lh: dstReg, (sp + offset).             
+	] ifFalse:[ type == Int8 ifTrue:[
+		generate
+			lb: dstReg, (sp + offset).             
+	]]]].
+
+	^dstReg.
+]
+
+{ #category : #'evaluation-helpers' }
 TRRV64GCodeEvaluator >> commonMul: node [
 	"Handles imul and lmul"
 	
@@ -252,7 +279,7 @@ TRRV64GCodeEvaluator >> evaluate_aladd: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_aload: node [
-	^ self evaluate_lload: node
+	^ self commonLoad: node
 ]
 
 { #category : #evaluation }
@@ -268,6 +295,11 @@ TRRV64GCodeEvaluator >> evaluate_astore: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_bconst: node [
 	^ self evaluate_iconst: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_bload: node [
+	^ self commonLoad: node
 ]
 
 { #category : #evaluation }
@@ -495,12 +527,7 @@ TRRV64GCodeEvaluator >> evaluate_iflcmpne: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_iload: node [
-	| symbol dstReg |
-
-	symbol := node symbol.
-	dstReg := codegen allocateRegister.
-	generate lw: dstReg, (sp + (AcDSLSymbol value: symbol name)).
-	^ dstReg
+	^ self commonLoad: node
 ]
 
 { #category : #evaluation }
@@ -583,12 +610,7 @@ TRRV64GCodeEvaluator >> evaluate_lconst: node [
 
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lload: node [
-	| symbol dstReg |
-
-	symbol := node symbol.
-	dstReg := codegen allocateRegister.
-	generate ld: dstReg, (sp + (AcDSLSymbol value: symbol name)).
-	^ dstReg
+	^ self commonLoad: node
 ]
 
 { #category : #evaluation }
@@ -687,6 +709,11 @@ TRRV64GCodeEvaluator >> evaluate_overflowchk: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_sconst: node [
 	^ self evaluate_iconst: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_sload: node [
+	^ self commonLoad: node
 ]
 
 { #category : #evaluation }
