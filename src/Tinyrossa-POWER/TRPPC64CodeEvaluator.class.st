@@ -33,6 +33,30 @@ TRPPC64CodeEvaluator >> commonLoad: node [
 	^dstReg.
 ]
 
+{ #category : #'evaluation-helpers' }
+TRPPC64CodeEvaluator >> commonStore: node [
+	"Handles astore, lstore, istore, sstore & bstore"  
+
+	| srcReg offset type |
+
+	offset := (AcDSLSymbol value: node symbol name).
+	srcReg := self evaluate: node child1.
+
+	type := node type.
+	(type == Address or:[type == Int64]) ifTrue:[
+		self shouldImplement
+	] ifFalse:[ type == Int32 ifTrue:[
+		 generate
+			stw: srcReg, (gr1 + offset).             
+	] ifFalse:[ type == Int16 ifTrue:[
+		self shouldImplement
+	] ifFalse:[ type == Int8 ifTrue:[
+		self shouldImplement
+	]]]].
+
+	^nil.
+]
+
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_aconst: node [
 	^self evaluate_lconst: node
@@ -44,6 +68,11 @@ TRPPC64CodeEvaluator >> evaluate_aload: node [
 ]
 
 { #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_astore: node [
+	^ self commonStore: node
+]
+
+{ #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_bconst: node [
 	^ self evaluate_iconst: node
 ]
@@ -51,6 +80,11 @@ TRPPC64CodeEvaluator >> evaluate_bconst: node [
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_bload: node [
 	^ self commonLoad: node
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_bstore: node [
+	^ self commonStore: node
 ]
 
 { #category : #evaluation }
@@ -185,12 +219,7 @@ TRPPC64CodeEvaluator >> evaluate_imul: node [
 
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_istore: node [
-	| symbol srcReg |
-
-	symbol := node symbol.
-	srcReg := self evaluate: node child1.
-	generate stw: srcReg, (gr1 + (AcDSLSymbol value: symbol name)).
-	^ nil
+	^ self commonStore: node
 ]
 
 { #category : #evaluation }
@@ -230,6 +259,11 @@ TRPPC64CodeEvaluator >> evaluate_lload: node [
 ]
 
 { #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_lstore: node [
+	^ self commonStore: node
+]
+
+{ #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_sconst: node [
 	^ self evaluate_iconst: node
 ]
@@ -237,4 +271,9 @@ TRPPC64CodeEvaluator >> evaluate_sconst: node [
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_sload: node [
 	^ self commonLoad: node
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_sstore: node [
+	^ self commonStore: node
 ]
