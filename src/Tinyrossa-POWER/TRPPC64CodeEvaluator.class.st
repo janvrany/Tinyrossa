@@ -2,11 +2,36 @@ Class {
 	#name : #TRPPC64CodeEvaluator,
 	#superclass : #TRCodeEvaluator,
 	#pools : [
+		'TRDataTypes',
 		'TRPPC64RegisterKinds',
 		'TRPPC64Registers'
 	],
 	#category : #'Tinyrossa-POWER-Codegen'
 }
+
+{ #category : #'evaluation-helpers' }
+TRPPC64CodeEvaluator >> commonLoad: node [
+	"Handles aload, lload, iload, sload & bload"  
+
+	| dstReg offset type |
+
+	offset := (AcDSLSymbol value: node symbol name).
+	dstReg := codegen allocateRegister.
+
+	type := node type.
+	(type == Address or:[type == Int64]) ifTrue:[
+		self shouldImplement
+	] ifFalse:[ type == Int32 ifTrue:[
+		 generate
+			lwz: dstReg, (gr1 + offset).             
+	] ifFalse:[ type == Int16 ifTrue:[
+		self shouldImplement
+	] ifFalse:[ type == Int8 ifTrue:[
+		self shouldImplement
+	]]]].
+
+	^dstReg.
+]
 
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_aconst: node [
@@ -14,8 +39,18 @@ TRPPC64CodeEvaluator >> evaluate_aconst: node [
 ]
 
 { #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_aload: node [
+	^ self commonLoad: node
+]
+
+{ #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_bconst: node [
 	^ self evaluate_iconst: node
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_bload: node [
+	^ self commonLoad: node
 ]
 
 { #category : #evaluation }
@@ -132,12 +167,7 @@ TRPPC64CodeEvaluator >> evaluate_ificmpne: node [
 
 { #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_iload: node [
-	| symbol dstReg |
-
-	symbol := node symbol.
-	dstReg := codegen allocateRegister.
-	generate lwz: dstReg, (gr1 + (AcDSLSymbol value: symbol name)).
-	^ dstReg
+	^ self commonLoad: node
 ]
 
 { #category : #evaluation }
@@ -195,6 +225,16 @@ TRPPC64CodeEvaluator >> evaluate_lconst: node [
 ]
 
 { #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_lload: node [
+	^ self commonLoad: node
+]
+
+{ #category : #evaluation }
 TRPPC64CodeEvaluator >> evaluate_sconst: node [
 	^ self evaluate_iconst: node
+]
+
+{ #category : #evaluation }
+TRPPC64CodeEvaluator >> evaluate_sload: node [
+	^ self commonLoad: node
 ]
