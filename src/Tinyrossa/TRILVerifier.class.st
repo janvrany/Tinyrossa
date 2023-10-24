@@ -3,6 +3,7 @@ Class {
 	#superclass : #TRILWalker,
 	#instVars : [
 		'compilation',
+		'blocks',
 		'allInCurrentBlock',
 		'parents',
 		'allInProcessedBlocks'
@@ -44,11 +45,19 @@ TRILVerifier >> initializeWithCompilation: aTRCompilation [
 { #category : #verification }
 TRILVerifier >> verify [
 	allInProcessedBlocks := Set new.
+	blocks := compilation cfg blocks.
 	compilation cfg preorderDo: [ :block | self verifyBlock: block ].
 ]
 
 { #category : #verification }
 TRILVerifier >> verifyBlock: aTRILBlock [
+	aTRILBlock precedessorsDo: [ :prec|
+		self assert: (blocks includes: prec).
+	].
+	aTRILBlock successorsDo: [ :succ|
+		self assert: (blocks includes: succ).
+	].
+
 	allInCurrentBlock := Set new.
 	
 	aTRILBlock treetops do:[:node| 

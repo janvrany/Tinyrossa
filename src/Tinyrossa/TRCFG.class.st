@@ -232,6 +232,7 @@ TRCFG >> prune [
 	
 	unreachable do:[ :block |
 			block removeAll. 
+			block setSuccessor1: nil.
 			blocks remove: block.
 	]
 	

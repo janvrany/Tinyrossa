@@ -20,6 +20,8 @@ Class {
 
 { #category : #private }
 TRCFGSimplifier >> relink: oldSuccessor to: newSuccessor in: block [
+	self assert: (oldSuccessor precedessors includes: block).
+
 	block successor1 == oldSuccessor ifTrue: [ 
 		block setSuccessor1: newSuccessor.
 	].
@@ -33,7 +35,9 @@ TRCFGSimplifier >> relink: oldSuccessor to: newSuccessor in: block [
 		block replace: last with: (TRILNode opcode: last opcode symbol: label children: last children).
 
 		self assert: block successor2 == newSuccessor.
-	]
+	].
+
+	self assert: (newSuccessor precedessors includes: block).
 ]
 
 { #category : #optimizing }

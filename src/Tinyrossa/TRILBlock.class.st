@@ -169,6 +169,11 @@ TRILBlock >> precedessors [
 	^ precedessors copy
 ]
 
+{ #category : #enumerating }
+TRILBlock >> precedessorsDo: aBlock [
+	precedessors do: aBlock
+]
+
 { #category : #'printing & storing' }
 TRILBlock >> printOn:aStream [
 	"append a printed representation of the receiver to the argument, aStream"
@@ -287,6 +292,16 @@ TRILBlock >> successors [
 
 	successor1 isNil ifTrue:[ ^ { successor2 } ].
 	^ { successor1 . successor2 }
+]
+
+{ #category : #enumerating }
+TRILBlock >> successorsDo: aBlock [
+	successor1 notNil ifTrue: [
+		aBlock value: successor1
+	].
+	successor2 notNil ifTrue: [
+		aBlock value: successor2
+	].
 ]
 
 { #category : #accessing }
