@@ -114,14 +114,9 @@ TRRV64GCodeGenerator >> loadConstant64: value into: reg [
 	].
 ]
 
-{ #category : #registers }
-TRRV64GCodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
-	"Evaluate block for each virtual register modified by
-	 given instruction."
-
-	instruction isPseudoInstruction "such as label" ifTrue: [ 
-		^ self
-	]. 
+{ #category : #'registers-private' }
+TRRV64GCodeGenerator >> virtualRegistersModifiedByProcessorInstruction: instruction do: block [
+	self assert: instruction isProcessorInstruction. 
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
 		name = 'rd' ifTrue: [ 
@@ -135,14 +130,9 @@ TRRV64GCodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
 	].
 ]
 
-{ #category : #registers }
-TRRV64GCodeGenerator >> virtualRegistersReadBy: instruction do: block [
-	"Evaluate block for each virtual register read by
-	 given instruction."
-
-	instruction isPseudoInstruction "such as label" ifTrue: [ 
-		^ self
-	]. 
+{ #category : #'registers-private' }
+TRRV64GCodeGenerator >> virtualRegistersReadByProcessorInstruction: instruction do: block [
+	self assert: instruction isProcessorInstruction.
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
 		(#('rs1' 'rs2' 'rs3') includes: name) ifTrue: [ 

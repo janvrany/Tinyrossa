@@ -286,13 +286,51 @@ TRCodeGenerator >> virtualRegisters [
 TRCodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
 	 "Evaluate block for each virtual register modified by
 	  given instruction."  
+
+	instruction isProcessorInstruction ifTrue: [ 
+		self virtualRegistersModifiedByProcessorInstruction: instruction do: block.
+		^ self.
+	].
+]
+
+{ #category : #'registers-private' }
+TRCodeGenerator >> virtualRegistersModifiedByProcessorInstruction: instruction do: block [
+	"Evaluate block for each virtual register modified by
+	 given processor instruction. 
+
+	 DO NOT USE this method directly, use virtualRegistersModifiedBy:do:
+	"  
 	^ self subclassResponsibility
 ]
 
 { #category : #registers }
 TRCodeGenerator >> virtualRegistersReadBy: instruction do: block [
-	 "Evaluate block for each virtual register read by
-	  given instruction."  
+	"Evaluate block for each virtual register read by
+	 given instruction."  
+	instruction isProcessorInstruction ifTrue: [ 
+		self virtualRegistersReadByProcessorInstruction: instruction do: block.
+		^ self.
+	].
+
+	instruction isLeaveInstruction ifTrue: [
+		"In some cases, leave instruction refer to value in
+		 physical (real) register rather then virtual register.
+
+		 One example is when function returns zero and machine
+		 has zero register (as it is common on RISCs)."
+		instruction value isTRVirtualRegister ifTrue: [
+			block value: instruction value
+		].
+	].
+]
+
+{ #category : #'registers-private' }
+TRCodeGenerator >> virtualRegistersReadByProcessorInstruction: instruction do: block [
+	"Evaluate block for each virtual register read by
+	 given processor instruction.
+
+	 DO NOT USE this method directly, use virtualRegistersModifiedBy:do:    
+	"  
 	^ self subclassResponsibility
 ]
 
@@ -300,11 +338,8 @@ TRCodeGenerator >> virtualRegistersReadBy: instruction do: block [
 TRCodeGenerator >> virtualRegistersUsedBy: instruction [
 	| used |
 
-	instruction isPseudoInstruction "such as label" ifTrue: [ 
-		^ #()
-	].
-
 	used := Set new.
 	self virtualRegistersReadBy: instruction do: [ :vReg | used add: vReg ].
 	self virtualRegistersModifiedBy: instruction do: [ :vReg | used add: vReg ].
+	^ used
 ]
