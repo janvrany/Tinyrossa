@@ -3,7 +3,6 @@ Class {
 	#superclass : #AcDSLSymbol,
 	#instVars : [
 		'kind',
-		'constraints',
 		'assigned',
 		'allocation'
 	],
@@ -42,40 +41,6 @@ TRVirtualRegister >> allocation: realReg [
 	self assert: kind == realReg kind.
 
 	allocation := realReg
-]
-
-{ #category : #constraints }
-TRVirtualRegister >> constrainTo: reg [ 
-	"
-	Ensure this virtual register maps to `reg`.
-	"
-	self assert: (reg isKindOf: AcDSLRegister).
-
-	constraints isNil ifTrue: [ constraints := Dictionary new ].
-	constraints at: nil put: reg.
-]
-
-{ #category : #constraints }
-TRVirtualRegister >> constrainTo: reg atInstruction: insn [
-	"
-	Ensure this virtual register maps to `reg` for instruction `insn`.
-	"
-	self assert: (reg isKindOf: AcDSLRegister).
-	self assert: (insn isKindOf: ProcessorInstruction).
-
-	constraints isNil ifTrue: [ constraints := Dictionary new ].
-	constraints at: insn put: reg.
-]
-
-{ #category : #constraints }
-TRVirtualRegister >> constraints [
-	constraints isNil ifTrue: [ ^ Dictionary new ].
-	^ constraints
-]
-
-{ #category : #queries }
-TRVirtualRegister >> hasConstraints [
-	^ constraints notNil and: [ constraints notEmpty ]
 ]
 
 { #category : #initialization }

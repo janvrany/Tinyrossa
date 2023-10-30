@@ -30,15 +30,6 @@ TRNaiveConstraintSolvingRegisterAllocator >> allocateRegisters [
 	].
 
 	"
-	Second, add constraints
-	"
-	codegen virtualRegisters do: [:vReg |  
-		vReg constraints do: [:rReg |  
-			solver assert: (vReg toInt eq: rReg toInt)
-		].
-	].
-
-	"
 	Third, make sure that mapping has no conflicts.
 	Following code is absolutely bogus as it does not
 	take liveness into an account, but will do for now.
