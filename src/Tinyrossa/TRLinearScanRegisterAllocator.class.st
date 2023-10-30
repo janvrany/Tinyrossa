@@ -45,28 +45,15 @@ Class {
 { #category : #allocation }
 TRLinearScanRegisterAllocator >> allocateRegisterFor: aTRVirtualRegister [
 	self assert: aTRVirtualRegister allocation isNil.
-	aTRVirtualRegister hasConstraints ifTrue: [ 
-		"Check, that constraints can be met, that is no other
-		 active v-reg is allocated to requested register."
-		self assert: aTRVirtualRegister constraints size == 1.
-		aTRVirtualRegister constraints do: [:rReg | 
-			activeRanges do: [:vRegAndRange | 
-				vRegAndRange key allocation == rReg ifTrue: [ 
-					self error: 'Conflicing constraints (not yet supported)'
-				].
-			].
-			aTRVirtualRegister allocation: rReg.    
+
+	codegen linkage allocatableRegisters do: [:rReg | 
+		(availableRegisters includes: rReg) ifTrue: [ 
+			aTRVirtualRegister allocation: rReg.
+			availableRegisters remove: rReg.
+			^ self.
 		].
-	] ifFalse: [
-		codegen linkage allocatableRegisters do: [:rReg | 
-			(availableRegisters includes: rReg) ifTrue: [ 
-				aTRVirtualRegister allocation: rReg.
-				availableRegisters remove: rReg.
-				^ self.
-			].
-		].
-		self error: 'Should not happen!'.
 	].
+	self error: 'Should not happen!'.
 ]
 
 { #category : #allocation }
