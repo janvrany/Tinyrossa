@@ -91,21 +91,21 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 			"See class comment why we use `i * 2`."
 			liveRange used: i * 2.
 		].
-		codegen virtualRegistersModifiedBy: insn do: [:vreg | 
-			| liveRange |
-
-			liveRange := liveRanges at: vreg.
-			"See class comment why we use `(i * 2) + 1`."
-			liveRange used: (i * 2) + 1.
-		].
+		codegen virtualRegistersAssignedBy: insn
+			  do: [:vreg | 
+				  | liveRange |
+		  
+				  liveRange := liveRanges at: vreg.
+				   "See class comment why we use `(i * 2) + 1`."
+				  liveRange used: (i * 2) + 1.
+			  ].
 	].
 	liveRanges := liveRanges associations sort: [ :a :b | a value start < b value start ].
 
 	liveRanges do: [:vregAndRange | 
-		| vReg range |
+		| vReg |
 
 		vReg := vregAndRange key.
-		range := vregAndRange value.
 
 		self expireOldRanges: vregAndRange.
 		availableRegisters isEmpty ifTrue: [ 
