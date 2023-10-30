@@ -9,7 +9,7 @@ Class {
 
 { #category : #defaults }
 TRRegisterAllocator class >> defaultClass [
-	^ TRLinearScanRegisterAllocator
+	^ TRReverseLinearScanRegisterAllocator
 ]
 
 { #category : #'instance creation' }
