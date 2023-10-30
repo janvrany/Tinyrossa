@@ -283,23 +283,23 @@ TRCodeGenerator >> virtualRegisters [
 ]
 
 { #category : #registers }
-TRCodeGenerator >> virtualRegistersModifiedBy: instruction do: block [
-	 "Evaluate block for each virtual register modified by
-	  given instruction."  
-
-	instruction isProcessorInstruction ifTrue: [ 
-		self virtualRegistersModifiedByProcessorInstruction: instruction do: block.
+TRCodeGenerator >> virtualRegistersAssignedBy: instruction do: block [ 
+	"Evaluate block for each virtual register modified by
+	 given instruction."
+	
+	instruction isProcessorInstruction ifTrue: [
+		self virtualRegistersAssignedByProcessorInstruction: instruction do: block.
 		^ self.
 	].
 ]
 
 { #category : #'registers-private' }
-TRCodeGenerator >> virtualRegistersModifiedByProcessorInstruction: instruction do: block [
+TRCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
 	"Evaluate block for each virtual register modified by
-	 given processor instruction. 
+	 given processor instruction.
 
-	 DO NOT USE this method directly, use virtualRegistersModifiedBy:do:
-	"  
+	 DO NOT USE this method directly, use virtualRegistersModifiedBy:do:"
+	
 	^ self subclassResponsibility
 ]
 
@@ -340,6 +340,6 @@ TRCodeGenerator >> virtualRegistersUsedBy: instruction [
 
 	used := Set new.
 	self virtualRegistersReadBy: instruction do: [ :vReg | used add: vReg ].
-	self virtualRegistersModifiedBy: instruction do: [ :vReg | used add: vReg ].
+	self virtualRegistersAssignedBy: instruction do: [:vReg | used add: vReg ].
 	^ used
 ]

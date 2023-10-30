@@ -51,19 +51,19 @@ TRPPC64CodeGenerator >> loadConstant32: value into: reg [
 ]
 
 { #category : #'registers-private' }
-TRPPC64CodeGenerator >> virtualRegistersModifiedByProcessorInstruction: instruction do: block [
+TRPPC64CodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
 	self assert: instruction isProcessorInstruction.
+	instruction externalBindings 
+		keysAndValuesDo: [:name :value | 
+			name = 'rt' ifTrue: [
+				(value isBitVector and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [
+					| vReg |
 
-	instruction externalBindings keysAndValuesDo: [ :name :value |
-		name = 'rt' ifTrue: [ 
-			(value isBitVector and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [ 
-				| vReg |
-
-				vReg := virtualRegisters at: value sym ifAbsent: nil.
-				block value: vReg.
+					vReg := virtualRegisters at: value sym ifAbsent: nil.
+					block value: vReg.
+				].
 			].
 		].
-	].
 ]
 
 { #category : #'registers-private' }
