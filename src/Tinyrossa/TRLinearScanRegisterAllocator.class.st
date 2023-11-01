@@ -95,7 +95,7 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 
 		vReg := vregAndRange key.
 
-		self expireOldRanges: vregAndRange.
+		self expireOldIntervals: vregAndRange.
 		availableRegisters isEmpty ifTrue: [ 
 			self error: 'Spilling not supported yet!'
 		] ifFalse: [ 
@@ -106,7 +106,7 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 ]
 
 { #category : #allocation }
-TRLinearScanRegisterAllocator >> expireOldRanges: newRange [
+TRLinearScanRegisterAllocator >> expireOldIntervals: newRange [
 	activeRanges copy do: [:activeRange | 
 		activeRange value stop >= newRange value start ifTrue: [ ^ self ].
 		activeRanges remove: activeRange.
