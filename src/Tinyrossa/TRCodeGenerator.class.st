@@ -306,10 +306,12 @@ TRCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction d
 { #category : #registers }
 TRCodeGenerator >> virtualRegistersReadBy: instruction do: block [
 	"Evaluate block for each virtual register read by
-	 given instruction."  
+	 given instruction."
+
+	| deps |
+
 	instruction isProcessorInstruction ifTrue: [ 
 		self virtualRegistersReadByProcessorInstruction: instruction do: block.
-		^ self.
 	].
 
 	instruction isLeaveInstruction ifTrue: [
