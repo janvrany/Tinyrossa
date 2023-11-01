@@ -29,6 +29,11 @@ TRRealRegister >> initializeWithValue: anAcAsmMapEntry kind: aTRRegisterKind [
 ]
 
 { #category : #testing }
+TRRealRegister >> isTRRealRegister [
+	^ true
+]
+
+{ #category : #testing }
 TRRealRegister >> isTRRegister [
 	^ true
 ]

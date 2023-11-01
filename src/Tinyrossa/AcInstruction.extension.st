@@ -1,6 +1,16 @@
 Extension { #name : #AcInstruction }
 
 { #category : #'*Tinyrossa' }
+AcInstruction >> dependencies [
+	^ self annotationAt: TRRegisterDependencies
+]
+
+{ #category : #'*Tinyrossa' }
+AcInstruction >> dependencies: aTRRegisterDependencies [
+	self annotationAddOrReplace: aTRRegisterDependencies
+]
+
+{ #category : #'*Tinyrossa' }
 AcInstruction >> isLeaveInstruction [
 	^ false
 ]
