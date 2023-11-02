@@ -2,6 +2,7 @@ Class {
 	#name : #TRRegisterLiveRange,
 	#superclass : #Object,
 	#instVars : [
+		'register',
 		'start',
 		'stop'
 	],
@@ -9,12 +10,30 @@ Class {
 }
 
 { #category : #'instance creation' }
+TRRegisterLiveRange class >> forRegister: aTRVirtualRegister [
+	^ self basicNew initializeWithRegister: aTRVirtualRegister
+]
+
+{ #category : #'instance creation' }
 TRRegisterLiveRange class >> new [
-	^ self basicNew initialize
+	^ self shouldNotImplement. "Use #forRegister: instead"
+]
+
+{ #category : #accessing }
+TRRegisterLiveRange >> allocation [
+	^ register allocation
+]
+
+{ #category : #accessing }
+TRRegisterLiveRange >> allocation: aTRRealRegister [
+	register allocation: aTRRealRegister
 ]
 
 { #category : #initialization }
-TRRegisterLiveRange >> initialize [
+TRRegisterLiveRange >> initializeWithRegister: aTRVirtualRegister [
+	self assert: aTRVirtualRegister isTRVirtualRegister.
+
+	register := aTRVirtualRegister.
 	start := SmallInteger maxVal.
 	stop := 0.
 ]
@@ -24,11 +43,13 @@ TRRegisterLiveRange >> printOn:aStream [
 	"append a printed representation of the receiver to the argument, aStream"
 
 	super printOn:aStream.
-	aStream nextPutAll:'< '.
+	aStream nextPut: $(.
+	aStream nextPutAll: register name.
+	aStream nextPutAll:', <'.
 	start printOn:aStream.
 	aStream nextPutAll:', '.
 	stop printOn:aStream.
-	aStream nextPutAll:' >'.
+	aStream nextPutAll:'>)'.
 ]
 
 { #category : #accessing }
