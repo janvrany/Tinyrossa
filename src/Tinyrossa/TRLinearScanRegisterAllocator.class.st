@@ -62,12 +62,12 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 
 	insns := codegen instructions.
 	availableRegisters := codegen linkage allocatableRegisters asSet.
-	activeRanges := SortedCollection sortBlock: [ :a :b | a value stop < b value stop ].
+	activeRanges := SortedCollection sortBlock: [ :a :b | a stop < b stop ].
 
 	"Step 1 - compute live ranges."
 	liveRanges := Dictionary new.
 	codegen virtualRegisters do: [:vReg | 
-		liveRanges at: vReg put: TRRegisterLiveRange new.
+		liveRanges at: vReg put: (TRRegisterLiveRange forRegister: vReg).
 	].
 	1 to: insns size do: [:i |
 		| insn |
@@ -79,28 +79,27 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 			"See class comment why we use `i * 2`."
 			liveRange used: i * 2.
 		].
-		codegen virtualRegistersAssignedBy: insn
-			  do: [:vreg | 
-				  | liveRange |
-		  
-				  liveRange := liveRanges at: vreg.
-				   "See class comment why we use `(i * 2) + 1`."
-				  liveRange used: (i * 2) + 1.
-			  ].
+		codegen virtualRegistersAssignedBy: insn do: [:vreg | 
+			| liveRange |
+
+			liveRange := liveRanges at: vreg.
+			"See class comment why we use `(i * 2) + 1`."
+			liveRange used: (i * 2) + 1.
+		].
 	].
-	liveRanges := liveRanges associations sort: [ :a :b | a value start < b value start ].
+	liveRanges := liveRanges associations sort: [ :a :b | a start < b start ].
 
-	liveRanges do: [:vregAndRange | 
-		| vReg |
+	liveRanges do: [:liveRange | 
+		self assert: liveRange start odd.
+		self assert: liveRange stop even.
+		self assert: liveRange start < liveRange stop.
 
-		vReg := vregAndRange key.
-
-		self expireOldIntervals: vregAndRange.
+		self expireOldIntervals: liveRange.
 		availableRegisters isEmpty ifTrue: [ 
 			self error: 'Spilling not supported yet!'
 		] ifFalse: [ 
-			self allocateRegisterFor: vReg.
-			activeRanges add: vregAndRange
+			self allocateRegisterFor: liveRange.
+			activeRanges add: liveRange
 		].
 	].
 ]
@@ -108,8 +107,8 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 { #category : #allocation }
 TRLinearScanRegisterAllocator >> expireOldIntervals: newRange [
 	activeRanges copy do: [:activeRange | 
-		activeRange value stop >= newRange value start ifTrue: [ ^ self ].
+		activeRange stop >= newRange start ifTrue: [ ^ self ].
 		activeRanges remove: activeRange.
-		availableRegisters add: activeRange key allocation.
+		availableRegisters add: activeRange allocation.
 	].
 ]

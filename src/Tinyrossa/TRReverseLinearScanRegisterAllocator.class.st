@@ -47,12 +47,12 @@ Class {
 }
 
 { #category : #allocation }
-TRReverseLinearScanRegisterAllocator >> allocateRegisterFor: aTRVirtualRegister [
-	self assert: aTRVirtualRegister allocation isNil.
+TRReverseLinearScanRegisterAllocator >> allocateRegisterFor: newRange [
+	self assert: newRange allocation isNil.
 
 	codegen linkage allocatableRegisters do: [:rReg | 
 		(availableRegisters includes: rReg) ifTrue: [ 
-			aTRVirtualRegister allocation: rReg.
+			newRange allocation: rReg.
 			availableRegisters remove: rReg.
 			^ self.
 		].
@@ -66,12 +66,12 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 
 	insns := codegen instructions.
 	availableRegisters := codegen linkage allocatableRegisters asSet.
-	activeRanges := SortedCollection sortBlock: [ :a :b | a value start < b value start ].
+	activeRanges := SortedCollection sortBlock: [ :a :b | a start < b start ].
 
 	"Step 1 - compute live intervals."
 	liveRanges := Dictionary new.
 	codegen virtualRegisters do: [:vReg | 
-		liveRanges at: vReg put: TRRegisterLiveRange new.
+		liveRanges at: vReg put: (TRRegisterLiveRange forRegister: vReg).
 	].
 	"Here we compute live intervals in reverse order although
 	 we need not to."
@@ -85,28 +85,27 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 			"See class comment why we use `i * 2`."
 			liveRange used: i * 2.
 		].
-		codegen virtualRegistersAssignedBy: insn
-			  do: [:vreg | 
-				  | liveRange |
-		  
-				  liveRange := liveRanges at: vreg.
-				   "See class comment why we use `(i * 2) + 1`."
-				  liveRange used: (i * 2) + 1.
-			  ].
+		codegen virtualRegistersAssignedBy: insn do: [:vreg | 
+			| liveRange |
+			  
+			liveRange := liveRanges at: vreg.
+			"See class comment why we use `(i * 2) + 1`."
+			liveRange used: (i * 2) + 1.
+		].
 	].
-	liveRanges := liveRanges associations sort: [ :a :b | a value stop < b value stop ].
+	liveRanges := liveRanges values sort: [ :a :b | a stop < b stop ].
 
-	liveRanges reverseDo: [:vregAndRange | 
-		| vReg |
-
-		vReg := vregAndRange key.
-
-		self expireOldIntervals: vregAndRange.
+	liveRanges reverseDo: [:liveRange |
+		self assert: liveRange start odd.
+		self assert: liveRange stop even.
+		self assert: liveRange start < liveRange stop.
+		
+		self expireOldIntervals: liveRange.
 		availableRegisters isEmpty ifTrue: [ 
 			self error: 'Spilling not supported yet!'
 		] ifFalse: [ 
-			self allocateRegisterFor: vReg.
-			activeRanges add: vregAndRange
+			self allocateRegisterFor: liveRange.
+			activeRanges add: liveRange
 		].
 	].
 ]
@@ -114,8 +113,8 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 { #category : #allocation }
 TRReverseLinearScanRegisterAllocator >> expireOldIntervals: newRange [
 	activeRanges copy reverseDo: [:activeRange |
-		activeRange value start <= newRange value stop ifTrue: [ ^ self ].
+		activeRange start <= newRange stop ifTrue: [ ^ self ].
 		activeRanges remove: activeRange.
-		availableRegisters add: activeRange key allocation.
+		availableRegisters add: activeRange allocation.
 	].
 ]
