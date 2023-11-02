@@ -60,21 +60,21 @@ TRILBuilder >> defineFunction: name type: type linkage: linkage [
 
 { #category : #'building-blocks' }
 TRILBuilder >> fallThroughTo: anILBuilder [
-	| target |
-
-	target := self transferTo: anILBuilder.
-	^ self fallThroughToBlock: target
+	self fallThroughToBlock: anILBuilder entry
 ]
 
 { #category : #'building-blocks' }
 TRILBuilder >> fallThroughToBlock: block [
-	self assert: block isTRILBlock.
+	| target |
 
+	self assert: block isTRILBlock.   
+
+	target := self transferTo: block.     
 	current isTerminated ifFalse: [ 
 		current successor1 notNil ifTrue: [ 
-			block setSuccessor1: current successor1.
+			target setSuccessor1: current successor1.
 		].
-		current setSuccessor1: block.
+		current setSuccessor1: target.
 	].
 ]
 
@@ -154,13 +154,22 @@ TRILBuilder >> location: aTRLocation [
 
 { #category : #'building-blocks' }
 TRILBuilder >> orphan [
+	^ self orphan: nil
+]
+
+{ #category : #'building-blocks' }
+TRILBuilder >> orphan: nameOrNil [
 	"Return a new subbuilder which may be used to build 
 	 code fragments. The code has no relation to the receiver
 	 (hence the name 'orphan') so caller is responsible to pass
 	 control to orphan if it wishes (via `#goto:` or conditional
 	 jump)."
 
-	^ self orphanClass forCompilation: compilation block: compilation cfg addBlock.
+	| orphan |
+	
+	orphan := self orphanClass forCompilation: compilation block: (compilation cfg addBlockNamed: nameOrNil).
+	orphan location: location.
+	^orphan
 ]
 
 { #category : #'building-blocks' }
@@ -186,7 +195,7 @@ TRILBuilder >> orphanIfNeeded: builderOrClosure [
 
 	builderOrClosure isBlock ifTrue: [
 		builder := self orphan.
-		self transferTo: builder.
+		self transferTo: builder entry.
 		builderOrClosure value: builder.
 	] ifFalse: [
 		builder := builderOrClosure.
