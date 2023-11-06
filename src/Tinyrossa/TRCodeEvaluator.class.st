@@ -156,13 +156,7 @@ TRCodeEvaluator >> evaluate_lreturn: node [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_return: node [
-	| retReg |
-
-	self assert: codegen compilation functionType == node child1 type.
-
-	retReg := self evaluate: node child1.
-	generate leave: retReg.
-	^ nil
+	^ codegen linkage generateReturn: node.
 ]
 
 { #category : #evaluation }

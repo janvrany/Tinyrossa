@@ -49,6 +49,16 @@ TRLinkage >> generatePrologue [
 	self subclassResponsibility
 ]
 
+{ #category : #'code generation' }
+TRLinkage >> generateReturn: node [
+	"Generate a TRLeave for given return node (see AcDSLAssembler >> #leave:).
+
+	 If function's linkage return value through register(s), leave pseudo instruction
+	 has to have dependencies set appropriately."
+
+	^ self subclassResponsibility
+]
+
 { #category : #initialization }
 TRLinkage >> initializeWithCodeGenerator: aTRCodeGenerator [
 	codegen := aTRCodeGenerator.
