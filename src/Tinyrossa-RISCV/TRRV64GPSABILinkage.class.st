@@ -182,6 +182,18 @@ TRRV64GPSABILinkage >> generatePrologue [
 	].
 ]
 
+{ #category : #'code generation' }
+TRRV64GPSABILinkage >> generateReturn: node [
+	| srcReg |
+
+	self assert: codegen compilation functionType == node child1 type.
+
+	srcReg := codegen evaluator evaluate: node child1.
+	generate leave: srcReg.   
+
+	^ nil
+]
+
 { #category : #initialization }
 TRRV64GPSABILinkage >> initializeWithCodeGenerator: aTRCodeGenerator [ 
 	super initializeWithCodeGenerator: aTRCodeGenerator.

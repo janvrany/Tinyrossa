@@ -120,6 +120,18 @@ TRPPC64PSABILinkage >> generatePrologue [
 	].
 ]
 
+{ #category : #'code generation' }
+TRPPC64PSABILinkage >> generateReturn: node [
+	| srcReg |
+
+	self assert: codegen compilation functionType == node child1 type.
+
+	srcReg := codegen evaluator evaluate: node child1.
+	generate leave: srcReg.   
+
+	^ nil
+]
+
 { #category : #mapping }
 TRPPC64PSABILinkage >> mapParameters: parameterTypes [ 
 	"Map parameters to argument registers.
