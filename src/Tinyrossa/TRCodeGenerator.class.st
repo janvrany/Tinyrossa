@@ -287,6 +287,13 @@ TRCodeGenerator >> registerAllocatorClass [
 	^ compilation config registerAllocatorClass
 ]
 
+{ #category : #utilities }
+TRCodeGenerator >> registerCopyFrom: srcReg to: dstReg [
+	"Copy value of source register into destination register"
+
+	self subclassResponsibility
+]
+
 { #category : #accessing }
 TRCodeGenerator >> virtualRegisters [
 	^ virtualRegisters
