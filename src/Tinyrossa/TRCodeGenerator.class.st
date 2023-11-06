@@ -83,6 +83,16 @@ TRCodeGenerator >> createLinkage: linkageClass [
 ]
 
 { #category : #accessing }
+TRCodeGenerator >> cursor [
+	^ generate cursor
+]
+
+{ #category : #accessing }
+TRCodeGenerator >> cursor: anInteger [
+	generate cursor: anInteger
+]
+
+{ #category : #accessing }
 TRCodeGenerator >> evaluator [
 	^ evaluator
 ]
