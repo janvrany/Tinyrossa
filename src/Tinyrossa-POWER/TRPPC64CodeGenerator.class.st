@@ -81,7 +81,7 @@ TRPPC64CodeGenerator >> virtualRegistersReadBy: instruction do: block [
 	]. 
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
-		(#('ra' 'rb' 'rc') includes: name) ifTrue: [ 
+		(#('ra' 'rb' 'rc' 'rs') includes: name) ifTrue: [ 
 			(value isBitVector and: [ value isSymbolic and: [ value isConstant ] ]) ifTrue: [ 
 				| vReg |
 
