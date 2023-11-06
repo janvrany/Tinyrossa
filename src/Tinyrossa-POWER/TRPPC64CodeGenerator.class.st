@@ -50,6 +50,11 @@ TRPPC64CodeGenerator >> loadConstant32: value into: reg [
 	].
 ]
 
+{ #category : #utilities }
+TRPPC64CodeGenerator >> registerCopyFrom: srcReg to: dstReg [
+	generate mr: dstReg, srcReg
+]
+
 { #category : #'registers-private' }
 TRPPC64CodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
 	self assert: instruction isProcessorInstruction.
