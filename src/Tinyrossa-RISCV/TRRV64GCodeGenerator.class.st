@@ -114,6 +114,13 @@ TRRV64GCodeGenerator >> loadConstant64: value into: reg [
 	].
 ]
 
+{ #category : #utilities }
+TRRV64GCodeGenerator >> registerCopyFrom: srcReg to: dstReg [
+	"Copy value of source register into destination register"
+
+	generate addi: dstReg, srcReg, 0
+]
+
 { #category : #'registers-private' }
 TRRV64GCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
 	self assert: instruction isProcessorInstruction.
