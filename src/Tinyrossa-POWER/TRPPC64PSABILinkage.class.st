@@ -122,12 +122,17 @@ TRPPC64PSABILinkage >> generatePrologue [
 
 { #category : #'code generation' }
 TRPPC64PSABILinkage >> generateReturn: node [
-	| srcReg |
+	| srcReg leave deps |
 
 	self assert: codegen compilation functionType == node child1 type.
 
 	srcReg := codegen evaluator evaluate: node child1.
-	generate leave: srcReg.   
+
+	deps := TRRegisterDependencies new.
+	deps pre addDependency: srcReg on: gr4.
+
+	leave := generate leave: srcReg.   
+	leave dependencies: deps.
 
 	^ nil
 ]
