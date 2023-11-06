@@ -46,13 +46,17 @@ TRRV64GPSABILinkage >> allocatedPreservedRegisters [
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generateCall: node [
-	"Also handles indirect calls"
-	| indirect firstParameterIndex parameterVregs parameterTypes parameterRregs retVreg|
+	"Also handles indirect calls."
+	| indirect deps firstParameterIndex parameterVregs parameterTypes parameterRregs call retVreg |
 
 	indirect := node opcode isIndirect.
+	deps := TRRegisterDependencies new.
+
+	"Step 1: collect parameters and map parameters to parameter registers
+	 (and stack slots, thought that's not supported yet)"
+
 	"If this is an indirect call, the first child is the address of the callee."
 	firstParameterIndex := indirect ifTrue: [ 2 ] ifFalse: [ 1 ].
-
 
 	parameterVregs := Array new: node children size - firstParameterIndex + 1.
 	parameterTypes := Array new: node children size - firstParameterIndex + 1.
@@ -66,22 +70,40 @@ TRRV64GPSABILinkage >> generateCall: node [
 		parameterTypes at: i - firstParameterIndex + 1 
 					  put: parameter type.
 	].
-
 	parameterRregs := self mapParameters: parameterTypes.
-	parameterVregs with: parameterRregs do: [:valReg :paramReg | 
-		generate addi: paramReg , valReg, 0
+
+	"Step 2: map parameters into parameter registers and
+	 thrash all other unused parameter registers and volatile
+	 registers."
+	parameterVregs with: parameterRregs do: [:vReg :rReg |
+		generate addi: rReg, vReg, 0.
+		deps pre addDependency: vReg on: rReg. 
+		rReg ~~ a0 ifTrue: [
+			deps post addDependency: vReg on: rReg.
+		]
+	].
+	self parameterRegisters do: [:rReg |  
+		(parameterRregs includes: rReg) ifFalse: [  
+			deps pre addTrashed: rReg. 
+			deps post addTrashed: rReg.
+		].
+	].
+	self volatileRegisters do: [:rReg | 
+		deps pre addTrashed: rReg.
+		deps post addTrashed: rReg.
 	].
 
+	"Step 3: generate all instruction"
 	indirect ifTrue: [ 
 		| addrReg |
 
 		addrReg := codegen evaluator evaluate: node child1.
-		generate jalr: ra, addrReg, 0.
+		call := generate jalr: ra, addrReg, 0.
 	] ifFalse: [
 		"If the call a recursive call..."
 		node symbol == codegen compilation functionSymbol ifTrue: [ 
 			"...then generate 'jal ra, <function>'..."
-			generate jal: ra, node symbol.
+			call := generate jal: ra, node symbol.
 		] ifFalse: [
 			"...otherwise..."
 			codegen compilation isAOT ifTrue: [ 
@@ -89,7 +111,7 @@ TRRV64GPSABILinkage >> generateCall: node [
 				In AOT mode we generate call and let the (runtime) linker 
 				to properly relocate it.
 				"
-				generate call: node symbol
+				call := generate call: node symbol
 			] ifFalse: [ 
 				"
 				In JIT mode we load address directly into 'ra' 
@@ -104,20 +126,25 @@ TRRV64GPSABILinkage >> generateCall: node [
 				self assert: node symbol address notNil description: 'No address set for function symbol'.
 
 				codegen loadConstant64: node symbol address into: ra.
-				generate jalr: ra, ra, 0.
+				call := generate jalr: ra, ra, 0.
 			].
 		].
 	].
+	call dependencies: deps.
+
 
 	"Note that link register has been overwritten"
 	codegen linkRegisterKilled: true.
 	
+	"Step 4: map return value into return register (if any) and finish"
 	node symbol type == Void ifTrue:[
 		retVreg := nil.
 	] ifFalse:[
 		retVreg := codegen allocateRegister.
 		generate addi: retVreg , a0, 0.
+		deps post addDependency: retVreg on: a0.
 	].
+
 	^ retVreg
 ]
 
@@ -184,12 +211,17 @@ TRRV64GPSABILinkage >> generatePrologue [
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generateReturn: node [
-	| srcReg |
+	| srcReg leave deps |
 
 	self assert: codegen compilation functionType == node child1 type.
 
 	srcReg := codegen evaluator evaluate: node child1.
-	generate leave: srcReg.   
+
+	deps := TRRegisterDependencies new.
+	deps pre addDependency: srcReg on: a0.
+
+	leave := generate leave: srcReg.   
+	leave dependencies: deps.
 
 	^ nil
 ]
