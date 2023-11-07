@@ -2,27 +2,8 @@
 `TRLinearScanRegisterAllocator` is the old register allocator superseded by
 `TRReverseLinearScanRegisterAllocator`.
 
-It's straightforward reimplementation from original 1999 paper [1] with one
-small change: when computing live intervals, use either 2 * i (where i is instruction
-index) if the register is read or ( 2 * i ) + 1 if the register is modified.
-For example, consider following code: 
-
-  i=0:  reg_B = reg A - 1
-  i=1:  reg_C = reg_B * reg_A
-  i=2:  reg_D = reg_C
-
-then live intervals are: 
-  reg_A = <0, 2>
-  reg_B = <1, 2>
-  reg_C = <3, 4>
-  reg_D = <5, ...>
-
-This helps on 3-address architectures (RISCs) to (for example) allocate
-reg_C (used in instruction i=1) into the same physical register as 
-reg_B or reg_A - at the start of live interval for reg_C (3) reg_B and reg_A
-are already free (since their live interval ends at 2).
-
-Note that there's no need to deal with virtual registers being used across
+It's straightforward reimplementation from original 1999 paper [1] Note that 
+there's no need to deal with virtual registers being used across
 basic block boundary - in Tinyrossa (as well as in Testarossa), the only way
 to transfer value from one (extended) block to another is via `?store` and
 `?load` IL operations.
@@ -73,20 +54,13 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 	].
 	1 to: insns size do: [:i |
 		| insn |
+
 		insn := insns at: i.
-		codegen virtualRegistersReadBy: insn do: [:vreg | 
+		codegen virtualRegistersUsedBy: insn do: [:vreg | 
 			| liveRange |
 
 			liveRange := liveRanges at: vreg.
-			"See class comment why we use `i * 2`."
-			liveRange used: i * 2.
-		].
-		codegen virtualRegistersAssignedBy: insn do: [:vreg | 
-			| liveRange |
-
-			liveRange := liveRanges at: vreg.
-			"See class comment why we use `(i * 2) + 1`."
-			liveRange used: (i * 2) + 1.
+			liveRange used: i.
 		].
 	].
 
@@ -138,9 +112,15 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 
 { #category : #allocation }
 TRLinearScanRegisterAllocator >> expireOldIntervals: newRange [
-	activeRanges copy do: [:activeRange | 
-		activeRange stop >= newRange start ifTrue: [ ^ self ].
-		activeRanges remove: activeRange.
-		availableRegisters add: activeRange allocation.
+	self expireOldIntervalsAt: newRange start
+]
+
+{ #category : #allocation }
+TRLinearScanRegisterAllocator >> expireOldIntervalsAt: i [
+	[ activeRanges notEmpty and:[ activeRanges first stop <= i ] ] whileTrue: [
+		| expiredRange |
+
+		expiredRange := activeRanges removeFirst.
+		availableRegisters add: expiredRange allocation
 	].
 ]
