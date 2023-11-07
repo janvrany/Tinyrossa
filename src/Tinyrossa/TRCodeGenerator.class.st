@@ -387,3 +387,9 @@ TRCodeGenerator >> virtualRegistersUsedBy: instruction [
 	self virtualRegistersAssignedBy: instruction do: [:vReg | used add: vReg ].
 	^ used
 ]
+
+{ #category : #registers }
+TRCodeGenerator >> virtualRegistersUsedBy: instruction do: block [
+	self virtualRegistersReadBy: instruction do: block.
+	self virtualRegistersAssignedBy: instruction do: block.
+]
