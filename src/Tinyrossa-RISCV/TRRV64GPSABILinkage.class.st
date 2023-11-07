@@ -76,7 +76,6 @@ TRRV64GPSABILinkage >> generateCall: node [
 	 thrash all other unused parameter registers and volatile
 	 registers."
 	parameterVregs with: parameterRregs do: [:vReg :rReg |
-		generate addi: rReg, vReg, 0.
 		deps pre addDependency: vReg on: rReg. 
 		rReg ~~ a0 ifTrue: [
 			deps post addDependency: vReg on: rReg.
@@ -141,7 +140,6 @@ TRRV64GPSABILinkage >> generateCall: node [
 		retVreg := nil.
 	] ifFalse:[
 		retVreg := codegen allocateRegister.
-		generate addi: retVreg , a0, 0.
 		deps post addDependency: retVreg on: a0.
 	].
 
@@ -157,12 +155,9 @@ TRRV64GPSABILinkage >> generateCallIndirect: node [
 TRRV64GPSABILinkage >> generateEpilogue: valReg [
 	| preserved offset |
 
-	"Move value to ABI return register..."
-	generate addi: a0, valReg, 0.
-
-	"...and reload link register if needed."
+	"Reload link register if needed"
 	codegen linkRegisterKilled ifTrue:[
-		generate ld: ra, (sp + 0).
+		generate ld: ra, (sp + 0).      
 	].
 
 	"Restore preserved registers"

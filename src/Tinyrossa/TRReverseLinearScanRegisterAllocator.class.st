@@ -41,6 +41,7 @@ Class {
 	#instVars : [
 		'liveRanges',
 		'activeRanges',
+		'allocatableRegisters',
 		'availableRegisters'
 	],
 	#category : #'Tinyrossa-Codegen-Register Allocation'
@@ -50,7 +51,7 @@ Class {
 TRReverseLinearScanRegisterAllocator >> allocateRegisterFor: newRange [
 	self assert: newRange allocation isNil.
 
-	codegen linkage allocatableRegisters do: [:rReg | 
+	allocatableRegisters do: [:rReg | 
 		(availableRegisters includes: rReg) ifTrue: [ 
 			newRange allocation: rReg.
 			availableRegisters remove: rReg.
@@ -65,7 +66,8 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 	| insns |
 
 	insns := codegen instructions.
-	availableRegisters := codegen linkage allocatableRegisters asSet.
+	allocatableRegisters := codegen linkage allocatableRegisters.
+	availableRegisters := allocatableRegisters asSet.  
 	activeRanges := SortedCollection sortBlock: [ :a :b | a start < b start ].
 
 	"Step 1 - compute live intervals."
@@ -77,6 +79,7 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 	 we need not to."
 	insns size downTo: 1 do: [:i |
 		| insn |
+
 		insn := insns at: i.
 		codegen virtualRegistersReadBy: insn do: [:vreg | 
 			| liveRange |
@@ -93,8 +96,11 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 			liveRange used: (i * 2) + 1.
 		].
 	].
-	liveRanges := liveRanges values sort: [ :a :b | a stop < b stop ].
 
+	"
+	Step 2. Allocate registers using collected intervals.
+	"
+	liveRanges := liveRanges values sort: [ :a :b | a stop < b stop ].
 	liveRanges reverseDo: [:liveRange |
 		self assert: liveRange start odd.
 		self assert: liveRange stop even.
@@ -106,6 +112,32 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 		] ifFalse: [ 
 			self allocateRegisterFor: liveRange.
 			activeRanges add: liveRange
+		].
+	].
+
+	"
+	Step 3. Insert register moves to satisfy register dependencies
+	"
+	insns size downTo: 1 do: [:i |
+		| insn deps |
+
+		insn := insns at: i.
+		deps := insn dependencies.
+
+		deps notEmptyOrNil ifTrue: [ 
+			codegen cursor: i.
+			deps post do: [:dep |
+				dep isDependency ifTrue:[ 
+					self insertMoveFrom: dep rreg to: dep vreg.
+				].
+			].
+
+			codegen cursor: i - 1.
+			deps pre do: [:dep |
+				dep isDependency ifTrue:[ 
+					self insertMoveFrom: dep vreg to: dep rreg.
+				].
+			].
 		].
 	].
 ]
