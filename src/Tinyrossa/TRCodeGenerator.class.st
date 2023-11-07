@@ -341,6 +341,18 @@ TRCodeGenerator >> virtualRegistersReadBy: instruction do: block [
 			block value: instruction value
 		].
 	].
+
+	"Pre-dependencies represent physical registers that contain
+	 values of (presumably) used virtual registers. Therefore
+	 such virtual registers are considered as 'read'."
+	deps := instruction dependencies.
+	deps notNil ifTrue: [ 
+		deps pre do: [:info | 
+			info vreg isTRVirtualRegister ifTrue: [ 
+				block value: info vreg.
+			].
+		].
+	].
 ]
 
 { #category : #'registers-private' }
