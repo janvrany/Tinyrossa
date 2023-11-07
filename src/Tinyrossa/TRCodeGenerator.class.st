@@ -303,10 +303,23 @@ TRCodeGenerator >> virtualRegisters [
 TRCodeGenerator >> virtualRegistersAssignedBy: instruction do: block [ 
 	"Evaluate block for each virtual register modified by
 	 given instruction."
-	
+
+	| deps |
+
 	instruction isProcessorInstruction ifTrue: [
 		self virtualRegistersAssignedByProcessorInstruction: instruction do: block.
-		^ self.
+	].
+
+	"Post-dependencies represent physical registers that contain
+	 values of (presumably) later used virtual registers. Therefore
+	 such virtual registers are considered as 'assigned'."
+	deps := instruction dependencies.
+	deps notNil ifTrue: [ 
+		deps post do: [:info | 
+			info vreg isTRVirtualRegister ifTrue: [ 
+				block value: info vreg.
+			].
+		].
 	].
 ]
 
