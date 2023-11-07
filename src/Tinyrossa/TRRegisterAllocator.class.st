@@ -31,3 +31,12 @@ TRRegisterAllocator >> allocateRegisters [
 TRRegisterAllocator >> initializeWithCodeGenerator: aTRCodeGenerator [
 	codegen := aTRCodeGenerator
 ]
+
+{ #category : #utilities }
+TRRegisterAllocator >> insertMoveFrom: srcReg to: dstReg [
+	(srcReg allocation isNil 
+		or: [ dstReg allocation isNil 
+		or: [ srcReg allocation ~~ dstReg allocation ]]) ifTrue: [ 
+		codegen registerCopyFrom: srcReg to: dstReg.
+	].
+]

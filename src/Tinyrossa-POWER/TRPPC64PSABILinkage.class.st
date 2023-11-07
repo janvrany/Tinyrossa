@@ -55,10 +55,6 @@ TRPPC64PSABILinkage >> generateCall: node [
 
 { #category : #'code generation' }
 TRPPC64PSABILinkage >> generateEpilogue: valReg [
-	"Move value to ABI return register..."
-	generate
-		mr: gr4, valReg.
-
 	"Restore preserved registers"
 	self preservedRegisters do: [:reg |
 		(self allocatedRegisters includes: reg) ifTrue: [ 
