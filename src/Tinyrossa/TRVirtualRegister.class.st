@@ -2,21 +2,19 @@ Class {
 	#name : #TRVirtualRegister,
 	#superclass : #AcDSLSymbol,
 	#instVars : [
+		'codegen',
 		'kind',
 		'assigned',
-		'allocation'
+		'allocation',
+		'spill',
+		'spilled'
 	],
 	#category : #'Tinyrossa-Codegen'
 }
 
 { #category : #'instance creation' }
-TRVirtualRegister class >> named: aString [
-	^ self basicNew initializeWithName: aString
-]
-
-{ #category : #'instance creation' }
-TRVirtualRegister class >> named: aString kind: aTRRegisterKind [         
-	^ self basicNew initializeWithName: aString kind: aTRRegisterKind
+TRVirtualRegister class >> named: aString kind: aTRRegisterKind codeGenerator: aTRCodeGenerator [       
+	^ self basicNew initializeWithName: aString kind: aTRRegisterKind codeGenerator: aTRCodeGenerator
 ]
 
 { #category : #arithmetic }
@@ -44,7 +42,8 @@ TRVirtualRegister >> allocation: realReg [
 ]
 
 { #category : #initialization }
-TRVirtualRegister >> initializeWithName: aString kind: aTRRegisterKind [
+TRVirtualRegister >> initializeWithName: aString kind: aTRRegisterKind codeGenerator: aTRCodeGenerator [
+	codegen := aTRCodeGenerator.
 	value := aString.
 	kind := aTRRegisterKind.
 	assigned := false.
