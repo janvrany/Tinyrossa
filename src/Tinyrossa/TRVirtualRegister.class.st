@@ -19,12 +19,12 @@ TRVirtualRegister class >> named: aString kind: aTRRegisterKind codeGenerator: a
 
 { #category : #arithmetic }
 TRVirtualRegister >> + offset [
-	^ AcDSLMemRef base: self offset: offset asAcDSLOperand
+	^ TRMemoryReference base: self offset: offset asAcDSLOperand
 ]
 
 { #category : #arithmetic }
 TRVirtualRegister >> - offset [
-	^ AcDSLMemRef base: self offset: offset negated asAcDSLOperand
+	^ TRMemoryReference base: self offset: offset negated asAcDSLOperand
 ]
 
 { #category : #accessing }
