@@ -1,5 +1,12 @@
+"
+`TRRegisterLiveInterval` is a helper structure used by
+(reverse) linear scan allocators. It keeps information
+required by the allocator as it progresses and allocates
+registers.
+
+"
 Class {
-	#name : #TRRegisterLiveRange,
+	#name : #TRRegisterLiveInterval,
 	#superclass : #Object,
 	#instVars : [
 		'register',
@@ -10,27 +17,17 @@ Class {
 }
 
 { #category : #'instance creation' }
-TRRegisterLiveRange class >> forRegister: aTRVirtualRegister [
+TRRegisterLiveInterval class >> forRegister: aTRVirtualRegister [
 	^ self basicNew initializeWithRegister: aTRVirtualRegister
 ]
 
 { #category : #'instance creation' }
-TRRegisterLiveRange class >> new [
+TRRegisterLiveInterval class >> new [
 	^ self shouldNotImplement. "Use #forRegister: instead"
 ]
 
-{ #category : #accessing }
-TRRegisterLiveRange >> allocation [
-	^ register allocation
-]
-
-{ #category : #accessing }
-TRRegisterLiveRange >> allocation: aTRRealRegister [
-	register allocation: aTRRealRegister
-]
-
 { #category : #initialization }
-TRRegisterLiveRange >> initializeWithRegister: aTRVirtualRegister [
+TRRegisterLiveInterval >> initializeWithRegister: aTRVirtualRegister [
 	self assert: aTRVirtualRegister isTRVirtualRegister.
 
 	register := aTRVirtualRegister.
@@ -39,7 +36,7 @@ TRRegisterLiveRange >> initializeWithRegister: aTRVirtualRegister [
 ]
 
 { #category : #'printing & storing' }
-TRRegisterLiveRange >> printOn:aStream [
+TRRegisterLiveInterval >> printOn:aStream [
 	"append a printed representation of the receiver to the argument, aStream"
 
 	super printOn:aStream.
@@ -53,17 +50,22 @@ TRRegisterLiveRange >> printOn:aStream [
 ]
 
 { #category : #accessing }
-TRRegisterLiveRange >> start [
+TRRegisterLiveInterval >> register [
+	^ register
+]
+
+{ #category : #accessing }
+TRRegisterLiveInterval >> start [
 	^ start
 ]
 
 { #category : #accessing }
-TRRegisterLiveRange >> stop [
+TRRegisterLiveInterval >> stop [
 	^ stop
 ]
 
 { #category : #utilities }
-TRRegisterLiveRange >> used: anInteger [
+TRRegisterLiveInterval >> used: anInteger [
 	anInteger < start ifTrue:[
 		start := anInteger.
 	].
