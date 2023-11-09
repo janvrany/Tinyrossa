@@ -34,7 +34,7 @@ TRCodeGenerator >> allocateRegister [
 TRCodeGenerator >> allocateRegister: kind [
 	| reg |
 
-	reg := TRVirtualRegister named: (kind name , '_' , (virtualRegisters size + 1) printString) kind: kind.
+	reg := TRVirtualRegister named: (kind name , '_' , (virtualRegisters size + 1) printString) kind: kind codeGenerator: self.
 	virtualRegisters at: reg name put: reg.
 	^ reg
 ]
