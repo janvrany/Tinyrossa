@@ -50,7 +50,7 @@ TRLinearScanRegisterAllocator >> allocateRegisters [
 	"Step 1 - compute live intervals."
 	liveRanges := Dictionary new.
 	codegen virtualRegisters do: [:vReg | 
-		liveRanges at: vReg put: (TRRegisterLiveRange forRegister: vReg).
+		liveRanges at: vReg put: (TRRegisterLiveInterval forRegister: vReg).
 	].
 	1 to: insns size do: [:i |
 		| insn |

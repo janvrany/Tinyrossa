@@ -19,8 +19,8 @@ Class {
 	#superclass : #TRRegisterAllocator,
 	#instVars : [
 		'instructions',
-		'liveRanges',
-		'activeRanges',
+		'intervals',
+		'live',
 		'allocatableRegisters',
 		'availableRegisters'
 	],
@@ -28,15 +28,17 @@ Class {
 }
 
 { #category : #allocation }
-TRReverseLinearScanRegisterAllocator >> allocateRegisterFor: newRange [
-	self assert: newRange allocation isNil.
+TRReverseLinearScanRegisterAllocator >> allocateRegister: interval [
+	"Allocate register for given `interval`."
+
+	self assert: interval register allocation isNil.
 	self assert: availableRegisters notEmpty.
 
 	allocatableRegisters do: [:rReg | 
 		(availableRegisters includes: rReg) ifTrue: [ 
-			newRange allocation: rReg.
+			interval register allocation: rReg.
 			availableRegisters remove: rReg.
-			activeRanges add: newRange.
+			live add: interval.
 			^ self.
 		].
 	].
@@ -48,12 +50,12 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 	instructions := codegen instructions.
 	allocatableRegisters := codegen linkage allocatableRegisters.
 	availableRegisters := allocatableRegisters asSet.  
-	activeRanges := SortedCollection sortBlock: [ :a :b | a start < b start ].
+	live := SortedCollection sortBlock: [ :a :b | a start < b start ].
 
 	"Step 1 - compute live intervals."
-	liveRanges := Dictionary new.
+	intervals := Dictionary new.
 	codegen virtualRegisters do: [:vReg | 
-		liveRanges at: vReg put: (TRRegisterLiveRange forRegister: vReg).
+		intervals at: vReg put: (TRRegisterLiveInterval forRegister: vReg).
 	].
 	"Here we compute live intervals in reverse order although
 	 we need not to."
@@ -62,22 +64,21 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 
 		insn := instructions at: i.
 		codegen virtualRegistersUsedBy: insn do: [:vreg | 
-			| liveRange |
+			| interval |
 
-			liveRange := liveRanges at: vreg.
-			liveRange used: i.
+			interval := intervals at: vreg.
+			interval used: i.
 		].
 	].
-	liveRanges do: [:liveRange | 
-		self assert: liveRange start < liveRange stop.
+	intervals do: [:interval | 
+		self assert: interval start < interval stop.
 	].
+	intervals := intervals values asOrderedCollection sort: [ :a :b | a stop < b stop ].
 
 	"
 	Step 2. Walk instructions in reverse order and allocate
 	registers. Insert moves / reloads and spills as needed.
 	"
-	liveRanges := liveRanges values asOrderedCollection sort: [ :a :b | a stop < b stop ].
-
 	instructions size downTo: 1 do: [:i |  
 		self allocateRegistersAt: i 
 	].
@@ -109,13 +110,14 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 	].
 
 	"Free registers no longer 'live'"
-	self expireOldIntervalsAt: insnIndex.
+	self expireRegistersAt: insnIndex.
 
-	"Allocate registers going to be live at this point.
-	 Here we remove a register for list of live intervals
-	 (liveRanges is actually a worklist)."
-	[ liveRanges notEmpty and: [ liveRanges last stop == insnIndex ] ] whileTrue: [
-		self allocateRegisterFor: liveRanges removeLast.
+	"Allocate registers going to be live at this point. Here we remove 
+	 the interval from the list so we do not need to always search the
+	 list for intervals starting at this point. 
+	 In other words, `intervals` collection serve as a worklist."
+	[ intervals notEmpty and: [ intervals last stop == insnIndex ] ] whileTrue: [ 
+		self allocateRegister: intervals removeLast.
 	].
 
 	"Satisfy pre-dependencies, i.e., move values from (virtual) registers
@@ -132,16 +134,12 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 ]
 
 { #category : #allocation }
-TRReverseLinearScanRegisterAllocator >> expireOldIntervals: newRange [
-	^ self expireOldIntervalsAt: newRange stop
-]
+TRReverseLinearScanRegisterAllocator >> expireRegistersAt: insnIndex [
+	"Expire all registers no longer live at given instruction (index)."
+	[ live notEmpty and:[ live last start >= insnIndex ] ] whileTrue: [
+		| expired |
 
-{ #category : #allocation }
-TRReverseLinearScanRegisterAllocator >> expireOldIntervalsAt: i [
-	[ activeRanges notEmpty and:[ activeRanges last start >= i ] ] whileTrue: [
-		| expiredRange |
-
-		expiredRange := activeRanges removeLast.
-		availableRegisters add: expiredRange allocation
+		expired := live removeLast.
+		availableRegisters add: expired register allocation
 	].
 ]
