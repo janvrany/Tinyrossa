@@ -21,18 +21,18 @@ Class {
 
 { #category : #accessing }
 TRRV64GPSABILinkage >> allocatableRegisters [
-	codegen linkRegisterKilled ifFalse:[
-		"For leaf methods, we prefer volatile registers over preserved 
-		 registers. This saves us a need to save / reload (preserved) 
-		 registers in prologue / epilogue."
+	(codegen linkRegisterKilled not or:[codegen compilation config stressRA])  ifTrue:[
+		"For leaf methods (or when we want to stress RA), we prefer volatile registers
+		 over preserved registers. This might save us a need to spill / reload (preserved) 
+		 registers in prologue / epilogue for small methods."
 
 		^ self volatileRegisters , self preservedRegisters
-	] ifTrue:[
-		"FIXME: For non-leaf methods, we only allow to use preserved registers 
-		 because as of now, there's no support for spilling / reloading 
-		 registers in the code (only in prologue / epilogue)."
+	] ifFalse:[
+		"For non-leaf methods we prefer preserved registers over volatile registers. 
+		 This might save us a need to spill / reload (volatile) registers at call 
+		 instructions for small functions."
 
-		^ self preservedRegisters
+		^ self preservedRegisters , self volatileRegisters
 	]
 ]
 
