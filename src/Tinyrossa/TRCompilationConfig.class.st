@@ -101,6 +101,16 @@ TRCompilationConfig >> registerAllocatorClass: aClass [
 ]
 
 { #category : #options }
+TRCompilationConfig >> stressRA [
+	^ options at: OptionStressRA ifAbsent: [ false ]
+]
+
+{ #category : #options }
+TRCompilationConfig >> stressRA: aBoolean [
+	^ options at: OptionStressRA put: aBoolean
+]
+
+{ #category : #options }
 TRCompilationConfig >> target [
 	^ options at: OptionTarget ifAbsent: [ self error:'Oops, no target specified!' ]
 ]

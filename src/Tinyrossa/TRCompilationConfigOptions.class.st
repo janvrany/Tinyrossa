@@ -7,6 +7,7 @@ Class {
 		'OptionObjectFile',
 		'OptionOptimizationPasses',
 		'OptionRegisterAllocator',
+		'OptionStressRA',
 		'OptionTarget',
 		'OptionVerifyAfterEachOptimizationPass'
 	],
@@ -23,4 +24,5 @@ TRCompilationConfigOptions class >> initialize [
 	OptionObjectFile := #OptionObjectFile.
 	OptionVerifyAfterEachOptimizationPass := #OptionVerifyAfterEachOptimizationPass.
 	OptionOptimizationPasses := #OptionOptimizationPasses.
+	OptionStressRA := #OptionStressRA
 ]
