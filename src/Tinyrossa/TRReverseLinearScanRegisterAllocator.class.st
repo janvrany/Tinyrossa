@@ -18,6 +18,7 @@ Class {
 	#name : #TRReverseLinearScanRegisterAllocator,
 	#superclass : #TRRegisterAllocator,
 	#instVars : [
+		'instructions',
 		'liveRanges',
 		'activeRanges',
 		'allocatableRegisters',
@@ -29,11 +30,13 @@ Class {
 { #category : #allocation }
 TRReverseLinearScanRegisterAllocator >> allocateRegisterFor: newRange [
 	self assert: newRange allocation isNil.
+	self assert: availableRegisters notEmpty.
 
 	allocatableRegisters do: [:rReg | 
 		(availableRegisters includes: rReg) ifTrue: [ 
 			newRange allocation: rReg.
 			availableRegisters remove: rReg.
+			activeRanges add: newRange.
 			^ self.
 		].
 	].
@@ -42,9 +45,7 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisterFor: newRange [
 
 { #category : #allocation }
 TRReverseLinearScanRegisterAllocator >> allocateRegisters [
-	| insns |
-
-	insns := codegen instructions.
+	instructions := codegen instructions.
 	allocatableRegisters := codegen linkage allocatableRegisters.
 	availableRegisters := allocatableRegisters asSet.  
 	activeRanges := SortedCollection sortBlock: [ :a :b | a start < b start ].
@@ -56,10 +57,10 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 	].
 	"Here we compute live intervals in reverse order although
 	 we need not to."
-	insns size downTo: 1 do: [:i |
+	instructions size downTo: 1 do: [:i |
 		| insn |
 
-		insn := insns at: i.
+		insn := instructions at: i.
 		codegen virtualRegistersUsedBy: insn do: [:vreg | 
 			| liveRange |
 
@@ -67,45 +68,64 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 			liveRange used: i.
 		].
 	].
-
-	"
-	Step 2. Allocate registers using collected intervals.
-	"
-	liveRanges := liveRanges values sort: [ :a :b | a stop < b stop ].
-	liveRanges reverseDo: [:liveRange |
+	liveRanges do: [:liveRange | 
 		self assert: liveRange start < liveRange stop.
-		
-		self expireOldIntervals: liveRange.
-		availableRegisters isEmpty ifTrue: [ 
-			self error: 'Spilling not supported yet!'
-		] ifFalse: [ 
-			self allocateRegisterFor: liveRange.
-			activeRanges add: liveRange
-		].
 	].
 
 	"
-	Step 3. Insert register moves to satisfy register dependencies
+	Step 2. Walk instructions in reverse order and allocate
+	registers. Insert moves / reloads and spills as needed.
 	"
-	insns size downTo: 1 do: [:i |
-		| insn deps |
+	liveRanges := liveRanges values asOrderedCollection sort: [ :a :b | a stop < b stop ].
 
-		insn := insns at: i.
-		deps := insn dependencies.
+	instructions size downTo: 1 do: [:i |  
+		self allocateRegistersAt: i 
+	].
+]
 
-		deps notEmptyOrNil ifTrue: [ 
-			codegen cursor: i.
-			deps post do: [:dep |
-				dep isDependency ifTrue:[ 
-					self insertMoveFrom: dep rreg to: dep vreg.
-				].
+{ #category : #allocation }
+TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
+	"Helper to allocate registers for instruction at given index.
+	 Also makes ensures both pre and post register dependencies are
+	 met at this point.
+
+	 When reading this code, keep in mind that we progress in reverse order, 
+	 from last to first instruction!
+	"
+	| insn deps |
+
+	insn := instructions at: insnIndex.
+	deps := insn dependencies.
+
+	"Satisfy post-dependencies, i.e., move values from fixed (real)
+	 registers to desired (virtual) registers"
+	deps notEmptyOrNil ifTrue: [
+		codegen cursor: insnIndex.
+		deps post do: [:dep |
+			dep isDependency ifTrue:[
+				self insertMoveFrom: dep rreg to: dep vreg.
 			].
+		].
+	].
 
-			codegen cursor: i - 1.
-			deps pre do: [:dep |
-				dep isDependency ifTrue:[ 
-					self insertMoveFrom: dep vreg to: dep rreg.
-				].
+	"Free registers no longer 'live'"
+	self expireOldIntervalsAt: insnIndex.
+
+	"Allocate registers going to be live at this point.
+	 Here we remove a register for list of live intervals
+	 (liveRanges is actually a worklist)."
+	[ liveRanges notEmpty and: [ liveRanges last stop == insnIndex ] ] whileTrue: [
+		self allocateRegisterFor: liveRanges removeLast.
+	].
+
+	"Satisfy pre-dependencies, i.e., move values from (virtual) registers
+	 to desired (real) registers. They're placed *before* the instruction
+	 being processed, hence the `insnIndex - 1`"
+	deps notEmptyOrNil ifTrue: [
+		codegen cursor: insnIndex - 1.
+		deps pre do: [:dep |
+			dep isDependency ifTrue:[
+				self insertMoveFrom: dep vreg to: dep rreg.
 			].
 		].
 	].
