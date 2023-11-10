@@ -49,6 +49,9 @@ TRReverseLinearScanRegisterAllocator >> allocateRegister: interval [
 TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 	instructions := codegen instructions.
 	allocatableRegisters := codegen linkage allocatableRegisters.
+	codegen compilation config stressRA ifTrue: [ 
+		allocatableRegisters := allocatableRegisters copyFrom: 1 to: 2.
+	].
 	availableRegisters := allocatableRegisters asSet.  
 	live := SortedCollection sortBlock: [ :a :b | a start < b start ].
 
