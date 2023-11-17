@@ -97,12 +97,10 @@ TRVirtualRegister >> setAssigned [
 
 { #category : #conversion }
 TRVirtualRegister >> toBitVector: length [
-	allocation notNil ifTrue: [ ^ allocation toBitVector: length ].
 	^ value toBitVector: length
 ]
 
 { #category : #conversion }
 TRVirtualRegister >> toInt [
-	allocation notNil ifTrue: [ ^ allocation toInt ].
 	^ value toInt
 ]
