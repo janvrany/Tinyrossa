@@ -138,7 +138,18 @@ TRCodeGenerator >> fixupOffsets [
 
 { #category : #'code gen-phases' }
 TRCodeGenerator >> fixupRegisters [
-	self fixupUsing: virtualRegisters
+	| v2rMap |
+
+	v2rMap := Dictionary new: virtualRegisters size.
+	virtualRegisters keysAndValuesDo: [ :name :reg |
+		"It might be that some virtual register was allocated but not
+		 actually used. In this case, it has not been assigned a 
+		 real register."
+		reg allocation notNil ifTrue: [
+			v2rMap at: name put: reg allocation.
+		].
+	].
+	self fixupUsing: v2rMap
 ]
 
 { #category : #private }
