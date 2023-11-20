@@ -305,6 +305,26 @@ TRCodeGenerator >> registerCopyFrom: srcReg to: dstReg [
 	self subclassResponsibility
 ]
 
+{ #category : #utilities }
+TRCodeGenerator >> registerLoad: reg from: sym [
+	"Load value of given symbol `sym` into a register `reg`.
+
+	 Currently, symbol must be an automatic and of type Address.
+	 This method is used to implement register reloads.
+	"
+	self subclassResponsibility.
+]
+
+{ #category : #utilities }
+TRCodeGenerator >> registerStore: reg to: sym [
+	"Store value of given register `reg` into a symbol `sym`.
+
+	 Currently, symbol must be an automatic and of type Address.
+	 This method is used to implement register spills.
+	"     
+	^ self subclassResponsibility
+]
+
 { #category : #accessing }
 TRCodeGenerator >> virtualRegisters [
 	^ virtualRegisters
