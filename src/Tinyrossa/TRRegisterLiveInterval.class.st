@@ -11,7 +11,9 @@ Class {
 	#instVars : [
 		'register',
 		'start',
-		'stop'
+		'stop',
+		'spilled',
+		'spillSlot'
 	],
 	#category : #'Tinyrossa-Codegen-Register Allocation'
 }
@@ -33,6 +35,7 @@ TRRegisterLiveInterval >> initializeWithRegister: aTRVirtualRegister [
 	register := aTRVirtualRegister.
 	start := SmallInteger maxVal.
 	stop := 0.
+	spilled := false.
 ]
 
 { #category : #'printing & storing' }
@@ -52,6 +55,35 @@ TRRegisterLiveInterval >> printOn:aStream [
 { #category : #accessing }
 TRRegisterLiveInterval >> register [
 	^ register
+]
+
+{ #category : #accessing }
+TRRegisterLiveInterval >> spillSlot [
+	^ spillSlot
+]
+
+{ #category : #accessing }
+TRRegisterLiveInterval >> spillSlot: aTRAutomaticSymbol [
+	self assert: aTRAutomaticSymbol isTRAutomaticSymbol.
+	self assert: spillSlot isNil.
+
+	spillSlot := aTRAutomaticSymbol.
+]
+
+{ #category : #accessing }
+TRRegisterLiveInterval >> spilled [
+	^ spilled
+]
+
+{ #category : #accessing }
+TRRegisterLiveInterval >> spilled: aBoolean [
+	self assert: aBoolean = spilled not.
+	self assert: spillSlot isTRAutomaticSymbol.
+
+	spilled := aBoolean.
+	spilled ifTrue: [ 
+		spillSlot incUseCount.
+	].
 ]
 
 { #category : #accessing }

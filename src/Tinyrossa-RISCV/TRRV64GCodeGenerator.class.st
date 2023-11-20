@@ -2,6 +2,7 @@ Class {
 	#name : #TRRV64GCodeGenerator,
 	#superclass : #TRCodeGenerator,
 	#pools : [
+		'TRDataTypes',
 		'TRIntLimits',
 		'TRRV64GISALimits',
 		'TRRV64GRegisters'
@@ -119,6 +120,30 @@ TRRV64GCodeGenerator >> registerCopyFrom: srcReg to: dstReg [
 	"Copy value of source register into destination register"
 
 	generate addi: dstReg, srcReg, 0
+]
+
+{ #category : #utilities }
+TRRV64GCodeGenerator >> registerLoad: reg from: sym [
+	| offset |
+
+	self assert: reg isTRRegister.
+	self assert: sym isTRAutomaticSymbol.
+	self assert: sym type == Address.
+
+	offset := AcDSLSymbol value: sym name.
+	generate ld: reg, (sp + offset).
+]
+
+{ #category : #utilities }
+TRRV64GCodeGenerator >> registerStore: reg to: sym [
+	| offset |
+
+	self assert: reg isTRRegister.
+	self assert: sym isTRAutomaticSymbol.
+	self assert: sym type == Address.
+
+	offset := AcDSLSymbol value: sym name.
+	generate sd: reg, (sp + offset).
 ]
 
 { #category : #'registers-private' }
