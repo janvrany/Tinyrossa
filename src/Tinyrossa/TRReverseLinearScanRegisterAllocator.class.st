@@ -66,11 +66,17 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 		| insn |
 
 		insn := instructions at: i.
-		codegen virtualRegistersUsedBy: insn do: [:vreg | 
+		codegen virtualRegistersReadBy: insn do: [:vreg | 
 			| interval |
 
 			interval := intervals at: vreg.
-			interval used: i.
+			interval usedAt: i.
+		].
+		codegen virtualRegistersAssignedBy: insn do: [:vreg | 
+			| interval |
+
+			interval := intervals at: vreg.
+			interval defdAt: i.
 		].
 	].
 	intervals do: [:interval | 
