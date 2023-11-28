@@ -68,7 +68,7 @@ TRRV64GCompilationTests >> test03_lconst_n [
 	 VDBDebuggerApplication openFor: debugger
 	"
 	debugger c.
-	self assert: (debugger getRegister: 'a0') hex equals: '-7AFEAFFECAFEAFFE'.
+	self assert: (debugger getRegister: 'a0')  equals: -16r7AFEAFFECAFEAFFE.
 ]
 
 { #category : #tests }

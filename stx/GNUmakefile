@@ -33,7 +33,7 @@ endif
 
 ifndef LIBGDBS_DIR
 LIBGDBS_DIR    := ../3rdparty/jv/libgdbs
-LIBGDBS_URL    ?= https://swing.fit.cvut.cz/hg/jv-libgdbs
+LIBGDBS_URL    ?= https://jan.vrany.io/hg/jv-libgdbs
 LIBGDBS_BRANCH ?= default
 $(eval $(call mercurial-clone-local,LIBGDBS_DIR,$(LIBGDBS_URL),$(LIBGDBS_BRANCH)))
 endif

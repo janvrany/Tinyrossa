@@ -110,27 +110,21 @@ TRCompilationTestShell >> setUp [
 
 { #category : #'running-private' }
 TRCompilationTestShell >> setUpDebuggerOnHost: host port: port [
-	Smalltalk isSmalltalkX ifTrue:[
-		"On Smalltalk/X we use jv:libgdbs to poke at shell."
+	(Smalltalk includesKey: #GDBDebugger) ifTrue:[
+		"Use LibGDBs if available..."
 		
-		self assert: (Smalltalk includesKey: #GDBDebugger).
-
 		debugger := (Smalltalk at: #GDBDebugger) new.
 		debugger executable: binary.
 		debugger send: 'target remote ', host , ':' , port printString.
 		^self
-	].
-
-	Smalltalk isPharo ifTrue:[
-		"On Pharo, we se ULD (SmallRSP) to poke at shell."
+	] ifFalse:[
+		"...else use SmallRSP."
 	
 		self assert: (Smalltalk includesKey: #RemoteGDB).
 
 		debugger := (Smalltalk at: #RemoteGDB) host: host port: port.
 		^self.
 	].
-
-	self error:'Unsupported dialect'
 ]
 
 { #category : #running }
@@ -140,23 +134,25 @@ TRCompilationTestShell >> tearDown [
 
 { #category : #'running-private' }
 TRCompilationTestShell >> tearDownDebugger [
-	Smalltalk isSmalltalkX ifTrue:[
-		"On Smalltalk/X we use jv:libgdbs to poke at shell."
+	(debugger class name = #GDBDebugger) ifTrue:[
+		"debugger is LibGDBs' GDBDebugger..."
 		
 		(debugger notNil and: [ debugger isConnected ]) ifTrue: [
+			| shouldQuitDebugger |
+			
 			debugger send: 'kill'.
-			(Smalltalk includesKey: #VDBDebuggerApplication) ifTrue: [
-				((Smalltalk at: #VDBDebuggerApplication) allInstances allSatisfy:[:vdbApp | vdbApp debugger ~~ target]) ifTrue: [ 
-					debugger send: 'quit' andWait: false.
-				].
+			
+			shouldQuitDebugger := (Smalltalk includesKey: #VDBDebuggerApplication) not 
+														or:[(Smalltalk at: #VDBDebuggerApplication) allInstances allSatisfy:[:vdbApp | vdbApp debugger ~~ target]].
+			shouldQuitDebugger ifTrue: [ 
+					debugger send: 'quit' andWait: false.				
 			].
+		].		
+	] ifFalse:[
+		"debugger is either nil or SmallRSP's RemoteGDB"
+		debugger notNil ifTrue:[		
+			debugger disconnect.
 		].
-		
-	].
-	Smalltalk isPharo ifTrue:[
-		"On Pharo, we se ULD (SmallRSP) to poke at shell."
-		
-		debugger disconnect.
 	].
 	debugger := nil.
 ]
