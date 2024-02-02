@@ -17,6 +17,7 @@ ManifestTinyrossaTests class >> mandatoryPreRequisites [
 	^ #(
 		#Tinyrossa    "TRCompilationExamples - superclass of TRCompilationExamplesTests"
 		#'stx:goodies/sunit'    "TestAsserter - superclass of TRCompilationExamplesTests"
+		#'stx:goodies/sunit/ext/parametrized'
 		#'stx:libbasic'    "Object - superclass of ManifestTinyrossaTests"
 		#'stx:libcompat'    "PackageManifest - superclass of ManifestTinyrossaTests"
 	)
