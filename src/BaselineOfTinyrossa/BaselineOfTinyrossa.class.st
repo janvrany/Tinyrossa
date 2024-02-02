@@ -25,7 +25,11 @@ BaselineOfTinyrossa >> baseline: spec [
 			spec baseline: 'LibUnix' with: [
 				spec repository: 'github://janvrany/pharo-hacks'.
 			].
-			
+
+			spec baseline: 'SUnitParametrized' with: [
+				spec repository: 'github://janvrany/pharo-hacks'.
+			].
+
 			spec baseline: 'Roassal3' with: [
 				spec repository: 'github://ObjectProfile/Roassal3:v0.9.2'
 			].
@@ -38,6 +42,7 @@ BaselineOfTinyrossa >> baseline: spec [
 					spec requires: 'ArchC'
 				];
 				package: #'Tinyrossa-Tests' with: [
+					spec requires: 'SUnitParametrized'.
 					spec requires: 'SmallRSP'.
 				];
 				package: #'Tinyrossa-RISCV' with: [
