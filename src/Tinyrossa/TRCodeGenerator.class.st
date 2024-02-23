@@ -1,11 +1,9 @@
 Class {
 	#name : #TRCodeGenerator,
-	#superclass : #Object,
+	#superclass : #TRCodeGeneratorBase,
 	#instVars : [
-		'compilation',
 		'virtualRegisters',
 		'linkage',
-		'evaluator',
 		'generate',
 		'linkRegisterKilled'
 	],
@@ -14,16 +12,6 @@ Class {
 	],
 	#category : #'Tinyrossa-Codegen'
 }
-
-{ #category : #'instance creation' }
-TRCodeGenerator class >> forCompilation: aTRCompilation [
-	^ self basicNew initializeWithCompilation: aTRCompilation
-]
-
-{ #category : #'instance creation' }
-TRCodeGenerator class >> new [
-	self shouldNotImplement. "Use #forCompilation:"
-]
 
 { #category : #registers }
 TRCodeGenerator >> allocateRegister [
@@ -62,19 +50,9 @@ TRCodeGenerator >> codeBuffer [
 	^ generate memory
 ]
 
-{ #category : #accessing }
-TRCodeGenerator >> compilation [
-	^ compilation
-]
-
 { #category : #'instance creation' }
 TRCodeGenerator >> createAssembler [
 	^ self assemblerClass new
-]
-
-{ #category : #'instance creation' }
-TRCodeGenerator >> createEvaluator [
-	^ self evaluatorClass forCodeGenerator: self
 ]
 
 { #category : #'instance creation' }
@@ -90,16 +68,6 @@ TRCodeGenerator >> cursor [
 { #category : #accessing }
 TRCodeGenerator >> cursor: anInteger [
 	generate cursor: anInteger
-]
-
-{ #category : #accessing }
-TRCodeGenerator >> evaluator [
-	^ evaluator
-]
-
-{ #category : #'accessing - config' }
-TRCodeGenerator >> evaluatorClass [
-	^ self subclassResponsibility
 ]
 
 { #category : #'code gen-phases' }
@@ -237,7 +205,7 @@ TRCodeGenerator >> generatePrologue [
 
 { #category : #initialization }
 TRCodeGenerator >> initializeWithCompilation: aTRCompilation [ 
-	compilation := aTRCompilation.
+	super initializeWithCompilation: aTRCompilation.
 	virtualRegisters := Dictionary new.
 	generate := self createAssembler.
 	evaluator := self createEvaluator.
