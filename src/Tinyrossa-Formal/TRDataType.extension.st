@@ -16,7 +16,7 @@ TRDataType >> asΛBase [
 	"Return 'Sprite' type for this (Tinyrossa) datatype"
 
 	self isIntegerType ifTrue:[
-		^ TInt instance
+		^ TBitVector instance: self sizeInBytes * 8
 	] ifFalse:[
 		^ self subclassResponsibility
 	]
