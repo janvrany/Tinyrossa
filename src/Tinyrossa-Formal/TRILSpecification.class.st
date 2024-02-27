@@ -2908,16 +2908,18 @@ let     iconst = (c) => {
 };'
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> idiv [
-	self shouldBeImplemented.
 	^self specify: idiv as:'
-	/*@ val idiv : ... */
-	let idiv = (...) => {
-	...
+	/*@ val idiv : c1:Int32 => c2:Int32 => Int32[r|r === (c1 / c2)] */
+	let     idiv = (c1,c2) => {
+		bvdiv32(c1,c2)
 	};
-	'
+'
 
+	"
+	TRILSpecification new specify: idiv
+	"
 ]
 
 { #category : #'opcodes (not yet specified)' }
@@ -3424,13 +3426,12 @@ TRILSpecification >> ificmno [
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> ificmpeq [
-	self shouldBeImplemented.
 	^self specify: ificmpeq as:'
-	/*@ val ificmpeq : ... */
-	let ificmpeq = (...) => {
-	...
+	/*@ val ificmpeq : c1:Int32 => c2:Int32 => bool[r|r === (c1 === c2)] */
+	let     ificmpeq = (c1,c2) => {
+		bveq32(c1 , c2)
 	};
 	'
 
@@ -3439,21 +3440,20 @@ TRILSpecification >> ificmpeq [
 { #category : #opcodes }
 TRILSpecification >> ificmpge [
 	^self specify: ificmpge as:'
-	/*@ val ificmpge : c1:Int32 => c2:Int32 => bool[r|r === (c1 > c2)] */
+	/*@ val ificmpge : c1:Int32 => c2:Int32 => bool[r|r === (c1 >= c2)] */
 	let     ificmpge = (c1,c2) => {
-		bvgt32(c1 , c2)
+		bvge32(c1 , c2)
 	};
 	'
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> ificmpgt [
-	self shouldBeImplemented.
 	^self specify: ificmpgt as:'
-	/*@ val ificmpgt : ... */
-	let ificmpgt = (...) => {
-	...
+	/*@ val ificmpgt : c1:Int32 => c2:Int32 => bool[r|r === (c1 > c2)] */
+	let     ificmpgt = (c1,c2) => {
+		bvgt32(c1 , c2)
 	};
 	'
 
@@ -3462,33 +3462,31 @@ TRILSpecification >> ificmpgt [
 { #category : #opcodes }
 TRILSpecification >> ificmple [
 	^self specify: ificmple as:'
-	/*@ val ificmple : c1:Int32 => c2:Int32 => bool[r|r === (c1 < c2)] */
+	/*@ val ificmple : c1:Int32 => c2:Int32 => bool[r|r === (c1 <= c2)] */
 	let     ificmple = (c1,c2) => {
+		bvle32(c1 , c2)
+	};
+	'
+
+]
+
+{ #category : #opcodes }
+TRILSpecification >> ificmplt [
+	^self specify: ificmplt as:'
+	/*@ val ificmplt : c1:Int32 => c2:Int32 => bool[r|r === (c1 < c2)] */
+	let     ificmplt = (c1,c2) => {
 		bvlt32(c1 , c2)
 	};
 	'
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
-TRILSpecification >> ificmplt [
-	self shouldBeImplemented.
-	^self specify: ificmplt as:'
-	/*@ val ificmplt : ... */
-	let ificmplt = (...) => {
-	...
-	};
-	'
-
-]
-
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> ificmpne [
-	self shouldBeImplemented.
 	^self specify: ificmpne as:'
-	/*@ val ificmpne : ... */
-	let ificmpne = (...) => {
-	...
+	/*@ val ificmpne : c1:Int32 => c2:Int32 => bool[r|r === (c1 ~== c2)] */
+	let     ificmpne = (c1,c2) => {
+		bvne32(c1 , c2)
 	};
 	'
 
@@ -3961,16 +3959,18 @@ TRILSpecification >> imin [
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> imul [
-	self shouldBeImplemented.
 	^self specify: imul as:'
-	/*@ val imul : ... */
-	let imul = (...) => {
-	...
+	/*@ val imul : c1:Int32 => c2:Int32 => Int32[r|r === (c1 * c2)] */
+	let     imul = (c1,c2) => {
+		bvmul32(c1,c2)
 	};
-	'
+'
 
+	"
+	TRILSpecification new specify: imul
+	"
 ]
 
 { #category : #'opcodes (not yet specified)' }
@@ -4224,16 +4224,18 @@ TRILSpecification >> istorei [
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> isub [
-	self shouldBeImplemented.
 	^self specify: isub as:'
-	/*@ val isub : ... */
-	let isub = (...) => {
-	...
+	/*@ val isub : c1:Int32 => c2:Int32 => Int32[r|r === (c1 - c2)] */
+	let     isub = (c1,c2) => {
+		bvsub32(c1,c2)
 	};
-	'
+'
 
+	"
+	TRILSpecification new specify: isub
+	"
 ]
 
 { #category : #'opcodes (not yet specified)' }
@@ -5872,6 +5874,8 @@ TRILSpecification >> specify: opcode as: specification [
 		
 	spec := TRILSpecificationParser parse:	specification.
 	self assert: spec solve isSafe. 
+	self assert: spec expr isLet.
+	self assert: spec expr decl bind id = opcode name.
 	^spec
 	
 	"

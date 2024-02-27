@@ -179,7 +179,22 @@ TRSymbolicEvaluator >> evaluate_iconst: node [
 ]
 
 { #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_idiv: node [
+	^self common: node.
+]
+
+{ #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_ificmpeq: node [
+	^self commonBranchConditional: node
+]
+
+{ #category : #evaluation }
 TRSymbolicEvaluator >> evaluate_ificmpge: node [
+	^self commonBranchConditional: node
+]
+
+{ #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_ificmpgt: node [
 	^self commonBranchConditional: node
 ]
 
@@ -189,13 +204,33 @@ TRSymbolicEvaluator >> evaluate_ificmple: node [
 ]
 
 { #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_ificmplt: node [
+	^self commonBranchConditional: node
+]
+
+{ #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_ificmpne: node [
+	^self commonBranchConditional: node
+]
+
+{ #category : #evaluation }
 TRSymbolicEvaluator >> evaluate_iload: node [
 	^self commonLoad: node
 ]
 
 { #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_imul: node [
+	^self common: node.
+]
+
+{ #category : #evaluation }
 TRSymbolicEvaluator >> evaluate_ireturn: node [
 	^self commonReturn: node.
+]
+
+{ #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_isub: node [
+	^self common: node.
 ]
 
 { #category : #accessing }
