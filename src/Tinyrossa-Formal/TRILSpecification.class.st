@@ -2708,11 +2708,15 @@ TRILSpecification >> iabs [
 { #category : #opcodes }
 TRILSpecification >> iadd [
 	^self specify: iadd as:'
-	/*@ val iadd : c1:int => c2:int => int[r|r === (c1 + c2)] */
+	/*@ val iadd : c1:Int32 => c2:Int32 => Int32[r|r === (c1 + c2)] */
 	let     iadd = (c1,c2) => {
-		c1 + c2
+		bvadd32(c1,c2)
 	};
 '
+
+	"
+	TRILSpecification new specify: iadd
+	"
 ]
 
 { #category : #'opcodes (not yet specified)' }
@@ -2898,7 +2902,7 @@ TRILSpecification >> icmpset [
 { #category : #opcodes }
 TRILSpecification >> iconst [
 	^self specify: iconst as: '
-/*@ val iconst : c:int => int[r|r === c] */
+/*@ val iconst : c:Int32 => Int32[r|r === c] */
 let     iconst = (c) => {
 	c
 };'
@@ -3435,9 +3439,9 @@ TRILSpecification >> ificmpeq [
 { #category : #opcodes }
 TRILSpecification >> ificmpge [
 	^self specify: ificmpge as:'
-	/*@ val ificmpge : c1:int => c2:int => bool[r|r === (c1 > c2)] */
+	/*@ val ificmpge : c1:Int32 => c2:Int32 => bool[r|r === (c1 > c2)] */
 	let     ificmpge = (c1,c2) => {
-		c1 > c2
+		bvgt32(c1 , c2)
 	};
 	'
 
@@ -3458,9 +3462,9 @@ TRILSpecification >> ificmpgt [
 { #category : #opcodes }
 TRILSpecification >> ificmple [
 	^self specify: ificmple as:'
-	/*@ val ificmple : c1:int => c2:int => bool[r|r === (c1 < c2)] */
+	/*@ val ificmple : c1:Int32 => c2:Int32 => bool[r|r === (c1 < c2)] */
 	let     ificmple = (c1,c2) => {
-		c1 < c2
+		bvlt32(c1 , c2)
 	};
 	'
 
@@ -3913,7 +3917,7 @@ TRILSpecification >> ilbit [
 { #category : #opcodes }
 TRILSpecification >> iload [
 	^self specify: iload as:'
-	/*@ val iload : s:int => int[r|r === s] */
+	/*@ val iload : s:Int32 => Int32[r|r === s] */
 	let     iload = (s) => {
 		s
 	};
@@ -4128,7 +4132,7 @@ TRILSpecification >> irem [
 { #category : #opcodes }
 TRILSpecification >> ireturn [
 	^self specify: ireturn as:'
-	/*@ val ireturn : c1:int => int[r|r === c1] */
+	/*@ val ireturn : c1:Int32 => Int32[r|r === c1] */
 	let     ireturn = (c1) => {
 		c1
 	};
@@ -5529,6 +5533,7 @@ TRILSpecification >> prog [
 
 	"
 	TRILSpecification new prog
+	TRILSpecification new prog solve
 	"
 ]
 
@@ -5864,9 +5869,14 @@ TRILSpecification >> specify: opcode [
 { #category : #private }
 TRILSpecification >> specify: opcode as: specification [
 	| spec |
-
-	spec := ΛκParser parse:	 specification.
+		
+	spec := TRILSpecificationParser parse:	specification.
+	self assert: spec solve isSafe. 
 	^spec
+	
+	"
+	TRILSpecification new specify: iadd
+	"
 ]
 
 { #category : #'opcodes (not yet specified)' }

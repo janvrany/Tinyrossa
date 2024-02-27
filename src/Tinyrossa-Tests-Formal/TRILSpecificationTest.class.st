@@ -5,41 +5,79 @@ Class {
 }
 
 { #category : #doodles }
-TRILSpecificationTest >> test_doodle_01 [
-	self proveSafe:  '
-type trvalue =
-  | Int32 (i:int)
-  | Void (i:int)
-  ;
+TRILSpecificationTest >> test_iadd [
+	| spec test |
+	
+	spec := TRILSpecification new prog.
+	test := TRILSpecificationParser parse:'
+	/*@ val check01 : bool[b|b] */
+	    let check01 = { 
+				let got = iadd(bv32(2), bv32(2));
+				let exp = bv32(4);
+				got == exp
+	};
+	
+	/*@ val check02 : Int32 => Int32 => bool[b|b] */
+	    let check02 = (x , y) => { 
+				let got = iadd(x, y);
+				let exp = bvadd32(x,y);
+				got == exp
+	};
+	
+	'.
+	
+	self assert: (spec , test) solve isSafe.
+	
+]
 
-type trnode =
-  | N_iconst (v:trvalue)
-  ;
+{ #category : #doodles }
+TRILSpecificationTest >> test_iload [
+	| spec test |
+	
+	spec := TRILSpecification new prog.
+	test := TRILSpecificationParser parse:'
+	/*@ val check01 : bool[b|b] */
+	    let check01 = { 
+				let got = iload(bv32(2));
+				let exp = bv32(2);
+				got == exp
+	};
+	
+	/*@ val check02 : Int32 => bool[b|b] */
+	    let check02 = (x) => { 
+				let got = iload(x);
+				let exp = x;
+				got == exp
+	};
+	
+	'.
+	
+	self assert: (spec , test) solve isSafe.
+	
+]
 
-/*@ val trvalue2int : trvalue => int */
-let     trvalue2int = (v) => {
-	switch (v) {
-		| Int32(i) => i
-	}
-};
-
-/*@ val commonConst : trnode => trvalue */
-let rec commonConst = (n) => {
-	switch (n) {
-		| N_iconst(v) => let r = trvalue2int(v);
-								   Int32(r)
-	}
-};
-
-/*@ val eval_iconst : trnode => trvalue */
-let rec eval_iconst = (n) => {
-	commonConst(n)
-};
-
-
-'.
-
-"
-
-"
+{ #category : #doodles }
+TRILSpecificationTest >> test_ireturn [
+	| spec test |
+	
+	spec := TRILSpecification new prog.
+	test := TRILSpecificationParser parse:'
+	/*@ val check01 : bool[b|b] */
+	    let check01 = { 
+				let got = ireturn(bv32(2));
+				let exp = bv32(2);
+				got == exp
+	};
+	
+	/*@ val check02 : Int32 => bool[b|b] */
+	    let check02 = (x) => { 
+				let got = ireturn(x);
+				let exp = x;
+				got == exp
+	};
+	
+	'.
+	
+	self assert: (spec , test) solve isSafe.
+	
 ]
