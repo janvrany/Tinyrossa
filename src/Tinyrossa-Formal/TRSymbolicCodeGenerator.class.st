@@ -2,8 +2,8 @@ Class {
 	#name : #TRSymbolicCodeGenerator,
 	#superclass : #TRCodeGeneratorBase,
 	#instVars : [
-		'spec',
-		'prog'
+		'prog',
+		'metric'
 	],
 	#pools : [
 		'TRILOpcodes'
@@ -92,7 +92,7 @@ TRSymbolicCodeGenerator >> generateCodeForBlock: block [
 									bind: bind
 									expr: (EAnn
 													expr: efun
-													ann:  (Val symbol: bind id rtype: tfun metric: nil)))
+													ann:  (Refl symbol: bind id rtype: tfun metric: metric)))
 					expr: prog expr.
 
 	prog expr: elet.
@@ -101,12 +101,18 @@ TRSymbolicCodeGenerator >> generateCodeForBlock: block [
 { #category : #initialization }
 TRSymbolicCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	super initializeWithCompilation: aTRCompilation.
+	
+	prog := Prog empty.	
+	metric := TerminationMetric with: (MetricExpression source: 'zero').
+	
+	"
 	prog := Prog
 					quals: Set new
 					meas: #()
 					expr: (ΛExpression int: 0)
 					data: #()
 					options: #()
+	"
 ]
 
 { #category : #accessing }
