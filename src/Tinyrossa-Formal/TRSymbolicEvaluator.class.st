@@ -113,6 +113,11 @@ TRSymbolicEvaluator >> commonReturn: node [
 	^ node opcode asΛEApp: { node child1 }
 ]
 
+{ #category : #'evaluation-helpers' }
+TRSymbolicEvaluator >> commonStore: node [
+	^ node opcode asΛEApp: { node symbol }
+]
+
 { #category : #accessing }
 TRSymbolicEvaluator >> compilation [
 	^ codegen compilation
@@ -226,6 +231,11 @@ TRSymbolicEvaluator >> evaluate_imul: node [
 { #category : #evaluation }
 TRSymbolicEvaluator >> evaluate_ireturn: node [
 	^self commonReturn: node.
+]
+
+{ #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_istore: node [
+	^self commonStore: node
 ]
 
 { #category : #evaluation }

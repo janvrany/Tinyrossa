@@ -1,6 +1,9 @@
 Class {
 	#name : #TRILSpecification,
 	#superclass : #Object,
+	#instVars : [
+		'prelude'
+	],
 	#classVars : [
 		'SpecificationTable'
 	],
@@ -2708,8 +2711,8 @@ TRILSpecification >> iabs [
 { #category : #opcodes }
 TRILSpecification >> iadd [
 	^self specify: iadd as:'
-	/*@ val iadd : c1:Int32 => c2:Int32 => Int32[r|r === (c1 + c2)] */
-	let     iadd = (c1,c2) => {
+	/*@ reflect iadd : Int32 => Int32 => Int32 / [zero] */
+	let rec iadd = (c1,c2) => {
 		bvadd32(c1,c2)
 	};
 '
@@ -2902,8 +2905,8 @@ TRILSpecification >> icmpset [
 { #category : #opcodes }
 TRILSpecification >> iconst [
 	^self specify: iconst as: '
-/*@ val iconst : c:Int32 => Int32[r|r === c] */
-let     iconst = (c) => {
+/*@ reflect iconst : Int32 => Int32 / [zero] */
+let rec     iconst = (c) => {
 	c
 };'
 ]
@@ -3429,7 +3432,7 @@ TRILSpecification >> ificmno [
 { #category : #opcodes }
 TRILSpecification >> ificmpeq [
 	^self specify: ificmpeq as:'
-	/*@ val ificmpeq : c1:Int32 => c2:Int32 => bool[r|r === (c1 === c2)] */
+	/*@ reflect ificmpeq : Int32 => Int32 => bool */
 	let     ificmpeq = (c1,c2) => {
 		bveq32(c1 , c2)
 	};
@@ -3440,7 +3443,7 @@ TRILSpecification >> ificmpeq [
 { #category : #opcodes }
 TRILSpecification >> ificmpge [
 	^self specify: ificmpge as:'
-	/*@ val ificmpge : c1:Int32 => c2:Int32 => bool[r|r === (c1 >= c2)] */
+	/*@ reflect ificmpge : Int32 => Int32 => bool */
 	let     ificmpge = (c1,c2) => {
 		bvge32(c1 , c2)
 	};
@@ -3451,8 +3454,8 @@ TRILSpecification >> ificmpge [
 { #category : #opcodes }
 TRILSpecification >> ificmpgt [
 	^self specify: ificmpgt as:'
-	/*@ val ificmpgt : c1:Int32 => c2:Int32 => bool[r|r === (c1 > c2)] */
-	let     ificmpgt = (c1,c2) => {
+	/*@ reflect ificmpgt : Int32 => Int32 => bool */
+	let rec ificmpgt = (c1,c2) => {
 		bvgt32(c1 , c2)
 	};
 	'
@@ -3462,7 +3465,7 @@ TRILSpecification >> ificmpgt [
 { #category : #opcodes }
 TRILSpecification >> ificmple [
 	^self specify: ificmple as:'
-	/*@ val ificmple : c1:Int32 => c2:Int32 => bool[r|r === (c1 <= c2)] */
+	/*@ reflect ificmple : Int32 => Int32 => bool */
 	let     ificmple = (c1,c2) => {
 		bvle32(c1 , c2)
 	};
@@ -3473,7 +3476,7 @@ TRILSpecification >> ificmple [
 { #category : #opcodes }
 TRILSpecification >> ificmplt [
 	^self specify: ificmplt as:'
-	/*@ val ificmplt : c1:Int32 => c2:Int32 => bool[r|r === (c1 < c2)] */
+	/*@ reflect ificmplt : Int32 => Int32 => bool */
 	let     ificmplt = (c1,c2) => {
 		bvlt32(c1 , c2)
 	};
@@ -3484,7 +3487,7 @@ TRILSpecification >> ificmplt [
 { #category : #opcodes }
 TRILSpecification >> ificmpne [
 	^self specify: ificmpne as:'
-	/*@ val ificmpne : c1:Int32 => c2:Int32 => bool[r|r === (c1 ~== c2)] */
+	/*@ reflect ificmpne : Int32 => Int32 => bool */
 	let     ificmpne = (c1,c2) => {
 		bvne32(c1 , c2)
 	};
@@ -3915,8 +3918,8 @@ TRILSpecification >> ilbit [
 { #category : #opcodes }
 TRILSpecification >> iload [
 	^self specify: iload as:'
-	/*@ val iload : s:Int32 => Int32[r|r === s] */
-	let     iload = (s) => {
+	/*@ reflect iload : Int32 => Int32 / [zero] */
+	let rec iload = (s) => {
 		s
 	};
 	'
@@ -3995,6 +3998,20 @@ TRILSpecification >> ineg [
 	};
 	'
 
+]
+
+{ #category : #initialization }
+TRILSpecification >> initialize [
+	prelude := Prog empty.
+	prelude options: #(#'check-termination').
+	"
+	prelude := ΛκParser parse:'
+	[--check-termination]
+
+	⟦val zero : int[v | v===0]⟧
+	 let zero = 0;
+	'.
+	"
 ]
 
 { #category : #'opcodes (not yet specified)' }
@@ -4132,8 +4149,8 @@ TRILSpecification >> irem [
 { #category : #opcodes }
 TRILSpecification >> ireturn [
 	^self specify: ireturn as:'
-	/*@ val ireturn : c1:Int32 => Int32[r|r === c1] */
-	let     ireturn = (c1) => {
+	/*@ reflect ireturn : Int32 => Int32 / [zero] */
+	let rec ireturn = (c1) => {
 		c1
 	};
 	'
@@ -4227,8 +4244,8 @@ TRILSpecification >> istorei [
 { #category : #opcodes }
 TRILSpecification >> isub [
 	^self specify: isub as:'
-	/*@ val isub : c1:Int32 => c2:Int32 => Int32[r|r === (c1 - c2)] */
-	let     isub = (c1,c2) => {
+	/*@ reflect isub : Int32 => Int32 => Int32 / [zero] */
+	let rec isub = (c1,c2) => {
 		bvsub32(c1,c2)
 	};
 '
@@ -5526,7 +5543,7 @@ TRILSpecification >> prefetch [
 TRILSpecification >> prog [
 	"Return Sprite's `Prog` containing specification of opcodes"
 
-	^TRILOpcodes all inject: Prog empty into: [ :all :opcode |
+	^TRILOpcodes all inject: prelude into: [ :all :opcode |
 		| spec |
 
 		spec := [ self specify: opcode ] on: ShouldBeImplemented do:[:e| Prog empty ].
@@ -5873,7 +5890,6 @@ TRILSpecification >> specify: opcode as: specification [
 	| spec |
 		
 	spec := TRILSpecificationParser parse:	specification.
-	self assert: spec solve isSafe. 
 	self assert: spec expr isLet.
 	self assert: spec expr decl bind id = opcode name.
 	^spec
