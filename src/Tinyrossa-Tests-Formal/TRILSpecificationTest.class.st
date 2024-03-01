@@ -57,6 +57,32 @@ TRILSpecificationTest >> test_iload [
 ]
 
 { #category : #doodles }
+TRILSpecificationTest >> test_imul [
+	| spec test |
+
+	spec := TRILSpecification new prog.
+	test := TRILSpecificationParser parse:'
+	/*@ val check01 : bool[b|b] */
+	    let check01 = {
+				let got = imul(bv32(2), bv32(2));
+				let exp = bv32(4);
+				got == exp
+	};
+
+	/*@ val check02 : Int32 => Int32 => bool[b|b] */
+	    let check02 = (x , y) => {
+				let got = imul(x, y);
+				let exp = bvmul32(x,y);
+				got == exp
+	};
+
+	'.
+
+	self assert: (spec , test) solve isSafe.
+
+]
+
+{ #category : #doodles }
 TRILSpecificationTest >> test_ireturn [
 	| spec test |
 	
@@ -80,4 +106,32 @@ TRILSpecificationTest >> test_ireturn [
 	
 	self assert: (spec , test) solve isSafe.
 	
+]
+
+{ #category : #doodles }
+TRILSpecificationTest >> test_ishl [
+	| spec test |
+
+	spec := TRILSpecification new prog.
+	test := TRILSpecificationParser parse:'
+	/*@ val check01 : bool[b|b] */
+	    let check01 = {
+				let got = ishl(bv32(2), bv32(1));
+				let exp = bv32(4);
+				got == exp
+	};
+	'.
+	'
+
+	/*@ val check02 : Int32 => Int32 => bool[b|b] */
+	    let check02 = (x , y) => {
+				let got = iadd(x, y);
+				let exp = bvadd32(x,y);
+				got == exp
+	};
+
+	'.
+
+	self assert: (spec , test) solve isSafe.
+
 ]
