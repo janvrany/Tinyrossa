@@ -240,6 +240,21 @@ TRILOpcode >> isReturn [
 ]
 
 { #category : #testing }
+TRILOpcode >> isShift [
+	^ props1 anyMask: LeftShift | RightShift
+]
+
+{ #category : #testing }
+TRILOpcode >> isShiftLeft [
+	^ props1 anyMask: LeftShift
+]
+
+{ #category : #testing }
+TRILOpcode >> isShiftRight [
+	^ props1 anyMask: RightShift
+]
+
+{ #category : #testing }
 TRILOpcode >> isStore [
 	^ props1 anyMask: Store
 ]
