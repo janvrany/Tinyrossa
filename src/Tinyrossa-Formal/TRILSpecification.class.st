@@ -3965,11 +3965,11 @@ TRILSpecification >> imin [
 { #category : #opcodes }
 TRILSpecification >> imul [
 	^self specify: imul as:'
-	/*@ val imul : c1:Int32 => c2:Int32 => Int32[r|r === (c1 * c2)] */
-	let     imul = (c1,c2) => {
+	/*@ reflect imul : Int32 => Int32 => Int32 / [zero] */
+	let rec imul = (c1,c2) => {
 		bvmul32(c1,c2)
 	};
-'
+	'
 
 	"
 	TRILSpecification new specify: imul
@@ -4193,16 +4193,18 @@ TRILSpecification >> iselect [
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> ishl [
-	self shouldBeImplemented.
 	^self specify: ishl as:'
-	/*@ val ishl : ... */
-	let ishl = (...) => {
-	...
+	/*@ reflect ishl : Int32 => Int32 => Int32 / [zero] */
+	let rec ishl = (c1,c2) => {
+		bvshl32(c1,c2)
 	};
-	'
+'
 
+	"
+	TRILSpecification new specify: ishl
+	"
 ]
 
 { #category : #'opcodes (not yet specified)' }
