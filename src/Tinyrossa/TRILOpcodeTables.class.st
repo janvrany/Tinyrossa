@@ -6,6 +6,7 @@ Class {
 		'CompareOpcodes',
 		'ConstOpcodes',
 		'LoadOpcodes',
+		'ShiftLeftOpcodes',
 		'StoreOpcodes'
 	],
 	#pools : [
@@ -188,5 +189,16 @@ TRILOpcodeTables class >> initialize [
 					Div  . invalid .
 					Rem  . invalid .
 				  }.
+	}.
+
+	ShiftLeftOpcodes := SmallDictionary newFromPairs: {
+		Int8    . bshl .
+		Int16   . sshl .
+		Int32   . ishl .
+		Int64   . lshl .
+		Address . invalid .
+		Float   . invalid .
+		Double  . invalid .
+		Void    . invalid .
 	}.
 ]
