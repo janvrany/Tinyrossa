@@ -234,6 +234,11 @@ TRSymbolicEvaluator >> evaluate_ireturn: node [
 ]
 
 { #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_ishl: node [
+	^self common: node.
+]
+
+{ #category : #evaluation }
 TRSymbolicEvaluator >> evaluate_istore: node [
 	^self commonStore: node
 ]
