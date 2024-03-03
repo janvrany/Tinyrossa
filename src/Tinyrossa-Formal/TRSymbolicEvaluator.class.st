@@ -115,7 +115,7 @@ TRSymbolicEvaluator >> commonReturn: node [
 
 { #category : #'evaluation-helpers' }
 TRSymbolicEvaluator >> commonStore: node [
-	^ node opcode asΛEApp: { node symbol }
+	^ node opcode asΛEApp: { node child1 }
 ]
 
 { #category : #accessing }
@@ -145,8 +145,11 @@ TRSymbolicEvaluator >> evaluate: node [
 
 		"...and append it to the chain."
 		node opcode isReturn ifTrue:[
-			result := self append: value.
+			self append: value.
 			tail := nil.
+		] ifFalse:[
+		node opcode isStore ifTrue:[
+			self appendLet: node symbol name to: value.
 		] ifFalse:[
 			"For any non-return, we wrap the value into an ELet
 			 since this allows (i) referencing the value and (ii)
@@ -164,7 +167,7 @@ TRSymbolicEvaluator >> evaluate: node [
 				"Mark node has been evaluated. Using #setResultUnchecked:
 			 because result is not an V-reg but symbolic expression"
 				node setResultUnchecked: result.
-			].
+			]].
 		].
 
 
