@@ -135,3 +135,29 @@ TRILSpecificationTest >> test_ishl [
 	self assert: (spec , test) solve isSafe.
 
 ]
+
+{ #category : #doodles }
+TRILSpecificationTest >> test_istore [
+	| spec test |
+	
+	spec := TRILSpecification new prog.
+	test := TRILSpecificationParser parse:'
+	/*@ val check01 : bool[b|b] */
+	    let check01 = { 
+				let got = istore(bv32(2));
+				let exp = bv32(2);
+				got == exp
+	};
+	
+	/*@ val check02 : Int32 => bool[b|b] */
+	    let check02 = (x) => { 
+				let got = istore(x);
+				let exp = x;
+				got == exp
+	};
+	
+	'.
+	
+	self assert: (spec , test) solve isSafe.
+	
+]
