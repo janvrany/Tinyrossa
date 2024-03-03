@@ -4219,13 +4219,12 @@ TRILSpecification >> ishr [
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> istore [
-	self shouldBeImplemented.
 	^self specify: istore as:'
-	/*@ val istore : ... */
-	let istore = (...) => {
-	...
+	/*@ reflect istore : Int32 => Int32 / [zero] */
+	let rec istore = (s) => {
+		s
 	};
 	'
 
