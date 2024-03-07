@@ -2712,7 +2712,7 @@ TRILSpecification >> iabs [
 TRILSpecification >> iadd [
 	^self specify: iadd as:'
 	/*@ reflect iadd : Int32 => Int32 => Int32 / [zero] */
-	let rec iadd = (c1,c2) => {
+	let         iadd = (c1,c2) => {
 		bvadd32(c1,c2)
 	};
 '
@@ -2905,17 +2905,17 @@ TRILSpecification >> icmpset [
 { #category : #opcodes }
 TRILSpecification >> iconst [
 	^self specify: iconst as: '
-/*@ reflect iconst : Int32 => Int32 / [zero] */
-let rec     iconst = (c) => {
-	c
-};'
+	/*@ reflect iconst : Int32 => Int32 / [zero] */
+	let         iconst = (c) => {
+		c
+	};'
 ]
 
 { #category : #opcodes }
 TRILSpecification >> idiv [
 	^self specify: idiv as:'
-	/*@ val idiv : c1:Int32 => c2:Int32 => Int32[r|r === (c1 / c2)] */
-	let     idiv = (c1,c2) => {
+	/*@ reflect idiv : c1:Int32 => c2:Int32 => Int32[r|r === (c1 / c2)] */
+	let         idiv = (c1,c2) => {
 		bvdiv32(c1,c2)
 	};
 '
@@ -3433,7 +3433,7 @@ TRILSpecification >> ificmno [
 TRILSpecification >> ificmpeq [
 	^self specify: ificmpeq as:'
 	/*@ reflect ificmpeq : Int32 => Int32 => bool */
-	let     ificmpeq = (c1,c2) => {
+	let         ificmpeq = (c1,c2) => {
 		bveq32(c1 , c2)
 	};
 	'
@@ -3444,7 +3444,7 @@ TRILSpecification >> ificmpeq [
 TRILSpecification >> ificmpge [
 	^self specify: ificmpge as:'
 	/*@ reflect ificmpge : Int32 => Int32 => bool */
-	let     ificmpge = (c1,c2) => {
+	let         ificmpge = (c1,c2) => {
 		bvge32(c1 , c2)
 	};
 	'
@@ -3455,7 +3455,7 @@ TRILSpecification >> ificmpge [
 TRILSpecification >> ificmpgt [
 	^self specify: ificmpgt as:'
 	/*@ reflect ificmpgt : Int32 => Int32 => bool */
-	let rec ificmpgt = (c1,c2) => {
+	let         ificmpgt = (c1,c2) => {
 		bvgt32(c1 , c2)
 	};
 	'
@@ -3466,7 +3466,7 @@ TRILSpecification >> ificmpgt [
 TRILSpecification >> ificmple [
 	^self specify: ificmple as:'
 	/*@ reflect ificmple : Int32 => Int32 => bool */
-	let     ificmple = (c1,c2) => {
+	let         ificmple = (c1,c2) => {
 		bvle32(c1 , c2)
 	};
 	'
@@ -3477,7 +3477,7 @@ TRILSpecification >> ificmple [
 TRILSpecification >> ificmplt [
 	^self specify: ificmplt as:'
 	/*@ reflect ificmplt : Int32 => Int32 => bool */
-	let     ificmplt = (c1,c2) => {
+	let         ificmplt = (c1,c2) => {
 		bvlt32(c1 , c2)
 	};
 	'
@@ -3488,7 +3488,7 @@ TRILSpecification >> ificmplt [
 TRILSpecification >> ificmpne [
 	^self specify: ificmpne as:'
 	/*@ reflect ificmpne : Int32 => Int32 => bool */
-	let     ificmpne = (c1,c2) => {
+	let         ificmpne = (c1,c2) => {
 		bvne32(c1 , c2)
 	};
 	'
@@ -3919,7 +3919,7 @@ TRILSpecification >> ilbit [
 TRILSpecification >> iload [
 	^self specify: iload as:'
 	/*@ reflect iload : Int32 => Int32 / [zero] */
-	let rec iload = (s) => {
+	let         iload = (s) => {
 		s
 	};
 	'
@@ -3966,7 +3966,7 @@ TRILSpecification >> imin [
 TRILSpecification >> imul [
 	^self specify: imul as:'
 	/*@ reflect imul : Int32 => Int32 => Int32 / [zero] */
-	let rec imul = (c1,c2) => {
+	let         imul = (c1,c2) => {
 		bvmul32(c1,c2)
 	};
 	'
@@ -4150,7 +4150,7 @@ TRILSpecification >> irem [
 TRILSpecification >> ireturn [
 	^self specify: ireturn as:'
 	/*@ reflect ireturn : Int32 => Int32 / [zero] */
-	let rec ireturn = (c1) => {
+	let         ireturn = (c1) => {
 		c1
 	};
 	'
@@ -4197,7 +4197,7 @@ TRILSpecification >> iselect [
 TRILSpecification >> ishl [
 	^self specify: ishl as:'
 	/*@ reflect ishl : Int32 => Int32 => Int32 / [zero] */
-	let rec ishl = (c1,c2) => {
+	let         ishl = (c1,c2) => {
 		bvshl32(c1,c2)
 	};
 '
@@ -4223,7 +4223,7 @@ TRILSpecification >> ishr [
 TRILSpecification >> istore [
 	^self specify: istore as:'
 	/*@ reflect istore : Int32 => Int32 / [zero] */
-	let rec istore = (s) => {
+	let         istore = (s) => {
 		s
 	};
 	'
@@ -4246,7 +4246,7 @@ TRILSpecification >> istorei [
 TRILSpecification >> isub [
 	^self specify: isub as:'
 	/*@ reflect isub : Int32 => Int32 => Int32 / [zero] */
-	let rec isub = (c1,c2) => {
+	let         isub = (c1,c2) => {
 		bvsub32(c1,c2)
 	};
 '
