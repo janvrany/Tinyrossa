@@ -73,6 +73,11 @@ BaselineOfTinyrossa >> baseline: spec [
 					spec requires: 'Tinyrossa-Formal'.
 				];
 
+				package: #'Tinyrossa-Demos' with: [
+					spec requires: 'Tinyrossa'.
+					spec requires: 'Tinyrossa-Formal'.
+				];
+
 				yourself.
 		]
 ]
