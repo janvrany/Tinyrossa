@@ -100,7 +100,7 @@ TRSymbolicCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	super initializeWithCompilation: aTRCompilation.
 	
 	prog := Prog empty.	
-	metric := TerminationMetric with: (MetricExpression source: 'zero').
+	metric := TerminationMetric with: 0 toInt.
 	
 	"
 	prog := Prog
