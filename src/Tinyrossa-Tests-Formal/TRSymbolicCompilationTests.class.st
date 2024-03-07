@@ -445,3 +445,55 @@ TRSymbolicCompilationTests >> test_shl2_01 [
 
 	self yourself.
 ]
+
+{ #category : #'tests - examples' }
+TRSymbolicCompilationTests >> test_sum_01 [
+	| bldr spec code verf prog safe |
+
+	bldr := compilation builder.
+	bldr defineName: 'sum' type: Int32.
+	bldr defineParameter: 'x' type: Int32.
+	bldr 
+		"if x == 0:"
+		if: (bldr icmple: { bldr iload: 'x' . bldr iconst: 0  })
+		then: [ :then |
+			"return 1"
+			then ireturn: 
+				{ then iconst: 0 }
+		] else: [ :else |
+			"return x + sum(x - 1)"
+			else ireturn: 
+				{ else iadd: 
+					{ else iload: 'x' .
+					  else icall: 
+						{ else isub: 
+							{ else iload: 'x' .
+							  else iconst: 1 } .
+						'sum' } } }
+		].
+
+	compilation optimize.
+	compilation compile.
+	
+	self skip: 'Unfinished'.
+
+	spec := TRILSpecification new prog.
+	code := compilation codegen prog.
+	verf := TRILSpecificationParser parse:'
+	/*@ val verify : Int32 => bool[b|b] */
+	    let verify = (x) => {
+				let exp = bvshl32(x,bv32(2));
+				let got = sum(x);
+				got == exp
+	    };
+	'.
+
+	self halt.
+
+	prog := spec , code, verf.
+
+	safe := prog solve.
+	self assert: safe isSafe.
+
+	self yourself.
+]
