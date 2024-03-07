@@ -99,6 +99,11 @@ TRSymbolicEvaluator >> commonBranchConditional: node [
 ]
 
 { #category : #'evaluation-helpers' }
+TRSymbolicEvaluator >> commonCall: node [
+	^ node symbol asΛEApp: node children
+]
+
+{ #category : #'evaluation-helpers' }
 TRSymbolicEvaluator >> commonConst: node [
 	^ node opcode asΛEApp: { node constant asExpr: node type asΛBase  }
 ]
@@ -179,6 +184,11 @@ TRSymbolicEvaluator >> evaluate: node [
 { #category : #evaluation }
 TRSymbolicEvaluator >> evaluate_iadd: node [
 	^self common: node.
+]
+
+{ #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_icall: node [
+	^self commonCall: node
 ]
 
 { #category : #evaluation }
