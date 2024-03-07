@@ -18,10 +18,11 @@ TRSymbolicCompilationTests >> setUpForTarget: aTRCompilationTarget [
 TRSymbolicCompilationTests >> test_abs_01 [
 	| bldr spec code verf prog safe |
 
+
 	bldr := compilation builder.
 	bldr defineName: 'abs' type: Int32.
 	bldr defineParameter: 'x' type: Int32.
-	bldr if: (bldr icmple: { bldr iload:'x' . bldr iconst: 0 } )
+	bldr if: (bldr icmplt: { bldr iload:'x' . bldr iconst: 0 } )
 		then: [:then |
 			then ireturn: {
 				then isub: {
@@ -41,14 +42,14 @@ TRSymbolicCompilationTests >> test_abs_01 [
 	/*@ val verify : Int32 => bool[b|b] */
 	    let verify = (x) => {
 				let got = abs(x);
-				bvgt32(got, bv32(0))
+				bvge32(got, bv32(0))
 	    };
 	'.
 
 	prog := spec , code, verf.
 
 	safe := prog solve.
-	self assert: safe isSafe.
+	self assert: safe isSafe not. "See comment L8PosTest >> test_ans_03"
 
 	self yourself.
 ]
