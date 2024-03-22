@@ -11,6 +11,14 @@ Class {
 	#category : #'Tinyrossa-Tests'
 }
 
+{ #category : #accessing }
+TRCompilationTestCase class >> compiler [
+	Smalltalk isPharo ifTrue:[
+		^super compiler options: #(+ optionSkipSemanticWarnings)
+	].
+	^super compiler
+]
+
 { #category : #testing }
 TRCompilationTestCase class >> isAbstract [
 	^ self == TRCompilationTestCase
