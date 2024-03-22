@@ -79,8 +79,10 @@ TRSymbolicEvaluator >> commonBranchConditional: node [
 
 	| parms autos jump cont if |
 
-	parms := (self compilation symbolManager lookupSymbolsByType: TRParameterSymbol) sorted: #index.
-	autos := (self compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol) sorted: #index.
+	parms := self compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
+	parms := parms sorted: [ :a :b | a index < b index ].	
+	autos :=(self compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol) select: #isUsed.
+	autos := autos sorted: [ :a :b | a index < b index ].
 
 	jump := node symbol asΛEApp: (parms , autos).
 	cont := ELet decl: (SpriteDecl bind: (SpriteBind id: '_') expr: (0 asΛExpr: TInt instance))

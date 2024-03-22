@@ -65,15 +65,15 @@ TRSymbolicCodeGenerator >> generateCodeForBlock: block [
 	"Now, wrap the sequence in EFun"
 	block == compilation cfg entry ifTrue:[
 		bind := SpriteBind id: compilation functionSymbol name.
-		parms := compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
+		parms := (compilation symbolManager lookupSymbolsByType: TRParameterSymbol).
 		autos := #()
 	] ifFalse:[
 		bind := SpriteBind id: block name.
 		parms := compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
-		autos := compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
+		autos :=(compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol) select: #isUsed.
 	].
-	parms := parms sorted: #index.
-	autos := autos sorted: #index.
+	parms := parms sorted: [ :a :b | a index < b index ].
+	autos := autos sorted: [ :a :b | a index < b index ].
 
 	tfun := (parms , autos) reversed
 					inject: compilation functionSymbol type asRType
