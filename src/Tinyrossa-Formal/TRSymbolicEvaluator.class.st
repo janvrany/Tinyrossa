@@ -151,7 +151,7 @@ TRSymbolicEvaluator >> evaluate: node [
 		self assert: (value isKindOf: ΛExpression).
 
 		"...and append it to the chain."
-		node opcode isReturn ifTrue:[
+		(node opcode isReturn or:[node opcode isGoto]) ifTrue:[
 			self append: value.
 			tail := nil.
 		] ifFalse:[
@@ -181,6 +181,18 @@ TRSymbolicEvaluator >> evaluate: node [
 
 	].
 	^ result.
+]
+
+{ #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_goto: node [
+	| parms autos jump |
+
+	parms := self compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
+	parms := parms sorted: [ :a :b | a index < b index ].
+	autos :=(self compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol) select: #isUsed.
+	autos := autos sorted: [ :a :b | a index < b index ].
+	jump := node symbol asΛEApp: (parms , autos).
+	^jump.
 ]
 
 { #category : #evaluation }
