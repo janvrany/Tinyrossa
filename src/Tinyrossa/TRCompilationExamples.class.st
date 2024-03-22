@@ -14,6 +14,14 @@ Class {
 }
 
 { #category : #accessing }
+TRCompilationExamples class >> compiler [
+	Smalltalk isPharo ifTrue:[
+		^super compiler options: #(+ optionSkipSemanticWarnings)
+	].
+	^super compiler
+]
+
+{ #category : #accessing }
 TRCompilationExamples class >> testSelectors [
 	^ self selectors select: [ :each | each beginsWith:'example' ]
 ]
