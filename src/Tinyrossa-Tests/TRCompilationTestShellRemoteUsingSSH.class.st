@@ -22,13 +22,20 @@ TRCompilationTestShellRemoteUsingSSH >> setUp [
 	| scpCmd |
 	super setUp.
 
-	scpCmd := 'scp ' , debugger pathName , ' ' , self class host , ':/tmp'.
+	scpCmd := 'scp ' , binary pathName , ' ' , self class host , ':/tmp'.
 
 
-	self assert: (OperatingSystem executeCommand: scpCmd)
+	self assert: (OSProcess new command: scpCmd) execute
 		 description: 'Cannot upload shell'.
 
-	target := GDBDebugger new.
-	target executable: debugger.
-	target send: 'target extended-remote | ssh -C ', self class host , ' gdbserver - /tmp/' , debugger baseName.
+	(Smalltalk includesKey: #GDBDebugger) ifTrue:[
+		"Use LibGDBs if available..."
+
+		debugger := (Smalltalk at: #GDBDebugger) new.
+		debugger executable: binary.
+		target send: 'target extended-remote | ssh -C ', self class host , ' gdbserver - /tmp/' , binary baseName.
+		^self
+	] ifFalse:[
+		self error: 'This shell require libgdbs'
+	].
 ]

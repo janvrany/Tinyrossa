@@ -76,7 +76,6 @@ $(PROJECT).image: ../src/*/*.st
 	$(call pharo-load-local, $@, SmallRSP,         $(SMALLRSP_DIR)/src)
 	$(call pharo-load-local, $@, LibUnix,          $(PHARO_HACKS_DIR)/src)
 	$(call pharo-load-local, $@, LibCompat,        $(PHARO_HACKS_DIR)/src)
-	$(call pharo-load-local, $@, LibUnix,          $(PHARO_HACKS_DIR)/src)
 	$(call pharo-load-local, $@, PTerm,            $(PTERM_DIR))
 	$(call pharo-load-local, $@, LibGDBs,          $(LIBGDBS_DIR)/ports/pharo/src-generated)
 	$(call pharo-load-local, $@, Tinyrossa,        ../src)
