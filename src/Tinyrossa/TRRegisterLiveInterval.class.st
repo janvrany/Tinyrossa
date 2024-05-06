@@ -167,6 +167,12 @@ TRRegisterLiveInterval >> needsToBeSpilled [
 	^ spillSlot notNil
 ]
 
+{ #category : #queries }
+TRRegisterLiveInterval >> needsToBeSpilled [
+	"Return true, if this interval (register) has to be spilled after its definition"
+	^ spillSlot notNil
+]
+
 { #category : #'printing & storing' }
 TRRegisterLiveInterval >> printOn:aStream [
 	"append a printed representation of the receiver to the argument, aStream"

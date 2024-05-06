@@ -102,7 +102,7 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 	 When reading this code, keep in mind that we progress in reverse order, 
 	 from last to first instruction!
 	"
-	| insn deps liveAcross thrashed |
+	| insn deps liveAcross |
 
 	insn := instructions at: insnIndex.
 	deps := insn dependencies.
@@ -119,7 +119,6 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 		liveAcross := Set new: live size.
 		live do: [:i | (i start < insnIndex and: [ i stop > insnIndex ]) ifTrue:[liveAcross add:i] ].
 
-		thrashed := OrderedCollection new: deps post size.
 		codegen cursor: insnIndex.
 		deps post do: [:dep |
 			dep isDependency ifTrue:[
@@ -129,10 +128,13 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 				liveAcross do:[:i |
 					(i register allocation == dep rreg) ifTrue: [
 						"Live-across register is trashed, we have to spill and reload. 
-						 So reload here and note the it has to be spilled before this 
-						 instruction executes (see handling of pre-dependencies below)"
+						 Since we go 'backwards', we reload here.
+
+						 Note, that calling #insertReload: has the sideffect of allocating
+						 a spill slot for the (virtual) register. Also, the register is spilled
+						 right after it is defined in `#expireRegistersAt:`. Therefore, there's
+						 no need to call `#insertSpill:` when satisfying pre-dependencies."
 						self insertReload: i.
-						thrashed add: i.
 					].
 				]
 			].
@@ -163,16 +165,8 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 			dep isDependency ifTrue:[
 				self insertMoveFrom: dep vreg to: dep rreg.
 			].
-			dep isTrash ifTrue: [
-				thrashed do:[:i |
-					(i register allocation == dep rreg) ifTrue: [
-						"Live register is trashed and has to be spilled. 
-						 See handling of post-dependencies above where `spilled` set
-						 is populated."
-						self insertSpill: i.
-					].
-				]
-			].
+			"Note that there's no need to handle thrashed registers here
+			 see comment in code handling post-dependencies above."
 		].
 	].
 ]
@@ -184,6 +178,9 @@ TRReverseLinearScanRegisterAllocator >> expireRegistersAt: insnIndex [
 		| expired |
 
 		expired := live removeLast.
+		expired spillSlot notNil ifTrue: [ 
+			 self insertSpill: expired.
+		].
 		self freeRegister: expired.
 	].
 ]
