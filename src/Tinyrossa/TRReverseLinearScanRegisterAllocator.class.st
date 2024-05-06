@@ -196,7 +196,6 @@ TRReverseLinearScanRegisterAllocator >> freeRegister: interval [
 TRReverseLinearScanRegisterAllocator >> insertReload: interval [
 	| slot |
 
-	self assert: interval spilled not.
 	self assert: interval register kind == GPR description: 'FIXME: FPRs not yet supported'.
 	self assert: interval register allocation notNil.
 
@@ -205,21 +204,20 @@ TRReverseLinearScanRegisterAllocator >> insertReload: interval [
 		slot := codegen compilation symbolManager defineAutomatic: nil type: Address.
 		interval spillSlot: slot.
 	].
+	slot incUseCount.
 	codegen registerLoad: interval register from: slot.
-	interval spilled: true.
 ]
 
 { #category : #utilities }
 TRReverseLinearScanRegisterAllocator >> insertSpill: interval [
 	| slot |
 
-	self assert: interval spilled.
 	self assert: interval spillSlot isTRAutomaticSymbol.
 	self assert: interval register kind == GPR description: 'FIXME: FPRs not yet supported'.
 
 	slot := interval spillSlot.
+	slot incUseCount.
 	codegen registerStore: interval register to: slot.
-	interval spilled: false.
 ]
 
 { #category : #utilities }
@@ -254,7 +252,7 @@ TRReverseLinearScanRegisterAllocator >> pickSpill: interval [
 
 	insn := instructions at: interval stop.
 
-	candidates := live reject: [:each | each spilled ].
+	candidates := live copy.
 	codegen virtualRegistersReadBy: insn do: [:vReg |
 		live do: [:e | e register == vReg ifTrue:[ candidates remove: e ifAbsent:nil] ]
 	].
