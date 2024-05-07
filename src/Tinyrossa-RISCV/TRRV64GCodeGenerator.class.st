@@ -128,6 +128,7 @@ TRRV64GCodeGenerator >> registerLoad: reg from: sym [
 
 	self assert: reg isTRRegister.
 	self assert: sym isTRAutomaticSymbol.
+	self assert: sym useCount > 0.
 	self assert: sym type == Address.
 
 	offset := AcDSLSymbol value: sym name.
@@ -140,6 +141,7 @@ TRRV64GCodeGenerator >> registerStore: reg to: sym [
 
 	self assert: reg isTRRegister.
 	self assert: sym isTRAutomaticSymbol.
+	self assert: sym useCount > 0.
 	self assert: sym type == Address.
 
 	offset := AcDSLSymbol value: sym name.

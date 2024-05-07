@@ -44,7 +44,6 @@ TRRegisterLiveInterval >> defdAt: position [
 	| positionEncoding |
 
 	self assert: position isInteger.
-	self assert: self firstDef isNil description: 'Register defined more than once'.
 
 	positionEncoding := self encodeDefPosition: position.
 	uses isEmpty ifTrue: [
@@ -130,6 +129,18 @@ TRRegisterLiveInterval >> isUsedAt: position [
 ]
 
 { #category : #accessing }
+TRRegisterLiveInterval >> lastDef [
+	"Return the last def position for this interval."
+
+	uses reverseDo: [:encodedPosition |
+		(self encodesDefPosition: encodedPosition) ifTrue: [
+			^ self decodePosition: encodedPosition
+		].
+	].
+	^ nil
+]
+
+{ #category : #accessing }
 TRRegisterLiveInterval >> lastUse [
 	"Return the last use position for this interval."
 
@@ -162,9 +173,8 @@ TRRegisterLiveInterval >> length [
 ]
 
 { #category : #queries }
-TRRegisterLiveInterval >> needsToBeSpilled [
-	"Return true, if this interval (register) has to be spilled after its definition"
-	^ spillSlot notNil
+TRRegisterLiveInterval >> needsToBeSpilledAt: position [
+	^ spillSlot notNil and: [ position = self lastDef ]
 ]
 
 { #category : #queries }
@@ -205,8 +215,8 @@ TRRegisterLiveInterval >> spillSlot [
 
 { #category : #accessing }
 TRRegisterLiveInterval >> spillSlot: aTRAutomaticSymbol [
-	self assert: aTRAutomaticSymbol isTRAutomaticSymbol.
-	self assert: spillSlot isNil.
+	self assert: (aTRAutomaticSymbol isTRAutomaticSymbol and: [spillSlot isNil])
+					| (aTRAutomaticSymbol isNil and: [spillSlot isTRAutomaticSymbol]).
 
 	spillSlot := aTRAutomaticSymbol.
 ]
