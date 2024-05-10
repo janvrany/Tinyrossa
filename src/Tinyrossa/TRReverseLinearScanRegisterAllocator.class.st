@@ -80,6 +80,9 @@ TRReverseLinearScanRegisterAllocator >> allocateRegister: interval [
 	].
 
 	self assert: assigned notNil.
+
+	interval register allocation: assigned.
+	self takeRegister: interval.
 	live add: interval.
 ]
 
@@ -293,22 +296,15 @@ TRReverseLinearScanRegisterAllocator >> insertSpill: interval [
 
 { #category : #utilities }
 TRReverseLinearScanRegisterAllocator >> pickRegister: interval [
-	"Pick (choose) and assign the best real register for given live interval.
-	 Return the chosen register.
-
-	 Internal list of currently available registers is updated accordingly.
+	"Pick (choose) and return the best real register to assign to given (about to
+	 going live) `interval`. Chosen register is NOT assigned.
 
 	 If there's no available register at this point, return `nil`. Caller
 	 is responsible for handling this case and schedule a spill / reload.
 	"
-	self assert: interval register allocation isNil.
-
 	availableRegisters isEmpty ifTrue: [ ^ nil ].
-
 	allocatableRegisters do: [:rReg | 
 		(availableRegisters includes: rReg) ifTrue: [ 
-			interval register allocation: rReg.
-			self takeRegister: interval.
 			^ rReg
 		].
 	].     
