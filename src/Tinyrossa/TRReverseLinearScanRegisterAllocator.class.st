@@ -171,7 +171,7 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 		live do: [:i | (i start < insnIndex and: [ i stop > insnIndex ]) ifTrue:[liveAcross add:i] ].
 
 		deps post do: [:dep |
-			dep isDependency ifTrue:[
+			dep isUnsatisfiedDependency ifTrue:[
 				self insertMoveFrom: dep rreg to: dep vreg.
 			].
 			dep isTrash ifTrue: [
@@ -232,7 +232,7 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 	codegen cursor: insnIndex - 1.
 	deps notEmptyOrNil ifTrue: [
 		deps pre reverseDo: [:dep |
-			dep isDependency ifTrue:[
+			dep isUnsatisfiedDependency ifTrue:[
 				self insertMoveFrom: dep vreg to: dep rreg.
 			].
 			"Note that there's no need to handle thrashed registers here
