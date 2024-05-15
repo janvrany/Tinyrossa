@@ -20,10 +20,29 @@ interval is chosen (`#pickSplit:`) and split (`#splitRegister:at:`).
 If interval is split between first 'def position' and following 'use position'
 the new interval has no 'use positions' and spans only one instruction.
 
-Thrashing of a register by an instruction (for example, function call
-'thrashes' all volatile registers) is solved by interval splitting
-too. When a register is thrashed, its interval if forcefully splitted
-(see `#allocateRegistersAt:`.
+When an interval is split into two intervals, they're both assigned
+same spill slot. The value is spilled at closest prior def position
+and reloaded at split position (see `#splitRegister:at:`)
+
+# Satisfying dependencies
+
+Dependencies are satisfied by interval splitting too:
+
+ * Intervals allocated to thrashed registers are split at instruction
+   that thrashes them, this forces spill and reload.
+
+ * Unsatisfied post-dependencies are solved by moving the value
+   to required real register. If that real register is already
+   allocated to some other interval, that interval is split which
+   makes it free (and therefore value can be freely moved there).
+
+ * Unsatisfied pre-dependencies on currently allocated real registers
+   are trickier and solved by either re-allocating the conflicting
+   interval to a free register (if any) or swapping allocations
+   or splitting. For details, see comments in relevant part of
+   allocateRegistersAt:
+
+---
 
 Note that there's no need to deal with virtual registers being used across
 basic block boundary - in Tinyrossa (as well as in Testarossa), the only way
@@ -172,7 +191,16 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 
 		deps post do: [:dep |
 			dep isUnsatisfiedDependency ifTrue:[
+				"Move value from real register to its virtual register."
 				self insertMoveFrom: dep rreg to: dep vreg.
+
+				live copy do: [:i |
+					(i register allocation == dep rreg) ifTrue: [
+						"Live-across register is trashed, we have to spill and reload.
+						 We do it by forcefully splitting the interval."
+						self splitRegister: i at: insnIndex.
+					].
+				].
 			].
 			dep isTrash ifTrue: [
 				liveAcross do:[:i |
@@ -233,7 +261,66 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 	deps notEmptyOrNil ifTrue: [
 		deps pre reverseDo: [:dep |
 			dep isUnsatisfiedDependency ifTrue:[
-				self insertMoveFrom: dep vreg to: dep rreg.
+				| conflicting |
+
+				conflicting := live detect: [:each | each register allocation == dep rreg ] ifNone: nil.
+				conflicting notNil ifTrue: [
+					"There's a dependency on a real register but (another) live interval (`conflicting`)
+					 is allocated to that very real register (so the real register is not free)."
+
+					"If conflicting interval have just gone live..."
+					conflicting stop == insnIndex ifTrue: [
+						| free |
+
+						free := self pickRegister: conflicting.
+						free notNil ifTrue:[
+							"...and there's a free register, we can just reassign conflicting register
+							 to this free one."
+							self freeRegister: conflicting register allocation.
+							conflicting register allocation: free.
+							self takeRegister: free.
+
+							"Now the real register is free so we can simply move
+							 value from virtual to (now free) real register."
+							self insertMoveFrom: dep vreg to: dep rreg.
+						] ifFalse: [
+							"If there's no free register, then we swap allocations for
+							 conflicting and dependent registers. However, we can do this
+							 safely only if dependent register has also gone live at this
+							 position."
+
+							| dependent |
+
+							dependent := live detect: [:each | each register == dep vreg ].
+							dependent stop == insnIndex ifFalse: [
+								"So if it doesn't (has alreadt been live at this point), se
+								 split it and allocate it right back to the same register.
+								 This way, we can easily swap allocations without possibly
+								 creating conflict in already allocated intervals."
+
+								self splitRegister: dependent at: insnIndex.
+								self allocateRegister: (dependent := todo removeLast).
+							].
+
+							self assert: dependent stop == insnIndex.
+
+							"Now, swap allocations"
+							conflicting register allocation: dependent register allocation.
+							dependent register allocation: dep rreg.
+
+							"Since dependent (virtual) register is allocated to required (real) register,
+							 there's no need to move values."
+						].
+					] ifFalse: [
+						"Ouch, what to do here?"
+						self notYetImplemented.
+					].
+				] ifFalse: [
+					"There's no conflict, i.e., there's no live register currently allocated
+					 to required real register. Therefore we can simply move value from
+					 virtual register to real register."
+					self insertMoveFrom: dep vreg to: dep rreg.
+				].
 			].
 			"Note that there's no need to handle thrashed registers here
 			 as all thrashed intervals have been split, see above."
