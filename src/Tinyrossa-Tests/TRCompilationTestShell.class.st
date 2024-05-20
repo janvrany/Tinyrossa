@@ -143,7 +143,7 @@ TRCompilationTestShell >> tearDownDebugger [
 			debugger send: 'kill'.
 			
 			shouldQuitDebugger := (Smalltalk includesKey: #VDBDebuggerApplication) not 
-														or:[(Smalltalk at: #VDBDebuggerApplication) allInstances allSatisfy:[:vdbApp | vdbApp debugger ~~ target]].
+														or:[(Smalltalk at: #VDBDebuggerApplication) allInstances allSatisfy:[:vdbApp | vdbApp debugger ~~ debugger]].
 			shouldQuitDebugger ifTrue: [ 
 					debugger send: 'quit' andWait: false.				
 			].
