@@ -11,205 +11,101 @@ TRRV64GCompilationTests >> target [
 
 { #category : #tests }
 TRRV64GCompilationTests >> test01_bytecode_abs [
-	| debugger |
-
 	super test01_bytecode_abs.
-	"
-	VDBDebuggerAp
-	"
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger setRegister: 'a0' to: 2.
-
-	"
-	VDBDebuggerApplication openFor: debugger
-	"
-
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: 2 abs.
+	self assert: (shell call: 2) equals: 2 abs.
 ]
 
 { #category : #tests }
 TRRV64GCompilationTests >> test02_iconst_n [
-	| debugger |
-
 	super test02_iconst_n.
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	 "
-	 VDBDebuggerApplication openFor: debugger
-	"
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: -16r7FEDCBA9.
+	self assert: (shell call) equals: -16r7FEDCBA9.
 ]
 
 { #category : #tests }
 TRRV64GCompilationTests >> test02_iconst_p [
-	| debugger |
-
 	super test02_iconst_p.
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	 "
-	 VDBDebuggerApplication openFor: debugger
-	"
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: 16r7FEDCBA9.
+	self assert: (shell call) equals: 16r7FEDCBA9.
 ]
 
 { #category : #tests }
 TRRV64GCompilationTests >> test03_lconst_n [
-	| debugger |
-
 	super test03_lconst_n.
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	 "
-	 VDBDebuggerApplication openFor: debugger
-	"
-	debugger c.
-	self assert: (debugger getRegister: 'a0')  equals: -16r7AFEAFFECAFEAFFE.
+	self assert: (shell call) equals: -16r7AFEAFFECAFEAFFE.
 ]
 
 { #category : #tests }
 TRRV64GCompilationTests >> test03_lconst_p [
-	| debugger |
-
 	super test03_lconst_p.
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	 "
-	 VDBDebuggerApplication openFor: debugger
-	"
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: 16r7AFEAFFECAFEAFFE.
+	self assert: (shell call) equals: 16r7AFEAFFECAFEAFFE.
 ]
 
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example01_meaningOfLife [
-	| debugger |
-
 	TRCompilationExamples new
 		compilation: compilation;
 		example01_meaningOfLife.
 
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: 42.
+	self assert: (shell call) equals: 42.
 ]
 
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example03_signum [
-	| debugger |
-
 	TRCompilationExamples new
 		compilation: compilation;
 		example03_signum.
 
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger setRegister: 'a0' to: -5.
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: -1.
+	self assert: (shell call:-5) equals: -5 sign.
 ]
 
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example04_factorial_i [
-	| debugger |
-
 	TRCompilationExamples new
 		compilation: compilation;
 		example04_factorial_i.
 
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger setRegister: 'a0' to: 5.
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: 5 factorial.
+	self assert: (shell call:5) equals: 5 factorial.
 ]
 
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example05_factorial_r [
-	| debugger |
-
 	TRCompilationExamples new
 		compilation: compilation;
 		example05_factorial_r.
 
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger setRegister: 'a0' to: 5.
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: 5 factorial.
+	self assert: (shell call:5) equals:  5 factorial.
 ]
 
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example08_bytecode_compiler [
-	| debugger |
-
 	TRCompilationExamples new
 		compilation: compilation;
 		example08_bytecode_compiler.
-	"
-	VDBDebuggerAp
-	"
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger setRegister: 'a0' to: 2.
-
-	"
-	VDBDebuggerApplication openFor: debugger
-	"
-
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: 2 factorial.
+	self assert: (shell call:2) equals: 2 factorial.
 ]
 
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example09_signum_2 [
-	| debugger |
-
 	TRCompilationExamples new
 		compilation: compilation;
 		example09_signum_2.
 
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger setRegister: 'a0' to: -5.
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: -1.
+	self assert: (shell call:-1) equals: -1 sign.
 ]
 
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example15_add_with_overflow_check [
-	| debugger |
-
 	TRCompilationExamples new
 		compilation: compilation;
 		example15_add_with_overflow_check.
-
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger setRegister: 'a0' to: 16r7FFFFFFE.
-	debugger setRegister: 'a1' to:          2.
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: 0.
+	self assert: (shell call: 16r7FFFFFFE _: 2 ) equals: 0.
 ]
 
 { #category : #'tests - examples' }
 TRRV64GCompilationTests >> test_example16_factorial_i_with_overflow [
-	| debugger |
-
 	TRCompilationExamples new
 		compilation: compilation;
 		example16_factorial_i_with_overflow.
-
-	debugger := shell debugger.
-	debugger memoryAt: shell nzone put: compilation codeBuffer bytes.
-	debugger setRegister: 'a0' to: 13.
-	debugger c.
-	self assert: (debugger getRegister: 'a0') equals: -1.
+	self assert: (shell call:13)equals: -1.
 
 
 	"
