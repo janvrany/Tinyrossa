@@ -2,12 +2,15 @@ Class {
 	#name : #TRCompilationTestShell,
 	#superclass : #TestAsserter,
 	#instVars : [
-		'target',
+		'compilation',
 		'binary',
 		'debugger'
 	],
 	#classVars : [
 		'DefaultImpl'
+	],
+	#pools : [
+		'TRRegisterKinds'
 	],
 	#category : #'Tinyrossa-Tests-Shells-SmalltalkX'
 }
@@ -27,11 +30,11 @@ TRCompilationTestShell class >> defaultImpl: aClass [
 ]
 
 { #category : #'instance creation' }
-TRCompilationTestShell class >> forTarget: aTRCompilationTarget [
+TRCompilationTestShell class >> forCompilation: aTRCompilation [
 	self == TRCompilationTestShell ifTrue: [ 
-		^ self defaultImpl forTarget: aTRCompilationTarget
+		^ self defaultImpl forCompilation: aTRCompilation
 	] ifFalse: [ 
-		^ self new initializeWithTarget: aTRCompilationTarget
+		^ self new initializeWithCompilation: aTRCompilation
 	].
 ]
 
@@ -73,6 +76,66 @@ TRCompilationTestShell class >> shellDirectory [
 	"
 ]
 
+{ #category : #utilities }
+TRCompilationTestShell >> call [
+	^ self callWithArguments: #()
+]
+
+{ #category : #utilities }
+TRCompilationTestShell >> call: arg1 [
+	^ self callWithArguments: { arg1 }
+]
+
+{ #category : #utilities }
+TRCompilationTestShell >> call: arg1 _:arg2 [
+	^ self callWithArguments: { arg1 . arg2 }
+]
+
+{ #category : #'utilities-private' }
+TRCompilationTestShell >> callWithArguments: values [
+	| params |
+
+	"Inject compiled code into shell"
+	debugger memoryAt: self nzone put: compilation codeBuffer bytes.
+
+	"Prepare parameters"
+	params := (compilation symbolManager lookupSymbolsByType: TRParameterSymbol) sorted: [ :a :b | a index < b index ].
+	self assert: values size == params size description: 'Number of formal paramerers does not match actual'.
+	1 to: values size do: [:i |
+		| param value |
+
+		param := params at: i.
+		value := values at: i.
+
+		param type validateConstant: value.
+
+		param type isIntegerType ifTrue: [
+			| argReg |
+
+			argReg := (compilation codegen linkage parameterRegisters: GPR) at: i.
+			debugger setRegister: argReg nameInGDB to: value.
+		] ifFalse: [
+			self error: 'Parameter type not supported yet: ' , param type name
+		].
+	].
+
+	"Call injected function"
+	"
+	VDBDebuggerApplication openFor: debugger
+	"
+	debugger c.
+
+	"Retrieve return value"
+	compilation functionSymbol type isIntegerType ifTrue: [
+		| retReg |
+
+		retReg := (compilation codegen linkage returnRegisters: GPR) at: 1.
+		^ debugger getRegister: retReg nameInGDB
+	] ifFalse: [
+		self error: 'Return type not supported yet: ' , compilation functionSymbol type name
+	].
+]
+
 { #category : #accessing }
 TRCompilationTestShell >> debugger [
 	self assert: debugger notNil.
@@ -80,8 +143,8 @@ TRCompilationTestShell >> debugger [
 ]
 
 { #category : #initialization }
-TRCompilationTestShell >> initializeWithTarget: aTRCompilationTarget [
-	target := aTRCompilationTarget.
+TRCompilationTestShell >> initializeWithCompilation: aTRCompilation [
+	compilation := aTRCompilation.
 	self setUp; reset.
 ]
 
@@ -101,10 +164,10 @@ TRCompilationTestShell >> reset [
 TRCompilationTestShell >> setUp [
 	| shellDir |
 	
-	shellDir := self class shellDirectory.	
+	shellDir := self class shellDirectory.
 	self assert: shellDir notNil description:'Could not determine directory with test shells!'.
 
-	binary := shellDir / ('shell-' , (target name readStream upTo: $-)).
+	binary := shellDir / ('shell-' , (compilation config target name readStream upTo: $-)).
 	self assert: binary isExecutable.
 ]
 

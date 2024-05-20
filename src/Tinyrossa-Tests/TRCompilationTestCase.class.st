@@ -27,7 +27,7 @@ TRCompilationTestCase class >> isAbstract [
 { #category : #running }
 TRCompilationTestCase >> setUpForTarget: aTRCompilationTarget [
 	compilation := TRCompilation forTarget: aTRCompilationTarget.
-	shell := TRCompilationTestShell forTarget: aTRCompilationTarget.
+	shell := TRCompilationTestShell forCompilation: compilation.
 ]
 
 { #category : #running }
