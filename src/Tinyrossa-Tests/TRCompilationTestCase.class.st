@@ -1,6 +1,6 @@
 Class {
 	#name : #TRCompilationTestCase,
-	#superclass : #TestCase,
+	#superclass : #TestCaseParametrized,
 	#instVars : [
 		'compilation',
 		'shell'
@@ -24,10 +24,25 @@ TRCompilationTestCase class >> isAbstract [
 	^ self == TRCompilationTestCase
 ]
 
+{ #category : #accessing }
+TRCompilationTestCase >> parametersIterator [
+	^ super parametersIterator ,
+		(self parameter: #target values: { self target })
+]
+
 { #category : #running }
-TRCompilationTestCase >> setUpForTarget: aTRCompilationTarget [
-	compilation := TRCompilation forTarget: aTRCompilationTarget.
+TRCompilationTestCase >> setUp [
+	| target |
+
+	target := testParameters at:#target.
+
+	compilation := TRCompilation forTarget: target.
 	shell := TRCompilationTestShell forCompilation: compilation.
+]
+
+{ #category : #accessing }
+TRCompilationTestCase >> target [
+	^ self subclassResponsibility
 ]
 
 { #category : #running }

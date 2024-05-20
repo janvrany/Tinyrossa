@@ -4,9 +4,9 @@ Class {
 	#category : #'Tinyrossa-Tests-POWER'
 }
 
-{ #category : #running }
-TRPPC64CompilationTests >> setUp [
-	self setUpForTarget: TRPPC64Linux default
+{ #category : #accessing }
+TRPPC64CompilationTests >> target [
+	^ TRPPC64Linux default
 ]
 
 { #category : #tests }

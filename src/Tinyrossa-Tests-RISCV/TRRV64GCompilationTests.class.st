@@ -4,9 +4,9 @@ Class {
 	#category : #'Tinyrossa-Tests-RISCV'
 }
 
-{ #category : #running }
-TRRV64GCompilationTests >> setUp [
-	self setUpForTarget: TRRV64GLinux default
+{ #category : #accessing }
+TRRV64GCompilationTests >> target [
+	^ TRRV64GLinux default
 ]
 
 { #category : #tests }
