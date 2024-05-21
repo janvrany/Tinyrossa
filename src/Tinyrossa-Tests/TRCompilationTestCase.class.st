@@ -24,6 +24,36 @@ TRCompilationTestCase class >> isAbstract [
 	^ self == TRCompilationTestCase
 ]
 
+{ #category : #'accessing - parameters' }
+TRCompilationTestCase >> int32Values [
+	^ { -16r80000000 .
+		-16r7FEDCBA9 .
+			-16rCBA9 .
+			  -16rA9 .
+				  -1 .
+				   0 .
+			   16rA9 .
+			 16rCBA9 .
+		 16r7FEDCBA9 .
+		 16r7FFFFFFF }
+]
+
+{ #category : #'accessing - parameters' }
+TRCompilationTestCase >> int64Values [
+	^ { -16r8000000000000000 .
+		-16r7AFEAFFECAFEAFFE .
+				-16r7FEDCBA9 .
+					-16rCBA9 .
+					  -16rA9 .
+						  -1 .
+						   0 .
+					   16rA9 .
+					 16rCBA9 .
+				 16r7FEDCBA9 .
+		 16r7AFEAFFECAFEAFFE .
+		 16r7FFFFFFFFFFFFFFF }
+]
+
 { #category : #accessing }
 TRCompilationTestCase >> parametersIterator [
 	^ super parametersIterator ,
@@ -172,18 +202,21 @@ TRCompilationTestCase >> test01_bytecode_abs [
 ]
 
 { #category : #tests }
-TRCompilationTestCase >> test02_iconst_n [
-	| builder |
+TRCompilationTestCase >> test02_iconst [
+	<parameter: #x values: #int32Values>
 
+	| x builder |
+
+	x := testParameters at: #x.
 	builder := compilation builder.
 	builder defineName: testSelector type: Int32.
 	builder ireturn: {
-				builder iconst: -16r7FEDCBA9
+				builder iconst: x
 			}.
 	compilation optimize.
 	compilation compile.
 
-	self assert: (shell call) equals: -16r7FEDCBA9.
+	self assert: (shell call) equals: x.
 
 	"
 	 TRRV64GCompilationTests debug: #test02_iconst_p
@@ -191,69 +224,29 @@ TRCompilationTestCase >> test02_iconst_n [
 ]
 
 { #category : #tests }
-TRCompilationTestCase >> test02_iconst_p [
-	| builder |
+TRCompilationTestCase >> test03_lconst [
+	<parameter: #x values: #int64Values>
 
-	builder := compilation builder.
-	builder defineName: testSelector type: Int32.
-	builder ireturn: {
-				builder iconst: 16r7FEDCBA9
-			}.
-	compilation optimize.
-	compilation compile.
-
-	self assert: (shell call) equals: 16r7FEDCBA9.
-
-	"
-	 TRRV64GCompilationTests debug: #test02_iconst_p
-	 TRPPC64CompilationTests debug: #test02_iconst_p"
-]
-
-{ #category : #tests }
-TRCompilationTestCase >> test03_lconst_n [
-	| builder |
+	| x builder |
 
 	self target name = 'powerpc64le-linux' ifTrue: [
 		self skip: 'Skipped since #loadConstant64:into: is not implemented for POWER (see issue #43)'.
 	].
 
+	x := testParameters at: #x.
 	builder := compilation builder.
 	builder defineName: testSelector type: Int64.
 	builder lreturn: 
-		{ builder lconst: -16r7AFEAFFECAFEAFFE }.
+		{ builder lconst: x }.
 
 	compilation optimize.
 	compilation compile.
 
-	self assert: (shell call) equals: -16r7AFEAFFECAFEAFFE.
+	self assert: (shell call) equals: x.
 
 	"
 	TRRV64GCompilationTests debug: #test03_lconst_n 
 	TRPPC64CompilationTests debug: #test03_lconst_n 
-	"
-]
-
-{ #category : #tests }
-TRCompilationTestCase >> test03_lconst_p [
-	| builder |
-
-	self target name = 'powerpc64le-linux' ifTrue: [
-		self skip: 'Skipped since #loadConstant64:into: is not implemented for POWER (see issue #43)'.
-	].
-
-	builder := compilation builder.
-	builder defineName: testSelector type: Int64.
-	builder lreturn: 
-		{ builder lconst: 16r7AFEAFFECAFEAFFE }.
-
-	compilation optimize.
-	compilation compile.
-
-	self assert: (shell call) equals: 16r7AFEAFFECAFEAFFE.
-
-	"
-	TRRV64GCompilationTests debug: #test03_lconst_p 
-	TRPPC64CompilationTests debug: #test03_lconst_p 
 	"
 ]
 
