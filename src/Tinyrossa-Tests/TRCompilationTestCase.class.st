@@ -1,6 +1,6 @@
 Class {
 	#name : #TRCompilationTestCase,
-	#superclass : #TestCase,
+	#superclass : #TestCaseParametrized,
 	#instVars : [
 		'compilation',
 		'shell'
@@ -24,10 +24,55 @@ TRCompilationTestCase class >> isAbstract [
 	^ self == TRCompilationTestCase
 ]
 
+{ #category : #'accessing - parameters' }
+TRCompilationTestCase >> int32Values [
+	^ { -16r80000000 .
+		-16r7FEDCBA9 .
+			-16rCBA9 .
+			  -16rA9 .
+				  -1 .
+				   0 .
+			   16rA9 .
+			 16rCBA9 .
+		 16r7FEDCBA9 .
+		 16r7FFFFFFF }
+]
+
+{ #category : #'accessing - parameters' }
+TRCompilationTestCase >> int64Values [
+	^ { -16r8000000000000000 .
+		-16r7AFEAFFECAFEAFFE .
+				-16r7FEDCBA9 .
+					-16rCBA9 .
+					  -16rA9 .
+						  -1 .
+						   0 .
+					   16rA9 .
+					 16rCBA9 .
+				 16r7FEDCBA9 .
+		 16r7AFEAFFECAFEAFFE .
+		 16r7FFFFFFFFFFFFFFF }
+]
+
+{ #category : #accessing }
+TRCompilationTestCase >> parametersIterator [
+	^ super parametersIterator ,
+		(self parameter: #target values: { self target })
+]
+
 { #category : #running }
-TRCompilationTestCase >> setUpForTarget: aTRCompilationTarget [
-	compilation := TRCompilation forTarget: aTRCompilationTarget.
-	shell := TRCompilationTestShell forTarget: aTRCompilationTarget.
+TRCompilationTestCase >> setUp [
+	| target |
+
+	target := testParameters at:#target.
+
+	compilation := TRCompilation forTarget: target.
+	shell := TRCompilationTestShell forCompilation: compilation.
+]
+
+{ #category : #accessing }
+TRCompilationTestCase >> target [
+	^ self subclassResponsibility
 ]
 
 { #category : #running }
@@ -153,21 +198,25 @@ TRCompilationTestCase >> test01_bytecode_abs [
 
 	compilation compile.
 
-	compilation codeBuffer. "Only convenience inspection."
+	self assert: (shell call: 2) equals: 2 abs.
 ]
 
 { #category : #tests }
-TRCompilationTestCase >> test02_iconst_n [
-	| builder |
+TRCompilationTestCase >> test02_iconst [
+	<parameter: #x values: #int32Values>
 
+	| x builder |
+
+	x := testParameters at: #x.
 	builder := compilation builder.
 	builder defineName: testSelector type: Int32.
 	builder ireturn: {
-				builder iconst: -16r7FEDCBA9
+				builder iconst: x
 			}.
 	compilation optimize.
 	compilation compile.
-	compilation codeBuffer.
+
+	self assert: (shell call) equals: x.
 
 	"
 	 TRRV64GCompilationTests debug: #test02_iconst_p
@@ -175,37 +224,25 @@ TRCompilationTestCase >> test02_iconst_n [
 ]
 
 { #category : #tests }
-TRCompilationTestCase >> test02_iconst_p [
-	| builder |
+TRCompilationTestCase >> test03_lconst [
+	<parameter: #x values: #int64Values>
 
-	builder := compilation builder.
-	builder defineName: testSelector type: Int32.
-	builder ireturn: {
-				builder iconst: 16r7FEDCBA9
-			}.
-	compilation optimize.
-	compilation compile.
-	compilation codeBuffer.
+	| x builder |
 
-	"
-	 TRRV64GCompilationTests debug: #test02_iconst_p
-	 TRPPC64CompilationTests debug: #test02_iconst_p"
-]
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since #loadConstant64:into: is not implemented for POWER (see issue #43)'.
+	].
 
-{ #category : #tests }
-TRCompilationTestCase >> test03_lconst_n [
-	| builder |
-
+	x := testParameters at: #x.
 	builder := compilation builder.
 	builder defineName: testSelector type: Int64.
 	builder lreturn: 
-		{ builder lconst: -16r7AFEAFFECAFEAFFE }.
+		{ builder lconst: x }.
 
 	compilation optimize.
-
 	compilation compile.
 
-	compilation codeBuffer. 
+	self assert: (shell call) equals: x.
 
 	"
 	TRRV64GCompilationTests debug: #test03_lconst_n 
@@ -213,23 +250,92 @@ TRCompilationTestCase >> test03_lconst_n [
 	"
 ]
 
-{ #category : #tests }
-TRCompilationTestCase >> test03_lconst_p [
-	| builder |
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example01_meaningOfLife [
+	TRCompilationExamples new
+		compilation: compilation;
+		example01_meaningOfLife.
 
-	builder := compilation builder.
-	builder defineName: testSelector type: Int64.
-	builder lreturn: 
-		{ builder lconst: 16r7AFEAFFECAFEAFFE }.
+	self assert: (shell call) equals: 42.
+]
 
-	compilation optimize.
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example03_signum [
+	TRCompilationExamples new
+		compilation: compilation;
+		example03_signum.
 
-	compilation compile.
+	self assert: (shell call:-5) equals: -5 sign.
+]
 
-	compilation codeBuffer. 
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example04_factorial_i [
+	TRCompilationExamples new
+		compilation: compilation;
+		example04_factorial_i.
+
+	self assert: (shell call:5) equals: 5 factorial.
+]
+
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example05_factorial_r [
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since calls are not implemented for POWER (see issue #45)'.
+	].
+	TRCompilationExamples new
+		compilation: compilation;
+		example05_factorial_r.
+
+	self assert: (shell call:5) equals:  5 factorial.
+]
+
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example08_bytecode_compiler [
+	TRCompilationExamples new
+		compilation: compilation;
+		example08_bytecode_compiler.
+	self assert: (shell call:2) equals: 2 factorial.
+]
+
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example09_signum_2 [
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Known failure (see issue #46)'.
+	].
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example09_signum_2.
+
+	self assert: (shell call:-1) equals: -1 sign.
+]
+
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example15_add_with_overflow_check [
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since overflowchk evaluator is not implemented for POWER (see issue #44)'.
+	].
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example15_add_with_overflow_check.
+	self assert: (shell call: 16r7FFFFFFE _: 2 ) equals: 0.
+]
+
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example16_factorial_i_with_overflow [
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since overflowchk evaluator is not implemented for POWER (see issue #44)'.
+	].
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example16_factorial_i_with_overflow.
+	self assert: (shell call:13)equals: -1.
+
 
 	"
-	TRRV64GCompilationTests debug: #test03_lconst_p 
-	TRPPC64CompilationTests debug: #test03_lconst_p 
+	13 factorial > 0x7FFFFFFF
+	22 factorial > 0x7FFFFFFFFFFFFFFF
 	"
 ]

@@ -33,7 +33,7 @@ TRCompilationTestShellRemoteUsingSSH >> setUp [
 
 		debugger := (Smalltalk at: #GDBDebugger) new.
 		debugger executable: binary.
-		target send: 'target extended-remote | ssh -C ', self class host , ' gdbserver - /tmp/' , binary baseName.
+		debugger send: 'target extended-remote | ssh -C ', self class host , ' gdbserver - /tmp/' , binary baseName.
 		^self
 	] ifFalse:[
 		self error: 'This shell require libgdbs'

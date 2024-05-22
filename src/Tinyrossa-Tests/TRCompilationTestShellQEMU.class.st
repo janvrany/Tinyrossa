@@ -13,7 +13,7 @@ TRCompilationTestShellQEMU >> setUp [
 
 	super setUp.
 
-	qemuCmd := target qemu, ' -g 1234 ', binary pathString.
+	qemuCmd := compilation config target qemu, ' -g 1234 ', binary pathString.
 
 	"First, start QEMU... "
 	qemu := OSProcess new command: qemuCmd. 

@@ -43,6 +43,16 @@ TRRealRegister >> kind [
 	^ kind
 ]
 
+{ #category : #'printing & storing' }
+TRRealRegister >> printOn: aStream [
+	aStream nextPutAll: self name
+]
+
+{ #category : #'printing & storing' }
+TRRealRegister >> printString [
+	^ self name
+]
+
 { #category : #initialization }
 TRRealRegister >> setAssigned [
 	"No-op, we do not track assignments to real registers"
