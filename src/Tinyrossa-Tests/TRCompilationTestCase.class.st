@@ -57,7 +57,8 @@ TRCompilationTestCase >> int64Values [
 { #category : #accessing }
 TRCompilationTestCase >> parametersIterator [
 	^ super parametersIterator ,
-		(self parameter: #target values: { self target })
+		(self parameter: #target values: { self target }),
+		(self parameter: #stressRA values: { true . false })
 ]
 
 { #category : #running }
@@ -67,6 +68,7 @@ TRCompilationTestCase >> setUp [
 	target := testParameters at:#target.
 
 	compilation := TRCompilation forTarget: target.
+	compilation config stressRA: (testParameters at: #stressRA).
 	shell := TRCompilationTestShell forCompilation: compilation.
 ]
 
