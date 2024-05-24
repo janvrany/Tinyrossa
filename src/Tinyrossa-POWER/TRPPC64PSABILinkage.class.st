@@ -43,7 +43,7 @@ TRPPC64PSABILinkage class >> initialize [
 
 { #category : #accessing }
 TRPPC64PSABILinkage >> allocatableRegisters [
-	^ self preservedRegisters reversed
+	^ self preservedRegisters reversed , self parameterRegisters reversed
 ]
 
 { #category : #'code generation' }
