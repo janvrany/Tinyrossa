@@ -4,6 +4,9 @@ I am an abstract superclass for the standard x86 registers.
 Class {
 	#name : #AJRegister,
 	#superclass : #AJBaseReg,
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-Operands'
 }
 

@@ -29,6 +29,9 @@ Class {
 		'displacement',
 		'ripLabel'
 	],
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-Operands'
 }
 

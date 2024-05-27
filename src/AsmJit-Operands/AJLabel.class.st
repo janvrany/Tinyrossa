@@ -9,6 +9,9 @@ Class {
 		'position',
 		'relative'
 	],
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-Operands'
 }
 

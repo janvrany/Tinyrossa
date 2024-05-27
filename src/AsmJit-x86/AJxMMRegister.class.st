@@ -12,6 +12,9 @@ Depending on the instructions used the XMM registers represent different data ty
 Class {
 	#name : #AJxMMRegister,
 	#superclass : #AJBaseReg,
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-x86-Operands'
 }
 

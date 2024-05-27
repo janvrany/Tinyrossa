@@ -5,6 +5,7 @@ Class {
 	#name : #AJx86GeneralPurposeRegister,
 	#superclass : #AJRegister,
 	#pools : [
+		'AJConstants',
 		'AJx86Registers'
 	],
 	#category : #'AsmJit-x86-Operands'

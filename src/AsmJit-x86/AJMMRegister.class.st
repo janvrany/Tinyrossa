@@ -8,6 +8,9 @@ Note that the MMX register overlap with the floating point register and only use
 Class {
 	#name : #AJMMRegister,
 	#superclass : #AJBaseReg,
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-x86-Operands'
 }
 

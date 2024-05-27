@@ -9,6 +9,9 @@ Class {
 		'opCode1',
 		'opCodeR'
 	],
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-x86-Instructions'
 }
 

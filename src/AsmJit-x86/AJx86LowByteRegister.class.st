@@ -9,6 +9,7 @@ Class {
 		'highByteComplementRegister'
 	],
 	#pools : [
+		'AJConstants',
 		'AJx86Registers'
 	],
 	#category : #'AsmJit-x86-Operands'

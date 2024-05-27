@@ -19,6 +19,9 @@ Class {
 		'value',
 		'relocationMode'
 	],
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-Operands'
 }
 

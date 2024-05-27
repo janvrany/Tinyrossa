@@ -6,6 +6,9 @@ The lower 64bit of the floating point ST registers are shared with the MMX regis
 Class {
 	#name : #AJx87Register,
 	#superclass : #AJBaseReg,
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-x86-Operands'
 }
 

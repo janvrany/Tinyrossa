@@ -18,6 +18,9 @@ Class {
 		'code',
 		'name'
 	],
+	#pools : [
+		'AJConstants'
+	],
 	#category : #'AsmJit-Operands'
 }
 
