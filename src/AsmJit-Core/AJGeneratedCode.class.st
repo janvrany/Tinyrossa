@@ -97,12 +97,11 @@ AJGeneratedCode >> saveToFile [
 
 { #category : #output }
 AJGeneratedCode >> saveToFile: fileName [
-	| wd file |
-	wd := FileSystem disk workingDirectory.
-	file := wd / fileName.
+	| file |
+	file := '.' / fileName.
 	file exists
 		ifTrue: [ file delete ].
-	file binaryWriteStream
+	file writeStream binary
 		nextPutAll: bytes;
 		close
 ]
