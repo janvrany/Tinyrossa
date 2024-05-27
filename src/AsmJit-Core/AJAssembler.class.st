@@ -47,11 +47,6 @@ AJAssembler >> bytes [
 	^ self generatedCode bytes.
 ]
 
-{ #category : #convenience }
-AJAssembler >> data: aByteArray [
-	^ self addInstruction: (AJData data: aByteArray)
-]
-
 { #category : #'code generation' }
 AJAssembler >> generatedCode [
 
@@ -69,21 +64,6 @@ AJAssembler >> initialize [
 { #category : #accessing }
 AJAssembler >> instructionDescriptions [
 	^ self subclassResponsibility
-]
-
-{ #category : #convenience }
-AJAssembler >> mov: assoc [
-	"convenience"
-	^ self mov: assoc key to: assoc value
-]
-
-{ #category : #convenience }
-AJAssembler >> mov: src to: dest [
-	"Ensure right src/dest order"
-
-	src = dest ifTrue: [ ^ self ]. "do not if source and dest are same "
-
-	^ self mov: dest with: src
 ]
 
 { #category : #accessing }

@@ -1532,6 +1532,11 @@ AJx86Assembler >> data [
 ]
 
 { #category : #convenience }
+AJx86Assembler >> data: aByteArray [
+	^ self addInstruction: (AJData data: aByteArray)
+]
+
+{ #category : #convenience }
 AJx86Assembler >> db: aByteValue [
 	^ self addInstruction: (AJData byte: aByteValue)
 ]
@@ -3828,6 +3833,21 @@ AJx86Assembler >> lea: aDestinationRegister with: aSourceMemory [
 	^ self
 		addInstruction: #lea
 		operands: { aDestinationRegister . aSourceMemory }
+]
+
+{ #category : #convenience }
+AJx86Assembler >> mov: assoc [
+	"convenience"
+	^ self mov: assoc key to: assoc value
+]
+
+{ #category : #convenience }
+AJx86Assembler >> mov: src to: dest [
+	"Ensure right src/dest order"
+
+	src = dest ifTrue: [ ^ self ]. "do not if source and dest are same "
+
+	^ self mov: dest with: src
 ]
 
 { #category : #'instructions generated' }
