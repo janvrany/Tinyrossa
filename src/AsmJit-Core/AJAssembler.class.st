@@ -96,5 +96,5 @@ AJAssembler >> reset [
 	instructions := lastInstruction := nil.
 	labels := Dictionary new.
 	decorationNestingLevel := 0.
-	self addInstruction: AJRoutinePrologue new
+
 ]

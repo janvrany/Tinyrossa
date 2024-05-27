@@ -5172,6 +5172,13 @@ AJx86Assembler >> registers [
 	^ AJx86Registers
 ]
 
+{ #category : #'initialize-release' }
+AJx86Assembler >> reset [
+	super reset.
+	self addInstruction: AJRoutinePrologue new
+
+]
+
 { #category : #'instructions generated' }
 AJx86Assembler >> ret: anImmediate [
 	"
