@@ -32,11 +32,10 @@ AJInstructionDecoration >> printIndentOn: aStream [
 AJInstructionDecoration >> printSelfOn: aStream [
 	end
 		ifFalse: [ aStream nextPutAll: '/ "' ]
-		ifTrue: [	aStream nextPutAll: '\ "end ' ].
+		ifTrue: [       aStream nextPutAll: '\ "end ' ].
 	aStream
-		nextPutAll: annotation asString;
+		nextPutAll: (self annotationAt: String) asString;
 		nextPut: $".
-
 ]
 
 { #category : #accessing }

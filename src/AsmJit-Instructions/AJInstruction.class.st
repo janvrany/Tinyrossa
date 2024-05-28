@@ -10,7 +10,7 @@ Class {
 		'machineCode',
 		'position',
 		'next',
-		'annotation',
+		'annotations',
 		'level'
 	],
 	#category : #'AsmJit-Instructions'
@@ -30,12 +30,92 @@ AJInstruction >> accept: anObject [
 
 { #category : #accessing }
 AJInstruction >> annotation [
-	^ annotation
+	<resource: #obsolete>
+
+	self obsoleteMethodWarning: 'Use ArchC-compatible API #annotationAt:'.
+	^ self annotationAt: String
 ]
 
 { #category : #accessing }
 AJInstruction >> annotation: anObject [
-	annotation := anObject
+	<resource: #obsolete>
+
+	self obsoleteMethodWarning: 'Use ArchC-compatible API #annotationAdd:'.
+	self annotationAdd: anObject
+]
+
+{ #category : #annotations }
+AJInstruction >> annotationAdd: anObject [
+	annotations isNil ifTrue: [
+		annotations := Set with: anObject
+	] ifFalse: [
+		| annotation |
+
+		annotation := self annotationAt: anObject class.
+		annotation notNil ifTrue: [
+			self error: 'Instruction already annotated with ', anObject class name.
+			"You may want to #annotationAddOrReplace:"
+		].
+		annotations add: anObject
+	].
+]
+
+{ #category : #annotations }
+AJInstruction >> annotationAddOrReplace: anObject [
+	annotations isNil ifTrue: [
+		annotations := Set with: anObject
+	] ifFalse: [
+		| annotation |
+
+		annotation := self annotationAt: anObject class.
+		annotation notNil ifTrue: [
+			annotations remove: annotation.
+		].
+		annotations add: anObject
+	].
+]
+
+{ #category : #annotations }
+AJInstruction >> annotationAt: aClass [
+	annotations isNil ifTrue: [
+		^ nil
+	].
+	^ annotations detect: [:e | e class == aClass ] ifNone: nil
+]
+
+{ #category : #annotations }
+AJInstruction >> annotationRemove: anObject [
+	annotations notNil ifTrue: [
+		annotations remove: anObject ifAbsent: nil
+	].
+]
+
+{ #category : #annotations }
+AJInstruction >> annotationRemoveByKey: aClass [
+	| annotation |
+
+	annotation := self annotationAt: aClass.
+	annotation notNil ifTrue: [
+		self annotationRemove: annotation.
+	].
+]
+
+{ #category : #annotations }
+AJInstruction >> annotations [
+	annotations isNil ifTrue: [ ^ #() ].
+	^ annotations
+]
+
+{ #category : #annotations }
+AJInstruction >> annotations: aCollection [
+	"Set annotations. Old annotations (if any) are discarded."
+
+	aCollection notNil ifTrue: [
+		annotations := nil.
+	].
+	aCollection notNil ifTrue: [
+		aCollection do: [:each | self annotationAdd: each ]
+	]
 ]
 
 { #category : #asserting }
@@ -297,10 +377,12 @@ AJInstruction >> prepareCallAlignments [
 
 { #category : #printing }
 AJInstruction >> printAnnotationOn: aStream [
-	annotation
-		ifNil: [^ self].
+	| comment |
+
+	comment := self annotationAt: String.
+	comment isNil ifTrue: [ ^ self ].
 	aStream nextPut: $";
-		 nextPutAll: annotation asString;
+		 nextPutAll: comment asString;
 		 nextPut: $";
 		 cr.
 	self printIndentOn: aStream
