@@ -31,6 +31,13 @@ AJImmediate class >> ivalue: aValue [
 		ivalue: aValue
 ]
 
+{ #category : #'instance creation' }
+AJImmediate class >> new [
+	"return an initialized instance"
+
+	^ self basicNew initialize.
+]
+
 { #category : #comparing }
 AJImmediate >> = other [
 	self class = other class

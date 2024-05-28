@@ -16,6 +16,13 @@ Class {
 	#category : #'AsmJit-Instructions'
 }
 
+{ #category : #'instance creation' }
+AJInstruction class >> new [
+	"return an initialized instance"
+
+	^ self basicNew initialize.
+]
+
 { #category : #visitor }
 AJInstruction >> accept: anObject [
 	self subclassResponsibility

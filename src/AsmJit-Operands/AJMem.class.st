@@ -49,6 +49,13 @@ AJMem class >> displacement: anImmediate [
 		yourself
 ]
 
+{ #category : #'instance creation' }
+AJMem class >> new [
+	"return an initialized instance"
+
+	^ self basicNew initialize.
+]
+
 { #category : #accessing }
 AJMem >> * aScale [
 	self scale: aScale

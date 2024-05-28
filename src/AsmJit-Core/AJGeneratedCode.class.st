@@ -13,6 +13,13 @@ AJGeneratedCode class >> fromInstructions: instructions [
 	^ self new fromInstructions: instructions
 ]
 
+{ #category : #'instance creation' }
+AJGeneratedCode class >> new [
+	"return an initialized instance"
+
+	^ self basicNew initialize.
+]
+
 { #category : #accessing }
 AJGeneratedCode >> bytes [
 	^ bytes

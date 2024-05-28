@@ -16,6 +16,13 @@ AJFormatter class >> format: anObject [
 ]
 
 { #category : #'instance creation' }
+AJFormatter class >> new [
+	"return an initialized instance"
+
+	^ self basicNew initialize.
+]
+
+{ #category : #'instance creation' }
 AJFormatter class >> on: aStream [
 	^ self basicNew
 		initializeWithStream: aStream;

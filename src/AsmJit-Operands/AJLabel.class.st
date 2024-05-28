@@ -15,6 +15,13 @@ Class {
 	#category : #'AsmJit-Operands'
 }
 
+{ #category : #'instance creation' }
+AJLabel class >> new [
+	"return an initialized instance"
+
+	^ self basicNew initialize.
+]
+
 { #category : #visiting }
 AJLabel >> accept: aVisitor [
 	^ aVisitor visitLabel: self

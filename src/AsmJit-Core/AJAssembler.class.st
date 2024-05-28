@@ -13,6 +13,13 @@ Class {
 	#category : #'AsmJit-Core'
 }
 
+{ #category : #'instance creation' }
+AJAssembler class >> new [
+	"return an initialized instance"
+
+	^ self basicNew initialize.
+]
+
 { #category : #'instruction list' }
 AJAssembler >> addInstruction: anInstruction [
 	anInstruction validate.
