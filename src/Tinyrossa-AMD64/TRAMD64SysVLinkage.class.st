@@ -30,14 +30,11 @@ TRAMD64SysVLinkage >> generateCall: node [
 TRAMD64SysVLinkage >> generateEpilogue: valReg [
 	| preserved offset |
 
-	"Move value to ABI return register..."
-	generate mov: valReg -> rax.
-
 	"Restore preserved registers"
 	offset := framePreservedOffset.
 	preserved := self allocatedPreservedRegisters.
 	preserved do: [:preservedReg | 
-		generate mov: (rbp ptr - offset) -> preservedReg.
+		generate mov: (rbp ptr + offset) -> preservedReg.
 		offset := offset - 8.
 	].  
 
@@ -55,7 +52,7 @@ TRAMD64SysVLinkage >> generatePrologue [
 	| parameters parameterTypes preserved offset |
 
 	"Save and update frame pointer"
-	generate mov: rbp -> rsp ptr.
+	generate mov: rbp -> rsp ptr64.
 	generate mov: rsp -> rbp.
 
 	"Allocate frame"
@@ -67,16 +64,33 @@ TRAMD64SysVLinkage >> generatePrologue [
 	parameters := parameters sorted: [ :a :b | a index < b index ].
 	parameterTypes := parameters collect: [ :parameter | parameter type ].
 	parameters with: (self mapParameters: parameterTypes) do: [ :parameter :paramReg |
-		generate mov: paramReg -> (rbp ptr + parameter offset).
+		generate mov: paramReg -> (rbp ptr64 + parameter offset).
 	].
 
 	"Save preserved registers"
 	offset := framePreservedOffset.
 	preserved := self allocatedPreservedRegisters.
 	preserved do: [:preservedReg | 
-		generate mov: preservedReg -> (rbp ptr - offset).
+		generate mov: preservedReg -> (rbp ptr64 + offset).
 		offset := offset - 8.
 	].
+]
+
+{ #category : #'code generation' }
+TRAMD64SysVLinkage >> generateReturn: node [
+	| srcReg leave deps |
+
+	self assert: codegen compilation functionType == node child1 type.
+
+	srcReg := codegen evaluator evaluate: node child1.
+
+	deps := TRRegisterDependencies new.
+	deps pre addDependency: srcReg on: (rax size: srcReg size).
+
+	leave := generate leave: srcReg.
+	leave dependencies: deps.
+
+	^ nil
 ]
 
 { #category : #mapping }
@@ -92,7 +106,6 @@ TRAMD64SysVLinkage >> mapParameters: parameterTypes [
 
 	parameterMapping := Array new: parameterTypes size.
 	parameterTypes withIndexDo: [:type :index | 
-		"For now, only up to 8 integer parameters are supported."
 		self assert: type isIntegerType.
 		self assert: index <= self parameterRegisters size.
 		parameterMapping at: index put: (self parameterRegisters at: index)
@@ -113,7 +126,7 @@ TRAMD64SysVLinkage >> mapStack [
 				  | stack argument 1   | 
 
 				  | return address     | 
-				  | saved rbp          | <--- RBP <--- sp upon entry to the function
+				  | saved rbp          | <--- RBP <--- RSP upon entry to the function
 
 
 				  | reg argument 1     | 
@@ -129,7 +142,7 @@ TRAMD64SysVLinkage >> mapStack [
 				  | automatic 1        |
 				  | automatic 2        |
 				  | ...                |
-	  low address | automatic N        | <--- sp after frame is built
+	  low address | automatic N        | <--- RSP after frame is built
 
 	 For simplicity, all slots are 8 bytes.    
 

@@ -8,7 +8,7 @@ Class {
 TRAMD64CodeEvaluator >> evaluate_iconst: node [
 	| dstReg |
 
-	dstReg := self codegen allocateRegister.
+	dstReg := self codegen allocateRegister dword.
 
 	generate 
 		mov: node constant -> dstReg.

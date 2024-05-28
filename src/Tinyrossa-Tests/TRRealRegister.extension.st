@@ -7,5 +7,5 @@ TRRealRegister >> nameInGDB [
 	To be overriden in custom subclasses for some architectures
 	where register names used by Tinyrossa and/or ArchC differ (POWER)."
 
-	^ value name
+	^ self name
 ]

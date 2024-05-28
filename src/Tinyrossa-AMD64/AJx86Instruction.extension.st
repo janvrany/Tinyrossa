@@ -1,6 +1,11 @@
 Extension { #name : #AJx86Instruction }
 
 { #category : #'*Tinyrossa-AMD64' }
+AJx86Instruction >> isProcessorInstruction [
+	^ true
+]
+
+{ #category : #'*Tinyrossa-AMD64' }
 AJx86Instruction >> isPseudoInstruction [
 	^ false
 

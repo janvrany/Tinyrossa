@@ -2,8 +2,8 @@ Class {
 	#name : #TRAMD64Assembler,
 	#superclass : #AJx64Assembler,
 	#instVars : [
-		'grounder',
-		'cursor'
+		'cursor',
+		'annotations'
 	],
 	#category : #'Tinyrossa-AMD64-Codegen'
 }
@@ -54,6 +54,22 @@ TRAMD64Assembler >> address [
 ]
 
 { #category : #accessing }
+TRAMD64Assembler >> annotations [
+	^ annotations
+]
+
+{ #category : #accessing }
+TRAMD64Assembler >> annotations: aCollection [
+	"Set a list of annotations to be attached to
+	 *every* instruction from now on (until a new
+	 list of annotations is set via this method).
+
+	 Given collection may be `nil`.
+	"
+	annotations := aCollection.
+]
+
+{ #category : #accessing }
 TRAMD64Assembler >> cursor [
 	^ cursor
 ]
@@ -74,7 +90,7 @@ TRAMD64Assembler >> instructions [
 TRAMD64Assembler >> leave: aTRVirtualRegister [
 	| insn |
 
-	insn := TRLeave value: aTRVirtualRegister.
+	insn := TRLeave forValue: aTRVirtualRegister.
 	self addInstruction: insn.
 	^ insn
 ]
@@ -82,16 +98,6 @@ TRAMD64Assembler >> leave: aTRVirtualRegister [
 { #category : #accessing }
 TRAMD64Assembler >> memory [
 	^ self
-]
-
-{ #category : #accessing }
-TRAMD64Assembler >> newInstruction [
-	^ TRAMD64Instruction new
-]
-
-{ #category : #accessing }
-TRAMD64Assembler >> newJumpInstruction [
-	^ TRAMD64JumpInstruction new
 ]
 
 { #category : #'code generation' }
@@ -103,8 +109,13 @@ TRAMD64Assembler >> prepareInstructions [
 	Prepared instructions will contain machine code, ready for use
 	"
 	"instructions := stackManager analyzeInstructions: instructions assembler: self."
+	instructions do: [:instruction |
+		instruction isPseudoInstruction ifFalse: [
+			instruction fixupOperands.
+		].
+	].
 	instructions do: [:instruction | 
-		instruction isPseudoInstruction ifFalse: [ 
+		instruction isPseudoInstruction ifFalse: [
 			instruction emitCodeAtOffset: 0 assembler: self.
 			^ instruction.
 		].
