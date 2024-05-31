@@ -22,7 +22,7 @@ TRCodeGenerator >> allocateRegister [
 TRCodeGenerator >> allocateRegister: kind [
 	| reg |
 
-	reg := TRVirtualRegister named: (kind name , '_' , (virtualRegisters size + 1) printString) kind: kind codeGenerator: self.
+	reg := self virtualRegisterClass named: (kind name , '_' , (virtualRegisters size + 1) printString) kind: kind codeGenerator: self.
 	virtualRegisters at: reg name put: reg.
 	^ reg
 ]
@@ -114,7 +114,7 @@ TRCodeGenerator >> fixupRegisters [
 		 actually used. In this case, it has not been assigned a 
 		 real register."
 		reg allocation notNil ifTrue: [
-			v2rMap at: name put: reg allocation.
+			v2rMap at: reg name put: reg allocation.
 		].
 	].
 	self fixupUsing: v2rMap
@@ -293,6 +293,11 @@ TRCodeGenerator >> registerStore: reg to: sym [
 	 This method is used to implement register spills.
 	"     
 	^ self subclassResponsibility
+]
+
+{ #category : #'accessing - config' }
+TRCodeGenerator >> virtualRegisterClass [
+	^ TRVirtualRegister
 ]
 
 { #category : #accessing }
