@@ -17,6 +17,16 @@ TRRealRegister class >> value: value kind: kind [
 	^ self basicNew initializeWithValue: value kind: kind
 ]
 
+{ #category : #arithmetic }
+TRRealRegister >> + offset [
+	^ TRMemoryReference base: self offset: offset asAcDSLOperand
+]
+
+{ #category : #arithmetic }
+TRRealRegister >> - offset [
+	^ TRMemoryReference base: self offset: offset negated asAcDSLOperand
+]
+
 { #category : #accessing }
 TRRealRegister >> allocation [
 	^ self

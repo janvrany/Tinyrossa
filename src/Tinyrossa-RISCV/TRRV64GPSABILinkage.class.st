@@ -26,13 +26,13 @@ TRRV64GPSABILinkage >> allocatableRegisters [
 		 over preserved registers. This might save us a need to spill / reload (preserved) 
 		 registers in prologue / epilogue for small methods."
 
-		^ self volatileRegisters , self preservedRegisters
+		^ self volatileRegisters , (self parameterRegisters reversed) , self preservedRegisters
 	] ifFalse:[
 		"For non-leaf methods we prefer preserved registers over volatile registers. 
 		 This might save us a need to spill / reload (volatile) registers at call 
 		 instructions for small functions."
 
-		^ self preservedRegisters , self volatileRegisters
+		^ self preservedRegisters , self volatileRegisters , (self parameterRegisters reversed)
 	]
 ]
 

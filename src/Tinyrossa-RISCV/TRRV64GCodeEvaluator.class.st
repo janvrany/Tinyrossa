@@ -88,20 +88,45 @@ TRRV64GCodeEvaluator >> commonMul: node [
 		] ifFalse:[
 		child2 constant == -1 ifTrue:[
 			dstReg := self codegen allocateRegister.
-			generate sub: dstReg, zero, src1Reg 							
-		]]].		
+			generate sub: dstReg, zero, src1Reg
+		]]].
 	] ifFalse:[
-		src2Reg := self evaluate: child2.		
+		src2Reg := self evaluate: child2.
 		dstReg := self codegen allocateRegister.
-		node type == Int64 ifTrue:[
-			generate mul: dstReg, src1Reg , src2Reg 
-		] ifFalse:[
-			generate mulw: dstReg, src1Reg , src2Reg 
-		].				
+
+		codegen compilation config stressRA ifTrue: [
+			"User requested to put more stress on RA (presumably for
+			 RA debugging purposes).
+
+			 So here we force argument and return value to be in
+			 certain real register."
+
+			| real insn deps |
+
+			real := t0.
+			deps := TRRegisterDependencies new.
+			deps pre addDependency: src1Reg on: real.
+			deps post addDependency: dstReg on: real.
+
+			node type == Int64 ifTrue:[
+				insn := generate mul: real, real , src2Reg
+			] ifFalse:[
+				insn := generate mulw: real, real , src2Reg
+			].
+			insn dependencies: deps.
+		] ifFalse: [
+			node type == Int64 ifTrue:[
+				generate mul: dstReg, src1Reg , src2Reg
+			] ifFalse:[
+				generate mulw: dstReg, src1Reg , src2Reg
+			].
+		].
+
+
+
 	].
 
 	^dstReg
-
 ]
 
 { #category : #'evaluation-helpers' }

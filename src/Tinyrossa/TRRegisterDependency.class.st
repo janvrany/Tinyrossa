@@ -32,13 +32,22 @@ TRRegisterDependency >> initializeWithVirtual: aTRVirtualRegister real: aTRRealR
 ]
 
 { #category : #testing }
-TRRegisterDependency >> isDependency [
-	^ vreg notNil
+TRRegisterDependency >> isTrash [
+	^ vreg isNil
 ]
 
 { #category : #testing }
-TRRegisterDependency >> isTrash [
-	^ vreg isNil
+TRRegisterDependency >> isUnsatisfiedDependency [
+	"Return true, if
+	   (1) this dependency express dependency on
+		   real register (a value of virtual register has to be
+		   in specified real register)
+	AND
+	  (ii) this dependecy is not satisfied, that is
+		   the virtual register is allocated a different register
+		   than required real register"
+
+	^ vreg notNil and: [ vreg allocation ~~ rreg ]
 ]
 
 { #category : #'printing & storing' }

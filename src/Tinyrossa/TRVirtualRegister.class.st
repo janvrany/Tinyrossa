@@ -19,12 +19,12 @@ TRVirtualRegister class >> named: aString kind: aTRRegisterKind codeGenerator: a
 
 { #category : #arithmetic }
 TRVirtualRegister >> + offset [
-	^ AcDSLMemRef base: self offset: offset asAcDSLOperand
+	^ TRMemoryReference base: self offset: offset asAcDSLOperand
 ]
 
 { #category : #arithmetic }
 TRVirtualRegister >> - offset [
-	^ AcDSLMemRef base: self offset: offset negated asAcDSLOperand
+	^ TRMemoryReference base: self offset: offset negated asAcDSLOperand
 ]
 
 { #category : #accessing }
@@ -34,8 +34,7 @@ TRVirtualRegister >> allocation [
 
 { #category : #accessing }
 TRVirtualRegister >> allocation: realReg [
-	self assert: allocation isNil.
-	self assert: (realReg isKindOf: TRRealRegister).
+	self assert: realReg isTRRealRegister.
 	self assert: kind == realReg kind.
 
 	allocation := realReg
