@@ -73,22 +73,6 @@ TRRegisterDependencies class >> pre: pre post: post [
 	^ self basicNew initializeWithPre: pre post: post.
 ]
 
-{ #category : #'adding & removing' }
-TRRegisterDependencies >> addPostDependencyOf: vreg on: rreg [ 
-	"Add register dependency ensuring that *after execution* 
-	 of an instruction, value of *vreg* is kept in *rreg*."
-	
-	post add: (TRRegisterDependency virtual: vreg real: rreg)
-]
-
-{ #category : #'adding & removing' }
-TRRegisterDependencies >> addPreDependencyOf: vreg on: rreg [ 
-	"Add register dependency ensuring that *prior execution* 
-	 of an instruction, value of *vreg* is stored in *rreg*."
-	
-	pre add: (TRRegisterDependency virtual: vreg real: rreg)
-]
-
 { #category : #initialization }
 TRRegisterDependencies >> initializeWithPre: preDependencyGroup post: postDependencyGroup [
 	pre := preDependencyGroup.
