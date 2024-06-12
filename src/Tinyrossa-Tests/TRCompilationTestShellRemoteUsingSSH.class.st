@@ -4,7 +4,7 @@ Class {
 	#classVars : [
 		'Host'
 	],
-	#category : #'Tinyrossa-Tests-Shells-SmalltalkX'
+	#category : #'Tinyrossa-Tests-Shells'
 }
 
 { #category : #accessing }

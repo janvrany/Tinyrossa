@@ -12,7 +12,7 @@ Class {
 	#pools : [
 		'TRRegisterKinds'
 	],
-	#category : #'Tinyrossa-Tests-Shells-SmalltalkX'
+	#category : #'Tinyrossa-Tests-Shells'
 }
 
 { #category : #accessing }

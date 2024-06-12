@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'qemu'
 	],
-	#category : #'Tinyrossa-Tests-Shells-SmalltalkX'
+	#category : #'Tinyrossa-Tests-Shells'
 }
 
 { #category : #running }
