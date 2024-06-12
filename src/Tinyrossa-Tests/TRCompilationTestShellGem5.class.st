@@ -37,13 +37,13 @@ TRCompilationTestShellGem5 >> setUp [
 		gem5exe := gem5dir asFileReference / 'build' / 'ALL' / 'gem5.debug'.
 	].
 	gem5exe exists ifFalse: [ 
-		gem5exe := gem5dir asFileReference / 'build' / compilation config target gem5 / 'gem5.opt'.
+		gem5exe := gem5dir asFileReference / 'build' / target gem5 / 'gem5.opt'.
 	].
 	gem5exe exists ifFalse: [ 
-		gem5exe := gem5dir asFileReference / 'build' / compilation config target gem5 / 'gem5.opt'.
+		gem5exe := gem5dir asFileReference / 'build' / target gem5 / 'gem5.opt'.
 	].
 
-	self assert: gem5exe exists description: 'No gem5.debug nor gem5.opt found in GEM5_DIR/build/ALL nor GEM5_DIR/build/',compilation config target gem5.
+	self assert: gem5exe exists description: 'No gem5.debug nor gem5.opt found in GEM5_DIR/build/ALL nor GEM5_DIR/build/',target gem5.
 
 	gem5cmd := '<1s> --listener-mode on "--debug-flags=Decode" <2s>/shell-gem5.py -c <3s> --wait-gdb --param ''system.shared_backstore = "/gem5"'''
 				expandMacrosWith: gem5exe pathString with: shellDir pathString with: binary pathString.
