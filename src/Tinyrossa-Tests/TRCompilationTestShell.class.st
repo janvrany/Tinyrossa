@@ -132,7 +132,7 @@ TRCompilationTestShell >> invoke: symbol with: arguments types: argumentTypes [
 			self error: 'Parameter type not supported yet: ' , typ name
 		].
 	].
-	self debugger setRegister: 'pc' to: self nzone.
+	self debugger setRegister: 'pc' to: (nzone exports at: symbol).
 
 	"Call injected function"
 	"
