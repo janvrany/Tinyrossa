@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'target',
 		'binary',
-		'debugger'
+		'debugger',
+		'nzone'
 	],
 	#classVars : [
 		'DefaultImpl'
@@ -75,7 +76,7 @@ TRCompilationTestShell >> initializeWithTarget: aTRCompilationTarget [
 TRCompilationTestShell >> inject: compilation [
 	"Utility: inject compiled code into the shell" 
 
-	debugger memoryAt: self nzone put: compilation codeBuffer bytes
+	self nzone add: compilation codeBuffer
 ]
 
 { #category : #utilities }
@@ -136,7 +137,18 @@ TRCompilationTestShell >> invoke: symbol with: arguments types: argumentTypes [
 
 { #category : #accessing }
 TRCompilationTestShell >> nzone [
-	"Return the address of nzone. See shell.link linker script."
+	nzone isNil ifTrue: [
+		| runtime |
+
+		runtime := TRRuntime forTarget: target.
+		nzone := TRCodeCache runtime: runtime base: self nzoneBase size: 512 memory: debugger selectedInferior memory.
+	].
+	^ nzone
+]
+
+{ #category : #accessing }
+TRCompilationTestShell >> nzoneBase [
+	"Return the base address of nzone. See shell.link linker script."
 
 	^ 16r00080000
 ]
