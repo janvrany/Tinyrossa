@@ -8,6 +8,24 @@ Class {
 	#category : #'Tinyrossa-IL-Symbols'
 }
 
+{ #category : #comparing }
+TRSymbol >> = another [
+	^ self class == another class
+		and:[ self name = another name
+		and:[ self type = another type ] ]
+]
+
+{ #category : #conversion }
+TRSymbol >> asString [
+	^ name
+]
+
+{ #category : #comparing }
+TRSymbol >> hash [
+	^ ((self class hash + name hash) hashMultiply
+		+ type hash) hashMultiply
+]
+
 { #category : #testing }
 TRSymbol >> isTRSymbol [
 	^ true
