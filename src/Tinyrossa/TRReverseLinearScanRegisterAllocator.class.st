@@ -469,14 +469,14 @@ TRReverseLinearScanRegisterAllocator >> splitRegister: interval at: insnIndex [
 	"Create new interval representing the first part of original interval
 	 up to current position. While walking definitions and uses,
 	 update instructions to use new virtual registers"
-	regmap := Dictionary new at: interval register name put: before register name; yourself.
+	regmap := Dictionary new at: interval register name put: before register; yourself.
 	interval defdDo: [ :i |
 		before defdAt:i.
-		instructions at: i put: ((instructions at: i) inEnvironment: regmap).
+		instructions at: i put: ((instructions at: i) replaceVirtualRegistersUsing: regmap).
 	].
 	interval usedDo: [:i | i <= insnIndex ifTrue: [
 		before usedAt:i.
-		instructions at: i put: ((instructions at: i) inEnvironment: regmap).
+		instructions at: i put: ((instructions at: i) replaceVirtualRegistersUsing: regmap).
 	]].
 
 	"Allocate spill slot for being-splitted `interval`. Insert reload

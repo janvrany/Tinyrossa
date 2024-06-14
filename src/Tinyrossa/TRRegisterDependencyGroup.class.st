@@ -34,3 +34,18 @@ TRRegisterDependencyGroup >> addTrashed: rReg [
 
 	self add: (TRRegisterDependency virtual: nil real: rReg).
 ]
+
+{ #category : #utilities }
+TRRegisterDependencyGroup >> replaceVirtualRegistersUsing: replacementMap [
+	(self anySatisfy: [:dep | dep vreg notNil and:[replacementMap includesKey: dep vreg name] ]) ifTrue: [
+		^ self collect: [ :dep |
+			(dep vreg notNil and:[replacementMap includesKey: dep vreg name]) ifTrue: [
+				TRRegisterDependency virtual: (replacementMap at: dep vreg name) real: dep rreg
+			] ifFalse: [
+				dep
+			].
+		].
+	] ifFalse: [
+		^ self
+	].
+]
