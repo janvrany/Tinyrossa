@@ -55,9 +55,22 @@ Class {
 
 { #category : #'instance creation' }
 TRRegisterDependencies class >> new [
-	"return an initialized instance"
+	^ self pre: TRRegisterDependencyGroup new post: TRRegisterDependencyGroup new
+]
 
-	^ self basicNew initialize.
+{ #category : #'instance creation' }
+TRRegisterDependencies class >> post: postDependencyGroup [
+	^ self pre: TRRegisterDependencyGroup new post: postDependencyGroup
+]
+
+{ #category : #'instance creation' }
+TRRegisterDependencies class >> pre: preDependencyGroup [
+	^ self pre: preDependencyGroup post: TRRegisterDependencyGroup new
+]
+
+{ #category : #'instance creation' }
+TRRegisterDependencies class >> pre: pre post: post [
+	^ self basicNew initializeWithPre: pre post: post.
 ]
 
 { #category : #'adding & removing' }
@@ -77,9 +90,9 @@ TRRegisterDependencies >> addPreDependencyOf: vreg on: rreg [
 ]
 
 { #category : #initialization }
-TRRegisterDependencies >> initialize [
-	pre := TRRegisterDependencyGroup new.
-	post := TRRegisterDependencyGroup new.
+TRRegisterDependencies >> initializeWithPre: preDependencyGroup post: postDependencyGroup [
+	pre := preDependencyGroup.
+	post := postDependencyGroup
 ]
 
 { #category : #testing }
@@ -100,4 +113,11 @@ TRRegisterDependencies >> post [
 { #category : #accessing }
 TRRegisterDependencies >> pre [
 	^ pre
+]
+
+{ #category : #utilities }
+TRRegisterDependencies >> replaceVirtualRegistersUsing: replacementMap [
+	^ self class
+		pre: (pre replaceVirtualRegistersUsing: replacementMap)
+		post: (post replaceVirtualRegistersUsing: replacementMap)
 ]
