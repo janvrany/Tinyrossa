@@ -1,10 +1,10 @@
 Class {
 	#name : #TRPPC64Linux,
-	#superclass : #TRCompilationTarget,
-	#category : #'Tinyrossa-POWER-Compile'
+	#superclass : #TRTarget,
+	#category : #'Tinyrossa-POWER-Target'
 }
 
-{ #category : #accessing }
+{ #category : #'accessing - config - compilation' }
 TRPPC64Linux >> codeGeneratorClass [
 	^ TRPPC64CodeGenerator
 ]
@@ -14,7 +14,7 @@ TRPPC64Linux >> name [
 	^ 'powerpc64le-linux'
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - config - compilation' }
 TRPPC64Linux >> systemLinkageClass [
 	^ TRPPC64PSABILinkage
 ]

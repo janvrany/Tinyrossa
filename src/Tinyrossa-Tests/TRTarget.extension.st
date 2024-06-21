@@ -1,7 +1,7 @@
-Extension { #name : #TRCompilationTarget }
+Extension { #name : #TRTarget }
 
 { #category : #'*Tinyrossa-Tests' }
-TRCompilationTarget >> gem5 [
+TRTarget >> gem5 [
 	"Return name of Gem5 architecture suitable for running programs for this target.
 
 	 For example, for RISC-V return `RISCV`,
@@ -15,7 +15,7 @@ TRCompilationTarget >> gem5 [
 ]
 
 { #category : #'*Tinyrossa-Tests' }
-TRCompilationTarget >> qemu [
+TRTarget >> qemu [
 	"Return name of QEMU suitable for running programs for this target."
 
 	^ self subclassResponsibility
