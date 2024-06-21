@@ -98,39 +98,29 @@ TRRV64GPSABILinkage >> generateCall: node [
 
 		addrReg := codegen evaluator evaluate: node child1.
 		call := generate jalr: ra, addrReg, 0.
+		call dependencies: deps.
 	] ifFalse: [
 		"If the call a recursive call..."
-		node symbol == codegen compilation functionSymbol ifTrue: [ 
-			"...then generate 'jal ra, <function>'..."
-			call := generate jal: ra, node symbol.
+		node symbol = codegen compilation functionSymbol ifTrue: [
+			"...then use simple `jal`, hoping offset would fit into 20 bits..."
+			call := generate jal: ra, node symbol .
+			call dependencies: deps.
 		] ifFalse: [
-			"...otherwise..."
-			codegen compilation isAOT ifTrue: [ 
-				"
-				In AOT mode we generate call and let the (runtime) linker 
-				to properly relocate it.
-				"
-				call := generate call: node symbol
-			] ifFalse: [ 
-				"
-				In JIT mode we load address directly into 'ra' 
-				(as opposite to allocating new v-register as in indirect case
-				above) because will be clobbered anyways by jalr storing return 
-				address. This lowers the pressure on RA.
+			"...otherwise use auipc + jalr pair with relocations.
 
-				Also note that rather than this, we should generate a trampoline
-				and call calle through it. Or relative jal if it's close enough. 
-				That's left as future work.
-				"
-				self assert: node symbol address notNil description: 'No address set for function symbol'.
+			We load address directly into 'ra' (as opposite to allocating
+			new v-register as in indirect case above) because will be clobbered
+			anyways by jalr storing return address. This lowers the pressure on RA."
 
-				codegen loadConstant64: node symbol address into: ra.
-				call := generate jalr: ra, ra, 0.
-			].
+			| auipc |
+
+			auipc := generate auipc: ra, (R_RISCV_CALL_PLT % node symbol).
+			auipc dependencies: (TRRegisterDependencies pre: deps pre).
+
+			call := generate jalr: ra, ra, 0.
+			call dependencies: (TRRegisterDependencies post: deps post)
 		].
 	].
-	call dependencies: deps.
-
 
 	"Note that link register has been overwritten"
 	codegen linkRegisterKilled: true.
@@ -140,7 +130,7 @@ TRRV64GPSABILinkage >> generateCall: node [
 		retVreg := nil.
 	] ifFalse:[
 		retVreg := codegen allocateRegister.
-		deps post addDependency: retVreg on: a0.
+		call dependencies post addDependency: retVreg on: a0.
 	].
 
 	^ retVreg
