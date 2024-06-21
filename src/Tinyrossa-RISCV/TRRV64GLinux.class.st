@@ -1,10 +1,10 @@
 Class {
 	#name : #TRRV64GLinux,
-	#superclass : #TRCompilationTarget,
-	#category : #'Tinyrossa-RISCV-Compile'
+	#superclass : #TRTarget,
+	#category : #'Tinyrossa-RISCV-Target'
 }
 
-{ #category : #accessing }
+{ #category : #'accessing - config - compilation' }
 TRRV64GLinux >> codeGeneratorClass [
 	^ TRRV64GCodeGenerator
 ]
@@ -14,7 +14,7 @@ TRRV64GLinux >> name [
 	^ 'riscv64-linux'
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - config - compilation' }
 TRRV64GLinux >> systemLinkageClass [
 	^ TRRV64GPSABILinkage
 ]
