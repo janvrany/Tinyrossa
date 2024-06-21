@@ -7,7 +7,7 @@ Class {
 	#pools : [
 		'TRCompilationConfigOptions'
 	],
-	#category : #'Tinyrossa-Config'
+	#category : #'Tinyrossa-Compile'
 }
 
 { #category : #'instance creation' }
