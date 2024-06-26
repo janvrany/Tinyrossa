@@ -88,7 +88,7 @@ TRGASGenerator >> generateInstruction: insn on: asm [
 	].
 
 	insn isLabelInstruction ifTrue: [ 
-		asm nextPutAll: insn symbol; nextPut: $:.
+		asm nextPutAll: insn symbol asString; nextPut: $:.
 	] ifFalse: [ 
 	insn isProcessorInstruction ifTrue: [ 
 		asm nextPutAll: '        '. 

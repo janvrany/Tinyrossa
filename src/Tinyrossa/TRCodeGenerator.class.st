@@ -196,7 +196,7 @@ TRCodeGenerator >> generatePrologue [
 	[
 		generate annotations: (Set with: compilation entry treetops first).
 		generate cursor: 0.
-		generate label: compilation functionSymbol name.
+		generate label: compilation functionSymbol.
 		self linkage generatePrologue    
 	] ensure: [
 		generate annotations: nil.
