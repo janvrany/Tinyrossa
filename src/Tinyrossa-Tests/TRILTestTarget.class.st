@@ -1,10 +1,10 @@
 Class {
 	#name : #TRILTestTarget,
-	#superclass : #TRCompilationTarget,
+	#superclass : #TRTarget,
 	#category : #'Tinyrossa-Tests-Compile'
 }
 
-{ #category : #accessing }
+{ #category : #'accessing - config - compilation' }
 TRILTestTarget >> codeGeneratorClass [
 	^ TRILTestCodeGenerator
 ]
@@ -14,7 +14,7 @@ TRILTestTarget >> name [
 	^ '<triltests>'
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - config - compilation' }
 TRILTestTarget >> systemLinkageClass [
 	^ TRILTestLinkage
 ]

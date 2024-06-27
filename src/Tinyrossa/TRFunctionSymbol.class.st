@@ -3,7 +3,6 @@ Class {
 	#superclass : #TRSymbol,
 	#instVars : [
 		'linkageClass',
-		'parameters',
 		'address'
 	],
 	#pools : [
@@ -40,7 +39,6 @@ TRFunctionSymbol >> initializeWithName:nameArg type:typeArg linkage: linkageClas
 	name := nameArg.
 	type := typeArg.
 	linkageClass := linkageClassArg.
-	parameters := OrderedCollection new.
 ]
 
 { #category : #testing }

@@ -11,7 +11,7 @@ Class {
 		'OptionTarget',
 		'OptionVerifyAfterEachOptimizationPass'
 	],
-	#category : #'Tinyrossa-Config'
+	#category : #'Tinyrossa-Compile'
 }
 
 { #category : #initialization }

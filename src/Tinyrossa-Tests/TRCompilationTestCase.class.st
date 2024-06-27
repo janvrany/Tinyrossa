@@ -69,7 +69,8 @@ TRCompilationTestCase >> setUp [
 
 	compilation := TRCompilation forTarget: target.
 	compilation config stressRA: (testParameters at: #stressRA).
-	shell := TRCompilationTestShell forCompilation: compilation.
+
+	shell := TRCompilationTestShell forTarget: target.
 ]
 
 { #category : #accessing }
@@ -200,7 +201,7 @@ TRCompilationTestCase >> test01_bytecode_abs [
 
 	compilation compile.
 
-	self assert: (shell call: 2) equals: 2 abs.
+	self assert: (shell inject: compilation andInvokeWith: { 2 }) equals: 2 abs.
 ]
 
 { #category : #tests }
@@ -218,7 +219,7 @@ TRCompilationTestCase >> test02_iconst [
 	compilation optimize.
 	compilation compile.
 
-	self assert: (shell call) equals: x.
+	self assert: (shell inject: compilation andInvokeWith: #()) equals: x.
 
 	"
 	 TRRV64GCompilationTests debug: #test02_iconst_p
@@ -244,11 +245,58 @@ TRCompilationTestCase >> test03_lconst [
 	compilation optimize.
 	compilation compile.
 
-	self assert: (shell call) equals: x.
+	self assert: (shell inject: compilation andInvokeWith: #()) equals: x.
 
 	"
 	TRRV64GCompilationTests debug: #test03_lconst_n 
 	TRPPC64CompilationTests debug: #test03_lconst_n 
+	"
+]
+
+{ #category : #tests }
+TRCompilationTestCase >> test04_call_resolved [
+	| comp1 bldr1 comp2 bldr2 |
+
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since calls are not implemented for POWER (see issue #45)'.
+	].
+
+	" ### CALLEE ### "
+	comp1 := TRCompilation forConfig: compilation config.
+	bldr1 := comp1 builder.
+	bldr1 defineName: 'callee' type: Int32.
+	bldr1 defineParameter: 'x' type: Int32.
+	bldr1 ireturn:
+		{ bldr1 iadd:
+			{ bldr1 iload: 'x'.
+			  bldr1 iconst: 1 } }.
+	comp1 optimize.
+	comp1 compile.
+
+	" ### CALLER ### "
+	comp2 := TRCompilation forConfig: compilation config.
+	bldr2 := comp2 builder.
+	bldr2 defineName: 'caller' type: Int32.
+	bldr2 defineParameter: 'x' type: Int32.
+	bldr2 defineFunction: 'callee' type: Int32.
+	bldr2 ireturn:
+		{ bldr2 iadd:
+			{ bldr2 iload: 'x'.
+			  bldr2 icall: { bldr2 iload: 'x' . 'callee' } } }.
+	comp2 optimize.
+	comp2 compile.
+
+	" ### ######### ### "
+
+	shell inject: comp1.
+	shell inject: comp2.
+
+	self assert: (shell invoke: comp2 functionSymbol with: { 10 } types: { Int32 })
+		 equals: 21
+
+	"
+	TRRV64GCompilationTests debug: #test03_lconst_n
+	TRPPC64CompilationTests debug: #test03_lconst_n
 	"
 ]
 
@@ -258,7 +306,7 @@ TRCompilationTestCase >> test_example01_meaningOfLife [
 		compilation: compilation;
 		example01_meaningOfLife.
 
-	self assert: (shell call) equals: 42.
+	self assert: (shell inject: compilation andInvokeWith: #()) equals: 42.
 ]
 
 { #category : #'tests - examples' }
@@ -267,7 +315,7 @@ TRCompilationTestCase >> test_example03_signum [
 		compilation: compilation;
 		example03_signum.
 
-	self assert: (shell call:-5) equals: -5 sign.
+	self assert: (shell inject: compilation andInvokeWith: { -5 }) equals: -5 sign.
 ]
 
 { #category : #'tests - examples' }
@@ -276,7 +324,7 @@ TRCompilationTestCase >> test_example04_factorial_i [
 		compilation: compilation;
 		example04_factorial_i.
 
-	self assert: (shell call:5) equals: 5 factorial.
+	self assert: (shell inject: compilation andInvokeWith: { 5 }) equals: 5 factorial.
 ]
 
 { #category : #'tests - examples' }
@@ -288,7 +336,7 @@ TRCompilationTestCase >> test_example05_factorial_r [
 		compilation: compilation;
 		example05_factorial_r.
 
-	self assert: (shell call:5) equals:  5 factorial.
+	self assert: (shell inject: compilation andInvokeWith: { 5 }) equals:  5 factorial.
 ]
 
 { #category : #'tests - examples' }
@@ -296,7 +344,7 @@ TRCompilationTestCase >> test_example08_bytecode_compiler [
 	TRCompilationExamples new
 		compilation: compilation;
 		example08_bytecode_compiler.
-	self assert: (shell call:2) equals: 2 factorial.
+	self assert: (shell inject: compilation andInvokeWith: { 2 }) equals: 2 factorial.
 ]
 
 { #category : #'tests - examples' }
@@ -309,7 +357,7 @@ TRCompilationTestCase >> test_example09_signum_2 [
 		compilation: compilation;
 		example09_signum_2.
 
-	self assert: (shell call:-1) equals: -1 sign.
+	self assert: (shell inject: compilation andInvokeWith: { -1 }) equals: -1 sign.
 ]
 
 { #category : #'tests - examples' }
@@ -321,7 +369,7 @@ TRCompilationTestCase >> test_example15_add_with_overflow_check [
 	TRCompilationExamples new
 		compilation: compilation;
 		example15_add_with_overflow_check.
-	self assert: (shell call: 16r7FFFFFFE _: 2 ) equals: 0.
+	self assert: (shell inject: compilation andInvokeWith: { 16r7FFFFFFE . 2 }) equals: 0.
 ]
 
 { #category : #'tests - examples' }
@@ -333,7 +381,7 @@ TRCompilationTestCase >> test_example16_factorial_i_with_overflow [
 	TRCompilationExamples new
 		compilation: compilation;
 		example16_factorial_i_with_overflow.
-	self assert: (shell call:13)equals: -1.
+	self assert: (shell inject: compilation andInvokeWith: { 13 })equals: -1.
 
 
 	"
