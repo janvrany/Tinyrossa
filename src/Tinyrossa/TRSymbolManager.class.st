@@ -72,6 +72,11 @@ TRSymbolManager >> defineParameter: name type: type [
 	^ self define: (self newParameter: name type: type index: index)
 ]
 
+{ #category : #defining }
+TRSymbolManager >> defineStatic: name type: type [
+	^ self define: (self newStatic: name type: type)
+]
+
 { #category : #queries }
 TRSymbolManager >> hasSymbolNamed: aString [ 
 	^ symbols contains: [:symbol | symbol name = aString ]

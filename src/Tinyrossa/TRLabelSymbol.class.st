@@ -1,6 +1,6 @@
 Class {
 	#name : #TRLabelSymbol,
-	#superclass : #TRSymbol,
+	#superclass : #TRStaticSymbol,
 	#instVars : [
 		'block'
 	],
@@ -12,17 +12,7 @@ Class {
 
 { #category : #'instance creation' }
 TRLabelSymbol class >> name: aString [
-	^ self basicNew initializeWithName: aString
-]
-
-{ #category : #converting }
-TRLabelSymbol >> asAcDSLOperand [
-	^ AcDSLSymbol value: name
-]
-
-{ #category : #converting }
-TRLabelSymbol >> asAcDSLOperandList [
-	^ self asAcDSLOperand asAcDSLOperandList
+	^ self name: aString type: Void
 ]
 
 { #category : #accessing }
@@ -31,11 +21,10 @@ TRLabelSymbol >> block [
 ]
 
 { #category : #initialization }
-TRLabelSymbol >> initializeWithName: aString [
-	self assert: aString isString.
-		
-	name := aString.
-	type := Void.
+TRLabelSymbol >> initializeWithName:nameArg type:typeArg [
+	self assert: typeArg == Void description: 'Type of a label must be void'.
+
+	super initializeWithName:nameArg type:typeArg
 ]
 
 { #category : #testing }
