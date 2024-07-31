@@ -4,13 +4,15 @@ Class {
 	#instVars : [
 		'block'
 	],
+	#pools : [
+		'TRDataTypes'
+	],
 	#category : #'Tinyrossa-IL-Symbols'
 }
 
 { #category : #'instance creation' }
-TRLabelSymbol class >> block: aTRILBlock [
-	^ self basicNew initializeWithBlock: aTRILBlock
-
+TRLabelSymbol class >> name: aString [
+	^ self basicNew initializeWithName: aString
 ]
 
 { #category : #converting }
@@ -29,24 +31,21 @@ TRLabelSymbol >> block [
 ]
 
 { #category : #initialization }
-TRLabelSymbol >> initializeWithBlock: aTRILBlock [
-	self assert: aTRILBlock isTRILBlock.
+TRLabelSymbol >> initializeWithName: aString [
+	self assert: aString isString.
 		
-	aTRILBlock compilation isAOT ifTrue:[	
-		"In AOT mode to generate and object file we use external 
-	 	 assembler (just like GCC) which treats labels prefixed with
-	   '.L' as local (intra-procedural) labels and does not put them
-	   into symbol table. We do the same here:"	
-		name := '.L_' , aTRILBlock name.	
-	] ifFalse: [
-		name := aTRILBlock name.	
-	].
-		
-	type := TRDataType named: 'Void'.
-	block := aTRILBlock.
+	name := aString.
+	type := Void.
 ]
 
 { #category : #testing }
 TRLabelSymbol >> isTRLabelSymbol [
 	^ true
+]
+
+{ #category : #initialization }
+TRLabelSymbol >> setBlock: aTRILBlock [
+	self assert: aTRILBlock isTRILBlock.
+
+	block := aTRILBlock
 ]
