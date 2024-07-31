@@ -44,16 +44,24 @@ TRSymbolManager >> defineFunction: name type: type linkage: linkageClass [
 ]
 
 { #category : #defining }
-TRSymbolManager >> defineLabel: block [
+TRSymbolManager >> defineLabel [
+	^ self defineLabel: nil
+]
+
+{ #category : #defining }
+TRSymbolManager >> defineLabel: nameOrBlock [
 	| label |
 
-	self assert: block isTRILBlock.
-
-	label := self lookupLabelByBlock: block.
-	label isNil ifTrue: [ 
-		label := self define: (self newLabel: block)
+	nameOrBlock isTRILBlock ifTrue: [
+		label := self lookupLabelByBlock: nameOrBlock.
+		label isNil ifTrue: [
+			label := self defineLabel: nameOrBlock name.
+			label setBlock: nameOrBlock.
+		].
+		self assert: (label instVarNamed:#block) == nameOrBlock.
+		^ label.
 	].
-	^ label
+	^ self define: (self newLabel: nameOrBlock)
 ]
 
 { #category : #defining }
@@ -80,7 +88,7 @@ TRSymbolManager >> lookupLabelByBlock: aTRILBlock [
 	self assert: aTRILBlock isTRILBlock.
 
 	^ symbols 
-		detect: [:symbol | symbol isTRLabelSymbol and:[symbol block == aTRILBlock ] ]
+		detect: [:symbol | symbol isTRLabelSymbol and:[symbol name == aTRILBlock name] ]
 		ifNone: [ nil ]
 ]
 
@@ -126,15 +134,28 @@ TRSymbolManager >> newFunction: name type: type linkage: linkageClass [
 ]
 
 { #category : #creating }
-TRSymbolManager >> newLabel: block [
-	self assert: block isTRILBlock.
+TRSymbolManager >> newLabel: nameOrNil [
+	| name |
 
-	^ TRLabelSymbol block: block
+	name := nameOrNil.
+	name isNil ifTrue: [
+		| index  |
+
+		index := (symbols count: [ :symbol | symbol isTRLabelSymbol ]) + 1.
+		name := '.LL_' , (index printLeftPaddedWith: $0 to: 3 base: 10).
+	].
+
+	^ TRLabelSymbol name: name
 ]
 
 { #category : #creating }
 TRSymbolManager >> newParameter: name type: type index: index [
 	^ TRParameterSymbol name: name type: type index: index
+]
+
+{ #category : #creating }
+TRSymbolManager >> newStatic: name type: type [
+	^ TRStaticSymbol name: name type: type
 ]
 
 { #category : #accessing }

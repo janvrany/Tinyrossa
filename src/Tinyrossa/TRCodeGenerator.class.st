@@ -13,6 +13,11 @@ Class {
 	#category : #'Tinyrossa-Codegen'
 }
 
+{ #category : #labels }
+TRCodeGenerator >> allocateLabel [
+	^ compilation symbolManager defineLabel
+]
+
 { #category : #registers }
 TRCodeGenerator >> allocateRegister [
 	^ self allocateRegister: GPR
