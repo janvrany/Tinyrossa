@@ -76,24 +76,37 @@ TRRV64GCodeEvaluator >> commonDiv: node [
 TRRV64GCodeEvaluator >> commonLoad: node [
 	"Handles aload, lload, iload, sload & bload"  
 
-	| dstReg offset type |
+	| dstReg baseReg offset type |
 
-	offset := (AcDSLSymbol value: node symbol name).
+	node symbol isTRStaticSymbol ifTrue: [
+		| l0 |
+
+		baseReg := codegen allocateRegister.
+		l0 := codegen allocateLabel.
+
+		generate label: l0.
+		generate auipc: baseReg, (R_RISCV_GOT_HI20 % node symbol).
+		generate ld:    baseReg, (baseReg + (R_RISCV_PCREL_LO12_I % l0)).
+		offset := 0.
+	] ifFalse: [
+		baseReg := sp.
+		offset := node symbol.
+	].
 	dstReg := codegen allocateRegister.
 
 	type := node type.
 	(type == Address or:[type == Int64]) ifTrue:[
 		generate
-			ld: dstReg, (sp + offset).
+			ld: dstReg, (baseReg + offset).
 	] ifFalse:[ type == Int32 ifTrue:[
 		generate
-			lw: dstReg, (sp + offset).             
+			lw: dstReg, (baseReg + offset).
 	] ifFalse:[ type == Int16 ifTrue:[
 		generate
-			lh: dstReg, (sp + offset).             
+			lh: dstReg, (baseReg + offset).
 	] ifFalse:[ type == Int8 ifTrue:[
 		generate
-			lb: dstReg, (sp + offset).             
+			lb: dstReg, (baseReg + offset).
 	]]]].
 
 	^dstReg.
@@ -232,24 +245,37 @@ TRRV64GCodeEvaluator >> commonShr: node [
 TRRV64GCodeEvaluator >> commonStore: node [
 	"Handles astore, lstore, istore, sstore & bstore"  
 
-	| srcReg offset type |
+	| srcReg baseReg offset type |
 
-	offset := (AcDSLSymbol value: node symbol name).
 	srcReg := self evaluate: node child1.
+	node symbol isTRStaticSymbol ifTrue: [
+		| l0 |
+
+		baseReg := codegen allocateRegister.
+		l0 := codegen allocateLabel.
+
+		generate label: l0.
+		generate auipc: baseReg, (R_RISCV_GOT_HI20 % node symbol).
+		generate ld:    baseReg, (baseReg + (R_RISCV_PCREL_LO12_I % l0)).
+		offset := 0.
+	] ifFalse: [
+		baseReg := sp.
+		offset := node symbol name.
+	].
 
 	type := node type.
 	(type == Address or:[type == Int64]) ifTrue:[
 		generate
-			sd: srcReg, (sp + offset).
+			sd: srcReg, (baseReg + offset).
 	] ifFalse:[ type == Int32 ifTrue:[
 		generate
-			sw: srcReg, (sp + offset).             
+			sw: srcReg, (baseReg + offset).
 	] ifFalse:[ type == Int16 ifTrue:[
 		generate
-			sh: srcReg, (sp + offset).             
+			sh: srcReg, (baseReg + offset).
 	] ifFalse:[ type == Int8 ifTrue:[
 		generate
-			sb: srcReg, (sp + offset).             
+			sb: srcReg, (baseReg + offset).
 	]]]].
 
 	^nil.
