@@ -301,6 +301,41 @@ TRCompilationTestCase >> test04_call_resolved [
 ]
 
 { #category : #tests }
+TRCompilationTestCase >> test05_increment_static_symbol_b [
+	"
+	This is pretty much same as #test_example18_increment_static_symbol
+	but we add counter symbol after the function itself.
+
+	This, together with test_example18_increment_static_symbol tests
+	that it does not matter in what order we link objects / define symbols.
+	"
+
+	| ctr asm |
+
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since Xload/Xstore evaluator does not support statics for POWER (see issue #52)'.
+	].
+
+	"Compile function"
+	TRCompilationExamples new
+		compilation: compilation;
+		example18_increment_static_symbol.
+
+	shell inject: compilation.
+
+	"Create static variable `counter`"
+	ctr := TRStaticSymbol name: 'counter' type: Int32.
+	asm := AcDSLRV64GAssembler new.
+	asm globl: ctr.
+	asm label: ctr.
+	asm int32: 42.
+	shell nzone add: asm object.
+
+	"Invoke function and test"
+	self assert: (shell invoke: compilation functionSymbol with: { } types: { })equals: 43.
+]
+
+{ #category : #tests }
 TRCompilationTestCase >> test06_iadd_discarding_value [
 	| x builder |
 
@@ -459,5 +494,33 @@ TRCompilationTestCase >> test_example16_factorial_i_with_overflow [
 	"
 	13 factorial > 0x7FFFFFFF
 	22 factorial > 0x7FFFFFFFFFFFFFFF
+	"
+]
+
+{ #category : #'tests - examples' }
+TRCompilationTestCase >> test_example18_increment_static_symbol [
+	| ctr asm |
+
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since Xload/Xstore evaluator does not support statics for POWER (see issue #52)'.
+	].
+
+	"Create and add static counter"
+	ctr := TRStaticSymbol name: 'counter' type: Int32.
+	asm := AcDSLRV64GAssembler new.
+	asm globl: ctr.
+	asm label: ctr.
+	asm int32: 42.
+
+	shell nzone add: asm object.
+
+	TRCompilationExamples new
+		compilation: compilation;
+		example18_increment_static_symbol.
+	self assert: (shell inject: compilation andInvokeWith: { })equals: 43.
+
+
+	"
+	shell debugger cli
 	"
 ]
