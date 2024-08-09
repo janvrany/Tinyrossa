@@ -20,6 +20,7 @@ Class {
 		'address'
 	],
 	#pools : [
+		'TRDataTypes',
 		'TRIntLimits'
 	],
 	#category : #'Tinyrossa-IL-Symbols'
@@ -46,6 +47,12 @@ TRStaticSymbol >> address [
 { #category : #converting }
 TRStaticSymbol >> asAcDSLOperand [
 	^ AcDSLSymbol value: name
+]
+
+{ #category : #conversion }
+TRStaticSymbol >> got [
+	"Return the GOT entry for this symbol as another symbol"
+	^ TRStaticSymbol name: name , '@got' type: Address
 ]
 
 { #category : #initialization }

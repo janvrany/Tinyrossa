@@ -20,6 +20,11 @@ TRLabelSymbol >> block [
 	^ block
 ]
 
+{ #category : #conversion }
+TRLabelSymbol >> got [
+	^ self shouldNotImplement
+]
+
 { #category : #initialization }
 TRLabelSymbol >> initializeWithName:nameArg type:typeArg [
 	self assert: typeArg == Void description: 'Type of a label must be void'.
