@@ -31,13 +31,18 @@ Class {
 		'manager',
 		'base',
 		'size',
+		'sizeOfGOTentry',
 		'memory',
 		'codeAllocPtr',
+		'goteAllocPtr',
 		'linker',
 		'exports',
 		'symbols',
 		'relocations',
 		'pending'
+	],
+	#pools : [
+		'TRDataTypes'
 	],
 	#category : #'Tinyrossa-Runtime-Code Cache'
 }
@@ -145,11 +150,22 @@ TRCodeCache >> addSymbol: aTRStaticSymbol [
 TRCodeCache >> allocCode: codeSize [
 	| codeStart |
 
-	self assert: (codeAllocPtr + codeSize) < (base + size).
+	self assert: (codeAllocPtr + codeSize) < goteAllocPtr.
 
 	codeStart := codeAllocPtr.
 	codeAllocPtr := codeAllocPtr + codeSize.
 	^ codeStart.
+]
+
+{ #category : #private }
+TRCodeCache >> allocGOTentry [
+	| addr |
+
+	self assert: codeAllocPtr < (goteAllocPtr - sizeOfGOTentry).
+
+	addr := goteAllocPtr.
+	goteAllocPtr := goteAllocPtr - sizeOfGOTentry.
+	^ addr.
 ]
 
 { #category : #accessing }
@@ -172,6 +188,26 @@ TRCodeCache >> exports [
 		exportMap at: symbol put: (symbols at: symbol)
 	].
 	^ exportMap
+]
+
+{ #category : #private }
+TRCodeCache >> getGOTentryFor: aTRStaticSymbol [
+	| entry |
+
+	self assert: aTRStaticSymbol isTRStaticSymbol.
+	self assert:(symbols includesKey: aTRStaticSymbol).
+
+	entry := TRStaticSymbol name: aTRStaticSymbol name , '@got' type: Address.
+	^ symbols elementAt: entry ifAbsent: [
+		entry setAddress: self allocGOTentry.
+
+		"BOGUS: both size of an entry and endian depends on target!"
+		self assert: sizeOfGOTentry == 8.
+		memory unsignedLongLongAt: entry address put: (symbols at: aTRStaticSymbol) bigEndian: false.
+
+		symbols at: entry put: entry address.
+		entry.
+	]
 ]
 
 { #category : #inspecting }
@@ -240,9 +276,11 @@ TRCodeCache >> initializeWithRuntime: runtimeArg base: baseArg size: sizeArg mem
 	runtime := runtimeArg.
 	base := baseArg.
 	size := sizeArg.
+	sizeOfGOTentry := 8"BOGUS, depnds on target!".
 	memory := memoryArg.
 
 	codeAllocPtr := base.
+	goteAllocPtr := base + size - sizeOfGOTentry.
 
 	manager := nil.
 	exports := Set new.
@@ -324,6 +362,11 @@ TRCodeCache >> link [
 				pending remove: reloc.
 			] on: AcRelocationSymbolUnresolved do: [:ex |
 				"Ignore, might get resolved later."
+			] on: AcRelocationRequestGOTEntry do: [:req |
+				| entry |
+
+				entry := self getGOTentryFor: req symbol.
+				req resume: entry -> entry address.
 			].
 		].
 	].
