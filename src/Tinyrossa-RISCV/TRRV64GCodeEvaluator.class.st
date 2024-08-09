@@ -753,6 +753,27 @@ TRRV64GCodeEvaluator >> evaluate_lmul: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_loadaddr: node [
+	| dstReg |
+
+	dstReg := codegen allocateRegister.
+
+	node symbol isTRStaticSymbol ifTrue: [
+		| l0 |
+
+		l0 := codegen allocateLabel.
+
+		generate label: l0.
+		generate auipc: dstReg, (R_RISCV_GOT_HI20 % node symbol).
+		generate ld:    dstReg, (dstReg + (R_RISCV_PCREL_LO12_I % l0)).
+	] ifFalse: [
+		generate addi:  dstReg, sp, node symbol.
+	].
+
+	^ dstReg
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lor: node [
 	^self commonBin: node opcodeR: 'or' opcodeI: 'ori'
 ]
