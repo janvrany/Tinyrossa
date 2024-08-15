@@ -43,6 +43,19 @@ TRILBuilder >> build: opcode arguments: arguments [
 
 	node := super build: opcode arguments: arguments.
 	node location: location.
+
+	"If the node is call, we anchor it here under a treetop.
+	 This is neccessary because otherwise, the node would be
+	 elided if nobody uses the return value and we cannot elide
+	 calls because they may have sideeffects.
+
+	 If we really want to elide calls to sideffect-free functions
+	 (whateber that means) whose value are not used, it should be
+	 done as an optimization pass."
+	opcode isCall ifTrue: [
+		current add: (TRILNode opcode: treetop children: { node })
+	].
+
 	^ node
 ]
 
