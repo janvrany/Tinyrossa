@@ -19,6 +19,11 @@ TRRegisterMappedSymbol class >> name:name type:type index: index [
 	^ self basicNew initializeWithName:name type:type index: index
 ]
 
+{ #category : #conversion }
+TRRegisterMappedSymbol >> asAcDSLOperand [
+	^ AcDSLSymbol value: name
+]
+
 { #category : #accessing }
 TRRegisterMappedSymbol >> index [
 	"Return (sequential) index of symbol.
