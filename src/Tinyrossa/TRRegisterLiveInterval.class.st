@@ -99,6 +99,18 @@ TRRegisterLiveInterval >> firstDef [
 	^ nil
 ]
 
+{ #category : #accessing }
+TRRegisterLiveInterval >> firstUse [
+	"Return the first use position for this interval."
+
+	uses do: [:encodedPosition |
+		(self encodesUsePosition: encodedPosition) ifTrue: [
+			^ self decodePosition: encodedPosition
+		].
+	].
+	^ nil
+]
+
 { #category : #initialization }
 TRRegisterLiveInterval >> initializeWithRegister: aTRVirtualRegister [
 	self assert: aTRVirtualRegister isTRVirtualRegister.

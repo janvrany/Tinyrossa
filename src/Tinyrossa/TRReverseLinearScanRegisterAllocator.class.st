@@ -142,7 +142,9 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 		].
 	].
 	intervals do: [:interval | 
-		self assert: interval start < interval stop.
+		self assert: interval start <= interval stop.
+		self assert: interval firstDef notNil description: 'virtual register not defined (assigned)'.
+		self assert:(interval firstUse isNil or:[interval firstDef < interval firstUse]) description: 'virtual register used before defined (assigned)'.
 	].
 
 	"Create todo (work) list. The list is sorted by interval's end position (#stop).
