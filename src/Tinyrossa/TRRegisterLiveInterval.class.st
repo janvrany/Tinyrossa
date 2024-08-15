@@ -185,14 +185,35 @@ TRRegisterLiveInterval >> length [
 ]
 
 { #category : #queries }
+TRRegisterLiveInterval >> needsToBeSpilled [
+	"Return true, if this interval (register) has to be spilled after its definition"
+	^ spillSlot notNil
+]
+
+{ #category : #queries }
 TRRegisterLiveInterval >> needsToBeSpilledAt: position [
 	^ spillSlot notNil and: [ position = self lastDef ]
 ]
 
-{ #category : #queries }
-TRRegisterLiveInterval >> needsToBeSpilled [
-	"Return true, if this interval (register) has to be spilled after its definition"
-	^ spillSlot notNil
+{ #category : #accessing }
+TRRegisterLiveInterval >> nextUseAfter: position [
+	"Return the next (closest) use position for this interval greater than `position`.
+	 If there's no use after given position and before next (closest) def position
+	 return `nil`."
+
+	| encodedDefPosition |
+
+	encodedDefPosition := self encodeDefPosition: position.
+	uses do: [ :i |
+		encodedDefPosition < i ifTrue:[
+			(self encodesUsePosition:i) ifTrue: [
+				^ self decodePosition: i.
+			] ifFalse: [
+				^ nil
+			].
+		].
+	].
+	^ nil.
 ]
 
 { #category : #'printing & storing' }

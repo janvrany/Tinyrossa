@@ -252,6 +252,78 @@ TRCompilationTestCase >> test03_lconst [
 	"
 ]
 
+{ #category : #tests }
+TRCompilationTestCase >> test06_iadd_discarding_value [
+	| x builder |
+
+	<parameter: #x values: #(0 10)>
+
+	x := testParameters at: #x.
+
+	builder := compilation builder.
+	builder defineName: testSelector asString type: Int32.
+	builder defineParameter: 'x' type: Int32.
+	builder treetop: {
+		builder iadd: {
+			builder iload: 'x'.
+			builder iconst: 1 } }.
+	builder ireturn:
+		{ builder iconst: -1 }.
+
+	compilation optimize.
+	compilation compile.
+
+	self assert: (shell call: x ) equals: -1.
+
+	"
+	TRRV64GCompilationTests debug: #test06_iadd_discarding_value
+	TRPPC64CompilationTests debug: #test06_iadd_discarding_value
+	"
+]
+
+{ #category : #tests }
+TRCompilationTestCase >> test07_call_discarding_value [
+	| x builder |
+
+	<parameter: #x values: #(0 10)>
+
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since Xload/Xstore evaluator does not support statics for POWER (see issue #52)'.
+	].
+
+	x := testParameters at: #x.
+
+	builder := compilation builder.
+	builder defineName: testSelector asString type: Int32.
+	builder defineParameter: 'x' type: Int32.
+	builder
+		if: (builder icmpeq:
+			 {  builder iload: 'x' .
+				builder iconst: 0  })
+		then:[ :builder |
+				builder ireturn:
+					{ builder iconst: -1 } ]
+		else:[ :builder |
+				builder icall: {
+					builder isub:
+						{ builder iload: 'x' .
+						  builder iconst: 1 } .
+					testSelector }.
+				builder ireturn:
+						{ builder iload: 'x' } ].
+
+	compilation optimize.
+	compilation compile.
+
+
+	self assert: (shell call: x) equals: ((x == 0) ifTrue:[ -1 ] ifFalse:[ x ]).
+
+	"
+	TRRV64GCompilationTests debug: #test07_call_discarding_value
+	TRPPC64CompilationTests debug: #test07_call_discarding_value
+	"
+]
+
 { #category : #'tests - examples' }
 TRCompilationTestCase >> test_example01_meaningOfLife [
 	TRCompilationExamples new
