@@ -142,7 +142,9 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 		].
 	].
 	intervals do: [:interval | 
-		self assert: interval start < interval stop.
+		self assert: interval start <= interval stop.
+		self assert: interval firstDef notNil description: 'virtual register not defined (assigned)'.
+		self assert:(interval firstUse isNil or:[interval firstDef < interval firstUse]) description: 'virtual register used before defined (assigned)'.
 	].
 
 	"Create todo (work) list. The list is sorted by interval's end position (#stop).
@@ -191,12 +193,19 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 
 		deps post do: [:dep |
 			dep isUnsatisfiedDependency ifTrue:[
-				"Move value from real register to its virtual register."
-				self insertMoveFrom: dep rreg to: dep vreg.
+				"Move value from real register to its virtual register but only
+				 if the value is needed (this is usually the case, but not always!)"
+				| interval |
+
+				interval := live detect: [:each | each register == dep vreg ] ifNone: [ nil ].
+				(interval notNil and:[(interval nextUseAfter: insnIndex) notNil]) ifTrue: [
+					self insertMoveFrom: dep rreg to: dep vreg.
+				].
 
 				live copy do: [:i |
 					(i register allocation == dep rreg) ifTrue: [
-						"Live-across register is trashed, we have to spill and reload.
+						"If any live register is allocated to dependency's real register
+						 (which is trashed at this point) we have to spill and reload.
 						 We do it by forcefully splitting the interval."
 						self splitRegister: i at: insnIndex.
 					].
@@ -229,14 +238,17 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 		self allocateRegister: interval.
 		interval length == 1 ifTrue: [ 
 			"We have just allocated an register interval of length 1 -
-			 such interval may be result of a split between its 
-			 definition and first use. In this case, this interval is 
-			 defined at this interval get immediatelly spilled so
-			 we can expire it right now to free the register for
-			 possibly other intervals that go live here."
-			self assert: (interval needsToBeSpilledAt: insnIndex).
+			 such interval may be result certain TRIL (like a call to
+			 non-void function whose return value is not used) or it may
+			 be result of a split between its definition and first use.
+			 If the latter, this interval is defined at this interval
+			 must be immediatelly spilled.
 
-			self insertSpill: interval.
+			 In both cases, so we can expire it right now to free the
+			 register for possibly other intervals that go live here."
+			(interval needsToBeSpilledAt: insnIndex) ifTrue: [
+				self insertSpill: interval.
+			].
 			self expireRegister: interval.
 		]
 	].

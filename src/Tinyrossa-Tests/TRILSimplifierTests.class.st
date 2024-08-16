@@ -117,11 +117,11 @@ TRILSimplifierTests >> test_simplify_store_02 [
 	b ireturn: {
 		b iconst: 2 }.
 
-	self assert: compilation cfg treetops size == 4.
-	self assert: compilation cfg treetops second opcode = istore.
+	self assert: compilation cfg treetops size == 5.
+	self assert: compilation cfg treetops third opcode = istore.
 
 	compilation optimize.
 
-	self assert: compilation cfg treetops size == 4.
-	self assert: compilation cfg treetops second opcode = treetop.
+	self assert: compilation cfg treetops size == 5.
+	self assert: compilation cfg treetops third opcode = treetop.
 ]
