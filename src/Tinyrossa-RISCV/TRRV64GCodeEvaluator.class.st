@@ -299,7 +299,22 @@ TRRV64GCodeEvaluator >> evaluate_Xloadi: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_a2b: node [
+	^ self evaluate: node child1
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_a2i: node [
+	^ self evaluate: node child1
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_a2l: node [
+	^ self evaluate: node child1
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_a2s: node [
 	^ self evaluate: node child1
 ]
 
