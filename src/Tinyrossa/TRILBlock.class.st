@@ -35,7 +35,8 @@ Class {
 		'successor2',
 		'next',
 		'startState',
-		'currentState'
+		'currentState',
+		'liveness'
 	],
 	#pools : [
 		'TRILOpcodes'
