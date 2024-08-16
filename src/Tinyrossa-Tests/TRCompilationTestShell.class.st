@@ -5,7 +5,20 @@ Class {
 		'target',
 		'binary',
 		'debugger',
-		'nzone'
+		'nzone1Base',
+		'nzone1Size',
+		'nzone1',
+		'heap1Base',
+		'heap1Size',
+		'heap1',
+		'nzone2Base',
+		'nzone2Size',
+		'nzone2',
+		'heap2Base',
+		'heap2Size',
+		'heap2',
+		'entryBase',
+		'entrySize'
 	],
 	#classVars : [
 		'DefaultImpl'
@@ -66,9 +79,72 @@ TRCompilationTestShell >> debugger [
 	^ debugger
 ]
 
+{ #category : #accessing }
+TRCompilationTestShell >> entry [
+	"Return the value if (default) entry point in nzone"
+
+	| memory entry |
+
+	memory := debugger selectedInferior memory.
+
+	"BOGUS BOGUS"
+	entry := memory unsignedLongLongAt: entryBase bigEndian: false.
+	^ entry
+]
+
+{ #category : #accessing }
+TRCompilationTestShell >> entry: entry [
+	"Set the address of entry point in nzone"
+
+	| memory |
+
+	memory := debugger selectedInferior memory.
+	"BOGUS BOGUS"
+	memory unsignedLongLongAt: entryBase put: entry bigEndian: false.
+	^ entry
+]
+
+{ #category : #accessing }
+TRCompilationTestShell >> heap1 [
+	heap1 isNil ifTrue: [
+		| runtime |
+
+		runtime := TRRuntime forTarget: target.
+		heap1 := TRCodeCache runtime: runtime base: heap1Base size: heap1Size memory: debugger selectedInferior memory.
+	].
+	^ heap1
+]
+
+{ #category : #accessing }
+TRCompilationTestShell >> heap2 [
+	heap2 isNil ifTrue: [
+		| runtime |
+
+		runtime := TRRuntime forTarget: target.
+		heap2 := TRCodeCache runtime: runtime base: heap2Base size: heap2Size memory: debugger selectedInferior memory.
+	].
+	^ heap2
+]
+
 { #category : #initialization }
 TRCompilationTestShell >> initializeWithTarget: aTRCompilationTarget [
 	target := aTRCompilationTarget.
+
+	"!!! Following must be kept in sync with values in
+		 `shell.c` and `shell.link`"
+	nzone1Base :=  16r000A0000.
+	nzone1Size :=  1024.
+	heap1Base  :=  16r000B0000.
+	heap1Size  :=  4096.
+
+	nzone2Base := 16r7000C0000.
+	nzone2Size := 1024.
+	heap2Base  := 16r7000D0000.
+	heap2Size  := 4096.
+
+	entryBase  := 16r00090000.
+	entrySize  := 8.
+
 	self setUp.
 ]
 
@@ -116,7 +192,7 @@ TRCompilationTestShell >> invoke: symbol with: arguments types: argumentTypes [
 			self error: 'Parameter type not supported yet: ' , typ name
 		].
 	].
-	self debugger setRegister: 'pc' to: (nzone exports at: symbol).
+	self debugger setRegister: 'pc' to: (nzone1 exports at: symbol).
 
 	"Call injected function"
 	"
@@ -137,20 +213,29 @@ TRCompilationTestShell >> invoke: symbol with: arguments types: argumentTypes [
 
 { #category : #accessing }
 TRCompilationTestShell >> nzone [
-	nzone isNil ifTrue: [
-		| runtime |
-
-		runtime := TRRuntime forTarget: target.
-		nzone := TRCodeCache runtime: runtime base: self nzoneBase size: 512 memory: debugger selectedInferior memory.
-	].
-	^ nzone
+   ^ self nzone1
 ]
 
 { #category : #accessing }
-TRCompilationTestShell >> nzoneBase [
-	"Return the base address of nzone. See shell.link linker script."
+TRCompilationTestShell >> nzone1 [
+	nzone1 isNil ifTrue: [
+		| runtime |
 
-	^ 16r00080000
+		runtime := TRRuntime forTarget: target.
+		nzone1 := TRCodeCache runtime: runtime base: nzone1Base size: nzone1Size memory: debugger selectedInferior memory.
+	].
+	^ nzone1
+]
+
+{ #category : #accessing }
+TRCompilationTestShell >> nzone2 [
+	nzone2 isNil ifTrue: [
+		| runtime |
+
+		runtime := TRRuntime forTarget: target.
+		nzone2 := TRCodeCache runtime: runtime base: nzone2Base size: nzone2Size memory: debugger selectedInferior memory.
+	].
+	^ nzone2
 ]
 
 { #category : #running }

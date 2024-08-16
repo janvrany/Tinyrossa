@@ -18,7 +18,7 @@ shell-$(ARCH): shell.c shell.link
 endif
 
 clean:
-	rm -f shell-*
+	rm -f shell-riscv64 shell-x86_64 shell-powerpc64le
 
 
 

@@ -1,6 +1,15 @@
 SECTIONS
 {
-  .nzone 0x00080000 : {  }
+  .entry  0x00090000 : {  }
+
+  .nzone1 0x000A0000 :  {  }
+  .heap1  0x000B0000 :  {  }
 }
-INSERT AFTER .text;
+INSERT AFTER .bss;
+SECTIONS
+{
+  .nzone2 0x7000C0000 :  {  }
+  .heap2  0x7000D0000 :  {  }
+}
+INSERT AFTER .bss;
 
