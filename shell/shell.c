@@ -1,11 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
+#include <stdint.h>
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
 
-#define NZONE_SIZE 512
+#define NZONE_SIZE 1024
+#define HEAP_SIZE  4096
 
 #if defined(__x86_64)
 #  define ASM_RETURN "mov %rdi, %rax\nret"
@@ -19,36 +18,38 @@
 
 __asm__(
 	"                                  \n"
-	".section .nzone,\"awx\", @progbits\n"
+	".section .entry,\"aw\"			   \n"
+	"entry:                            \n"
+	".8byte nzone                      \n"
+	"                                  \n"
+	".section .heap1,\"aw\"			   \n"
+	"heap1:                            \n"
+	".space " TOSTRING(HEAP_SIZE) "    \n"
+	"                                  \n"
+	".section .heap2,\"aw\"			   \n"
+	"heap2:                            \n"
+	".space " TOSTRING(HEAP_SIZE) "    \n"
+	"                                  \n"
+	".section .nzone1,\"awx\", @progbits\n"
 	"nzone:                            \n"
+	"nzone1:                           \n"
 	ASM_RETURN "                       \n"
 	".space " TOSTRING(NZONE_SIZE) "   \n"
 	"                                  \n"
+	"                                  \n"
+	".section .nzone2,\"awx\", @progbits\n"
+	"nzone2:                           \n"
+	ASM_RETURN "                       \n"
+	".space " TOSTRING(NZONE_SIZE) "   \n"
 	".section .text                    \n"
 );
 
-extern unsigned char nzone[NZONE_SIZE];
-
-typedef int (*entry_func)(int a);
-static entry_func entry = (entry_func)(&nzone);
-
-static int __attribute__ ((noinline)) trampoline(int a) {
-	return entry(a);
-}
+extern int (*entry)(intptr_t a, intptr_t b);
+extern unsigned char nzone1[NZONE_SIZE];
+extern unsigned char nzone2[NZONE_SIZE];
+extern unsigned char heap1[NZONE_SIZE];
+extern unsigned char heap2[NZONE_SIZE];
 
 int main(int argc, char** argv) {
-	int x = 0;
-	switch (argc) {
-		case 1:
-			x = 42;
-			break;
-		case 2:
-			x = strtol(argv[1], NULL, 10);
-			if (errno) return 127;
-			break;
-		default:
-			 return 127;
-			 break;
-	}
-	return trampoline(x);
+	return entry((intptr_t)argc, (intptr_t)argv);
 }
