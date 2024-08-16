@@ -35,7 +35,8 @@ Class {
 		'successor2',
 		'next',
 		'startState',
-		'currentState'
+		'currentState',
+		'liveness'
 	],
 	#pools : [
 		'TRILOpcodes'
@@ -166,6 +167,15 @@ TRILBlock >> isTerminated [
 ]
 
 { #category : #accessing }
+TRILBlock >> liveness [
+	"Return this block's liveness information."
+
+	self assert: liveness notNil description: 'Liveness not yet computed, call `TRLiveness compute: cfg` first'.
+
+	^ liveness
+]
+
+{ #category : #accessing }
 TRILBlock >> name [
 	^ name
 ]
@@ -269,6 +279,15 @@ TRILBlock >> replace: oldNode with: newNode [
 		 is unreachable from this block."
 		self setSuccessor1: nil.
 	].
+]
+
+{ #category : #initialization }
+TRILBlock >> setLiveness: aTRLiveness [
+	"Set this block's liveness information. This is used
+	 during liveness computation."
+
+	self assert: liveness isNil.
+	liveness := aTRLiveness.
 ]
 
 { #category : #initialization }
