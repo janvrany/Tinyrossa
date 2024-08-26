@@ -42,6 +42,37 @@ TRRV64GCodeEvaluator >> commonBin: node opcodeR: opR opcodeI: opI [
 ]
 
 { #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonDiv: node [
+	"Handles imul and lmul"
+
+	| child1 child2 src1Reg src2Reg dstReg |
+
+	child1 := node child1.
+	child2 := node child2.
+
+	src1Reg := self evaluate: child1.
+
+	(child2 opcode isLoadConst and: [child2 constant == 1]) ifTrue:[
+		dstReg := src1Reg.
+	] ifFalse:[
+	(child2 opcode isLoadConst and: [child2 constant == -1]) ifTrue:[
+			dstReg := self codegen allocateRegister.
+			generate sub: dstReg, zero, src1Reg
+	] ifFalse:[
+		src2Reg := self evaluate: child2.
+		dstReg := self codegen allocateRegister.
+
+		node type == Int64 ifTrue:[
+			generate div: dstReg, src1Reg , src2Reg
+		] ifFalse:[
+			generate divw: dstReg, src1Reg , src2Reg
+		].
+	]].
+
+	^dstReg
+]
+
+{ #category : #'evaluation-helpers' }
 TRRV64GCodeEvaluator >> commonLoad: node [
 	"Handles aload, lload, iload, sload & bload"  
 
@@ -429,6 +460,11 @@ TRRV64GCodeEvaluator >> evaluate_iconst: node [
 	^ dstReg
 ]
 
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_idiv: node [
+	^self commonDiv: node.
+]
+
 { #category : #'evaluation-helpers' }
 TRRV64GCodeEvaluator >> evaluate_ifXcmpeq: node [
 	"Handles Address, Int64 Int32, Int16 & Int8"  
@@ -673,6 +709,11 @@ TRRV64GCodeEvaluator >> evaluate_lconst: node [
 	codegen loadConstant64: node constant into: dstReg.
 
 	^ dstReg
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_ldiv: node [
+	^self commonDiv: node.
 ]
 
 { #category : #evaluation }
