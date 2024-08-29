@@ -5,6 +5,7 @@ Class {
 		'target',
 		'binary',
 		'debugger',
+		'codeCacheManager',
 		'nzone1Base',
 		'nzone1Size',
 		'nzone1',
@@ -59,7 +60,7 @@ TRCompilationTestShell class >> shellDirectory [
 	Smalltalk isSmalltalkX ifTrue:[
 		| packageDir shellDir |
 		
-		packageDir := Smalltalk getPackageDirectoryForPackage: self class package.
+		packageDir := Smalltalk getPackageDirectoryForPackage: TRCompilationTestShell package.
 		(packageDir notNil and: [packageDir exists]) ifTrue:[
 			shellDir := packageDir / '..' / '..' / 'shell'.
 			shellDir isDirectory ifTrue:[ 
@@ -124,10 +125,8 @@ TRCompilationTestShell >> entry: entry [
 { #category : #accessing }
 TRCompilationTestShell >> heap1 [
 	heap1 isNil ifTrue: [
-		| runtime |
-
-		runtime := TRRuntime forTarget: target.
-		heap1 := TRCodeCache runtime: runtime base: heap1Base size: heap1Size memory: debugger selectedInferior memory.
+		heap1 := TRCodeCache runtime: (codeCacheManager runtime) base: heap1Base size: heap1Size memory: debugger selectedInferior memory.
+		codeCacheManager addSegment: heap1.
 	].
 	^ heap1
 ]
@@ -135,10 +134,8 @@ TRCompilationTestShell >> heap1 [
 { #category : #accessing }
 TRCompilationTestShell >> heap2 [
 	heap2 isNil ifTrue: [
-		| runtime |
-
-		runtime := TRRuntime forTarget: target.
-		heap2 := TRCodeCache runtime: runtime base: heap2Base size: heap2Size memory: debugger selectedInferior memory.
+		heap2 := TRCodeCache runtime: (codeCacheManager runtime) base: heap2Base size: heap2Size memory: debugger selectedInferior memory.
+		codeCacheManager addSegment: heap2.
 	].
 	^ heap2
 ]
@@ -161,6 +158,8 @@ TRCompilationTestShell >> initializeWithTarget: aTRCompilationTarget [
 
 	entryBase  := 16r00090000.
 	entrySize  := 8.
+
+	codeCacheManager := TRCodeCacheManager runtime: (TRRuntime forTarget: target).
 
 	self setUp.
 ]
@@ -236,10 +235,8 @@ TRCompilationTestShell >> nzone [
 { #category : #accessing }
 TRCompilationTestShell >> nzone1 [
 	nzone1 isNil ifTrue: [
-		| runtime |
-
-		runtime := TRRuntime forTarget: target.
-		nzone1 := TRCodeCache runtime: runtime base: nzone1Base size: nzone1Size memory: debugger selectedInferior memory.
+		nzone1 := TRCodeCache runtime: (codeCacheManager runtime) base: nzone1Base size: nzone1Size memory: debugger selectedInferior memory.
+		codeCacheManager addSegment: nzone1.
 	].
 	^ nzone1
 ]
@@ -247,10 +244,8 @@ TRCompilationTestShell >> nzone1 [
 { #category : #accessing }
 TRCompilationTestShell >> nzone2 [
 	nzone2 isNil ifTrue: [
-		| runtime |
-
-		runtime := TRRuntime forTarget: target.
-		nzone2 := TRCodeCache runtime: runtime base: nzone2Base size: nzone2Size memory: debugger selectedInferior memory.
+		nzone2 := TRCodeCache runtime: (codeCacheManager runtime) base: nzone2Base size: nzone2Size memory: debugger selectedInferior memory.
+		codeCacheManager addSegment: nzone2.
 	].
 	^ nzone2
 ]

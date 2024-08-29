@@ -310,6 +310,8 @@ TRCompilationTestCase >> test05_increment_static_symbol_b [
 	that it does not matter in what order we link objects / define symbols.
 	"
 
+	<parameter: #data values: #(nzone heap1 heap2)> "Where to store (static) counter"
+
 	| ctr asm |
 
 	self target name = 'powerpc64le-linux' ifTrue: [
@@ -329,7 +331,7 @@ TRCompilationTestCase >> test05_increment_static_symbol_b [
 	asm globl: ctr.
 	asm label: ctr.
 	asm int32: 42.
-	shell nzone add: asm object.
+	(shell perform: (testParameters at:#data)) add: asm object.
 
 	"Invoke function and test"
 	self assert: (shell invoke: compilation functionSymbol with: { } types: { })equals: 43.
