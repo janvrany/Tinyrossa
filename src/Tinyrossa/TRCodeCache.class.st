@@ -20,12 +20,15 @@ of code cache fitting the needs of particular runtime. This class
 serves example implementation and it is used in tests (see
 class `TRCompilationTestShell`)
 
+See also `TRCodeCacheManager`.
+
 "
 Class {
 	#name : #TRCodeCache,
 	#superclass : #Object,
 	#instVars : [
 		'runtime',
+		'manager',
 		'base',
 		'size',
 		'sizeOfGOTentry',
@@ -121,6 +124,15 @@ TRCodeCache >> add: codeObj [
 		pending add: relocToAdd.
 	].
 	self link.
+
+	"
+	5. Inform manager (if any) that new exports have been added
+	"
+	manager notNil ifTrue: [ 
+		codeObj exports keys do: [:export | 
+			manager addSymbol: (symbols elementAt: export) segment: self
+		].
+	].
 ]
 
 { #category : #'adding & removing' }
@@ -270,6 +282,7 @@ TRCodeCache >> initializeWithRuntime: runtimeArg base: baseArg size: sizeArg mem
 	codeAllocPtr := base.
 	goteAllocPtr := base + size - sizeOfGOTentry.
 
+	manager := nil.
 	exports := Set new.
 	symbols := Dictionary new.
 	relocations := Dictionary new.
@@ -357,6 +370,11 @@ TRCodeCache >> link [
 			].
 		].
 	].
+]
+
+{ #category : #private }
+TRCodeCache >> manager: aTRCodeCacheManager [
+	manager := aTRCodeCacheManager.
 ]
 
 { #category : #accessing }
