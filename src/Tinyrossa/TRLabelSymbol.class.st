@@ -38,3 +38,10 @@ TRLabelSymbol >> setBlock: aTRILBlock [
 
 	block := aTRILBlock
 ]
+
+{ #category : #initialization }
+TRLabelSymbol >> setSize: anInteger [
+	self assert: anInteger == 0.
+
+	size := anInteger.
+]

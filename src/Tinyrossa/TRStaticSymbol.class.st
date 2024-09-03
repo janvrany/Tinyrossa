@@ -17,7 +17,8 @@ Class {
 	#name : #TRStaticSymbol,
 	#superclass : #TRSymbol,
 	#instVars : [
-		'address'
+		'address',
+		'size'
 	],
 	#pools : [
 		'TRIntLimits'
@@ -66,4 +67,19 @@ TRStaticSymbol >> setAddress: anInteger [
 	self assert: address isNil.
 
 	address := anInteger.
+]
+
+{ #category : #initialization }
+TRStaticSymbol >> setSize: anInteger [
+	self assert: anInteger isInteger.
+	self assert: anInteger > 0.
+
+	size := anInteger.
+]
+
+{ #category : #accessing }
+TRStaticSymbol >> size [
+	"Return size of the symbol in bytes, i.e., a number of
+	 bytes this symbol occupies in memory."
+	^ size ? type sizeInBytes
 ]

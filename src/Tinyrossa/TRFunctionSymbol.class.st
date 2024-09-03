@@ -41,3 +41,8 @@ TRFunctionSymbol >> isTRFunctionSymbol [
 TRFunctionSymbol >> linkageClass [
 	^ linkageClass
 ]
+
+{ #category : #accessing }
+TRFunctionSymbol >> size [
+	^ size ? 0
+]

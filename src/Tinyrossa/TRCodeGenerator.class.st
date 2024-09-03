@@ -157,7 +157,9 @@ TRCodeGenerator >> generate [
 
 		fixupRegisters;
 		fixupOffsets;
-		fixupBranches.
+		fixupBranches;
+
+		updateSymbols.
 ]
 
 { #category : #'code gen-phases' }
@@ -297,6 +299,13 @@ TRCodeGenerator >> registerStore: reg to: sym [
 	 This method is used to implement register spills.
 	"     
 	^ self subclassResponsibility
+]
+
+{ #category : #'code gen-phases' }
+TRCodeGenerator >> updateSymbols [
+	"Update size of function symbol"
+
+	compilation functionSymbol setSize: self codeBuffer size.
 ]
 
 { #category : #accessing }
