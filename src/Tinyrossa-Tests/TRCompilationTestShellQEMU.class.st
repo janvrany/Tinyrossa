@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'qemu'
 	],
-	#category : #'Tinyrossa-Tests-Shells-SmalltalkX'
+	#category : #'Tinyrossa-Tests-Shells'
 }
 
 { #category : #running }
@@ -13,7 +13,7 @@ TRCompilationTestShellQEMU >> setUp [
 
 	super setUp.
 
-	qemuCmd := compilation config target qemu, ' -g 1234 ', binary pathString.
+	qemuCmd := target qemu, ' -g 1234 ', binary pathString.
 
 	"First, start QEMU... "
 	qemu := OSProcess new command: qemuCmd. 
