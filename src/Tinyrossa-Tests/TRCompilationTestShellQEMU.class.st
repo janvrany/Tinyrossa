@@ -4,16 +4,34 @@ Class {
 	#instVars : [
 		'qemu'
 	],
+	#classVars : [
+		'QemuDebugPortRandom'
+	],
 	#category : #'Tinyrossa-Tests-Shells'
 }
 
+{ #category : #initialization }
+TRCompilationTestShellQEMU class >> initialize [
+	QemuDebugPortRandom := Random new seed: 1234
+]
+
 { #category : #running }
 TRCompilationTestShellQEMU >> setUp [
-	| qemuCmd |
+	| qemuDebugPort qemuCmd |
 
 	super setUp.
 
-	qemuCmd := target qemu, ' -g 1234 ', binary pathString.
+	"Randomize port where QEMU's debug stub is listening.
+	 This is to allow running tests simultaneously on both
+	 Smalltalk/X and Pharo (as they take some time to finish)."
+
+	Smalltalk isSmalltalkX ifTrue: [
+		qemuDebugPort := 30000 + (QemuDebugPortRandom nextInt: 1000).
+	] ifFalse: [
+		qemuDebugPort := 31000 + (QemuDebugPortRandom nextInt: 1000).
+	].
+
+	qemuCmd := target qemu, ' -g ', qemuDebugPort printString, ' ', binary pathString.
 
 	"First, start QEMU... "
 	qemu := OSProcess new command: qemuCmd. 
@@ -22,7 +40,7 @@ TRCompilationTestShellQEMU >> setUp [
 	(Delay forSeconds: 1) wait.
 
 	"...then setup debugger object (using either libgdbs or ULD)"    
-	self setUpDebuggerOnHost: 'localhost' port: 1234.
+	self setUpDebuggerOnHost: 'localhost' port: qemuDebugPort.
 ]
 
 { #category : #running }
