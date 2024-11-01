@@ -86,6 +86,11 @@ TRILBlock >> addPrecedessor: aTRILBlock [
 ]
 
 { #category : #accessing }
+TRILBlock >> bbstart [
+	^ bbstartNode
+]
+
+{ #category : #accessing }
 TRILBlock >> cfg [
 	^ cfg
 ]
