@@ -8,6 +8,11 @@ Class {
 	#category : #'Tinyrossa-IL-Symbols'
 }
 
+{ #category : #conversion }
+TRSymbol >> asString [
+	^ name
+]
+
 { #category : #testing }
 TRSymbol >> isTRSymbol [
 	^ true
