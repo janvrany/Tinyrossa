@@ -16,6 +16,22 @@ AcInstruction >> isLeaveInstruction [
 ]
 
 { #category : #'*Tinyrossa' }
+AcInstruction >> isPartOfEpilogue [
+	"Return true if this instruction is part of function epilogue,
+	 `false` otherwise."
+
+	^ self node notNil and: [ self node opcode isReturn ]
+]
+
+{ #category : #'*Tinyrossa' }
+AcInstruction >> isPartOfPrologue [
+	"Return true if this instruction is part of function prologue,
+	 `false` otherwise."
+
+	^ self node notNil and: [ self node opcode isBBStart ]
+]
+
+{ #category : #'*Tinyrossa' }
 AcInstruction >> location [
 	| node loc |
 
