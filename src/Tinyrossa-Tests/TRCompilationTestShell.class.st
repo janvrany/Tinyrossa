@@ -42,35 +42,18 @@ TRCompilationTestShell class >> forTarget: aTRCompilationTarget [
 TRCompilationTestShell class >> shellDirectory [
 	"Return a directory (as file reference) containing compiled shell binaries
 	 or nil if directory cound not be found."
-	Smalltalk isSmalltalkX ifTrue:[
-		| packageDir shellDir |
-		
-		packageDir := Smalltalk getPackageDirectoryForPackage: self class package.
-		(packageDir notNil and: [packageDir exists]) ifTrue:[
-			shellDir := packageDir / '..' / '..' / 'shell'.
-			shellDir isDirectory ifTrue:[ 
-				^shellDir.
-			].
-		].
-		^nil
-	].
-	Smalltalk isPharo ifTrue:[
-		| slash package repo shellDir |
 
-		slash := #DiskStore asClass activeClass delimiter.
-		package := self package name.
-		repo := #IceRepository asClass registry
-						detect:[ :each | each loadedPackages contains: [:icep | icep name = package ] ]
-						ifNone:[ ^nil ].
-		shellDir := repo location / 'shell'.
-		shellDir isDirectory ifTrue:[ 
+	| packageDir shellDir |
+
+	packageDir := Smalltalk getPackageDirectoryForPackage: TRCompilationTestShell package.
+	(packageDir notNil and: [packageDir exists]) ifTrue:[
+		shellDir := packageDir / '..' / '..' / 'shell'.
+		shellDir isDirectory ifTrue:[
 			^shellDir.
 		].
-		^nil
 	].
-	self error:'Unsupported dialect'.
-	^nil.
-	
+	^nil
+
 	"
 	TRCompilationTestShell shellDirectory
 	"
