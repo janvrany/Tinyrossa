@@ -79,23 +79,18 @@ TRRV64GCodeEvaluator >> commonLoad: node [
 	| dstReg baseReg offset type |
 
 	node symbol isTRStaticSymbol ifTrue: [
-		"TODO: here we use a 32-bit PC-relative load, so the symbol must
-		 be located withing -2GB, +2GB from current location.
-
-		 We should generate (relaxed) GOT load to allow symbol to be
-		 anywhere in memory but that's left as future work."
-
 		| l0 |
 
 		baseReg := codegen allocateRegister.
 		l0 := codegen allocateLabel.
 
 		generate label: l0.
-		generate auipc: baseReg, (R_RISCV_PCREL_HI20 % node symbol).
-		offset :=                (R_RISCV_PCREL_LO12_I % l0).
+		generate auipc: baseReg, (R_RISCV_GOT_HI20 % node symbol).
+		generate ld:    baseReg, (baseReg + (R_RISCV_PCREL_LO12_I % l0)).
+		offset := 0.
 	] ifFalse: [
 		baseReg := sp.
-		offset := (AcDSLSymbol value: node symbol name).
+		offset := node symbol.
 	].
 	dstReg := codegen allocateRegister.
 
@@ -256,22 +251,18 @@ TRRV64GCodeEvaluator >> commonStore: node [
 
 	srcReg := self evaluate: node child1.
 	node symbol isTRStaticSymbol ifTrue: [
-		"TODO: here we use a 32-bit PC-relative store, so the symbol must
-		 be located withing -2GB, +2GB from current location.
-
-		 We should generate (relaxed) GOT store to allow symbol to be
-		 anywhere in memory but that's left as future work."
 		| l0 |
 
 		baseReg := codegen allocateRegister.
 		l0 := codegen allocateLabel.
 
 		generate label: l0.
-		generate auipc: baseReg, (R_RISCV_PCREL_HI20 % node symbol).
-		offset :=                (R_RISCV_PCREL_LO12_S % l0).
+		generate auipc: baseReg, (R_RISCV_GOT_HI20 % node symbol).
+		generate ld:    baseReg, (baseReg + (R_RISCV_PCREL_LO12_I % l0)).
+		offset := 0.
 	] ifFalse: [
 		baseReg := sp.
-		offset := (AcDSLSymbol value: node symbol name).
+		offset := node symbol name.
 	].
 
 	type := node type.
