@@ -160,7 +160,21 @@ TRILBuilder >> location [
 
 { #category : #accessing }
 TRILBuilder >> location: aTRLocation [
+	"Set the location for subsequently built nodes. In other words each
+	 TRIL node built from now on will get given location associated with
+	 it until a new location is set (to either new location or nil)"
+
 	self assert: (aTRLocation isTRLocation or: [ aTRLocation isNil ]).
+
+	"Normally, `#location:` sets location for nodes to-be-created. But we
+	 also want to use this to set the location of the method itself
+	 (instructions in prologue will get this location assigned).
+
+	 So if this method is called before anything is built, we *ALSO* set
+	 this location to 'bbstart' node of method's entry."
+	(entry == current and: [ entry isEmpty and:[ compilation cfg entry == entry ]]) ifTrue: [
+		entry bbstart location: aTRLocation
+	].
 
 	location := aTRLocation.
 ]

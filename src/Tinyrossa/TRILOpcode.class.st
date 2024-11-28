@@ -19,7 +19,8 @@ Class {
 	#pools : [
 		'TRILOpcodeProps1',
 		'TRILOpcodeProps2',
-		'TRILOpcodeProps3'
+		'TRILOpcodeProps3',
+		'TRILOpcodes'
 	],
 	#category : #'Tinyrossa-IL'
 }
@@ -122,6 +123,16 @@ TRILOpcode >> isArithmetic [
 ]
 
 { #category : #testing }
+TRILOpcode >> isBBEnd [
+	^ self == bbend
+]
+
+{ #category : #testing }
+TRILOpcode >> isBBStart [
+	^ self == bbstart
+]
+
+{ #category : #testing }
 TRILOpcode >> isBranch [
 	^ props1 anyMask: Branch
 ]
@@ -186,7 +197,7 @@ TRILOpcode >> isCompareTrueIfNE [
 
 { #category : #testing }
 TRILOpcode >> isGoto [
-	^ name = 'goto'
+	^ self == goto
 ]
 
 { #category : #testing }
@@ -196,7 +207,7 @@ TRILOpcode >> isIndirect [
 
 { #category : #testing }
 TRILOpcode >> isInvalid [
-	^ name = 'invalid'
+	^ self == invalid
 ]
 
 { #category : #testing }

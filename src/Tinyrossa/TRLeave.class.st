@@ -13,7 +13,6 @@ Class {
 	#name : #TRLeave,
 	#superclass : #AcPseudoInstruction,
 	#instVars : [
-		'node',
 		'value'
 	],
 	#category : #'Tinyrossa-Codegen'
@@ -53,16 +52,6 @@ TRLeave >> name [
 	"superclass AcInstruction says that I am responsible to implement this method"
 
 	^ '<leave subroutine>'
-]
-
-{ #category : #accessing }
-TRLeave >> node [
-	^ node
-]
-
-{ #category : #accessing }
-TRLeave >> node: aTRILNode [
-	node := aTRILNode.
 ]
 
 { #category : #accessing }
