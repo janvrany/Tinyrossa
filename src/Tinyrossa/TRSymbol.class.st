@@ -8,9 +8,19 @@ Class {
 	#category : #'Tinyrossa-IL-Symbols'
 }
 
+{ #category : #comparing }
+TRSymbol >> = another [
+	^ another isTRSymbol and: [ name = another name ]
+]
+
 { #category : #conversion }
 TRSymbol >> asString [
 	^ name
+]
+
+{ #category : #comparing }
+TRSymbol >> hash [
+	^ name hash
 ]
 
 { #category : #testing }
