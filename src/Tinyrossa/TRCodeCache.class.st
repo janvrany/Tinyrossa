@@ -70,6 +70,7 @@ TRCodeCache >> add: codeObj [
 	codeObj exports keysAndValuesDo: [ :symbol :addr |
 		| symbolToAdd |
 
+		self assert: symbol isTRStaticSymbol.
 		self assert:(symbols keys contains: [:each | each name = symbol name]) not.
 		self assert:(addr between: base and: base + size - 1).
 
