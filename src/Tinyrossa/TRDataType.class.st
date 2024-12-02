@@ -126,7 +126,20 @@ TRDataType >> printOn:aStream [
 
 { #category : #queries }
 TRDataType >> sizeInBytes [
-	^self subclassResponsibility 
+	"DO NOT USE!
+
+	 While it would be very conventient to implement such method,
+	 it is not really possible. Size of type Address is not fixed,
+	 it is 4 on 32bit and 8 on 64bit systems. So, one has to use
+
+		 compilation target sizeInBytesOf: type
+
+	 instead.
+
+	 This method (and this comment) exists warn future myself
+	 from the temptation to implement it again.
+	"
+	^self shouldNotImplement "Use #sizeInBytesOf: instead"
 ]
 
 { #category : #queries }

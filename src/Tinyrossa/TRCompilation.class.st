@@ -159,6 +159,11 @@ TRCompilation >> symbolManager [
 	^ symbolManager
 ]
 
+{ #category : #accessing }
+TRCompilation >> target [
+	^ config target
+]
+
 { #category : #verification }
 TRCompilation >> verify [
 	"Make sure the current TRIL is well-formed. No-op if it is,

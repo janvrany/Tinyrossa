@@ -14,11 +14,6 @@ TRDataTypeVoid >> name [
 	^ 'Void'
 ]
 
-{ #category : #queries }
-TRDataTypeVoid >> sizeInBytes [
-	^self shouldNotImplement 
-]
-
 { #category : #validation }
 TRDataTypeVoid >> validateConstant: aNumber [
    self assert: false
