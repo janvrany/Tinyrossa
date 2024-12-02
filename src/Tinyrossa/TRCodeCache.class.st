@@ -197,13 +197,18 @@ TRCodeCache >> getGOTentryFor: aTRStaticSymbol [
 	self assert: aTRStaticSymbol isTRStaticSymbol.
 	self assert:(symbols includesKey: aTRStaticSymbol).
 
-	entry := TRStaticSymbol name: aTRStaticSymbol name , '@got' type: Address.
+	entry := aTRStaticSymbol got.
 	^ symbols elementAt: entry ifAbsent: [
 		entry setAddress: self allocGOTentry.
 
-		"BOGUS: both size of an entry and endian depends on target!"
-		self assert: sizeOfGOTentry == 8.
-		memory unsignedLongLongAt: entry address put: (symbols at: aTRStaticSymbol) bigEndian: false.
+		sizeOfGOTentry == 4 ifTrue: [
+			memory unsignedLongAt: entry address put: (symbols at: aTRStaticSymbol) bigEndian: runtime target endian isBig.
+		] ifFalse: [
+		sizeOfGOTentry == 8 ifTrue: [
+			memory unsignedLongLongAt: entry address put: (symbols at: aTRStaticSymbol) bigEndian: runtime target endian isBig.
+		] ifFalse: [
+			self assert: false description: 'Unsupported GOT entry size'
+		]].
 
 		symbols at: entry put: entry address.
 		entry.
@@ -276,7 +281,7 @@ TRCodeCache >> initializeWithRuntime: runtimeArg base: baseArg size: sizeArg mem
 	runtime := runtimeArg.
 	base := baseArg.
 	size := sizeArg.
-	sizeOfGOTentry := 8"BOGUS, depnds on target!".
+	sizeOfGOTentry := runtime target sizeInBytesOf: Address.
 	memory := memoryArg.
 
 	codeAllocPtr := base.

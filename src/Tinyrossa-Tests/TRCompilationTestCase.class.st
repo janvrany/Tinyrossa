@@ -306,9 +306,15 @@ TRCompilationTestCase >> test05_increment_static_symbol_b [
 	This is pretty much same as #test_example18_increment_static_symbol
 	but we add counter symbol after the function itself.
 
+	Moreover it inserts static symbol into different sections
+	to test access via GOT.
+
 	This, together with test_example18_increment_static_symbol tests
-	that it does not matter in what order we link objects / define symbols.
+	that it does not matter in what order we link objects / define symbols
+	and that they can be located anywhere in address space.
 	"
+
+	<parameter: #section values: #(nzone heap1 heap2)>
 
 	| ctr asm |
 
@@ -329,7 +335,7 @@ TRCompilationTestCase >> test05_increment_static_symbol_b [
 	asm globl: ctr.
 	asm label: ctr.
 	asm int32: 42.
-	shell nzone add: asm object.
+	(shell perform: (testParameters at: #section)) add: asm object.
 
 	"Invoke function and test"
 	self assert: (shell invoke: compilation functionSymbol with: { } types: { })equals: 43.
