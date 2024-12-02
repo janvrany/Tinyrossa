@@ -34,6 +34,12 @@ TRTarget >> codeGeneratorClass [
 	^ self subclassResponsibility
 ]
 
+{ #category : #queries }
+TRTarget >> endian [
+	"Return endian (either `Endian little` or `Endian big`)"
+	^ self subclassResponsibility
+]
+
 { #category : #accessing }
 TRTarget >> name [
 	^ self subclassResponsibility

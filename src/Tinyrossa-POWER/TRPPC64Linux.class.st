@@ -9,6 +9,13 @@ TRPPC64Linux >> codeGeneratorClass [
 	^ TRPPC64CodeGenerator
 ]
 
+{ #category : #queries }
+TRPPC64Linux >> endian [
+
+	"FIXME: allow for BE PPC"
+	^ Endian little
+]
+
 { #category : #accessing }
 TRPPC64Linux >> name [
 	^ 'powerpc64le-linux'
