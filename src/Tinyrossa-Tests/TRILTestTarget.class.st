@@ -9,6 +9,11 @@ TRILTestTarget >> codeGeneratorClass [
 	^ TRILTestCodeGenerator
 ]
 
+{ #category : #queries }
+TRILTestTarget >> endian [
+	^ self shouldNotImplement
+]
+
 { #category : #accessing }
 TRILTestTarget >> name [
 	^ '<triltests>'
