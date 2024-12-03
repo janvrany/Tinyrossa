@@ -1,26 +1,18 @@
 Class {
 	#name : #TRLabelSymbol,
-	#superclass : #TRSymbol,
+	#superclass : #TRStaticSymbol,
 	#instVars : [
 		'block'
+	],
+	#pools : [
+		'TRDataTypes'
 	],
 	#category : #'Tinyrossa-IL-Symbols'
 }
 
 { #category : #'instance creation' }
-TRLabelSymbol class >> block: aTRILBlock [
-	^ self basicNew initializeWithBlock: aTRILBlock
-
-]
-
-{ #category : #converting }
-TRLabelSymbol >> asAcDSLOperand [
-	^ AcDSLSymbol value: name
-]
-
-{ #category : #converting }
-TRLabelSymbol >> asAcDSLOperandList [
-	^ self asAcDSLOperand asAcDSLOperandList
+TRLabelSymbol class >> name: aString [
+	^ self name: aString type: Void
 ]
 
 { #category : #accessing }
@@ -28,25 +20,26 @@ TRLabelSymbol >> block [
 	^ block
 ]
 
+{ #category : #conversion }
+TRLabelSymbol >> got [
+	^ self shouldNotImplement
+]
+
 { #category : #initialization }
-TRLabelSymbol >> initializeWithBlock: aTRILBlock [
-	self assert: aTRILBlock isTRILBlock.
-		
-	aTRILBlock compilation isAOT ifTrue:[	
-		"In AOT mode to generate and object file we use external 
-	 	 assembler (just like GCC) which treats labels prefixed with
-	   '.L' as local (intra-procedural) labels and does not put them
-	   into symbol table. We do the same here:"	
-		name := '.L_' , aTRILBlock name.	
-	] ifFalse: [
-		name := aTRILBlock name.	
-	].
-		
-	type := TRDataType named: 'Void'.
-	block := aTRILBlock.
+TRLabelSymbol >> initializeWithName:nameArg type:typeArg [
+	self assert: typeArg == Void description: 'Type of a label must be void'.
+
+	super initializeWithName:nameArg type:typeArg
 ]
 
 { #category : #testing }
 TRLabelSymbol >> isTRLabelSymbol [
 	^ true
+]
+
+{ #category : #initialization }
+TRLabelSymbol >> setBlock: aTRILBlock [
+	self assert: aTRILBlock isTRILBlock.
+
+	block := aTRILBlock
 ]

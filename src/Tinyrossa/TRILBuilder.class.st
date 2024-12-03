@@ -71,6 +71,11 @@ TRILBuilder >> defineFunction: name type: type linkage: linkage [
 	^ compilation symbolManager defineFunction: name type: type linkage: linkage
 ]
 
+{ #category : #'defining symbols' }
+TRILBuilder >> defineStatic: name type: type [
+	 ^ compilation symbolManager defineStatic: name type: type
+]
+
 { #category : #'building-blocks' }
 TRILBuilder >> fallThroughTo: anILBuilder [
 	self fallThroughToBlock: anILBuilder entry

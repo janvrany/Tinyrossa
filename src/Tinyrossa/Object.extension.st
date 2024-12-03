@@ -51,6 +51,11 @@ Object >> isTRSourceLocation [
 ]
 
 { #category : #'*Tinyrossa' }
+Object >> isTRStaticSymbol [
+	^ false
+]
+
+{ #category : #'*Tinyrossa' }
 Object >> isTRSymbol [
 	"return false here; to be redefined in subclass(es)"
 

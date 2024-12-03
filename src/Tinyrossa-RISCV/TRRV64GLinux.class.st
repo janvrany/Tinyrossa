@@ -9,9 +9,20 @@ TRRV64GLinux >> codeGeneratorClass [
 	^ TRRV64GCodeGenerator
 ]
 
+{ #category : #queries }
+TRRV64GLinux >> endian [
+	"FIXME: allow for BE RISC-V, though this is non-standard (but possible)"
+	^ Endian little
+]
+
 { #category : #accessing }
 TRRV64GLinux >> name [
 	^ 'riscv64-linux'
+]
+
+{ #category : #'queries - private' }
+TRRV64GLinux >> sizeInBytesOfAddress [
+	^ 8
 ]
 
 { #category : #'accessing - config - compilation' }
