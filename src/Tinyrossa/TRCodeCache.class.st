@@ -215,6 +215,32 @@ TRCodeCache >> getGOTentryFor: aTRStaticSymbol [
 	]
 ]
 
+{ #category : #private }
+TRCodeCache >> getPLTentryFor: aTRFunctionSymbol [
+	| trampoline |
+
+	self assert: aTRFunctionSymbol isTRFunctionSymbol.
+	self assert:(symbols includesKey: aTRFunctionSymbol).
+
+	trampoline := aTRFunctionSymbol plt.
+	^ symbols elementAt: trampoline ifAbsent: [
+		| trampolineObj |
+
+		self halt.
+		"createTrampoline: is not yet implemented. This has to dispatch back
+		 to the linkage of `aTRFunctionSymbol` because that's the only object which
+		 knows the (main) call sequence as well as which registers are safe to
+		 trash and which not.
+
+		 The trouble is, to instantiate linkage we need full compilation...
+		 Sigh."
+		trampolineObj := runtime createTrampoline: aTRFunctionSymbol.
+		self add: trampolineObj.
+
+		trampoline
+	]
+]
+
 { #category : #inspecting }
 TRCodeCache >> gtInspectorInstructionsIn: composite [
 	<gtInspectorPresentationOrder: 50>
@@ -365,12 +391,17 @@ TRCodeCache >> link [
 			[
 				reloc fixup: memory symbols: symbols relocations: relocations.
 				pending remove: reloc.
-			] on: AcRelocationSymbolUnresolved do: [:ex |
+			]  on: AcRelocationSymbolUnresolved do: [:ex |
 				"Ignore, might get resolved later."
 			] on: AcRelocationRequestGOTEntry do: [:req |
 				| entry |
 
 				entry := self getGOTentryFor: req symbol.
+				req resume: entry -> entry address.
+			] on: AcRelocationRequestPLTEntry do: [:req |
+				| entry |
+
+				entry := self getPLTentryFor: req symbol.
 				req resume: entry -> entry address.
 			].
 		].

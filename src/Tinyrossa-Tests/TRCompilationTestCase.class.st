@@ -255,6 +255,9 @@ TRCompilationTestCase >> test03_lconst [
 
 { #category : #tests }
 TRCompilationTestCase >> test04_call_resolved [
+
+	<parameter: #calleeZone values: #(nzone nzone2)> "Where to store callee"
+
 	| comp1 bldr1 comp2 bldr2 |
 
 	self target name = 'powerpc64le-linux' ifTrue: [
@@ -288,8 +291,9 @@ TRCompilationTestCase >> test04_call_resolved [
 
 	" ### ######### ### "
 
-	shell inject: comp1.
-	shell inject: comp2.
+	(shell perform: (testParameters at:#calleeZone)) add: comp1 codeBuffer.
+	shell nzone add: comp2 codeBuffer.
+
 
 	self assert: (shell invoke: comp2 functionSymbol with: { 10 } types: { Int32 })
 		 equals: 21

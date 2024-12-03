@@ -41,3 +41,9 @@ TRFunctionSymbol >> isTRFunctionSymbol [
 TRFunctionSymbol >> linkageClass [
 	^ linkageClass
 ]
+
+{ #category : #conversion }
+TRFunctionSymbol >> plt [
+	"Return the GOT entry for this symbol as another symbol"
+	^ TRFunctionSymbol name: name , '@plt' type: type linkage: linkageClass
+]
