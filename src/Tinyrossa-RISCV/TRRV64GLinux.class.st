@@ -20,6 +20,11 @@ TRRV64GLinux >> name [
 	^ 'riscv64-linux'
 ]
 
+{ #category : #'queries - private' }
+TRRV64GLinux >> sizeInBytesOfAddress [
+	^ 8
+]
+
 { #category : #'accessing - config - compilation' }
 TRRV64GLinux >> systemLinkageClass [
 	^ TRRV64GPSABILinkage

@@ -21,6 +21,11 @@ TRPPC64Linux >> name [
 	^ 'powerpc64le-linux'
 ]
 
+{ #category : #'queries - private' }
+TRPPC64Linux >> sizeInBytesOfAddress [
+	^ 8
+]
+
 { #category : #'accessing - config - compilation' }
 TRPPC64Linux >> systemLinkageClass [
 	^ TRPPC64PSABILinkage

@@ -170,3 +170,8 @@ TRCodeEvaluator >> initializeWithCodeGenerator: aTRCodeGenerator [
 	codegen := aTRCodeGenerator.
 	generate := codegen assembler.
 ]
+
+{ #category : #accessing }
+TRCodeEvaluator >> target [
+	^ self codegen target
+]

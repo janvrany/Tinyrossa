@@ -166,7 +166,7 @@ TRRV64GCodeEvaluator >> commonShl: node [
 	
 	| width child1 child2 src1Reg src2Reg dstReg |
 	
-	width := node type sizeInBytes * 8.
+	width := (self target sizeInBytesOf: node type) * 8.
 	
 	child1 := node child1.
 	child2 := node child2.
@@ -178,13 +178,13 @@ TRRV64GCodeEvaluator >> commonShl: node [
 		
 		shamt := child2 constant bitAnd: width - 1.
 		shamt == 0 ifTrue:[
-			dstReg := src1Reg.	
+			dstReg := src1Reg.
 		] ifFalse: [
 			dstReg := self codegen allocateRegister.
 			generate slli: dstReg, src1Reg, shamt.
 		].
-	] ifFalse:[	
-		src2Reg := self evaluate: child2.		
+	] ifFalse:[
+		src2Reg := self evaluate: child2.
 		dstReg := self codegen allocateRegister.
 		node type == Int64 ifTrue:[
 			generate sll: dstReg, src1Reg , src2Reg 
@@ -192,7 +192,6 @@ TRRV64GCodeEvaluator >> commonShl: node [
 	].
 
 	^dstReg
-
 ]
 
 { #category : #'evaluation-helpers' }
@@ -201,7 +200,7 @@ TRRV64GCodeEvaluator >> commonShr: node [
 	
 	| width child1 child2 src1Reg src2Reg dstReg |
 	
-	width := node type sizeInBytes * 8.
+	width := (self target sizeInBytesOf: node type) * 8.
 	
 	child1 := node child1.
 	child2 := node child2.
@@ -213,13 +212,13 @@ TRRV64GCodeEvaluator >> commonShr: node [
 		
 		shamt := child2 constant bitAnd: width - 1.
 		shamt == 0 ifTrue:[
-			dstReg := src1Reg.	
+			dstReg := src1Reg.
 		] ifFalse: [
 			dstReg := self codegen allocateRegister.
 			generate srai: dstReg, src1Reg, shamt.
 		].
-	] ifFalse:[	
-		src2Reg := self evaluate: child2.		
+	] ifFalse:[
+		src2Reg := self evaluate: child2.
 		dstReg := self codegen allocateRegister.
 		node type == Int64 ifTrue:[
 			generate sra: dstReg, src1Reg , src2Reg 
@@ -227,7 +226,6 @@ TRRV64GCodeEvaluator >> commonShr: node [
 	].
 
 	^dstReg
-
 ]
 
 { #category : #'evaluation-helpers' }

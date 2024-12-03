@@ -45,3 +45,8 @@ TRCodeGeneratorBase >> evaluatorClass [
 TRCodeGeneratorBase >> initializeWithCompilation: aTRCompilation [
 	compilation := aTRCompilation.
 ]
+
+{ #category : #accessing }
+TRCodeGeneratorBase >> target [
+	^ compilation target
+]

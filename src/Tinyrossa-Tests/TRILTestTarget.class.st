@@ -19,6 +19,11 @@ TRILTestTarget >> name [
 	^ '<triltests>'
 ]
 
+{ #category : #'queries - private' }
+TRILTestTarget >> sizeInBytesOfAddress [
+	^ self shouldNotImplement
+]
+
 { #category : #'accessing - config - compilation' }
 TRILTestTarget >> systemLinkageClass [
 	^ TRILTestLinkage
