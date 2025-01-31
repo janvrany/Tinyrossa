@@ -76,24 +76,37 @@ TRRV64GCodeEvaluator >> commonDiv: node [
 TRRV64GCodeEvaluator >> commonLoad: node [
 	"Handles aload, lload, iload, sload & bload"  
 
-	| dstReg offset type |
+	| dstReg baseReg offset type |
 
-	offset := (AcDSLSymbol value: node symbol name).
+	node symbol isTRStaticSymbol ifTrue: [
+		| l0 |
+
+		baseReg := codegen allocateRegister.
+		l0 := codegen allocateLabel.
+
+		generate label: l0.
+		generate auipc: baseReg, (R_RISCV_GOT_HI20 % node symbol).
+		generate ld:    baseReg, (baseReg + (R_RISCV_PCREL_LO12_I % l0)).
+		offset := 0.
+	] ifFalse: [
+		baseReg := sp.
+		offset := node symbol.
+	].
 	dstReg := codegen allocateRegister.
 
 	type := node type.
 	(type == Address or:[type == Int64]) ifTrue:[
 		generate
-			ld: dstReg, (sp + offset).
+			ld: dstReg, (baseReg + offset).
 	] ifFalse:[ type == Int32 ifTrue:[
 		generate
-			lw: dstReg, (sp + offset).             
+			lw: dstReg, (baseReg + offset).
 	] ifFalse:[ type == Int16 ifTrue:[
 		generate
-			lh: dstReg, (sp + offset).             
+			lh: dstReg, (baseReg + offset).
 	] ifFalse:[ type == Int8 ifTrue:[
 		generate
-			lb: dstReg, (sp + offset).             
+			lb: dstReg, (baseReg + offset).
 	]]]].
 
 	^dstReg.
@@ -166,7 +179,7 @@ TRRV64GCodeEvaluator >> commonShl: node [
 	
 	| width child1 child2 src1Reg src2Reg dstReg |
 	
-	width := node type sizeInBytes * 8.
+	width := (self target sizeInBytesOf: node type) * 8.
 	
 	child1 := node child1.
 	child2 := node child2.
@@ -178,13 +191,13 @@ TRRV64GCodeEvaluator >> commonShl: node [
 		
 		shamt := child2 constant bitAnd: width - 1.
 		shamt == 0 ifTrue:[
-			dstReg := src1Reg.	
+			dstReg := src1Reg.
 		] ifFalse: [
 			dstReg := self codegen allocateRegister.
 			generate slli: dstReg, src1Reg, shamt.
 		].
-	] ifFalse:[	
-		src2Reg := self evaluate: child2.		
+	] ifFalse:[
+		src2Reg := self evaluate: child2.
 		dstReg := self codegen allocateRegister.
 		node type == Int64 ifTrue:[
 			generate sll: dstReg, src1Reg , src2Reg 
@@ -192,7 +205,6 @@ TRRV64GCodeEvaluator >> commonShl: node [
 	].
 
 	^dstReg
-
 ]
 
 { #category : #'evaluation-helpers' }
@@ -201,7 +213,7 @@ TRRV64GCodeEvaluator >> commonShr: node [
 	
 	| width child1 child2 src1Reg src2Reg dstReg |
 	
-	width := node type sizeInBytes * 8.
+	width := (self target sizeInBytesOf: node type) * 8.
 	
 	child1 := node child1.
 	child2 := node child2.
@@ -213,13 +225,13 @@ TRRV64GCodeEvaluator >> commonShr: node [
 		
 		shamt := child2 constant bitAnd: width - 1.
 		shamt == 0 ifTrue:[
-			dstReg := src1Reg.	
+			dstReg := src1Reg.
 		] ifFalse: [
 			dstReg := self codegen allocateRegister.
 			generate srai: dstReg, src1Reg, shamt.
 		].
-	] ifFalse:[	
-		src2Reg := self evaluate: child2.		
+	] ifFalse:[
+		src2Reg := self evaluate: child2.
 		dstReg := self codegen allocateRegister.
 		node type == Int64 ifTrue:[
 			generate sra: dstReg, src1Reg , src2Reg 
@@ -227,31 +239,43 @@ TRRV64GCodeEvaluator >> commonShr: node [
 	].
 
 	^dstReg
-
 ]
 
 { #category : #'evaluation-helpers' }
 TRRV64GCodeEvaluator >> commonStore: node [
 	"Handles astore, lstore, istore, sstore & bstore"  
 
-	| srcReg offset type |
+	| srcReg baseReg offset type |
 
-	offset := (AcDSLSymbol value: node symbol name).
 	srcReg := self evaluate: node child1.
+	node symbol isTRStaticSymbol ifTrue: [
+		| l0 |
+
+		baseReg := codegen allocateRegister.
+		l0 := codegen allocateLabel.
+
+		generate label: l0.
+		generate auipc: baseReg, (R_RISCV_GOT_HI20 % node symbol).
+		generate ld:    baseReg, (baseReg + (R_RISCV_PCREL_LO12_I % l0)).
+		offset := 0.
+	] ifFalse: [
+		baseReg := sp.
+		offset := node symbol name.
+	].
 
 	type := node type.
 	(type == Address or:[type == Int64]) ifTrue:[
 		generate
-			sd: srcReg, (sp + offset).
+			sd: srcReg, (baseReg + offset).
 	] ifFalse:[ type == Int32 ifTrue:[
 		generate
-			sw: srcReg, (sp + offset).             
+			sw: srcReg, (baseReg + offset).
 	] ifFalse:[ type == Int16 ifTrue:[
 		generate
-			sh: srcReg, (sp + offset).             
+			sh: srcReg, (baseReg + offset).
 	] ifFalse:[ type == Int8 ifTrue:[
 		generate
-			sb: srcReg, (sp + offset).             
+			sb: srcReg, (baseReg + offset).
 	]]]].
 
 	^nil.
@@ -724,6 +748,27 @@ TRRV64GCodeEvaluator >> evaluate_lload: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lmul: node [
 	^self commonMul: node.
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_loadaddr: node [
+	| dstReg |
+
+	dstReg := codegen allocateRegister.
+
+	node symbol isTRStaticSymbol ifTrue: [
+		| l0 |
+
+		l0 := codegen allocateLabel.
+
+		generate label: l0.
+		generate auipc: dstReg, (R_RISCV_GOT_HI20 % node symbol).
+		generate ld:    dstReg, (dstReg + (R_RISCV_PCREL_LO12_I % l0)).
+	] ifFalse: [
+		generate addi:  dstReg, sp, node symbol.
+	].
+
+	^ dstReg
 ]
 
 { #category : #evaluation }

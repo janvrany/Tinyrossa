@@ -701,6 +701,35 @@ TRCompilationExamples >> example17_call_external_function_in_aot_mode [
 	compilation codeBuffer. "Only convenience inspection."
 ]
 
+{ #category : #examples }
+TRCompilationExamples >> example18_increment_static_symbol [
+	| builder |
+
+	builder := compilation builder.
+	builder defineName: 'increment_static_symbol' type: Int32.
+	builder defineAutomatic: 'temp' type: Int32.
+	builder defineStatic: 'counter' type: Int32.
+
+	builder istore: {
+		builder iadd:{
+			builder iload: 'counter'.
+			builder iconst: 1 }.
+		"->" 'temp' }.
+
+	builder istore: {
+		builder iload: 'temp'.
+		"->" 'counter' }.
+
+	builder ireturn: {
+		builder iload:'temp' }.
+
+	compilation optimize.
+
+	compilation compile.
+
+	compilation codeBuffer bytes. "Only convenience inspection."
+]
+
 { #category : #running }
 TRCompilationExamples >> setUp [
 	super setUp.
