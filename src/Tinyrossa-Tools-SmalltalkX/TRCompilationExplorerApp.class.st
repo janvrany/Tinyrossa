@@ -3,8 +3,7 @@ Class {
 	#superclass : #ApplicationModel,
 	#instVars : [
 		'compilationHolder',
-		'selectedNodeHolder',
-		'selectedInstructionHolder'
+		'highlightedNodeHolder'
 	],
 	#category : #'Tinyrossa-Tools-SmalltalkX'
 }
@@ -152,7 +151,7 @@ TRCompilationExplorerApp class >> windowSpec [
 TRCompilationExplorerApp >> anfApp [
 	^ TRANFApp new
 		nodeListHolder: self nodeListHolder;
-		nodeSelectionHolder: self selectedNodeHolder;
+		nodeHighlightHolder: self highlightedNodeHolder;
 		yourself.
 ]
 
@@ -197,14 +196,25 @@ TRCompilationExplorerApp >> compilationHolder:aValueModel [
 	].
 ]
 
+{ #category : #aspects }
+TRCompilationExplorerApp >> highlightedNodeHolder [
+	highlightedNodeHolder isNil ifTrue: [
+		highlightedNodeHolder := ValueHolder new.
+	].
+	^ highlightedNodeHolder
+]
+
+{ #category : #aspects }
+TRCompilationExplorerApp >> highlightedNodeHolder: aValueModel [ 
+	highlightedNodeHolder := aValueModel.
+]
+
 { #category : #'aspects - apps' }
 TRCompilationExplorerApp >> instructionListApp [
    ^ TRInstructionListApp new
 		instructionListHolder: self instructionListHolder;
-		selectedInstructionHolder: self selectedInstructionHolder;
-		selectedNodeHolder: self selectedNodeHolder;
+		highlightedNodeHolder: self highlightedNodeHolder;
 		yourself.
-
 ]
 
 { #category : #aspects }
@@ -264,73 +274,10 @@ TRCompilationExplorerApp >> rightColumnTabs [
 	^ list
 ]
 
-{ #category : #aspects }
-TRCompilationExplorerApp >> selectedInstructionHolder [
-	"return/create the 'selectedInstructionHolder' value holder (automatically generated)"
-
-	selectedInstructionHolder isNil ifTrue:[
-		selectedInstructionHolder := ValueHolder new.
-		selectedInstructionHolder addDependent:self.
-	].
-	^ selectedInstructionHolder
-]
-
-{ #category : #aspects }
-TRCompilationExplorerApp >> selectedInstructionHolder:something [
-	"set the 'selectedInstructionHolder' value holder (automatically generated)"
-
-	|oldValue newValue|
-
-	selectedInstructionHolder notNil ifTrue:[
-		oldValue := selectedInstructionHolder value.
-		selectedInstructionHolder removeDependent:self.
-	].
-	selectedInstructionHolder := something.
-	selectedInstructionHolder notNil ifTrue:[
-		selectedInstructionHolder addDependent:self.
-	].
-	newValue := selectedInstructionHolder value.
-	oldValue ~~ newValue ifTrue:[
-		self update:#value with:newValue from:selectedInstructionHolder.
-	].
-]
-
-{ #category : #aspects }
-TRCompilationExplorerApp >> selectedNodeHolder [
-	"return/create the 'selectedNodeHolder' value holder (automatically generated)"
-
-	selectedNodeHolder isNil ifTrue:[
-		selectedNodeHolder := ValueHolder new.
-		selectedNodeHolder addDependent:self.
-	].
-	^ selectedNodeHolder
-]
-
-{ #category : #aspects }
-TRCompilationExplorerApp >> selectedNodeHolder:something [
-	"set the 'selectedNodeHolder' value holder (automatically generated)"
-
-	|oldValue newValue|
-
-	selectedNodeHolder notNil ifTrue:[
-		oldValue := selectedNodeHolder value.
-		selectedNodeHolder removeDependent:self.
-	].
-	selectedNodeHolder := something.
-	selectedNodeHolder notNil ifTrue:[
-		selectedNodeHolder addDependent:self.
-	].
-	newValue := selectedNodeHolder value.
-	oldValue ~~ newValue ifTrue:[
-		self update:#value with:newValue from:selectedNodeHolder.
-	].
-]
-
 { #category : #'aspects - apps' }
 TRCompilationExplorerApp >> treeApp [
 	^ TRILTreeApp new
 		nodeListHolder: self nodeListHolder;
-		nodeSelectionHolder: self selectedNodeHolder;
+		nodeHighlightHolder: self highlightedNodeHolder;
 		yourself.
-
 ]
