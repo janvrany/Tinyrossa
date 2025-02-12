@@ -3,9 +3,7 @@ Class {
 	#superclass : #VDBAbstractTreeApplication,
 	#instVars : [
 		'nodeListHolder',
-		'nodeList',
-		'nodeSelectionHolder',
-		'nodePrinter'
+		'nodeSelectionHolder'
 	],
 	#category : #'Tinyrossa-Tools-SmalltalkX'
 }
@@ -56,9 +54,8 @@ TRILTreeApp >> delayedUpdateInternalList [
 		| printed item |
 
 		printed := printer hasPrinted: node.
-		item := HierarchicalItemWithLabelAndIconAndValue new.
-		item value: node.
-		item label: (printer print: node).
+		item := TRILNodePresenter new.
+		item setNode: node label: (printer print: node).
 		printed ifFalse: [ 
 			item children: (node children collect: builder).
 		].
