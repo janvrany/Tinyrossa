@@ -6,24 +6,32 @@ Class {
 
 { #category : #'change & update-delayed' }
 TRANFApp >> delayedUpdateInternalList [
-	| nodes |
+	| printer items |
 
-	nodePrinter := TRANFNodePrinter new.
+	printer := TRANFNodePrinter new.
 	self nodeListHolder value isNil ifTrue: [ 
-		nodes := #()
+		items := #()
 	] ifFalse: [ 
-		nodes := OrderedCollection new.
+		| seen |
+
+		items := OrderedCollection new.
+		seen := Set new.
 		self nodeListHolder value do: [:treetop | 
 			treetop postorderDo: [:node | 
-				(nodes includes: node) ifFalse: [
-					nodes add: node 
-				].
-			]
-		]
-	].
-	self internalListHolder roots: nodes .
-	self internalListHolder root recursiveDo: [ :item | item expand ]
+				(seen includes: node) ifFalse: [
+					| item |
 
+					item := TRILNodePresenter new.
+					item setNode: node label: (printer print: node).     
+
+					seen add: node.
+					items add: item.
+				].
+			].
+		].
+	].
+	self internalListHolder roots: items .
+	self internalListHolder root recursiveDo: [ :item | item expand ]
 ]
 
 { #category : #'aspects-private' }
