@@ -1,6 +1,6 @@
 Class {
 	#name : #TRSourceLocation,
-	#superclass : #TRLocation,
+	#superclass : #Object,
 	#instVars : [
 		'file',
 		'line',

@@ -140,23 +140,18 @@ TRILNode >> location [
 ]
 
 { #category : #accessing }
-TRILNode >> location: aTRLocation [
-	self assert: (aTRLocation isTRLocation or: [ aTRLocation isNil ]).
-
-	(location notNil and: [ aTRLocation isNil ]) ifTrue: [ self halt ].
-
-	location := aTRLocation.
+TRILNode >> location: loc [
+	location := loc.
 ]
 
 { #category : #accessing }
-TRILNode >> locationIfNotSet: aTRLocation [
+TRILNode >> locationIfNotSet: loc [
 	"Set location if this node if no location is already set. 
 	 Otherwise, no-op."
 	
 	location isNil ifTrue:[
-		self location: aTRLocation 
+		self location: loc
 	]
-	
 ]
 
 { #category : #testing }

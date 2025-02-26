@@ -31,11 +31,6 @@ Object >> isTRLabelSymbol [
 ]
 
 { #category : #'*Tinyrossa' }
-Object >> isTRLocation [
-	^ false
-]
-
-{ #category : #'*Tinyrossa' }
 Object >> isTRParameterSymbol [
 	^ false
 ]

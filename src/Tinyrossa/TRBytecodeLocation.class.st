@@ -1,6 +1,6 @@
 Class {
 	#name : #TRBytecodeLocation,
-	#superclass : #TRLocation,
+	#superclass : #Object,
 	#instVars : [
 		'index'
 	],
