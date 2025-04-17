@@ -1,10 +1,10 @@
 Extension { #name : #Integer }
 
 { #category : #'*Tinyrossa-Formal' }
-Integer >> asExpr: base [
-	"Return receiver as Refinement's `ECon` of given `base` type."
+Integer >> asExpr: rtype [
+	"Return receiver as Sprite's ΛExpression of given type."
 
-	^base makeExpr: self
+	^rtype makeExpr: self
 
 ]
 
