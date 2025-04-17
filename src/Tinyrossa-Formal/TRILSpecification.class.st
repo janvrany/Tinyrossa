@@ -2713,7 +2713,7 @@ TRILSpecification >> iadd [
 	^self specify: iadd as:'
 	/*@ reflect iadd : Int32 => Int32 => Int32 / [zero] */
 	let         iadd = (c1,c2) => {
-		bvadd32(c1,c2)
+		bvadd(c1,c2)
 	};
 '
 
@@ -2916,7 +2916,7 @@ TRILSpecification >> idiv [
 	^self specify: idiv as:'
 	/*@ reflect idiv : c1:Int32 => c2:Int32 => Int32[r|r === (c1 / c2)] */
 	let         idiv = (c1,c2) => {
-		bvdiv32(c1,c2)
+		bvdiv(c1,c2)
 	};
 '
 
@@ -3434,10 +3434,13 @@ TRILSpecification >> ificmpeq [
 	^self specify: ificmpeq as:'
 	/*@ reflect ificmpeq : Int32 => Int32 => bool */
 	let         ificmpeq = (c1,c2) => {
-		bveq32(c1 , c2)
+		bveq(c1 , c2)
 	};
 	'
-
+	
+	"
+	TRILSpecification new specify: ificmpeq 
+	"
 ]
 
 { #category : #opcodes }
@@ -3445,7 +3448,7 @@ TRILSpecification >> ificmpge [
 	^self specify: ificmpge as:'
 	/*@ reflect ificmpge : Int32 => Int32 => bool */
 	let         ificmpge = (c1,c2) => {
-		bvge32(c1 , c2)
+		bvge(c1 , c2)
 	};
 	'
 
@@ -3456,7 +3459,7 @@ TRILSpecification >> ificmpgt [
 	^self specify: ificmpgt as:'
 	/*@ reflect ificmpgt : Int32 => Int32 => bool */
 	let         ificmpgt = (c1,c2) => {
-		bvgt32(c1 , c2)
+		bvgt(c1 , c2)
 	};
 	'
 
@@ -3467,7 +3470,7 @@ TRILSpecification >> ificmple [
 	^self specify: ificmple as:'
 	/*@ reflect ificmple : Int32 => Int32 => bool */
 	let         ificmple = (c1,c2) => {
-		bvle32(c1 , c2)
+		bvle(c1 , c2)
 	};
 	'
 
@@ -3478,7 +3481,7 @@ TRILSpecification >> ificmplt [
 	^self specify: ificmplt as:'
 	/*@ reflect ificmplt : Int32 => Int32 => bool */
 	let         ificmplt = (c1,c2) => {
-		bvlt32(c1 , c2)
+		bvlt(c1 , c2)
 	};
 	'
 
@@ -3489,7 +3492,7 @@ TRILSpecification >> ificmpne [
 	^self specify: ificmpne as:'
 	/*@ reflect ificmpne : Int32 => Int32 => bool */
 	let         ificmpne = (c1,c2) => {
-		bvne32(c1 , c2)
+		bvne(c1 , c2)
 	};
 	'
 
@@ -3967,7 +3970,7 @@ TRILSpecification >> imul [
 	^self specify: imul as:'
 	/*@ reflect imul : Int32 => Int32 => Int32 / [zero] */
 	let         imul = (c1,c2) => {
-		bvmul32(c1,c2)
+		bvmul(c1,c2)
 	};
 	'
 
@@ -4198,7 +4201,7 @@ TRILSpecification >> ishl [
 	^self specify: ishl as:'
 	/*@ reflect ishl : Int32 => Int32 => Int32 / [zero] */
 	let         ishl = (c1,c2) => {
-		bvshl32(c1,c2)
+		bvshl(c1,c2)
 	};
 '
 
@@ -4247,7 +4250,7 @@ TRILSpecification >> isub [
 	^self specify: isub as:'
 	/*@ reflect isub : Int32 => Int32 => Int32 / [zero] */
 	let         isub = (c1,c2) => {
-		bvsub32(c1,c2)
+		bvsub(c1,c2)
 	};
 '
 
@@ -5891,6 +5894,7 @@ TRILSpecification >> specify: opcode as: specification [
 	| spec |
 		
 	spec := TRILSpecificationParser parse:	specification.
+	self assert: spec isPetitFailure not.
 	self assert: spec expr isLet.
 	self assert: spec expr decl bind id = opcode name.
 	^spec
