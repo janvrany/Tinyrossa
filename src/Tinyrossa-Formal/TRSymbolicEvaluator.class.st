@@ -105,7 +105,18 @@ TRSymbolicEvaluator >> commonCall: node [
 
 { #category : #'evaluation-helpers' }
 TRSymbolicEvaluator >> commonConst: node [
-	^ node opcode asΛEApp: { node constant asExpr: node type asΛBase  }
+	| expr |
+	
+	expr := node constant asExpr: node type asRType.
+	(expr isKindOf: ECon) ifFalse:[
+		| var |
+		
+		var := 'tmp1'.
+		self appendLet: var to: expr.
+		expr := EVar of: var
+	].
+
+	^ node opcode asΛEApp: { expr }
 ]
 
 { #category : #'evaluation-helpers' }
