@@ -4,9 +4,29 @@ Class {
 	#category : #'Tinyrossa-Tests-Formal'
 }
 
+{ #category : #asserting }
+TRSymbolicCompilationTests >> assertSafe: prog [
+	[
+		| safe |
+		safe := prog solve.
+		self assert: safe isSafe
+	] runReader: #bvLengthInference initialState: BvLengthInference new
+
+]
+
+{ #category : #asserting }
+TRSymbolicCompilationTests >> assertUnsafe: prog [
+	[
+		| unsafe |
+		unsafe := prog solve.
+		self deny: unsafe isSafe.
+		unsafe bads do:[ :bad | self assert: (bad value value isKindOf: Z3Model) ]
+	] runReader: #bvLengthInference initialState: BvLengthInference new
+]
+
 { #category : #running }
 TRSymbolicCompilationTests >> setUp [
-	self setUpForTarget: TRSymbolic default
+	self setUpForTarget: self target
 ]
 
 { #category : #running }
@@ -14,10 +34,14 @@ TRSymbolicCompilationTests >> setUpForTarget: aTRCompilationTarget [
 	compilation := TRCompilation forTarget: aTRCompilationTarget.
 ]
 
+{ #category : #accessing }
+TRSymbolicCompilationTests >> target [
+	^ TRSymbolic default
+]
+
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_abs_01 [
-	| bldr spec code verf prog safe |
-
+	| bldr spec code verf prog |
 
 	bldr := compilation builder.
 	bldr defineName: 'abs' type: Int32.
@@ -42,21 +66,21 @@ TRSymbolicCompilationTests >> test_abs_01 [
 	/*@ val verify : Int32 => bool[b|b] */
 	    let verify = (x) => {
 				let got = abs(x);
-				bvge32(got, bv32(0))
+				let zer = toBitVector(0);
+				bvge(got, zer)
 	    };
 	'.
 
 	prog := spec , code, verf.
 
-	safe := prog solve.
-	self assert: safe isSafe not. "See comment L8PosTest >> test_ans_03"
+	self assertUnsafe: prog. "See comment L8PosTest >> test_ans_03"
 
-	self yourself.
+
 ]
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_add2_01 [
-	| bldr spec code verf prog safe |
+	| bldr spec code verf prog |
 
 	bldr := compilation builder.
 	bldr defineName: 'add2' type: Int32.
@@ -82,10 +106,9 @@ TRSymbolicCompilationTests >> test_add2_01 [
 
 	prog := spec , code, verf.
 
-	safe := prog solve.
-	self assert: safe isSafe.
+	self assertSafe: prog.
 
-	self yourself.
+
 
 
 	"
@@ -103,7 +126,7 @@ TRSymbolicCompilationTests >> test_add2_01 [
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_add2_02 [
-	| bldr spec code verf prog safeness |
+	| bldr spec code verf prog |
 
 	bldr := compilation builder.
 	bldr defineName: 'add2' type: Int32.
@@ -138,10 +161,7 @@ TRSymbolicCompilationTests >> test_add2_02 [
 
 	prog := spec , code, verf.
 
-	safeness := prog solve.
-	self assert: safeness isSafe.
-
-	self yourself.
+	self assertSafe: prog.
 
 
 	"
@@ -159,7 +179,7 @@ TRSymbolicCompilationTests >> test_add2_02 [
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_id_01 [
-	| bldr spec code verf prog safe |
+	| bldr spec code verf prog |
 
 	bldr := compilation builder.
 	bldr defineName: 'id' type: Int32.
@@ -182,10 +202,7 @@ TRSymbolicCompilationTests >> test_id_01 [
 
 	prog := spec , code, verf.
 
-	safe := prog solve.
-	self assert: safe isSafe.
-
-	self yourself.
+	self assertSafe: prog.
 
 
 	"
@@ -203,7 +220,7 @@ TRSymbolicCompilationTests >> test_id_01 [
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_id_02 [
-	| bldr spec code verf prog safe |
+	| bldr spec code verf prog |
 
 	bldr := compilation builder.
 	bldr defineName: 'id' type: Int32.
@@ -224,18 +241,15 @@ TRSymbolicCompilationTests >> test_id_02 [
 	    };
 	'.
 
-	prog := spec , code, verf.
-
-	safe := prog solve.
-	self assert: safe isSafe not.
-
-	self yourself.
+	prog := spec, code, verf.
+	
+	self assertSafe: prog.
 
 ]
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_id_03 [
-	| bldr spec code verf prog safeness |
+	| bldr spec code verf prog |
 
 	bldr := compilation builder.
 	bldr defineName: 'id' type: Int32.
@@ -268,10 +282,7 @@ TRSymbolicCompilationTests >> test_id_03 [
 
 	prog := spec , code, verf.
 
-	safeness := prog solve.
-	self assert: safeness isSafe.
-
-	self yourself.
+	self assertSafe: prog.
 
 
 	"
@@ -289,7 +300,7 @@ TRSymbolicCompilationTests >> test_id_03 [
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_mul2_01 [
-	| bldr spec code verf prog safe |
+	| bldr spec code verf prog |
 
 	compilation config optimizationPasses: { }.
 
@@ -317,10 +328,7 @@ TRSymbolicCompilationTests >> test_mul2_01 [
 
 	prog := spec , code, verf.
 
-	safe := prog solve.
-	self assert: safe isSafe.
-
-	self yourself.
+	self assertSafe: prog.
 
 
 	"
@@ -338,7 +346,7 @@ TRSymbolicCompilationTests >> test_mul2_01 [
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_mul2_02 [
-	| bldr spec code verf prog safe |
+	| bldr spec code verf prog |
 
 	compilation config optimizationPasses: { TRILXmul2Xshl }.
 
@@ -366,15 +374,12 @@ TRSymbolicCompilationTests >> test_mul2_02 [
 
 	prog := spec , code, verf.
 
-	safe := prog solve.
-	self assert: safe isSafe.
-
-	self yourself.
+	self assertSafe: prog.
 ]
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_mul4_01 [
-	| comp bldr spec code verf prog safe |
+	| comp bldr spec code verf prog |
 
 	comp := TRCompilation forTarget: TRSymbolic default.
 	comp config optimizationPasses: { TRILXmul2Xshl }.
@@ -406,8 +411,7 @@ TRSymbolicCompilationTests >> test_mul4_01 [
 
 	prog := spec , "code1," code , verf.
 
-	safe := prog solve.
-	self assert: safe isSafe.
+	self assertSafe: prog.
 
 
 
@@ -415,7 +419,7 @@ TRSymbolicCompilationTests >> test_mul4_01 [
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_shl2_01 [
-	| bldr spec code verf prog safe |
+	| bldr spec code verf prog |
 
 	bldr := compilation builder.
 	bldr defineName: 'shl2' type: Int32.
@@ -441,15 +445,12 @@ TRSymbolicCompilationTests >> test_shl2_01 [
 
 	prog := spec , code, verf.
 
-	safe := prog solve.
-	self assert: safe isSafe.
-
-	self yourself.
+	self assertSafe: prog.
 ]
 
 { #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_sum_01 [
-	| bldr spec code verf prog safe |
+	| bldr spec code verf prog |
 
 	bldr := compilation builder.
 	bldr defineName: 'sum' type: Int32.
@@ -493,8 +494,5 @@ TRSymbolicCompilationTests >> test_sum_01 [
 
 	prog := spec , code, verf.
 
-	safe := prog solve.
-	self assert: safe isSafe.
-
-	self yourself.
+	self assertSafe: prog.
 ]
