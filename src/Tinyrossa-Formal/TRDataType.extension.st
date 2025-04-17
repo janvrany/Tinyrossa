@@ -4,7 +4,7 @@ Extension { #name : #TRDataType }
 TRDataType >> asRType [
 	"Return 'Sprite' refined type for this (Tinyrossa) datatype"
 
-	^TBase b: self asΛBase r: Reft new known
+	^self asRType: Reft new known
 
 	"
 	Int32 asRType
@@ -12,12 +12,19 @@ TRDataType >> asRType [
 ]
 
 { #category : #'*Tinyrossa-Formal' }
-TRDataType >> asΛBase [
-	"Return 'Sprite' type for this (Tinyrossa) datatype"
+TRDataType >> asRType: reft [
+	"Return 'Sprite' refined type for this (Tinyrossa) datatype"
 
 	self isIntegerType ifTrue:[
-		^ TBitVector instance: self sizeInBytes * 8
-	] ifFalse:[
-		^ self subclassResponsibility
-	]
+		^ TCon c: 'BitVec'
+		      ts: { TBvSize length: self sizeInBytes * 8 }
+		     ars: #()
+		       r: reft
+	].
+
+	self shouldBeImplemented. 
+
+	"
+	Int32 asRType
+	"
 ]

@@ -8,19 +8,20 @@ Class {
 }
 
 { #category : #grammar }
-TRILSpecificationParser >> tbase [
-	^ super tbase 
-	/ ('Int8'  asParser ==> [:_ | Int8  asΛBase ])
-	/ ('Int16' asParser ==> [:_ | Int16 asΛBase ])
-	/ ('Int32' asParser ==> [:_ | Int32 asΛBase ])
-	/ ('Int64' asParser ==> [:_ | Int64 asΛBase ])
-	/ ('Address' asParser ==> [:_ | Address asΛBase ])
+TRILSpecificationParser >> rbase [
+  ^ ('Int8'  asParser , refTop    ==> [:_ | Int8    asRType: _ second ])
+	/ ('Int16' asParser , refTop    ==> [:_ | Int16   asRType: _ second ])
+	/ ('Int32' asParser , refTop    ==> [:_ | Int32   asRType: _ second ])
+	/ ('Int64' asParser , refTop    ==> [:_ | Int64   asRType: _ second ])
+	/ ('Address' asParser , refTop  ==> [:_ | Address asRType: _ second ])
+	/ super tbase
 
 	"
-	TRILSpecificationParser new tbase parse:'int'
-	TRILSpecificationParser new tbase parse:'Int32'
+	TRILSpecificationParser new rbase parse:'int'
+	TRILSpecificationParser new rbase parse:'Int32'
 	
 	TRILSpecificationParser new rtype parse:'Int32'
+	TRILSpecificationParser new rtype parse:'Int32[r|r === 0 /// 32]'
 	TRILSpecificationParser new rtype parse:'c1:Int32 => c2:Int32 => Int32[r|r === (c1 + c2)]'
 	"
 ]
