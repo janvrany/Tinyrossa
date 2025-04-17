@@ -6,12 +6,17 @@ Class {
 
 { #category : #running }
 TRSymbolicCompilationTests >> setUp [
-	self setUpForTarget: TRSymbolic default
+	self setUpForTarget: self target
 ]
 
 { #category : #running }
 TRSymbolicCompilationTests >> setUpForTarget: aTRCompilationTarget [
 	compilation := TRCompilation forTarget: aTRCompilationTarget.
+]
+
+{ #category : #accessing }
+TRSymbolicCompilationTests >> target [
+	^ TRSymbolic default
 ]
 
 { #category : #'tests - examples' }
@@ -42,7 +47,8 @@ TRSymbolicCompilationTests >> test_abs_01 [
 	/*@ val verify : Int32 => bool[b|b] */
 	    let verify = (x) => {
 				let got = abs(x);
-				bvge32(got, bv32(0))
+				let zer = toBitVector(0);
+				bvge(got, zer)
 	    };
 	'.
 
@@ -224,7 +230,8 @@ TRSymbolicCompilationTests >> test_id_02 [
 	    };
 	'.
 
-	prog := spec , code, verf.
+	prog := spec, code, verf.
+	
 
 	safe := prog solve.
 	self assert: safe isSafe not.
