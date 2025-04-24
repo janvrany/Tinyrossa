@@ -317,7 +317,9 @@ TRCodeCache >> instructions [
 		insns := isa decode: self bytes.
 		"Sigh, #decode: return a single instruction if there's only
 		 one instruction in giben bytes."
-		insns isCollection ifFalse: [
+		insns isCollection ifTrue:[
+			insns := insns asOrderedCollection.
+		] ifFalse: [
 			insns := OrderedCollection with: insns.
 		].
 	] on: IllegalInstruction do: [:ex |
