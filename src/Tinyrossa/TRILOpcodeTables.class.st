@@ -6,8 +6,10 @@ Class {
 		'CompareOpcodes',
 		'ConstOpcodes',
 		'LoadOpcodes',
+		'LoadRegOpcodes',
 		'ShiftLeftOpcodes',
-		'StoreOpcodes'
+		'StoreOpcodes',
+		'StoreRegOpcodes'
 	],
 	#pools : [
 		'TRDataTypes',
@@ -199,6 +201,28 @@ TRILOpcodeTables class >> initialize [
 		Address . invalid .
 		Float   . invalid .
 		Double  . invalid .
+		Void    . invalid .
+	}.
+
+	LoadRegOpcodes := SmallDictionary newFromPairs: {
+		Int8    . bregload .
+		Int16   . sregload .
+		Int32   . iregload .
+		Int64   . lregload .
+		Address . aregload .
+		Float   . fregload .
+		Double  . dregload .
+		Void    . invalid .
+	}.
+
+	StoreRegOpcodes := SmallDictionary newFromPairs: {
+		Int8    . bregstore .
+		Int16   . sregstore .
+		Int32   . iregstore .
+		Int64   . lregstore .
+		Address . aregstore .
+		Float   . fregstore .
+		Double  . dregstore .
 		Void    . invalid .
 	}.
 ]
