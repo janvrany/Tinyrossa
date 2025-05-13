@@ -413,6 +413,46 @@ TRCompilationTestCase >> test07_call_discarding_value [
 	"
 ]
 
+{ #category : #tests }
+TRCompilationTestCase >> test19_abs [
+	| x builder |
+
+	<parameter: #x values: #(-10 0 10)>
+
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since Xload/Xstore evaluator does not support statics for POWER (see issue #52)'.
+	].
+
+	x := testParameters at: #x.
+
+	builder := compilation builder.
+	builder defineName: testSelector asString type: Int64.
+	builder defineParameter: 'x' type: Int64.
+	builder
+		if: (builder lcmpgt:
+			 {  builder lload: 'x' .
+				builder lconst: 0  })
+		then:[ :builder |
+				builder lreturn:
+					{ builder lload: 'x' } ]
+		else:[ :builder |
+				builder lreturn: {
+					builder lsub:
+						{ builder lconst: 0 .
+						  builder lload: 'x' } } ].
+
+	compilation optimize.
+	compilation compile.
+
+
+	self assert: (shell inject: compilation andInvokeWith: {x }) equals: x abs
+
+	"
+	TRRV64GCompilationTests debug: #test19_abs
+	TRPPC64CompilationTests debug: #test19_abs
+	"
+]
+
 { #category : #'tests - examples' }
 TRCompilationTestCase >> test_example01_meaningOfLife [
 	TRCompilationExamples new
