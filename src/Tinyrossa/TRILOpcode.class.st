@@ -298,6 +298,17 @@ TRILOpcode >> isWriteBarrierStore [
 ]
 
 { #category : #testing }
+TRILOpcode >> mayHaveRegdeps [
+	"Return `true` if last child of this node may be
+	 glregdeps node.
+	"
+
+	^ self isBBStart
+		or: [ self isBBEnd
+		or: [ self isBranching ] ]
+]
+
+{ #category : #testing }
 TRILOpcode >> mayHaveSideeffect [
 	"Return `true` if evaluation of any node with this opcode 
 	 (regardless of node's children) may have some sideeffect 
@@ -378,7 +389,11 @@ TRILOpcode >> validateChildren: aCollection [
 	"If `children` is nil, it means the node can have
 	 any number of children of any type. For example ?call nodes."
 	children notNil ifTrue:[
-		self assert: aCollection size == children size description: 'Invalid number of children'.
+		(self mayHaveRegdeps and: [ aCollection notEmptyOrNil and:[ aCollection last opcode == glregdeps ] ]) ifTrue: [
+			self assert: aCollection size - 1 == children size description: 'Invalid number of children'.
+		] ifFalse: [
+			self assert: aCollection size == children size description: 'Invalid number of children'.
+		].
 		1 to: children size do: [ :i |
 			self assert: ((children at: i) isCompatibleWith: (aCollection at: i) type) description: 'Incompatible child ' , i printString
 		].
