@@ -49,10 +49,12 @@ TRILNodePrinter >> print: node on: aStream [
 		| block |
 
 		block := node block.
-		aStream nextPut:$<.
-		opcode name = 'bbend' ifTrue: [ aStream nextPut:$/ ].
-		aStream nextPutAll: block name; 
-				nextPut:$>.
+		block notNil ifTrue: [
+			aStream nextPut:$<.
+			opcode name = 'bbend' ifTrue: [ aStream nextPut:$/ ].
+			aStream nextPutAll: block name;
+					nextPut:$>.
+		].
 		(opcode name = 'bbend') ifTrue: [
 			(block isTerminated not and: [ block successor1 notNil and:[block next isNil]]) ifTrue: [ 
 				aStream nextPutAll: '  <!-- pass through to '; nextPutAll: block successor1 name; nextPutAll: ' -->'
