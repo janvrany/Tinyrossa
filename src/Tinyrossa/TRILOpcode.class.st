@@ -226,6 +226,11 @@ TRILOpcode >> isLoadOrStore [
 ]
 
 { #category : #testing }
+TRILOpcode >> isLoadReg [
+	^ props1 anyMask: LoadReg
+]
+
+{ #category : #testing }
 TRILOpcode >> isLoadVar [
 	^ props1 anyMask: LoadVar
 ]
@@ -263,6 +268,11 @@ TRILOpcode >> isShiftRight [
 { #category : #testing }
 TRILOpcode >> isStore [
 	^ props1 anyMask: Store
+]
+
+{ #category : #testing }
+TRILOpcode >> isStoreReg [
+	^ props1 anyMask: StoreReg
 ]
 
 { #category : #testing }
@@ -381,6 +391,16 @@ TRILOpcode >> validateConstant: aNumber [
 		type validateConstant: aNumber.
 	] ifFalse: [ 
 		self assert: aNumber isNil.
+	].
+]
+
+{ #category : #validation }
+TRILOpcode >> validateRegister: aTRReakRegister [
+	(props1 anyMask: LoadReg | StoreReg) ifTrue: [
+		self assert: aTRReakRegister notNil.
+		self assert: aTRReakRegister isTRRealRegister.
+	] ifFalse: [
+		self assert: aTRReakRegister isNil.
 	].
 ]
 

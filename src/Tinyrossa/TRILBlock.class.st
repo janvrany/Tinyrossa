@@ -112,11 +112,11 @@ TRILBlock >> initializeWithCFG: aTRCFG name: aString [
 
 	cfg := aTRCFG.
 	name := aString.
-	bbstartNode := (TRILNode opcode: bbstart symbol: nil constant: nil children: nil).
+	bbstartNode := TRILNode opcode: bbstart.
 	bbstartNode setBlock: self.
 	bbstartNode incUseCount.
 	treetops := OrderedCollection new.
-	bbendNode := (TRILNode opcode: bbend symbol: nil constant: nil children: nil).
+	bbendNode := TRILNode opcode: bbend.
 	bbendNode setBlock: self.
 	bbendNode incUseCount.        
 	precedessors := Array new.

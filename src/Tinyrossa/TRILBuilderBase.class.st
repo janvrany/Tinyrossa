@@ -688,7 +688,7 @@ TRILBuilderBase >> build: opcode arguments: arguments [
 		].
 	].
 
-	node := TRILNode opcode: opcode symbol: symbol constant: constant children: children.
+	node := TRILNode opcode: opcode symbol: symbol constant: constant register: nil children: children.
 	opcode isTreeTop ifTrue: [
 		current add: node.
 	].        
