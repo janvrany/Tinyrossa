@@ -150,7 +150,7 @@ TRRV64GPSABILinkage >> generateEpilogue: valReg [
 		generate ld: ra, (sp + 0).      
 	].
 
-	"Restore preserved registers"
+	"Restore preserved registers."
 	offset := framePreservedOffset.
 	preserved := self allocatedPreservedRegisters.
 	preserved do: [:preservedReg | 
@@ -158,22 +158,27 @@ TRRV64GPSABILinkage >> generateEpilogue: valReg [
 		offset := offset + 8.
 	].  
 
-	"Destroy the frame...
-	 and return."
-	generate
-		addi: sp, sp, frameSize;"Destroy the frame"
-		jalr: zero, ra, 0.      "Return"
+	"Destroy the frame (if any)..."
+	frameSize > 0 ifTrue: [
+		generate addi: sp, sp, frameSize.
+	].
+
+	"...and return."
+	generate jalr: zero, ra, 0.
 ]
 
 { #category : #'code generation' }
 TRRV64GPSABILinkage >> generatePrologue [
 	| parameters parameterTypes preserved offset |
 
-	"Allocate frame"
-	generate addi: sp, sp, frameSize negated.
+	"Allocate frame if needed"
+	frameSize > 0 ifTrue: [
+		generate addi: sp, sp, frameSize negated.
+	].
 
 	"Save link register"
 	codegen linkRegisterKilled ifTrue:[
+		self assert: frameSize > 0.
 		generate sd: ra, (sp + 0).
 	].
 
@@ -277,7 +282,11 @@ TRRV64GPSABILinkage >> mapStack [
 
 	| offset automatics preserved parameters |
 
-	offset := 8. "Slot at offset 0 is for link register"
+	codegen linkRegisterKilled ifTrue: [
+		offset := 8. "Slot at offset 0 is for link register"
+	] ifFalse: [
+		offset := 0. "No need to store link register"
+	].
 
 	automatics := codegen compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol.
 	automatics do: [:automatic | 
