@@ -182,7 +182,9 @@ TRRV64GPSABILinkage >> generatePrologue [
 	parameters := parameters sorted: [ :a :b | a index < b index ].
 	parameterTypes := parameters collect: [ :parameter | parameter type ].
 	parameters with: (self mapParameters: parameterTypes) do: [ :parameter :paramReg |
-		generate sd: paramReg, (sp + parameter offset).
+		parameter isUsed ifTrue: [
+			generate sd: paramReg, (sp + parameter offset).
+		].
 	].
 
 	"Save preserved registers"
@@ -290,9 +292,11 @@ TRRV64GPSABILinkage >> mapStack [
 	offset := offset + (preserved size * 8).
 
 	parameters := codegen compilation symbolManager lookupSymbolsByType: TRParameterSymbol.
-	parameters do: [:parameter | 
-		parameter setOffset: offset.
-		offset := offset + 8.
+	parameters do: [:parameter |
+		parameter isUsed ifTrue: [
+			parameter setOffset: offset.
+			offset := offset + 8.
+		]
 	].
 
 	frameSize := offset
