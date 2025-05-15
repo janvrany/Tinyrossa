@@ -238,22 +238,34 @@ TRILBlock >> removePrecedessor: aTRILBlock [
 
 { #category : #'adding & removing' }
 TRILBlock >> replace: oldNode with: newNode [
-	| index |
 
 	self assert: oldNode opcode isTreeTop description: 'Invalid node (not a treetop)'.
-	self assert: (treetops includes: oldNode).
+	self assert: ((treetops includes: oldNode) or: [ bbstartNode == oldNode or:[ bbendNode == oldNode ] ]).
 	self assert:((oldNode opcode isBranching == newNode opcode isBranching == true) "we're either replacing branch with branch..."
 				 or:[(newNode opcode isBranching and:[ self isBranching not])       "...or we're creating branch in non-branching block..."
 				 or:[ newNode opcode isBranching not ]])                           "...or we're replacing with non-branching node."
 		description: 'Invalid node (block can contain at most one branching node)'.
+	self assert: (bbstartNode ~~ oldNode or: [ newNode opcode == bbstart ])
+		description: 'Invalid node (bbstart node can be replaced only with another bbstart node)'.
+	self assert: (bbendNode ~~ oldNode or: [ newNode opcode == bbend ])
+		description: 'Invalid node (bbstart node can be replaced only with another bbend node)'.
 
-	index := treetops indexOf: oldNode.
-	self assert:(index == treetops size or: [newNode opcode isReturn not and:[ newNode opcode isGoto not]])
-		description: 'Invalid node (cannot replace non-last node with return or goto)'.
+	oldNode == bbstartNode ifTrue: [
+		bbstartNode := newNode.
+	] ifFalse: [
+	oldNode == bbendNode ifTrue: [
+		bbendNode := newNode.
+	] ifFalse: [
+		| index |
 
-	treetops at: index put: newNode.
+		index := treetops indexOf: oldNode.
+		self assert:(index == treetops size or: [newNode opcode isReturn not and:[ newNode opcode isGoto not]])
+			description: 'Invalid node (cannot replace non-last node with return or goto)'.
+		treetops at: index put: newNode.
+	]].
+
 	newNode setBlock: self.
-	newNode locationIfNotSet: oldNode location.	
+	newNode locationIfNotSet: oldNode location.
 	newNode incUseCount.
 	oldNode decUseCount.
 	oldNode opcode isBranching ifTrue: [ 
