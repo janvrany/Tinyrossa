@@ -9,7 +9,8 @@ Class {
 		'children',
 		'location',
 		'block',
-		'result'
+		'result',
+		'register'
 	],
 	#pools : [
 		'TRDataTypes',
@@ -24,28 +25,38 @@ TRILNode class >> new [
 ]
 
 { #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg [
+	^ self opcode: opcodeArg symbol: nil constant: nil register: nil children: nil
+]
+
+{ #category : #'instance creation' }
 TRILNode class >> opcode: opcodeArg children: childrenArg [   
-	^ self opcode: opcodeArg symbol: nil constant: nil children: childrenArg
+	^ self opcode: opcodeArg symbol: nil constant: nil register: nil children: childrenArg
 ]
 
 { #category : #'instance creation' }
 TRILNode class >> opcode: opcodeArg constant: constantArg [
-	^ self opcode: opcodeArg symbol: nil constant: constantArg children: nil
+	^ self opcode: opcodeArg symbol: nil constant: constantArg register: nil children: nil
+]
+
+{ #category : #'instance creation' }
+TRILNode class >> opcode: opcodeArg register: registerArg [
+	^ self opcode: opcodeArg symbol: nil constant: nil register: registerArg children: nil.
 ]
 
 { #category : #'instance creation' }
 TRILNode class >> opcode: opcodeArg symbol: symbolArg [
-	^ self opcode: opcodeArg symbol: symbolArg constant: nil children: nil
+	^ self opcode: opcodeArg symbol: symbolArg constant: nil register: nil children: nil
 ]
 
 { #category : #'instance creation' }
 TRILNode class >> opcode: opcodeArg symbol: symbolArg children: childrenArg [   
-	^ self opcode: opcodeArg symbol: symbolArg constant: nil children: childrenArg
+	^ self opcode: opcodeArg symbol: symbolArg constant: nil register: nil children: childrenArg
 ]
 
 { #category : #'instance creation-private' }
-TRILNode class >> opcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
-	^ self basicNew initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg
+TRILNode class >> opcode: opcodeArg symbol: symbolArg constant: constantArg register: registerArg children: childrenArg [
+	^ self basicNew initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg register: registerArg children: childrenArg
 ]
 
 { #category : #accessing }
@@ -117,15 +128,18 @@ TRILNode >> incUseCount [
 ]
 
 { #category : #initialization }
-TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg children: childrenArg [
+TRILNode >> initializeWithOpcode: opcodeArg symbol: symbolArg constant: constantArg register: registerArg children: childrenArg [
 	opcodeArg validateConstant: constantArg.
 	opcodeArg validateSymbol: symbolArg.
+	opcodeArg validateRegister: registerArg.
 	opcodeArg validateChildren: childrenArg.    
+
 
 	location := nil.
 	opcode := opcodeArg.
 	symbol := symbolArg.
 	constant := constantArg.
+	register:= registerArg.
 	children := childrenArg.
 ]
 
@@ -215,6 +229,13 @@ TRILNode >> printOn:aStream [
 		aStream nextPutAll:' <'; nextPutAll: block name; nextPut:$>.
 	].
 	aStream nextPut:$).
+]
+
+{ #category : #accessing }
+TRILNode >> register [
+	self assert: (opcode isLoadReg or: [ opcode isStoreReg ]).
+
+	^ register
 ]
 
 { #category : #rewriting }

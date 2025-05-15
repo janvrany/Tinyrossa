@@ -72,6 +72,17 @@ TRILNodePrinter >> print: node on: aStream [
 				] ifFalse: [
 					node constant printOn: aStream.
 				]
+			] ifFalse: [
+				(opcode isLoadReg or:[opcode isStoreReg]) ifTrue: [
+					| rreg |
+
+					rreg := node register.
+					rreg notNil ifTrue: [
+						rreg printOn: aStream
+					] ifFalse: [
+						aStream nextPutAll: '???'
+					].
+				].
 			].
 		].
 	].
