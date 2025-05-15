@@ -113,6 +113,13 @@ TRRV64GCodeEvaluator >> commonLoad: node [
 ]
 
 { #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonLoadReg: node [
+	"Handles aregload, lregload, iregload, sregload & bregload"
+
+	^ node register
+]
+
+{ #category : #'evaluation-helpers' }
 TRRV64GCodeEvaluator >> commonMul: node [
 	"Handles imul and lmul"
 	
@@ -410,6 +417,11 @@ TRRV64GCodeEvaluator >> evaluate_aloadi: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_aregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_astore: node [
 	^ self commonStore: node
 ]
@@ -430,8 +442,23 @@ TRRV64GCodeEvaluator >> evaluate_bloadi: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_bregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_bstore: node [
 	^ self commonStore: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_dregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_fregload: node [
+	^ self commonLoadReg: node
 ]
 
 { #category : #evaluation }
@@ -678,6 +705,11 @@ TRRV64GCodeEvaluator >> evaluate_ior: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_ishl: node [
 	^self commonShl: node
 ]
@@ -777,6 +809,11 @@ TRRV64GCodeEvaluator >> evaluate_lor: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lshl: node [
 	^self commonShl: node
 ]
@@ -867,6 +904,11 @@ TRRV64GCodeEvaluator >> evaluate_sload: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_sloadi: node [
 	^ self evaluate_Xloadi: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_sregload: node [
+	^ self commonLoadReg: node
 ]
 
 { #category : #evaluation }

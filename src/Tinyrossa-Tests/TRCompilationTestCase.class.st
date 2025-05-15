@@ -415,15 +415,20 @@ TRCompilationTestCase >> test07_call_discarding_value [
 
 { #category : #tests }
 TRCompilationTestCase >> test19_abs [
-	| x builder |
+	| x gra builder |
 
 	<parameter: #x values: #(-10 0 10)>
+	<parameter: #gra values: #(true false)>
 
 	self target name = 'powerpc64le-linux' ifTrue: [
 		self skip: 'Skipped since Xload/Xstore evaluator does not support statics for POWER (see issue #52)'.
 	].
 
 	x := testParameters at: #x.
+	gra := testParameters at: #gra.
+	gra ifTrue: [
+		compilation config optimizationPasses: (compilation config optimizationPasses , { TRGRA })
+	].
 
 	builder := compilation builder.
 	builder defineName: testSelector asString type: Int64.
