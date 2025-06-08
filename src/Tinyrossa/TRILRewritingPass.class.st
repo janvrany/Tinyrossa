@@ -9,21 +9,26 @@ Class {
 
 { #category : #evaluation }
 TRILRewritingPass >> evaluate: node [
-	(seen includes: node) ifTrue: [ 
-		"Make sure we evaluate (rewrite) each node only once"
-		^ node.
+	| rewritten |
+
+	(seen includesKey: node) ifTrue: [
+		"If the node was already evaluated (and possibly rewritten),
+		 return the node it was rewritten to"
+		^ seen at: node.
 	].
-	seen add: node.
 
 	node children do: [:original |
-		| simplified |
+		| rewritten |
 
-		simplified := self evaluate: original.
-		simplified ~~ original ifTrue: [ 
-			node replace: original with: simplified
+		rewritten := self evaluate: original.
+		rewritten ~~ original ifTrue: [
+			node replace: original with: rewritten
 		].
 	].
-	^ self rewrite: (super evaluate: node)
+
+	rewritten := self rewrite: (super evaluate: node).
+	seen at: node put: rewritten.
+	^ rewritten
 ]
 
 { #category : #evaluation }
@@ -43,13 +48,8 @@ TRILRewritingPass >> rewrite: aTRILNode [
 ]
 
 { #category : #optimizing }
-TRILRewritingPass >> run [
-	seen := Set new.
-	compilation cfg preorderDo: [ :block | self runOn: block ].
-]
-
-{ #category : #optimizing }
 TRILRewritingPass >> runOn: aTRILBlock [
+	seen := Dictionary new.
 	aTRILBlock treetops copy do: [ :original |
 		| simplified |
 

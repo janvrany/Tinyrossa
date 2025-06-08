@@ -23,6 +23,27 @@ TRCodeEvaluator >> codegen [
 	^ codegen
 ]
 
+{ #category : #'evaluation-helpers' }
+TRCodeEvaluator >> commonCall: node [
+	| linkage |
+
+	linkage := codegen createLinkage: node symbol linkageClass.
+	^ linkage generateCall: node
+]
+
+{ #category : #'evaluation-helpers' }
+TRCodeEvaluator >> commonCallIndirect: node [
+	| linkage |
+
+	linkage := codegen createLinkage: node symbol linkageClass.
+	^ linkage generateCallIndirect: node
+]
+
+{ #category : #'evaluation-helpers' }
+TRCodeEvaluator >> commonReturn: node [
+	^ codegen linkage generateReturn: node.
+]
+
 { #category : #accessing }
 TRCodeEvaluator >> compilation [
 	^ self codegen compilation
@@ -49,17 +70,17 @@ TRCodeEvaluator >> evaluate: node [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_acall: node [
-	^ self evaluate_call: node
+	^ self commonCall: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_acalli: node [
-	^ self evaluate_calli: node
+	^ self commonCallIndirect: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_areturn: node [
-	^ self evaluate_return: node
+	^ self commonReturn: node
 ]
 
 { #category : #evaluation }
@@ -80,83 +101,77 @@ TRCodeEvaluator >> evaluate_bbstart: node [
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_call: node [
-	| linkage |
-
-	linkage := codegen createLinkage: node symbol linkageClass.
-	^ linkage generateCall: node
+	^ self commonCall: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_calli: node [
-	| linkage |
-
-	linkage := codegen createLinkage: node symbol linkageClass.
-	^ linkage generateCallIndirect: node
+	^ self commonCallIndirect: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_dcall: node [
-	^ self evaluate_call: node
+	^ self commonCall: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_dcalli: node [
-	^ self evaluate_calli: node
+	^ self commonCallIndirect: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_dreturn: node [
-	^ self evaluate_return: node
+	^ self commonReturn: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_fcall: node [
-	^ self evaluate_call: node
+	^ self commonCall: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_fcalli: node [
-	^ self evaluate_calli: node
+	^ self commonCallIndirect: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_freturn: node [
-	^ self evaluate_return: node
+	^ self commonReturn: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_icall: node [
-	^ self evaluate_call: node
+	^ self commonCall: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_icalli: node [
-	^ self evaluate_calli: node
+	^ self commonCallIndirect: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_ireturn: node [
-	^ self evaluate_return: node
+	^ self commonReturn: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_lcall: node [
-	^ self evaluate_call: node
+	^ self commonCall: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_lcalli: node [
-	^ self evaluate_calli: node
+	^ self commonCallIndirect: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_lreturn: node [
-	^ self evaluate_return: node
+	^ self commonReturn: node
 ]
 
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_return: node [
-	^ codegen linkage generateReturn: node.
+	^ self commonReturn: node.
 ]
 
 { #category : #evaluation }
