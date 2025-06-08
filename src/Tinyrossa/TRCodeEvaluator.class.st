@@ -40,6 +40,13 @@ TRCodeEvaluator >> commonCallIndirect: node [
 ]
 
 { #category : #'evaluation-helpers' }
+TRCodeEvaluator >> commonLoadReg: node [
+	"Handles aregload, lregload, iregload, sregload, bregload, fregload & dregload"
+
+	^ node register
+]
+
+{ #category : #'evaluation-helpers' }
 TRCodeEvaluator >> commonReturn: node [
 	^ codegen linkage generateReturn: node.
 ]
@@ -79,6 +86,11 @@ TRCodeEvaluator >> evaluate_acalli: node [
 ]
 
 { #category : #evaluation }
+TRCodeEvaluator >> evaluate_aregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
 TRCodeEvaluator >> evaluate_areturn: node [
 	^ self commonReturn: node
 ]
@@ -97,6 +109,11 @@ TRCodeEvaluator >> evaluate_bbstart: node [
 		generate label: label.
 	].
 	^ nil
+]
+
+{ #category : #evaluation }
+TRCodeEvaluator >> evaluate_bregload: node [
+	^ self commonLoadReg: node
 ]
 
 { #category : #evaluation }
@@ -120,6 +137,11 @@ TRCodeEvaluator >> evaluate_dcalli: node [
 ]
 
 { #category : #evaluation }
+TRCodeEvaluator >> evaluate_dregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
 TRCodeEvaluator >> evaluate_dreturn: node [
 	^ self commonReturn: node
 ]
@@ -132,6 +154,11 @@ TRCodeEvaluator >> evaluate_fcall: node [
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_fcalli: node [
 	^ self commonCallIndirect: node
+]
+
+{ #category : #evaluation }
+TRCodeEvaluator >> evaluate_fregload: node [
+	^ self commonLoadReg: node
 ]
 
 { #category : #evaluation }
@@ -150,6 +177,11 @@ TRCodeEvaluator >> evaluate_icalli: node [
 ]
 
 { #category : #evaluation }
+TRCodeEvaluator >> evaluate_iregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
 TRCodeEvaluator >> evaluate_ireturn: node [
 	^ self commonReturn: node
 ]
@@ -165,6 +197,11 @@ TRCodeEvaluator >> evaluate_lcalli: node [
 ]
 
 { #category : #evaluation }
+TRCodeEvaluator >> evaluate_lregload: node [
+	^ self commonLoadReg: node
+]
+
+{ #category : #evaluation }
 TRCodeEvaluator >> evaluate_lreturn: node [
 	^ self commonReturn: node
 ]
@@ -172,6 +209,11 @@ TRCodeEvaluator >> evaluate_lreturn: node [
 { #category : #evaluation }
 TRCodeEvaluator >> evaluate_return: node [
 	^ self commonReturn: node.
+]
+
+{ #category : #evaluation }
+TRCodeEvaluator >> evaluate_sregload: node [
+	^ self commonLoadReg: node
 ]
 
 { #category : #evaluation }
