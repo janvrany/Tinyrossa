@@ -6,7 +6,8 @@ Class {
 		'genSet',
 		'killSet',
 		'liveIn',
-		'liveOut'
+		'liveOut',
+		'ranges'
 	],
 	#category : #'Tinyrossa-Codegen-Register Allocation'
 }
@@ -119,6 +120,7 @@ TRLiveness >> initializeWithBlock: aTRILBlock [
 	killSet := Set new: 5.
 	liveIn := Set new: 0.
 	liveOut := Set new: 0.
+	ranges := SmallDictionary new.
 
 	aTRILBlock setLiveness: self.
 ]
@@ -158,4 +160,9 @@ TRLiveness >> printOn:aStream [
 	aStream nextPutAll:'}, live-out = {'.
 	liveOut do:[:sym | aStream nextPutAll: sym name ] separatedBy: [ aStream nextPut:$,; space ].
 	aStream nextPutAll:'})'.
+]
+
+{ #category : #accessing }
+TRLiveness >> ranges [
+	^ ranges
 ]
