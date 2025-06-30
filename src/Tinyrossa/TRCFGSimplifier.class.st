@@ -20,7 +20,9 @@ Class {
 
 { #category : #private }
 TRCFGSimplifier >> relink: oldSuccessor to: newSuccessor in: block [
-	self assume: (oldSuccessor precedessors includes: block).
+	self assume: oldSuccessor is: TRILBlock | [ :v | v precedessors includes: block ].
+	self assume: oldSuccessor is: TRILBlock.
+	self assume: block is: TRILBlock.
 
 	block successor1 == oldSuccessor ifTrue: [ 
 		block setSuccessor1: newSuccessor.

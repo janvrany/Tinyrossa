@@ -139,8 +139,8 @@ TRILBlock >> immediateDominator [
 
 { #category : #initialization }
 TRILBlock >> initializeWithCFG: aTRCFG name: aString [
-	self assume: aTRCFG notNil.
-	self assume: aString notNil.
+	self assume: aTRCFG is: TRCFG.
+	self assume: aString is: String.
 
 	cfg := aTRCFG.
 	name := aString.
@@ -246,7 +246,7 @@ TRILBlock >> printOn:aStream [
 
 { #category : #'adding & removing' }
 TRILBlock >> remove: aTRNode [
-	self assume: (treetops includes: aTRNode).
+	self assume: aTRNode is: TRILNode | [ :v | treetops includes: v ].
 
 	treetops remove: aTRNode.
 	aTRNode decUseCount.
@@ -306,7 +306,7 @@ TRILBlock >> setNext: aTRILBlock [
 	"Set next block (in sense of linear order). This is used
 	 during block linearization."
 
-	self assume: (self isTerminated or: [ successor1 == aTRILBlock ]).
+	self assume: aTRILBlock is: (TRILBlock | [ :v | self isTerminated or: [ successor1 == v ] ]) | nil.
 	next := aTRILBlock.
 ]
 
@@ -320,8 +320,7 @@ TRILBlock >> setSetImmediateDominator: block [
 
 { #category : #initialization }
 TRILBlock >> setSuccessor1: blockOrNil [
-	self assume: (blockOrNil isNil or:[blockOrNil isTRILBlock]).
-	self assume: (blockOrNil isNil or:[self isTerminated not]).
+	self assume: blockOrNil is: (TRILBlock | [ :v | self isTerminated not ]) | nil.
 
 	successor1 notNil ifTrue: [ 
 		successor1 removePrecedessor: self.
@@ -334,8 +333,7 @@ TRILBlock >> setSuccessor1: blockOrNil [
 
 { #category : #initialization }
 TRILBlock >> setSuccessor2: block [
-	self assume: (block isNil or:[block isTRILBlock]).
-	self assume: (block isNil or:[treetops contains:[:node | node opcode isBranching]]).
+	self assume: block is: (TRILBlock | [ :v | self isBranching ]) | nil.
 
 	successor2 notNil ifTrue: [ 
 		successor2 removePrecedessor: self.
@@ -353,8 +351,8 @@ TRILBlock >> startState [
 
 { #category : #'accessing - VM state' }
 TRILBlock >> startState: aTRVMState [
-	self assume: startState isNil.
-	self assume: currentState isNil.
+	self assume: startState is: nil.
+	self assume: currentState is: nil.
 
 	startState := aTRVMState.
 	currentState := aTRVMState copy.

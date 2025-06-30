@@ -27,8 +27,8 @@ TRRV64GCodeGenerator >> fitsInItypeImm: anInteger [
 
 { #category : #utilities }
 TRRV64GCodeGenerator >> loadConstant32: value into: reg [
-	self assume: (value between: INT32_MIN and: INT32_MAX).
-	self assume: (reg isTRRealRegister or: [ reg isTRVirtualRegister ]).
+	self assume: value is: Int32.
+	self assume: reg   is: TRRealRegister | TRVirtualRegister.
 
 	"Code below is almost literal translation of code in OMR, see
 	 compiler/riscv/codegen/OMRTreeEvaluator.cpp, loadConstant32()."
@@ -59,8 +59,8 @@ TRRV64GCodeGenerator >> loadConstant32: value into: reg [
 
 { #category : #utilities }
 TRRV64GCodeGenerator >> loadConstant64: value into: reg [
-	self assume: (value between: INT64_MIN and: INT64_MAX).
-	self assume: (reg isTRRealRegister or: [ reg isTRVirtualRegister ]).
+	self assume: value is: Int64.
+	self assume: reg   is: TRRealRegister | TRVirtualRegister.
 
 	"Code below is almost literal translation of code in OMR, see
 	 compiler/riscv/codegen/OMRTreeEvaluator.cpp, loadConstant64()."
@@ -119,8 +119,8 @@ TRRV64GCodeGenerator >> loadConstant64: value into: reg [
 
 { #category : #utilities }
 TRRV64GCodeGenerator >> registerCopyFrom: srcReg to: dstReg [
-	self assume: (srcReg isTRRealRegister or: [ srcReg isTRVirtualRegister ]).
-	self assume: (dstReg isTRRealRegister or: [ dstReg isTRVirtualRegister ]).
+	self assume: srcReg is: TRRealRegister | TRVirtualRegister.
+	self assume: dstReg is: TRRealRegister | TRVirtualRegister.
 
 	generate addi: dstReg, srcReg, 0
 ]
@@ -129,10 +129,8 @@ TRRV64GCodeGenerator >> registerCopyFrom: srcReg to: dstReg [
 TRRV64GCodeGenerator >> registerLoad: reg from: sym [
 	| offset |
 
-	self assume: reg isTRRegister.
-	self assume: sym isTRAutomaticSymbol.
-	self assume: sym useCount > 0.
-	self assume: sym type == Address.
+	self assume: reg is: TRVirtualRegister | TRRealRegister.
+	self assume: sym is: TRAutomaticSymbol | [ :v | v isUsed and:[v type == Address ] ].
 
 	offset := AcDSLSymbol value: sym name.
 	generate ld: reg, (sp + offset).
@@ -142,10 +140,8 @@ TRRV64GCodeGenerator >> registerLoad: reg from: sym [
 TRRV64GCodeGenerator >> registerStore: reg to: sym [
 	| offset |
 
-	self assume: reg isTRRegister.
-	self assume: sym isTRAutomaticSymbol.
-	self assume: sym useCount > 0.
-	self assume: sym type == Address.
+	self assume: reg is: TRVirtualRegister | TRRealRegister.
+	self assume: sym is: TRAutomaticSymbol | [ :v | v isUsed and:[v type == Address ] ].
 
 	offset := AcDSLSymbol value: sym name.
 	generate sd: reg, (sp + offset).
@@ -153,7 +149,8 @@ TRRV64GCodeGenerator >> registerStore: reg to: sym [
 
 { #category : #'registers-private' }
 TRRV64GCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
-	self assume: instruction isProcessorInstruction.
+	self assume: instruction is: ProcessorInstruction.
+
 	instruction externalBindings 
 		keysAndValuesDo: [:name :value | 
 			name = 'rd' ifTrue: [
@@ -169,7 +166,7 @@ TRRV64GCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruct
 
 { #category : #'registers-private' }
 TRRV64GCodeGenerator >> virtualRegistersReadByProcessorInstruction: instruction do: block [
-	self assume: instruction isProcessorInstruction.
+	self assume: instruction is: ProcessorInstruction.
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
 		(#('rs1' 'rs2' 'rs3') includes: name) ifTrue: [ 

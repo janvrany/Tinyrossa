@@ -45,6 +45,22 @@ TRDataType >> arithmeticOpcodeFor: arithmeticOpFlag [
 	"
 ]
 
+{ #category : #converting }
+TRDataType >> asTyping [
+	self isIntegerType ifTrue: [
+		^ Integer | [ :v | self validateConstant: v. true ]
+	].
+	self isFloatingPointType ifTrue: [
+		^ (Float | [ :v | self validateConstant: v. true ])
+			| (Double | [ :v | self validateConstant: v. true ])
+	].
+	self isFloatingPointType ifTrue: [
+		^ nil asTyping.
+	].
+
+	self assert: false description: 'Invalid / unknown datatype!'
+]
+
 { #category : #queries }
 TRDataType >> compareOpcodeFor: compareFlags [
 	"Return opcode for comparing two values of receiver's type.
@@ -79,7 +95,8 @@ TRDataType >> constOpcode [
 
 { #category : #testing }
 TRDataType >> isCompatibleWith: anotherType [
-	self assume: (anotherType isKindOf: TRDataType).
+	self assume: anotherType is: TRDataType.
+
 	^ self == anotherType
 ]
 

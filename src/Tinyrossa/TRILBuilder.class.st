@@ -87,7 +87,7 @@ TRILBuilder >> fallThroughTo: anILBuilder [
 TRILBuilder >> fallThroughToBlock: block [
 	| target |
 
-	self assume: block isTRILBlock.
+	self assume: block is: TRILBlock.
 
 	target := self transferTo: block.     
 	current isTerminated ifFalse: [ 
@@ -163,9 +163,9 @@ TRILBuilder >> for: variableName from: initialValue to: finalValue do: bodyBuild
 TRILBuilder >> if: compareNode then: thenBuilderOrClosure [
 	| compareOp thenBuilder joinBlock joinLabel ifCompareNode |
 
+	self assume: compareNode is: TRILNode | [ :v | v opcode isCompare and: [ v opcode isBranch not ] ].
+
 	compareOp := compareNode opcode.
-	self assume: compareOp isCompare.
-	self assume: compareOp isBranch not.
 
 	thenBuilder := self orphanIfNeeded: thenBuilderOrClosure.
 	joinBlock := compilation cfg addBlock.
@@ -185,9 +185,9 @@ TRILBuilder >> if: compareNode then: thenBuilderOrClosure [
 TRILBuilder >> if: compareNode then: thenBuilderOrClosure else: elseBuilderOrClosure [
 	| compareOp thenBuilder elseBuilder elseLabel joinBlock ifCompareNode |
 
+	self assume: compareNode is: TRILNode | [ :v | v opcode isCompare and: [ v opcode isBranch not ] ].
+
 	compareOp := compareNode opcode.
-	self assume: compareOp isCompare.
-	self assume: compareOp isBranch not.
 
 	thenBuilder := self orphanIfNeeded: thenBuilderOrClosure.
 	elseBuilder := self orphanIfNeeded: elseBuilderOrClosure.
@@ -222,7 +222,7 @@ TRILBuilder >> location: aTRLocation [
 	 TRIL node built from now on will get given location associated with
 	 it until a new location is set (to either new location or nil)"
 
-	self assume: (aTRLocation isTRLocation or: [ aTRLocation isNil ]).
+	self assume: aTRLocation is: TRLocation | nil.
 
 	"Normally, `#location:` sets location for nodes to-be-created. But we
 	 also want to use this to set the location of the method itself
@@ -301,9 +301,9 @@ TRILBuilder >> printOn: aStream [
 TRILBuilder >> while: compareNode do: bodyBuilderOrClosure [
 	| compareOp condBlock bodyBuilder joinBlock joinLabel ifCompareNode |
 
+	self assume: compareNode is: TRILNode | [ :v | v opcode isCompare and: [ v opcode isBranch not ] ].
+
 	compareOp := compareNode opcode.
-	self assume: compareOp isCompare.
-	self assume: compareOp isBranch not.
 
 	condBlock := compilation cfg addBlock.
 	bodyBuilder := self orphanIfNeeded: bodyBuilderOrClosure.

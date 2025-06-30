@@ -68,9 +68,8 @@ TRStaticSymbol >> isTRStaticSymbol [
 
 { #category : #initialization }
 TRStaticSymbol >> setAddress: anInteger [
-	self assume: anInteger isInteger.
-	self assume:(anInteger between: 0 and: 16rFFFFFFFFFFFFFFFF).
-	self assume: address isNil.
+	self assume: anInteger is: Address.
+	self assume: address   is: nil.
 
 	address := anInteger.
 ]
