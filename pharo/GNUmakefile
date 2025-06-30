@@ -31,13 +31,6 @@ ARCHC_PDL_BRANCH ?= master
 $(eval $(call git-clone-local,ARCHC_PDL_DIR,$(ARCHC_PDL_URL),$(ARCHC_PDL_BRANCH)))
 endif
 
-ifndef SMALLRSP_DIR
-SMALLRSP_DIR    := ../3rdparty/SmallRSP
-SMALLRSP_URL    ?= https://github.com/shingarov/SmallRSP
-SMALLRSP_BRANCH ?= master
-$(eval $(call git-clone-local,SMALLRSP_DIR,$(SMALLRSP_URL),$(SMALLRSP_BRANCH)))
-endif
-
 ifndef PHARO_HACKS_DIR
 PHARO_HACKS_DIR    := ../3rdparty/pharo-hacks
 PHARO_HACKS_URL    ?= https://github.com/janvrany/pharo-hacks
@@ -73,7 +66,6 @@ $(PROJECT).image: ../src/*/*.st
 	$(call pharo-copy-image, $(PHARO_IMAGE), $@)
 	$(call pharo-load-local, $@, MachineArithmetic,$(MACHINEARITHMETIC_DIR)/src)
 	$(call pharo-load-local, $@, ArchC,            $(ARCHC_DIR)/src)
-	$(call pharo-load-local, $@, SmallRSP,         $(SMALLRSP_DIR)/src)
 	$(call pharo-load-local, $@, LibUnix,          $(PHARO_HACKS_DIR)/src)
 	$(call pharo-load-local, $@, LibCompat,        $(PHARO_HACKS_DIR)/src)
 	$(call pharo-load-local, $@, LibCompat,        $(PHARO_HACKS_DIR)/src)
