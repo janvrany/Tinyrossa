@@ -87,7 +87,7 @@ TRILBuilder >> fallThroughTo: anILBuilder [
 TRILBuilder >> fallThroughToBlock: block [
 	| target |
 
-	self assert: block isTRILBlock.   
+	self assume: block isTRILBlock.
 
 	target := self transferTo: block.     
 	current isTerminated ifFalse: [ 
@@ -164,8 +164,8 @@ TRILBuilder >> if: compareNode then: thenBuilderOrClosure [
 	| compareOp thenBuilder joinBlock joinLabel ifCompareNode |
 
 	compareOp := compareNode opcode.
-	self assert: compareOp isCompare.
-	self assert: compareOp isBranch not.
+	self assume: compareOp isCompare.
+	self assume: compareOp isBranch not.
 
 	thenBuilder := self orphanIfNeeded: thenBuilderOrClosure.
 	joinBlock := compilation cfg addBlock.
@@ -186,8 +186,8 @@ TRILBuilder >> if: compareNode then: thenBuilderOrClosure else: elseBuilderOrClo
 	| compareOp thenBuilder elseBuilder elseLabel joinBlock ifCompareNode |
 
 	compareOp := compareNode opcode.
-	self assert: compareOp isCompare.
-	self assert: compareOp isBranch not.
+	self assume: compareOp isCompare.
+	self assume: compareOp isBranch not.
 
 	thenBuilder := self orphanIfNeeded: thenBuilderOrClosure.
 	elseBuilder := self orphanIfNeeded: elseBuilderOrClosure.
@@ -222,7 +222,7 @@ TRILBuilder >> location: aTRLocation [
 	 TRIL node built from now on will get given location associated with
 	 it until a new location is set (to either new location or nil)"
 
-	self assert: (aTRLocation isTRLocation or: [ aTRLocation isNil ]).
+	self assume: (aTRLocation isTRLocation or: [ aTRLocation isNil ]).
 
 	"Normally, `#location:` sets location for nodes to-be-created. But we
 	 also want to use this to set the location of the method itself
@@ -302,8 +302,8 @@ TRILBuilder >> while: compareNode do: bodyBuilderOrClosure [
 	| compareOp condBlock bodyBuilder joinBlock joinLabel ifCompareNode |
 
 	compareOp := compareNode opcode.
-	self assert: compareOp isCompare.
-	self assert: compareOp isBranch not.
+	self assume: compareOp isCompare.
+	self assume: compareOp isBranch not.
 
 	condBlock := compilation cfg addBlock.
 	bodyBuilder := self orphanIfNeeded: bodyBuilderOrClosure.

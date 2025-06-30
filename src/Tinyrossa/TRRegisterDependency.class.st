@@ -24,8 +24,8 @@ TRRegisterDependency class >> virtual: vreg real: rreg [
 
 { #category : #initialization }
 TRRegisterDependency >> initializeWithVirtual: aTRVirtualRegister real: aTRRealRegister [
-	self assert:(aTRVirtualRegister isNil or:[aTRVirtualRegister isTRRegister]).
-	self assert: aTRRealRegister isTRRealRegister.
+	self assume:(aTRVirtualRegister isNil or:[aTRVirtualRegister isTRRegister]).
+	self assume: aTRRealRegister isTRRealRegister.
 
 	vreg := aTRVirtualRegister.
 	rreg := aTRRealRegister.
