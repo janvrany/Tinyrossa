@@ -14,10 +14,6 @@ BaselineOfTinyrossa >> baseline: spec [
 				spec repository: 'github://shingarov/Pharo-ArchC:pure-z3'
 			].
 
-			spec baseline: 'SmallRSP' with: [
-				spec repository: 'github://shingarov/SmallRSP:microwatt'
-			].
-
 			spec baseline: 'LibCompat' with: [
 				spec repository: 'github://janvrany/pharo-hacks'.
 			].
@@ -43,7 +39,6 @@ BaselineOfTinyrossa >> baseline: spec [
 				];
 				package: #'Tinyrossa-Tests' with: [
 					spec requires: 'SUnitParametrized'.
-					spec requires: 'SmallRSP'.
 				];
 				package: #'Tinyrossa-RISCV' with: [
 					spec requires: 'Tinyrossa'
