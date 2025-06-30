@@ -137,9 +137,7 @@ TRCodeCache >> add: codeObj [
 
 { #category : #'adding & removing' }
 TRCodeCache >> addSymbol: aTRStaticSymbol [
-	self assume: aTRStaticSymbol isTRStaticSymbol.
-	self assume: aTRStaticSymbol address isInteger.
-	self assume:(aTRStaticSymbol address between: base and: base + size) not.
+	self assume: aTRStaticSymbol is: TRStaticSymbol | [ :v | (v address between: base and: base + size) not ].
 	self assume:(symbols keys contains: [:each | each name = aTRStaticSymbol name]) not.
 
 	symbols at: aTRStaticSymbol put: aTRStaticSymbol address.
@@ -194,8 +192,7 @@ TRCodeCache >> exports [
 TRCodeCache >> getGOTentryFor: aTRStaticSymbol [
 	| entry |
 
-	self assume: aTRStaticSymbol isTRStaticSymbol.
-	self assume:(symbols includesKey: aTRStaticSymbol).
+	self assume: aTRStaticSymbol is: TRStaticSymbol | [ :v | symbols includesKey: v ].
 
 	entry := aTRStaticSymbol got.
 	^ symbols elementAt: entry ifAbsent: [
@@ -275,8 +272,9 @@ TRCodeCache >> gtInspectorSymbolsIn: composite [
 
 { #category : #initialization }
 TRCodeCache >> initializeWithRuntime: runtimeArg base: baseArg size: sizeArg memory: memoryArg [
-	self assume: (baseArg isInteger and: [ baseArg >= 0 ]).
-	self assume: (sizeArg isInteger and: [ sizeArg >  0 ]).
+	self assert: runtimeArg is: TRRuntime.
+	self assert: baseArg is: Integer | [ :v | v >= 0 ].
+	self assert: sizeArg is: Integer | [ :v | v >  0 ].
 
 	runtime := runtimeArg.
 	base := baseArg.

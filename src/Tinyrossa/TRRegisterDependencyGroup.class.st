@@ -16,8 +16,8 @@ TRRegisterDependencyGroup >> addDependency: vReg on: rReg [
 	 See class documentation of `TRRegisterDependencies`.
 	"
 
-	self assume: vReg isTRRegister.
-	self assume: rReg isTRRealRegister.
+	self assume: vReg is: TRRealRegister | TRVirtualRegister.
+	self assume: rReg is: TRRealRegister.
 
 	self add: (TRRegisterDependency virtual: vReg real: rReg).
 ]
@@ -30,7 +30,7 @@ TRRegisterDependencyGroup >> addTrashed: rReg [
 	 See class documentation of `TRRegisterDependencies`.
 	"
 
-	self assume: rReg isTRRealRegister.
+	self assume: rReg is: TRRealRegister.
 
 	self add: (TRRegisterDependency virtual: nil real: rReg).
 ]
