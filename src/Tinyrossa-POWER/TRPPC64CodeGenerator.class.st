@@ -57,7 +57,7 @@ TRPPC64CodeGenerator >> registerCopyFrom: srcReg to: dstReg [
 
 { #category : #'registers-private' }
 TRPPC64CodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
-	self assume: instruction isProcessorInstruction.
+	self assume: instruction is: ProcessorInstruction.
 	instruction externalBindings 
 		keysAndValuesDo: [:name :value | 
 			name = 'rt' ifTrue: [
@@ -73,7 +73,7 @@ TRPPC64CodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruct
 
 { #category : #'registers-private' }
 TRPPC64CodeGenerator >> virtualRegistersReadByProcessorInstruction: instruction do: block [
-	self assume: instruction isProcessorInstruction.
+	self assume: instruction is: ProcessorInstruction.
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
 		(#('ra' 'rb' 'rc' 'rs') includes: name) ifTrue: [ 

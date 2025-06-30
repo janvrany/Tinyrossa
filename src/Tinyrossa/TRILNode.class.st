@@ -141,9 +141,7 @@ TRILNode >> location [
 
 { #category : #accessing }
 TRILNode >> location: aTRLocation [
-	self assume: (aTRLocation isTRLocation or: [ aTRLocation isNil ]).
-
-	(location notNil and: [ aTRLocation isNil ]) ifTrue: [ self halt ].
+	self assume: aTRLocation is: TRLocation | nil.
 
 	location := aTRLocation.
 ]
@@ -245,7 +243,7 @@ TRILNode >> result [
 
 { #category : #initialization }
 TRILNode >> setBlock: aTRILBlock [
-	self assume: aTRILBlock isTRILBlock.
+	self assume: aTRILBlock is: TRILBlock.
 
 	block isNil ifTrue: [
 		block := aTRILBlock.

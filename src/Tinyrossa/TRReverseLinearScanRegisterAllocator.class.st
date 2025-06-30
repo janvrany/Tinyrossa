@@ -79,7 +79,7 @@ TRReverseLinearScanRegisterAllocator >> allocateRegister: interval [
 
 	| assigned |
 
-	self assume: interval register allocation isNil.
+	self assume: interval is: TRRegisterLiveInterval | [ :v | v register allocation isNil ].
 
 	assigned := self pickRegister: interval.
 	assigned isNil ifTrue: [
@@ -365,7 +365,7 @@ TRReverseLinearScanRegisterAllocator >> freeRegister: interval [
 	"Free register assigned to given interval, i.e.,
 	 put it back to list of available registers."
 
-	self assume: interval register allocation notNil.
+	self assume: interval is: TRRegisterLiveInterval | [ :v | v register allocation notNil ].
 
 	availableRegisters add: interval register allocation
 ]
@@ -373,9 +373,11 @@ TRReverseLinearScanRegisterAllocator >> freeRegister: interval [
 { #category : #utilities }
 TRReverseLinearScanRegisterAllocator >> insertReload: interval from: spillSlot [
 
+	self assume: interval is: TRRegisterLiveInterval | [ :v | v register allocation notNil ].
+	self assume: spillSlot is: TRAutomaticSymbol.
 	self assume: interval register kind == GPR description: 'FIXME: FPRs not yet supported'.
-	self assume: interval register allocation notNil.
-	self assume: spillSlot isTRAutomaticSymbol.
+
+
 
 	spillSlot incUseCount.
 	codegen registerLoad: interval register from: spillSlot.
@@ -385,7 +387,7 @@ TRReverseLinearScanRegisterAllocator >> insertReload: interval from: spillSlot [
 TRReverseLinearScanRegisterAllocator >> insertSpill: interval [
 	| spillSlot |
 
-	self assume: interval spillSlot isTRAutomaticSymbol.
+	self assume: interval is: TRRegisterLiveInterval.
 	self assume: interval register kind == GPR description: 'FIXME: FPRs not yet supported'.
 
 	spillSlot := interval spillSlot.
@@ -474,7 +476,8 @@ TRReverseLinearScanRegisterAllocator >> splitRegister: interval at: insnIndex [
 
 	| before regmap spillSlot |
 
-	self assume: (live includes: interval).
+	self assume: interval is: TRRegisterLiveInterval | [ :v | live includes: v].
+	self assume: insnIndex  is: Integer | [ :v | v between: 1 and: instructions size ].
 
 	before := TRRegisterLiveInterval forRegister: (codegen allocateRegister: interval register kind).
 
@@ -513,7 +516,7 @@ TRReverseLinearScanRegisterAllocator >> splitRegister: interval at: insnIndex [
 TRReverseLinearScanRegisterAllocator >> takeRegister: interval [
 	"Mark register assigned to given interval as used."
 
-	self assume: interval register allocation notNil.
+	self assume: interval is: TRRegisterLiveInterval | [ :v | v register allocation notNil ].
 
 	availableRegisters remove: interval register allocation
 ]

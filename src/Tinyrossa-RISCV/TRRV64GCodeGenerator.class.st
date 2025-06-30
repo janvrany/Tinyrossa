@@ -126,10 +126,8 @@ TRRV64GCodeGenerator >> registerCopyFrom: srcReg to: dstReg [
 TRRV64GCodeGenerator >> registerLoad: reg from: sym [
 	| offset |
 
-	self assume: reg isTRRegister.
-	self assume: sym isTRAutomaticSymbol.
-	self assume: sym useCount > 0.
-	self assume: sym type == Address.
+	self assume: reg is: TRVirtualRegister | TRRealRegister.
+	self assume: sym is: TRAutomaticSymbol | [ :v | v isUsed and:[v type == Address ] ].
 
 	offset := AcDSLSymbol value: sym name.
 	generate ld: reg, (sp + offset).
@@ -139,10 +137,8 @@ TRRV64GCodeGenerator >> registerLoad: reg from: sym [
 TRRV64GCodeGenerator >> registerStore: reg to: sym [
 	| offset |
 
-	self assume: reg isTRRegister.
-	self assume: sym isTRAutomaticSymbol.
-	self assume: sym useCount > 0.
-	self assume: sym type == Address.
+	self assume: reg is: TRVirtualRegister | TRRealRegister.
+	self assume: sym is: TRAutomaticSymbol | [ :v | v isUsed and:[v type == Address ] ].
 
 	offset := AcDSLSymbol value: sym name.
 	generate sd: reg, (sp + offset).
@@ -150,7 +146,8 @@ TRRV64GCodeGenerator >> registerStore: reg to: sym [
 
 { #category : #'registers-private' }
 TRRV64GCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
-	self assume: instruction isProcessorInstruction.
+	self assume: instruction is: ProcessorInstruction.
+
 	instruction externalBindings 
 		keysAndValuesDo: [:name :value | 
 			name = 'rd' ifTrue: [
@@ -166,7 +163,7 @@ TRRV64GCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruct
 
 { #category : #'registers-private' }
 TRRV64GCodeGenerator >> virtualRegistersReadByProcessorInstruction: instruction do: block [
-	self assume: instruction isProcessorInstruction.
+	self assume: instruction is: ProcessorInstruction.
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
 		(#('rs1' 'rs2' 'rs3') includes: name) ifTrue: [ 

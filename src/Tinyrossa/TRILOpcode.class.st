@@ -390,15 +390,7 @@ TRILOpcode >> validateConstant: aNumber [
 
 { #category : #validation }
 TRILOpcode >> validateSymbol: aTRSymbol [
-	self isBranching ifTrue: [ 
-		self assume: aTRSymbol notNil.
-		self assume: aTRSymbol isTRLabelSymbol.
-		^ self.
-	].
-	self hasSymbolRef ifTrue: [ 
-		self assume: aTRSymbol notNil.
-		self assume: aTRSymbol isTRLabelSymbol not.
-		^ self.
-	].
-	self assume: aTRSymbol isNil.
+	self assume: aTRSymbol is: (TRLabelSymbol | [ :v | self isBranching ])
+								| (TRSymbol | [ :v | self hasSymbolRef ])
+								| nil.
 ]

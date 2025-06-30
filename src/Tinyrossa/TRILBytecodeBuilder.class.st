@@ -46,7 +46,7 @@ TRILBytecodeBuilder >> push: aTRILNode [
 	| value |
 
 	self assume: self currentState notNil.
-	self assume: aTRILNode opcode isTreeTop not.
+	self assume: aTRILNode is: TRILNode | [ :v | v opcode isTreeTop not ].
 
 	value := TRILValue forCompilation: compilation node: (self treetop: { aTRILNode }).
 	self currentState push: value
