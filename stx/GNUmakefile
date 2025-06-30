@@ -49,8 +49,8 @@ build: prereq shells
 run: build
 	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(STX) \
 		--quick \
-		--package-path $(MACHINEARITHMETIC_DIR) \
-		--package-path $(ARCHC_DIR) \
+		--package-path $(MACHINEARITHMETIC_DIR)/src \
+		--package-path $(ARCHC_DIR)/src \
 		--package-path $(LIBGDBS_DIR)/../.. \
 		--package-path ../src \
 		--load BaselineOf$(PROJECT) \
@@ -58,8 +58,8 @@ run: build
 
 test: build
 	ARCHC_PDL_DIR=$(ARCHC_PDL_DIR)/ $(STX) \
-		--package-path $(MACHINEARITHMETIC_DIR) \
-		--package-path $(ARCHC_DIR) \
+		--package-path $(MACHINEARITHMETIC_DIR)/src \
+		--package-path $(ARCHC_DIR)/src \
 		--package-path $(LIBGDBS_DIR)/../.. \
 		--package-path ../src \
 		--load BaselineOf$(PROJECT) \
