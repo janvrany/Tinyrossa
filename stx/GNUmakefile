@@ -38,6 +38,12 @@ LIBGDBS_BRANCH ?= default
 $(eval $(call mercurial-clone-local,LIBGDBS_DIR,$(LIBGDBS_URL),$(LIBGDBS_BRANCH)))
 endif
 
+ifndef TYPING_DIR
+TYPING_DIR    := ../3rdparty/Typing
+TYPING_URL    ?= https://github.com/janvrany/Typing
+TYPING_BRANCH ?= master
+$(eval $(call git-clone-local,TYPING_DIR,$(TYPING_URL),$(TYPING_BRANCH)))
+endif
 
 build: prereq shells
 	@echo "To run Smalltalk/X with $(PROJECT) loaded, run:"
@@ -52,6 +58,7 @@ run: build
 		--package-path $(MACHINEARITHMETIC_DIR)/src \
 		--package-path $(ARCHC_DIR)/src \
 		--package-path $(LIBGDBS_DIR)/../.. \
+		--package-path $(TYPING_DIR)/src \
 		--package-path ../src \
 		--load BaselineOf$(PROJECT) \
 		#--execute 'Tools::NewSystemBrowser openInClass: TRCompilationExamples selector: #example01_meaningOfLife'
@@ -61,6 +68,7 @@ test: build
 		--package-path $(MACHINEARITHMETIC_DIR)/src \
 		--package-path $(ARCHC_DIR)/src \
 		--package-path $(LIBGDBS_DIR)/../.. \
+		--package-path $(TYPING_DIR)/src \
 		--package-path ../src \
 		--load BaselineOf$(PROJECT) \
 		--run Builder::ReportRunner -r Builder::TestReport --fail-on-failure \
