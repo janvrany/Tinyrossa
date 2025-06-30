@@ -15,6 +15,7 @@ ManifestBaselineOfTinyrossa class >> includedInPreRequisites [
 
 	included := #(
 		#'BaselineOfArchC'
+		#'BaselineOfTyping'
 		#'Tinyrossa'
 		#'Tinyrossa-RISCV'
 		#'Tinyrossa-POWER'

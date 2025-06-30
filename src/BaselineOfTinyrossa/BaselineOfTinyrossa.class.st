@@ -30,12 +30,20 @@ BaselineOfTinyrossa >> baseline: spec [
 				spec repository: 'github://ObjectProfile/Roassal3:v0.9.2'
 			].
 
+			spec baseline: 'Typing' with: [
+				| myRepo |
+
+				myRepo := #IceRepository asClass registry detect:[ :each | each loadedPackages contains: [ :icep | icep name = self class package name ] ].
+				spec repository: 'tonel://' , myRepo location pathString , '/src'
+			].
+
 			spec
 				package: #'Tinyrossa' with:[
 					"LibCompat's implementation of OSProcess requires LibUnix"
 					spec requires: 'LibUnix'.
 					spec requires: 'LibCompat'.
-					spec requires: 'ArchC'
+					spec requires: 'ArchC'.
+					spec requires: 'Typing'.
 				];
 				package: #'Tinyrossa-Tests' with: [
 					spec requires: 'SUnitParametrized'.
