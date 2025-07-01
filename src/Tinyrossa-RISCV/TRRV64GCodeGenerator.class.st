@@ -27,7 +27,7 @@ TRRV64GCodeGenerator >> fitsInItypeImm: anInteger [
 
 { #category : #utilities }
 TRRV64GCodeGenerator >> loadConstant32: value into: reg [
-	self assert: (value between: INT32_MIN and: INT32_MAX).
+	self assume: (value between: INT32_MIN and: INT32_MAX).
 
 	"Code below is almost literal translation of code in OMR, see
 	 compiler/riscv/codegen/OMRTreeEvaluator.cpp, loadConstant32()."
@@ -58,7 +58,7 @@ TRRV64GCodeGenerator >> loadConstant32: value into: reg [
 
 { #category : #utilities }
 TRRV64GCodeGenerator >> loadConstant64: value into: reg [
-	self assert: (value between: INT64_MIN and: INT64_MAX).
+	self assume: (value between: INT64_MIN and: INT64_MAX).
 
 	"Code below is almost literal translation of code in OMR, see
 	 compiler/riscv/codegen/OMRTreeEvaluator.cpp, loadConstant64()."
@@ -126,10 +126,8 @@ TRRV64GCodeGenerator >> registerCopyFrom: srcReg to: dstReg [
 TRRV64GCodeGenerator >> registerLoad: reg from: sym [
 	| offset |
 
-	self assert: reg isTRRegister.
-	self assert: sym isTRAutomaticSymbol.
-	self assert: sym useCount > 0.
-	self assert: sym type == Address.
+	self assume: reg is: TRVirtualRegister | TRRealRegister.
+	self assume: sym is: TRAutomaticSymbol | [ :v | v isUsed and:[v type == Address ] ].
 
 	offset := AcDSLSymbol value: sym name.
 	generate ld: reg, (sp + offset).
@@ -139,10 +137,8 @@ TRRV64GCodeGenerator >> registerLoad: reg from: sym [
 TRRV64GCodeGenerator >> registerStore: reg to: sym [
 	| offset |
 
-	self assert: reg isTRRegister.
-	self assert: sym isTRAutomaticSymbol.
-	self assert: sym useCount > 0.
-	self assert: sym type == Address.
+	self assume: reg is: TRVirtualRegister | TRRealRegister.
+	self assume: sym is: TRAutomaticSymbol | [ :v | v isUsed and:[v type == Address ] ].
 
 	offset := AcDSLSymbol value: sym name.
 	generate sd: reg, (sp + offset).
@@ -150,7 +146,8 @@ TRRV64GCodeGenerator >> registerStore: reg to: sym [
 
 { #category : #'registers-private' }
 TRRV64GCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
-	self assert: instruction isProcessorInstruction.
+	self assume: instruction is: ProcessorInstruction.
+
 	instruction externalBindings 
 		keysAndValuesDo: [:name :value | 
 			name = 'rd' ifTrue: [
@@ -166,7 +163,7 @@ TRRV64GCodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruct
 
 { #category : #'registers-private' }
 TRRV64GCodeGenerator >> virtualRegistersReadByProcessorInstruction: instruction do: block [
-	self assert: instruction isProcessorInstruction.
+	self assume: instruction is: ProcessorInstruction.
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
 		(#('rs1' 'rs2' 'rs3') includes: name) ifTrue: [ 

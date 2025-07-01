@@ -1,38 +1,24 @@
 Class {
-	#name : #ManifestBaselineOfTinyrossa,
+	#name : #ManifestBaselineOfTyping,
 	#superclass : #PackageManifest,
-	#category : #'BaselineOfTinyrossa-Manifest'
+	#category : #'BaselineOfTyping-Manifest'
 }
 
 { #category : #'stx - description' }
-ManifestBaselineOfTinyrossa class >> includedInPreRequisites [
+ManifestBaselineOfTyping class >> includedInPreRequisites [
 	"list packages which are to be implicitely included in the prerequisites list,
 	 even if not found by the automatic search.
 	 Redefine this, if classes from other packages are referred to via reflection
 	 or by constructing names dynamically (i.e. the search cannot find it)"
 
-	| included |
-
-	included := #(
-		#'BaselineOfArchC'
-		#'BaselineOfTyping'
-		#'Tinyrossa'
-		#'Tinyrossa-RISCV'
-		#'Tinyrossa-POWER'
-		#'Tinyrossa-Tests'
-		#'Tinyrossa-Tests-RISCV'
-		#'Tinyrossa-Tests-POWER'
-	).
-	
-	(Smalltalk getPackageDirectoryForPackage:#'jv:vdb') notNil ifTrue:[
-		included := included copyWith: #'Tinyrossa-Tools-SmalltalkX'
-	].
-
-	^included
+	^ #(
+		#'Typing'
+		#'Typing-Examples'
+	)
 ]
 
 { #category : #'stx - description' }
-ManifestBaselineOfTinyrossa class >> mandatoryPreRequisites [
+ManifestBaselineOfTyping class >> mandatoryPreRequisites [
 	"list packages which are mandatory as a prerequisite.
 	 This are packages containing superclasses of my classes and classes which
 	 are extended by myself.
@@ -42,7 +28,7 @@ ManifestBaselineOfTinyrossa class >> mandatoryPreRequisites [
 	 Please take a look at the #referencedPreRequisites method as well."
 
 	^ #(
-		#'stx:libbasic'    "Object - superclass of ManifestBaselineOfTinyrossa"
-		#'stx:libcompat'    "PackageManifest - superclass of ManifestBaselineOfTinyrossa"
+		#'stx:libbasic'    "Object - superclass of BaselineOfArchC"
+		#'stx:libcompat'    "BaselineOf - superclass of BaselineOfArchC"
 	)
 ]

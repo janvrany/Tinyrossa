@@ -35,7 +35,7 @@ TRILBytecodeBuilder >> orphanClass [
 TRILBytecodeBuilder >> pop [
 	| value |
 
-	self assert: self currentState notNil.
+	self assume: self currentState notNil.
 
 	value := self currentState pop.
 	^ value loadUsing: self.
@@ -45,8 +45,8 @@ TRILBytecodeBuilder >> pop [
 TRILBytecodeBuilder >> push: aTRILNode [
 	| value |
 
-	self assert: self currentState notNil.
-	self assert: aTRILNode opcode isTreeTop not.
+	self assume: self currentState notNil.
+	self assume: aTRILNode is: TRILNode | [ :v | v opcode isTreeTop not ].
 
 	value := TRILValue forCompilation: compilation node: (self treetop: { aTRILNode }).
 	self currentState push: value
@@ -65,7 +65,7 @@ TRILBytecodeBuilder >> top: index [
 	 1, previous one at 2 and so on."
 	| value |
 
-	self assert: self currentState notNil.
+	self assume: self currentState notNil.
 
 	value := self currentState top: index.
 	^ value loadUsing: self.

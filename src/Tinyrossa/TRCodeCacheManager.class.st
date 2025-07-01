@@ -39,8 +39,8 @@ TRCodeCacheManager class >> runtime: aTRRuntime [
 
 { #category : #'adding & removing' }
 TRCodeCacheManager >> addSegment: aTRCodeCache [
-	self assert: runtime == aTRCodeCache runtime.
-	self assert:(segments includes: aTRCodeCache) not.
+	self assume: aTRCodeCache is: TRCodeCache | [:v | v runtime == runtime ].
+	self assume:(segments includes: aTRCodeCache) not.
 
 
 	aTRCodeCache manager: self.

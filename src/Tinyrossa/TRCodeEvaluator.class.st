@@ -53,8 +53,8 @@ TRCodeEvaluator >> compilation [
 TRCodeEvaluator >> evaluate: node [
 	| result |
 
-	self assert: node isUsed.
-	self assert: (node result isNil or: [ node useCount > 1 ]).
+	self assume: node is: TRILNode | [ :v | v isUsed ].
+	self assume: (node result isNil or: [ node useCount > 1 ]).
 
 	result := node result.
 	result isNil ifTrue: [ 
