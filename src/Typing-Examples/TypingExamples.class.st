@@ -9,6 +9,17 @@ TypingExamples class >> testSelectors [
 	^ self selectors select: [ :each | each beginsWith:'example' ]
 ]
 
+{ #category : #private }
+TypingExamples >> = another [
+	"Implementation of ComparableI >> ="
+	^ super = another
+]
+
+{ #category : #private }
+TypingExamples >> dispose [
+	"Implementation of DisposableI >> dispose"
+]
+
 { #category : #examples }
 TypingExamples >> example_01 [
 	"Below is the simplest possible example.
@@ -88,4 +99,46 @@ TypingExamples >> example_06 [
 
 	self assert: 1 is: Nat.
 	self assert: 1 is: Int32.
+]
+
+{ #category : #examples }
+TypingExamples >> example_07 [
+	"Sometimes a method takes an object from no particular
+	 class hierarchy. All we need from an object is that it
+	 responds to a handful of messages. This is where
+	 snterfaces come to the scene.
+
+	 Following checks that `self` implements interface
+	 `DisposableI` because it implements all methods
+	 the interface specifies (#dispose):"
+
+	self assert: self implements: DisposableI.
+
+	"Similarly, it implements `ComparableI` because
+	 it implements both #= and #hash specified by it:"
+	self assert: self implements: ComparableI.
+
+	"And `self` does not implement `LockableI` because
+	 it does not implement #acquire nor #release:"
+	self should: [ self assert: self implements: LockableI ] raise: Exception.
+]
+
+{ #category : #examples }
+TypingExamples >> example_08 [
+	"Sometimes a value needs to conform to multiple interfaces -
+	 for example in order to add a value to finalization registry,
+	 it has to be comparable and disposable at the same time: "
+
+	self assert: self implements: ComparableI + DisposableI.
+
+	"Since new intefaces can be created by composing other interfaces,
+	 we may just as well use FinalizableI which is defined as implementing
+	 both, cinoarable and disposavle (see definition od `FinalizableI`!):"
+	self assert: self implements: FinalizableI.
+]
+
+{ #category : #private }
+TypingExamples >> hash [
+	"Implementation of ComparableI >> hash"
+	^ super hash
 ]

@@ -21,7 +21,7 @@ TyClass >> check: value [
 
 { #category : #initialization }
 TyClass >> initializeWithKlass: aClass [
-	self assume: aClass isClass.
+	self assume: aClass isBehavior.
 	self assume: klass isNil.
 
 	klass := aClass

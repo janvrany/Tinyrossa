@@ -15,12 +15,34 @@ Object class >> asTyping [
 ]
 
 { #category : #'*Typing' }
+Object >> assert: value implements: interfaceOrInterfaceComposition [
+	<resource: #skipInDebuggersWalkBack>
+
+	self assume: interfaceOrInterfaceComposition is: (TyClass klass: Interface class) | (TyClass klass: InterfaceComposition).
+
+	self assert: (interfaceOrInterfaceComposition asTyping check: value)
+
+	"Created: / 29-07-2025 / 14:22:05 / Jan Vrany <jan.vrany@labware.com>"
+]
+
+{ #category : #'*Typing' }
 Object >> assert: value is: typing [
 	<resource: #skipInDebuggersWalkBack>
 
 	self assert: (typing asTyping check: value)
 
 	"Created: / 24-06-2025 / 15:47:10 / Jan Vrany <jan.vrany@labware.com>"
+]
+
+{ #category : #'*Typing' }
+Object >> assume: value implements: interfaceOrInterfaceComposition [
+	<resource: #skipInDebuggersWalkBack>
+
+	self assume: interfaceOrInterfaceComposition is: (TyClass klass: Interface class) | (TyClass klass: InterfaceComposition).
+
+	self assume: (interfaceOrInterfaceComposition asTyping check: value)
+
+	"Created: / 29-07-2025 / 14:22:19 / Jan Vrany <jan.vrany@labware.com>"
 ]
 
 { #category : #'*Typing' }
