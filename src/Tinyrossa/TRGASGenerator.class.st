@@ -42,7 +42,7 @@ TRGASGenerator >> generateAssemblerFile [
 
 { #category : #'generating output' }
 TRGASGenerator >> generateInstruction: insn on: asm [
-	| location |
+	| location relocation |
 
 	location := insn location.
 	location isTRSourceLocation ifTrue: [ 
@@ -85,6 +85,16 @@ TRGASGenerator >> generateInstruction: insn on: asm [
 			asm lf.
 			bci := location index.
 		].
+	].
+
+	relocation := insn relocation.
+	relocation notNil ifTrue: [
+		self assert: (relocation addend = 0).
+		self assert: (relocation symbol notNil).
+
+		asm nextPutAll: '        '.
+		asm nextPutAll: '.reloc ., '; nextPutAll: relocation type; nextPutAll: ', '; nextPutAll: relocation symbol asString.
+		asm lf.
 	].
 
 	insn isLabelInstruction ifTrue: [ 

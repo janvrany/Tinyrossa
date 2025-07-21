@@ -709,12 +709,13 @@ TRCompilationExamples >> example17_call_external_function_in_aot_mode [
 	| builder |
 
 	builder := compilation builder.
-	builder defineName: 'call_exit' type: Int32.
-	builder defineParameter: 'status' type: Int32.
+	builder defineName: 'main' type: Int32.
+	builder defineParameter: 'argc' type: Int32.
+	builder defineParameter: 'argv' type: Address.
 
 	(builder defineFunction: 'exit' type: Void). 
 
-	builder call: { builder iload: 'status' . 'exit' }.
+	builder call: { builder iload: 'argc' . 'exit' }.
 	builder ireturn: { builder iconst: 0 }.
 
 	compilation config
