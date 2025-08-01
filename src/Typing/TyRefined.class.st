@@ -28,3 +28,12 @@ TyRefined >> initializeWithBase: baseTyping refinement: refinementBlock [
 	base := baseTyping.
 	refinement := refinementBlock.
 ]
+
+{ #category : #'printing & storing' }
+TyRefined >> storeOn: aStream parenthesised: aBoolean [
+	aBoolean ifTrue: [ aStream nextPut:$( ].
+	base storeOn: aStream parenthesised: true.
+	aStream nextPutAll: ' | '.
+	aStream nextPutAll: refinement sourceNode sourceCode.
+	aBoolean ifTrue: [ aStream nextPut:$) ].
+]

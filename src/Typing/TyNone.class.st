@@ -21,3 +21,8 @@ TyNone class >> instance [
 TyNone >> check: value [
 	^ value isNil
 ]
+
+{ #category : #'printing & storing' }
+TyNone >> storeOn: aStream parenthesised: aBoolean [
+	aStream nextPutAll: 'nil'
+]

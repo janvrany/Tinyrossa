@@ -21,6 +21,26 @@ Typing >> check: value [
 	^ self subclassResponsibility.
 ]
 
+{ #category : #testing }
+Typing >> isChoice [
+	^ false
+]
+
+{ #category : #'printing & storing' }
+Typing >> printOn: aStream [
+	self storeOn: aStream
+]
+
+{ #category : #'printing & storing' }
+Typing >> storeOn: aStream [
+	self storeOn: aStream parenthesised: false
+]
+
+{ #category : #'printing & storing' }
+Typing >> storeOn: aStream parenthesised: aBoolean [
+	self subclassResponsibility
+]
+
 { #category : #'instance creation' }
 Typing >> | typeishOrRefinement [
 	typeishOrRefinement isBlock ifTrue: [

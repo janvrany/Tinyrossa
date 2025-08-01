@@ -26,3 +26,8 @@ TyClass >> initializeWithKlass: aClass [
 
 	klass := aClass
 ]
+
+{ #category : #'printing & storing' }
+TyClass >> storeOn: aStream parenthesised: aBoolean [
+	aStream nextPutAll: klass name
+]

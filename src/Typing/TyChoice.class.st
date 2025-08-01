@@ -27,6 +27,20 @@ TyChoice >> initializeWithOption1: option1Arg option2: option2Arg [
 	option2 := option2Arg.
 ]
 
+{ #category : #testing }
+TyChoice >> isChoice [
+	^ true
+]
+
+{ #category : #'printing & storing' }
+TyChoice >> storeOn: aStream parenthesised: aBoolean [
+	aBoolean ifTrue: [ aStream nextPut:$( ].
+	option1 storeOn: aStream parenthesised: (option1 isChoice not).
+	aStream nextPutAll: ' | '.
+	option2 storeOn: aStream parenthesised: true.
+	aBoolean ifTrue: [ aStream nextPut:$) ].
+]
+
 { #category : #'instance creation' }
 TyChoice >> | typeishOrRefinement [
 	typeishOrRefinement isBlock ifTrue: [

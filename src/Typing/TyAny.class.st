@@ -21,3 +21,8 @@ TyAny class >> instance [
 TyAny >> check: value [
 	^ true
 ]
+
+{ #category : #'printing & storing' }
+TyAny >> storeOn: aStream parenthesised: aBoolean [
+	aStream nextPutAll: 'TyAny instance'
+]
