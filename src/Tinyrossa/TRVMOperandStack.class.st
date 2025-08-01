@@ -30,7 +30,7 @@ TRVMOperandStack >> mergeInto: currentStack using: builder [
 	| currentValues |
 
 	currentValues := currentStack slots.
-	self assert: values size == currentValues size.
+	self assume: values size == currentValues size.
 
 	1 to: values size do: [:slotIndex | 
 		| currentValue incomingValue  |
@@ -46,7 +46,7 @@ TRVMOperandStack >> mergeInto: currentStack using: builder [
 
 { #category : #operations }
 TRVMOperandStack >> pop [
-	self assert: values size > 0.
+	self assume: values size > 0.
 
 	^ values removeLast
 ]
@@ -89,7 +89,7 @@ TRVMOperandStack >> top: index [
 	 starts from one - the top most element (lastly pushed) is at index
 	 1, previous one at 2 and so on."
 
-	self assert: (values size + 1 - index) > 0.
+	self assume: (values size + 1 - index) > 0.
 
 	^ values at: values size + 1 - index.
 ]

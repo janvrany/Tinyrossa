@@ -137,10 +137,10 @@ TRCodeCache >> add: codeObj [
 
 { #category : #'adding & removing' }
 TRCodeCache >> addSymbol: aTRStaticSymbol [
-	self assert: aTRStaticSymbol isTRStaticSymbol.
-	self assert: aTRStaticSymbol address isInteger.
-	self assert:(aTRStaticSymbol address between: base and: base + size) not.
-	self assert:(symbols keys contains: [:each | each name = aTRStaticSymbol name]) not.
+	self assume: aTRStaticSymbol isTRStaticSymbol.
+	self assume: aTRStaticSymbol address isInteger.
+	self assume:(aTRStaticSymbol address between: base and: base + size) not.
+	self assume:(symbols keys contains: [:each | each name = aTRStaticSymbol name]) not.
 
 	symbols at: aTRStaticSymbol put: aTRStaticSymbol address.
 	self link.
@@ -150,7 +150,7 @@ TRCodeCache >> addSymbol: aTRStaticSymbol [
 TRCodeCache >> allocCode: codeSize [
 	| codeStart |
 
-	self assert: (codeAllocPtr + codeSize) < goteAllocPtr.
+	self assume: (codeAllocPtr + codeSize) < goteAllocPtr.
 
 	codeStart := codeAllocPtr.
 	codeAllocPtr := codeAllocPtr + codeSize.
@@ -161,7 +161,7 @@ TRCodeCache >> allocCode: codeSize [
 TRCodeCache >> allocGOTentry [
 	| addr |
 
-	self assert: codeAllocPtr < (goteAllocPtr - sizeOfGOTentry).
+	self assume: codeAllocPtr < (goteAllocPtr - sizeOfGOTentry).
 
 	addr := goteAllocPtr.
 	goteAllocPtr := goteAllocPtr - sizeOfGOTentry.
@@ -194,8 +194,8 @@ TRCodeCache >> exports [
 TRCodeCache >> getGOTentryFor: aTRStaticSymbol [
 	| entry |
 
-	self assert: aTRStaticSymbol isTRStaticSymbol.
-	self assert:(symbols includesKey: aTRStaticSymbol).
+	self assume: aTRStaticSymbol isTRStaticSymbol.
+	self assume:(symbols includesKey: aTRStaticSymbol).
 
 	entry := aTRStaticSymbol got.
 	^ symbols elementAt: entry ifAbsent: [
@@ -275,8 +275,8 @@ TRCodeCache >> gtInspectorSymbolsIn: composite [
 
 { #category : #initialization }
 TRCodeCache >> initializeWithRuntime: runtimeArg base: baseArg size: sizeArg memory: memoryArg [
-	self assert: (baseArg isInteger and: [ baseArg >= 0 ]).
-	self assert: (sizeArg isInteger and: [ sizeArg >  0 ]).
+	self assume: (baseArg isInteger and: [ baseArg >= 0 ]).
+	self assume: (sizeArg isInteger and: [ sizeArg >  0 ]).
 
 	runtime := runtimeArg.
 	base := baseArg.

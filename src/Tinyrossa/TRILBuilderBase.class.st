@@ -677,7 +677,7 @@ TRILBuilderBase >> build: opcode arguments: arguments [
 
 	"Resolve symbol if any"
 	symref notNil ifTrue: [
-		self assert: (opcode hasSymbolRef or: [opcode isBranch]).
+		self assume: (opcode hasSymbolRef or: [opcode isBranch]).
 		opcode isBranching ifTrue: [ 
 			| target |
 
@@ -2374,7 +2374,7 @@ TRILBuilderBase >> ineg: arguments [
 
 { #category : #initialization }
 TRILBuilderBase >> initializeWithCompilation: aTRCompilation block: aTRILBlock [
-	self assert: aTRILBlock isTRILBlock.
+	self assume: aTRILBlock isTRILBlock.
 
 	compilation := aTRCompilation.
 	entry := current := aTRILBlock.

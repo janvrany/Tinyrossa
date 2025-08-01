@@ -34,8 +34,8 @@ TRVirtualRegister >> allocation [
 
 { #category : #accessing }
 TRVirtualRegister >> allocation: realReg [
-	self assert: realReg isTRRealRegister.
-	self assert: kind == realReg kind.
+	self assume: realReg isTRRealRegister.
+	self assume: kind == realReg kind.
 
 	allocation := realReg
 ]
