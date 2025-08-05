@@ -107,8 +107,8 @@ TRILBlock >> currentState [
 
 { #category : #initialization }
 TRILBlock >> initializeWithCFG: aTRCFG name: aString [
-	self assert: aTRCFG notNil.
-	self assert: aString notNil.
+	self assume: aTRCFG is: TRCFG.
+	self assume: aString is: String.
 
 	cfg := aTRCFG.
 	name := aString.
@@ -205,7 +205,7 @@ TRILBlock >> printOn:aStream [
 
 { #category : #'adding & removing' }
 TRILBlock >> remove: aTRNode [
-	self assert: (treetops includes: aTRNode).
+	self assume: aTRNode is: TRILNode | [ :v | treetops includes: v ].
 
 	treetops remove: aTRNode.
 	aTRNode decUseCount.
@@ -230,12 +230,13 @@ TRILBlock >> removePrecedessor: aTRILBlock [
 TRILBlock >> replace: oldNode with: newNode [
 	| index |
 
-	self assert: oldNode opcode isTreeTop description: 'Invalid node (not a treetop)'.
-	self assert: (treetops includes: oldNode).
-	self assert:((oldNode opcode isBranching == newNode opcode isBranching == true) "we're either replacing branch with branch..."
+	self assume: oldNode opcode isTreeTop description: 'Invalid node (not a treetop)'.
+	self assume: ((treetops includes: oldNode) or: [ bbstartNode == oldNode or:[ bbendNode == oldNode ] ]).
+	self assume:((oldNode opcode isBranching == newNode opcode isBranching == true) "we're either replacing branch with branch..."
 				 or:[(newNode opcode isBranching and:[ self isBranching not])       "...or we're creating branch in non-branching block..."
 				 or:[ newNode opcode isBranching not ]])                           "...or we're replacing with non-branching node."
 		description: 'Invalid node (block can contain at most one branching node)'.
+
 
 	index := treetops indexOf: oldNode.
 	self assert:(index == treetops size or: [newNode opcode isReturn not and:[ newNode opcode isGoto not]])
@@ -264,14 +265,13 @@ TRILBlock >> setNext: aTRILBlock [
 	"Set next block (in sense of linear order). This is used
 	 during block linearization."
 
-	self assert: (self isTerminated or: [ successor1 == aTRILBlock ]).    
+	self assume: aTRILBlock is: (TRILBlock | [ :v | self isTerminated or: [ successor1 == v ] ]) | nil.
 	next := aTRILBlock.
 ]
 
 { #category : #initialization }
 TRILBlock >> setSuccessor1: blockOrNil [
-	self assert: (blockOrNil isNil or:[blockOrNil isTRILBlock]).
-	self assert: (blockOrNil isNil or:[self isTerminated not]).
+	self assume: blockOrNil is: (TRILBlock | [ :v | self isTerminated not ]) | nil.
 
 	successor1 notNil ifTrue: [ 
 		successor1 removePrecedessor: self.
@@ -284,8 +284,7 @@ TRILBlock >> setSuccessor1: blockOrNil [
 
 { #category : #initialization }
 TRILBlock >> setSuccessor2: block [
-	self assert: (block isNil or:[block isTRILBlock]).
-	self assert: (block isNil or:[treetops contains:[:node | node opcode isBranching]]).
+	self assume: block is: (TRILBlock | [ :v | self isBranching ]) | nil.
 
 	successor2 notNil ifTrue: [ 
 		successor2 removePrecedessor: self.
@@ -303,8 +302,8 @@ TRILBlock >> startState [
 
 { #category : #'accessing - VM state' }
 TRILBlock >> startState: aTRVMState [
-	self assert: startState isNil.
-	self assert: currentState isNil.
+	self assume: startState is: nil.
+	self assume: currentState is: nil.
 
 	startState := aTRVMState.
 	currentState := aTRVMState copy.

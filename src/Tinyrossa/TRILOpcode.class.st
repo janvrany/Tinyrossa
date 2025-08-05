@@ -102,7 +102,7 @@ TRILOpcode >> initializeFrom: anArray [
 	Private - initialize opcode from specification. Only to be called
 	from TRILOpcodes class >> initialize!
 	"
-	self assert: anArray size == self class instSize.
+	self assume: anArray size == self class instSize.
 	1 to: anArray size do: [:instIndex | 
 		self instVarAt: instIndex put: (anArray at: instIndex).
 	].
@@ -373,7 +373,6 @@ TRILOpcode >> validateChildren: aCollection [
 	"If `children` is nil, it means the node can have
 	 any number of children of any type. For example ?call nodes."
 	children notNil ifTrue:[
-		self assert: aCollection size == children size description: 'Invalid number of children'.
 		1 to: children size do: [ :i |
 			self assert: ((children at: i) isCompatibleWith: (aCollection at: i) type) description: 'Incompatible child ' , i printString
 		].
@@ -385,21 +384,13 @@ TRILOpcode >> validateConstant: aNumber [
 	self isLoadConst ifTrue: [
 		type validateConstant: aNumber.
 	] ifFalse: [ 
-		self assert: aNumber isNil.
+		self assume: aNumber isNil.
 	].
 ]
 
 { #category : #validation }
 TRILOpcode >> validateSymbol: aTRSymbol [
-	self isBranching ifTrue: [ 
-		self assert: aTRSymbol notNil.
-		self assert: aTRSymbol isTRLabelSymbol.
-		^ self.
-	].
-	self hasSymbolRef ifTrue: [ 
-		self assert: aTRSymbol notNil.
-		self assert: aTRSymbol isTRLabelSymbol not.
-		^ self.
-	].
-	self assert: aTRSymbol isNil.
+	self assume: aTRSymbol is: (TRLabelSymbol | [ :v | self isBranching ])
+								| (TRSymbol | [ :v | self hasSymbolRef ])
+								| nil.
 ]
