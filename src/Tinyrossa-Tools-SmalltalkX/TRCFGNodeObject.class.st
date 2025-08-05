@@ -74,6 +74,7 @@ TRCFGNodeObject >> moveTo:aPoint [
 	| redraw |
 
 	self origin: aPoint.
+	redraw := false.
 	view contents do: [:each | 
 		each isEdge ifTrue: [ 
 			(each src == self or: [ each dst == self ]) ifTrue: [ 

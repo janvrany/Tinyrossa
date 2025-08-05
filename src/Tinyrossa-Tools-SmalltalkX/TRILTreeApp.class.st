@@ -3,9 +3,8 @@ Class {
 	#superclass : #VDBAbstractTreeApplication,
 	#instVars : [
 		'nodeListHolder',
-		'nodeList',
 		'nodeSelectionHolder',
-		'nodePrinter'
+		'nodeHighlightHolder'
 	],
 	#category : #'Tinyrossa-Tools-SmalltalkX'
 }
@@ -48,6 +47,37 @@ TRILTreeApp >> contextMenuItemSlice [
 ]
 
 { #category : #'change & update-delayed' }
+TRILTreeApp >> delayedUpdateHighlight [
+	| nodeP |
+
+	nodeP := self internalHighlightHolder value.
+	nodeP notNil ifTrue: [
+		self nodeHighlightHolder value: nodeP node
+	] ifFalse: [ 
+		self nodeHighlightHolder value: nil
+	].
+]
+
+{ #category : #'change & update-delayed' }
+TRILTreeApp >> delayedUpdateInternalHighlight [
+	| highlighted |
+
+	highlighted := self nodeHighlightHolder value.
+	highlighted notNil ifTrue: [
+		internalListHolder value do: [:nodeP | 
+			nodeP node == highlighted ifTrue: [ 
+				internalHighlightHolder value: nodeP.
+				^ self.
+			].
+		].
+	].
+	internalHighlightHolder value: nil.
+
+	"Created: / 26-06-2018 / 11:33:06 / Jan Vrany <jan.vrany@fit.cvut.cz>"
+	"Modified: / 03-07-2018 / 14:56:10 / Jan Vrany <jan.vrany@fit.cvut.cz>"
+]
+
+{ #category : #'change & update-delayed' }
 TRILTreeApp >> delayedUpdateInternalList [
 	| printer builder root |
 
@@ -56,9 +86,8 @@ TRILTreeApp >> delayedUpdateInternalList [
 		| printed item |
 
 		printed := printer hasPrinted: node.
-		item := HierarchicalItemWithLabelAndIconAndValue new.
-		item value: node.
-		item label: (printer print: node).
+		item := TRILNodePresenter new.
+		item setNode: node label: (printer print: node).
 		printed ifFalse: [ 
 			item children: (node children collect: builder).
 		].
@@ -124,6 +153,33 @@ TRILTreeApp >> il [
 TRILTreeApp >> il: aCollection [
 	self nodeListHolder value: aCollection.
 
+]
+
+{ #category : #aspects }
+TRILTreeApp >> nodeHighlightHolder [
+	nodeHighlightHolder isNil ifTrue: [
+		nodeHighlightHolder := ValueHolder new.
+		nodeHighlightHolder addDependent:self.
+	].
+	^ nodeHighlightHolder
+]
+
+{ #category : #aspects }
+TRILTreeApp >> nodeHighlightHolder: aValueModel [
+	|oldValue newValue|
+
+	nodeHighlightHolder notNil ifTrue: [
+		oldValue := nodeHighlightHolder value.
+		nodeHighlightHolder removeDependent: self.
+	].
+	nodeHighlightHolder := aValueModel.
+	nodeHighlightHolder notNil ifTrue: [
+		nodeHighlightHolder addDependent: self.
+	].
+	newValue := nodeHighlightHolder value.
+	oldValue ~~ newValue ifTrue: [
+		self update: #value with: newValue from: nodeHighlightHolder.
+	].
 ]
 
 { #category : #aspects }
@@ -198,6 +254,11 @@ TRILTreeApp >> update:aspect with:parameter from:sender [
 	].
 	sender == nodeSelectionHolder ifTrue: [ 
 		self enqueueDelayedUpdateInternalSelection.
+		^ self
+	].
+
+	sender == nodeHighlightHolder ifTrue: [ 
+		self enqueueDelayedUpdateInternalHighlight.
 		^ self
 	].
 	super update:aspect with:parameter from:sender

@@ -2,7 +2,8 @@ Class {
 	#name : #TRInstructionListApp,
 	#superclass : #VDBInstructionListApplication,
 	#instVars : [
-		'selectedNodeHolder'
+		'selectedNodeHolder',
+		'highlightedNodeHolder'
 	],
 	#category : #'Tinyrossa-Tools-SmalltalkX'
 }
@@ -18,28 +19,45 @@ TRInstructionListApp class >> aspectSelectors [
 	"Modified: / 10-08-2022 / 16:02:10 / Jan Vrany <jan.vrany@labware.com>"
 ]
 
-{ #category : #aspects }
-TRInstructionListApp >> backgroundColorFor: aVDBPresenter [
-	| color node |
+{ #category : #'change & update-delayed' }
+TRInstructionListApp >> delayedUpdateHighlight [
+	| nodeP |
 
-	color := super backgroundColorFor: aVDBPresenter.
-	color notNil ifTrue: [ ^ color ].
-
-	node := self selectedNodeHolder value.
-	node notNil ifTrue: [ 
-		|  insn |
-
-		insn := aVDBPresenter instruction dissection.
-		(insn notNil and: [ insn isPseudoInstruction not and:[insn node = node ]]) ifTrue: [
-			^ (View styleSheet colorAt: #grey_bg_color default:[ Color rgbValue: 16r555555 ])
-		].
+	nodeP := self internalHighlightHolder value.
+	(nodeP notNil and:[nodeP instruction dissection notNil]) ifTrue: [
+		self highlightedNodeHolder value: nodeP instruction dissection node
+	] ifFalse: [ 
+		self highlightedNodeHolder value: nil
 	].
+]
 
-	^ nil
+{ #category : #'change & update-delayed' }
+TRInstructionListApp >> delayedUpdateInternalHighlight [
+	| highlighted |
 
-	"Created: / 26-06-2018 / 11:26:25 / Jan Vrany <jan.vrany@fit.cvut.cz>"
-	"Modified: / 21-10-2019 / 01:10:45 / Jan Vrany <jan.vrany@fit.cvut.cz>"
-	"Modified: / 29-07-2022 / 16:18:29 / Jan Vrany <jan.vrany@labware.com>"
+	highlighted := self highlightedNodeHolder value.
+	highlighted notNil ifTrue: [
+		| highlightedPs |
+
+		highlightedPs := OrderedCollection new: 3.
+		self instructionPresentersDo: [:insnP | 
+			| dissection |
+
+			dissection := insnP instruction dissection.
+			dissection notNil ifTrue: [ 
+				dissection node == highlighted ifTrue: [ 
+					highlightedPs add: insnP.
+				].
+			].
+		].
+		internalHighlightHolder value: highlightedPs.
+		^ self
+	].
+	internalHighlightHolder value: nil.
+
+
+	"Created: / 26-06-2018 / 11:33:06 / Jan Vrany <jan.vrany@fit.cvut.cz>"
+	"Modified: / 03-07-2018 / 14:56:10 / Jan Vrany <jan.vrany@fit.cvut.cz>"
 ]
 
 { #category : #'change & update-delayed' }
@@ -54,6 +72,33 @@ TRInstructionListApp >> delayedUpdateSelection [
 	self selectedNodeHolder value: node.
 
 	"Modified: / 22-06-2018 / 15:08:26 / Jan Vrany <jan.vrany@fit.cvut.cz>"
+]
+
+{ #category : #aspects }
+TRInstructionListApp >> highlightedNodeHolder [
+	highlightedNodeHolder isNil ifTrue: [
+		highlightedNodeHolder := ValueHolder new.
+		highlightedNodeHolder addDependent:self.
+	].
+	^ highlightedNodeHolder
+]
+
+{ #category : #aspects }
+TRInstructionListApp >> highlightedNodeHolder: aValueModel [
+	|oldValue newValue|
+
+	highlightedNodeHolder notNil ifTrue: [
+		oldValue := highlightedNodeHolder value.
+		highlightedNodeHolder removeDependent: self.
+	].
+	highlightedNodeHolder := aValueModel.
+	highlightedNodeHolder notNil ifTrue: [
+		highlightedNodeHolder addDependent: self.
+	].
+	newValue := highlightedNodeHolder value.
+	oldValue ~~ newValue ifTrue: [
+		self update: #value with: newValue from: highlightedNodeHolder.
+	].
 ]
 
 { #category : #aspects }
@@ -92,6 +137,10 @@ TRInstructionListApp >> update:aspect with:param from:sender [
 	sender == selectedNodeHolder ifTrue:[ 
 		self enqueueDelayedInvalidateInternalList.
 		^ self.
+	].
+
+	sender == highlightedNodeHolder ifTrue: [ 
+		self enqueueDelayedUpdateInternalHighlight.
 	].
 	super update:aspect with:param from:sender
 
