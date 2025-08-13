@@ -134,7 +134,19 @@ TRILBlock >> dominatorsDo: aBlock [
 
 { #category : #accessing }
 TRILBlock >> immediateDominator [
-	^ immediateDominator
+	self assert: immediateDominator notNil.
+
+	"By definition, immediate dominator of a block cannot be the block itself.
+	 Here if immediateDominator == self means that dominator analysis has been
+	 run but the block has no immediate dominator. In other words, `self` is used
+	 as a special null value different from nil (which means that dominators have
+	 not yet been computed)."
+
+	immediateDominator == self ifTrue: [
+		^ nil
+	] ifFalse: [
+		^ immediateDominator
+	]
 ]
 
 { #category : #initialization }
