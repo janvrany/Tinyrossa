@@ -35,7 +35,8 @@ Class {
 		'successor2',
 		'next',
 		'startState',
-		'currentState'
+		'currentState',
+		'immediateDominator'
 	],
 	#pools : [
 		'TRILOpcodes'
@@ -105,6 +106,37 @@ TRILBlock >> currentState [
 	^ currentState
 ]
 
+{ #category : #accessing }
+TRILBlock >> dominators [
+	"Return a set of blocks that dominates this block
+	 (the receiver)."
+
+	| dominators |
+
+	dominators := Set new.
+	self dominatorsDo: [ :dominator | dominators add: dominator ].
+	^ dominators
+]
+
+{ #category : #enumerating }
+TRILBlock >> dominatorsDo: aBlock [
+	"Evaluate aBlock for each block that dominates this
+	 block (the receiver)."
+
+	| dominator |
+
+	dominator := self.
+	[ dominator notNil ] whileTrue: [
+		aBlock value: dominator.
+		dominator := dominator immediateDominator.
+	].
+]
+
+{ #category : #accessing }
+TRILBlock >> immediateDominator [
+	^ immediateDominator
+]
+
 { #category : #initialization }
 TRILBlock >> initializeWithCFG: aTRCFG name: aString [
 	self assert: aTRCFG notNil.
@@ -128,6 +160,15 @@ TRILBlock >> isBranching [
 
 	branching := treetops contains: [:node | node opcode isBranching ].
 	^ branching
+]
+
+{ #category : #queries }
+TRILBlock >> isDominatedBy: block [
+	"Resturn true, if this block (receiver) is dominated by given block,
+	 false otherwise."
+
+	self dominatorsDo: [ :dominator | dominator == block ifTrue: [ ^ true ] ].
+	^ false
 ]
 
 { #category : #testing }
@@ -266,6 +307,14 @@ TRILBlock >> setNext: aTRILBlock [
 
 	self assert: (self isTerminated or: [ successor1 == aTRILBlock ]).    
 	next := aTRILBlock.
+]
+
+{ #category : #initialization }
+TRILBlock >> setSetImmediateDominator: block [
+	self assert: block isTRILBlock.
+	self assert: immediateDominator isNil.
+
+	immediateDominator := block
 ]
 
 { #category : #initialization }
