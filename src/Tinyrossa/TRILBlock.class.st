@@ -390,7 +390,7 @@ TRILBlock >> replace: oldNode with: newNode [
 
 { #category : #initialization }
 TRILBlock >> setImmediateDominator: block [
-	self assume: block is: TRILBlock.
+	self assume: block is: TRILBlock | nil.
 
 	immediateDominator := block
 ]

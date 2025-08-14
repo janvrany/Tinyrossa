@@ -5,7 +5,8 @@ Class {
 		'compilation',
 		'blocks',
 		'entry',
-		'nextBlockId'
+		'nextBlockId',
+		'loops'
 	],
 	#pools : [
 		'TRILOpcodes'
@@ -50,12 +51,13 @@ TRCFG >> addBlockNamed: aStringOrNil [
 
 { #category : #accessing }
 TRCFG >> blocks [
-	"Return the list of all *reachable* blocks"
+	"Return the list of all *reachable* blocks in pre-order"
 
 	| reachable |
 
 	reachable := OrderedCollection new: blocks size.
 	self preorderDo: [ :block | reachable add: block ].
+	self assert: reachable first == entry.
 	^ reachable.
 ]
 
@@ -173,9 +175,33 @@ TRCFG >> linearize [
 	].
 ]
 
+{ #category : #accessing }
+TRCFG >> loops [
+	"Return (possibly empty) list of loops in this CFG.
+	 If loop analysis has not been run yet, return nil."
+
+	^ loops
+]
+
+{ #category : #accessing }
+TRCFG >> loops: loopsCollection [
+	"Set loops found in this CFG to (possibly empty) `loopsCollection`.
+	 This is intended to be called only from loop analysis."
+
+	self assume: loops isNil.
+
+	loops := loopsCollection.
+]
+
 { #category : #private }
 TRCFG >> modified [
 	"Called whenever a CFG is modified (new edge is added or removed)."
+
+	"When CFG is modified, we need to flush all cached data flow information:"
+
+	"* Loop info"
+	blocks do: [:block | block setImmediateDominator: nil ].
+	loops := nil.
 ]
 
 { #category : #enumerating }
