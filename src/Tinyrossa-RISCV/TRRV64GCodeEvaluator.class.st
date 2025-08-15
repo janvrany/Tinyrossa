@@ -800,9 +800,9 @@ TRRV64GCodeEvaluator >> evaluate_lsub: node [
 TRRV64GCodeEvaluator >> evaluate_overflowchk: node [
 	| operationNode src1Reg src2Reg |
 
-	self assert: node child1 opcode mayOverflow.  
-	self assert: node child1 child1 == node child2.
-	self assert: node child1 child2 == node child3.
+	self assume: node child1 opcode mayOverflow.
+	self assume: node child1 child1 == node child2.
+	self assume: node child1 child2 == node child3.
 
 	operationNode := node child1.
 	src1Reg := self evaluate: operationNode child1.

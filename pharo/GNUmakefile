@@ -52,6 +52,13 @@ LIBGDBS_BRANCH ?= default
 $(eval $(call mercurial-clone-local,LIBGDBS_DIR,$(LIBGDBS_URL),$(LIBGDBS_BRANCH)))
 endif
 
+ifndef TYPING_DIR
+TYPING_DIR    := ../3rdparty/Typing
+TYPING_URL    ?= https://github.com/janvrany/Typing
+TYPING_BRANCH ?= master
+$(eval $(call git-clone-local,TYPING_DIR,$(TYPING_URL),$(TYPING_BRANCH)))
+endif
+
 build: prereq $(PROJECT).image shells
 	@echo ""
 	@echo "To open Pharo $(PROJECT) image run:"
@@ -72,6 +79,7 @@ $(PROJECT).image: ../src/*/*.st
 	$(call pharo-load-local, $@, SUnitParametrized,$(PHARO_HACKS_DIR)/src)
 	$(call pharo-load-local, $@, PTerm,            $(PTERM_DIR))
 	$(call pharo-load-local, $@, LibGDBs,          $(LIBGDBS_DIR)/ports/pharo/src-generated)
+	$(call pharo-load-local, $@, Typing,           $(TYPING_DIR)/src)
 	$(call pharo-load-local, $@, Tinyrossa,        ../src)
 
 run: build

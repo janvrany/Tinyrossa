@@ -205,7 +205,7 @@ TRRV64GPSABILinkage >> generatePrologue [
 TRRV64GPSABILinkage >> generateReturn: node [
 	| srcReg leave deps |
 
-	self assert: codegen compilation functionType == node child1 type.
+	self assume: codegen compilation functionType == node child1 type.
 
 	srcReg := codegen evaluator evaluate: node child1.
 

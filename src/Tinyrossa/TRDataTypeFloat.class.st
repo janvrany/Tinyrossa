@@ -19,5 +19,5 @@ TRDataTypeFloat >> name [
 
 { #category : #validation }
 TRDataTypeFloat >> validateConstant: aNumber [
-	self assert: aNumber isFloat
+	self assume: aNumber isFloat
 ]

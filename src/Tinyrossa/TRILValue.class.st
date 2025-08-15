@@ -38,8 +38,7 @@ TRILValue class >> forCompilation: compilation node: node [
 TRILValue >> initializeWithCompilation: compilation node: treetopNode [
 	| valueNode |
 
-	self assert: treetopNode opcode == treetop.
-	self assert: treetopNode child1 type isVoidType not.
+	self assume: treetopNode is: TRILNode | [ :v | v opcode isTreeTop and: [ v child1 type isVoidType not ] ].
 
 	valueNode := treetopNode child1.
 	store := TRILNode opcode: valueNode type storeOpcode
@@ -94,8 +93,8 @@ TRILValue >> symbol [
 TRILValue >> symbol: aTRAutomaticSymbol [
 	| storeInAnotherAuto |
 
-	self assert: self symbol type = aTRAutomaticSymbol type.
-	self assert: self symbol useCount == 1.
+	self assume: aTRAutomaticSymbol is: TRAutomaticSymbol | [ :v | self symbol type = v type ].
+	self assume: self symbol useCount == 1.
 
 	storeInAnotherAuto := TRILNode opcode: store opcode
 								   symbol: aTRAutomaticSymbol

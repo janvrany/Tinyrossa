@@ -16,15 +16,14 @@ TRSymbolManager class >> new [
 
 { #category : #counting }
 TRSymbolManager >> countSymbolsByType: symbolClass [
-	self assert: (symbolClass inheritsFrom: TRSymbol).
+	self assume: symbolClass is: Class | [ :v | v inheritsFrom: TRSymbol].
 
 	^ symbols count: [ :symbol | symbol isKindOf: symbolClass ].
 ]
 
 { #category : #defining }
 TRSymbolManager >> define: aTRSymbol [
-	self assert: aTRSymbol isTRSymbol.
-	self assert: (self hasSymbolNamed: aTRSymbol name) not.
+	self assume: aTRSymbol is: TRSymbol | [ :v | (self hasSymbolNamed: v name) not ].
 
 	symbols add: aTRSymbol.
 	^ aTRSymbol
@@ -90,7 +89,7 @@ TRSymbolManager >> initialize [
 
 { #category : #lookup }
 TRSymbolManager >> lookupLabelByBlock: aTRILBlock [
-	self assert: aTRILBlock isTRILBlock.
+	self assume: aTRILBlock is: TRILBlock.
 
 	^ symbols 
 		detect: [:symbol | symbol isTRLabelSymbol and:[symbol name == aTRILBlock name] ]
@@ -116,7 +115,7 @@ TRSymbolManager >> lookupSymbolByName: aString ifAbsent: aBlock [
 
 { #category : #lookup }
 TRSymbolManager >> lookupSymbolsByType: symbolClass [
-	self assert: (symbolClass inheritsFrom: TRSymbol).
+	self assume: symbolClass is: Class | [ :v | v inheritsFrom: TRSymbol].
 
 	^ symbols select: [ :symbol | symbol isKindOf: symbolClass ].
 ]

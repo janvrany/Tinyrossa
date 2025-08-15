@@ -49,7 +49,8 @@ TRRegisterMappedSymbol >> offset [
 
 { #category : #initialization }
 TRRegisterMappedSymbol >> setOffset: anInteger [
-	self assert: offset isNil.
+	self assume: anInteger is: Integer.
+	self assume: offset is: nil.
 
 	offset := anInteger
 ]

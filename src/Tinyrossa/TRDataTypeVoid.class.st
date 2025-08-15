@@ -16,5 +16,5 @@ TRDataTypeVoid >> name [
 
 { #category : #validation }
 TRDataTypeVoid >> validateConstant: aNumber [
-   self assert: false
+   self assume: false
 ]

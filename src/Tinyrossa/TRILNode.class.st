@@ -75,7 +75,7 @@ TRILNode >> children [
 
 { #category : #accessing }
 TRILNode >> constant [
-	self assert: opcode isLoadConst.
+	self assume: opcode isLoadConst.
 	^ constant
 ]
 
@@ -141,9 +141,7 @@ TRILNode >> location [
 
 { #category : #accessing }
 TRILNode >> location: aTRLocation [
-	self assert: (aTRLocation isTRLocation or: [ aTRLocation isNil ]).
-
-	(location notNil and: [ aTRLocation isNil ]) ifTrue: [ self halt ].
+	self assume: aTRLocation is: TRLocation | nil.
 
 	location := aTRLocation.
 ]
@@ -221,8 +219,8 @@ TRILNode >> printOn:aStream [
 TRILNode >> replace: oldChild with: newChild [
 	| newChildren |
 
-	self assert: children notEmptyOrNil.
-	self assert: (children includes: oldChild).
+	self assume: children notEmptyOrNil.
+	self assume: (children includes: oldChild).
 
 	newChildren := children copy.
 	newChildren at: (children indexOf: oldChild) put: newChild.
@@ -245,7 +243,7 @@ TRILNode >> result [
 
 { #category : #initialization }
 TRILNode >> setBlock: aTRILBlock [
-	self assert: aTRILBlock isTRILBlock.
+	self assume: aTRILBlock is: TRILBlock.
 
 	block isNil ifTrue: [
 		block := aTRILBlock.
@@ -261,28 +259,28 @@ TRILNode >> setBlock: aTRILBlock [
 { #category : #initialization }
 TRILNode >> setResult: vreg [
 	opcode type == Void ifTrue: [ 
-		self assert: vreg isNil description: 'Attempting to set result for void-typed node'.
+		self assume: vreg isNil description: 'Attempting to set result for void-typed node'.
 		^ self.
 	].
 	opcode isTreeTop ifTrue: [ 
-		self assert: vreg isNil description: 'Attempting to set result of tree-top'.
+		self assume: vreg isNil description: 'Attempting to set result of tree-top'.
 		^ self.
 	].
 	opcode type isIntegerType ifTrue: [ 
-		self assert: vreg notNil.
-		self assert: vreg kind == GPR
+		self assume: vreg notNil.
+		self assume: vreg kind == GPR
 	] ifFalse: [ 
-		self assert: vreg notNil.
-		self assert: vreg kind == FPR
+		self assume: vreg notNil.
+		self assume: vreg kind == FPR
 	].
-	self assert: result isNil description: 'Node already evaluated!'.
+	self assume: result isNil description: 'Node already evaluated!'.
 	vreg setAssigned.
 	result := vreg.
 ]
 
 { #category : #accessing }
 TRILNode >> symbol [
-	self assert: (opcode hasSymbolRef or: [ opcode isBranching ]).
+	self assume: (opcode hasSymbolRef or: [ opcode isBranching ]).
 	^ symbol
 ]
 
