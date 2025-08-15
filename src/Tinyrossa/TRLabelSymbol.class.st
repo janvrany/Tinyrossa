@@ -39,7 +39,7 @@ TRLabelSymbol >> isTRLabelSymbol [
 
 { #category : #initialization }
 TRLabelSymbol >> setBlock: aTRILBlock [
-	self assert: aTRILBlock isTRILBlock.
+	self assume: aTRILBlock isTRILBlock.
 
 	block := aTRILBlock
 ]

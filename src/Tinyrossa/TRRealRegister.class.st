@@ -48,6 +48,11 @@ TRRealRegister >> isTRRegister [
 	^ true
 ]
 
+{ #category : #testing }
+TRRealRegister >> isTRVirtualRegister [
+	^ false
+]
+
 { #category : #accessing }
 TRRealRegister >> kind [
 	^ kind

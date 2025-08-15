@@ -19,7 +19,7 @@ TRBytecodeLocation >> index [
 
 { #category : #initialization }
 TRBytecodeLocation >> initializeWithIndex: indexArg [
-	self assert: indexArg isInteger.
+	self assume: indexArg isInteger.
 
 	index := indexArg.
 ]

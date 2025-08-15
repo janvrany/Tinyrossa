@@ -16,8 +16,8 @@ TRRegisterDependencyGroup >> addDependency: vReg on: rReg [
 	 See class documentation of `TRRegisterDependencies`.
 	"
 
-	self assert: vReg isTRRegister.
-	self assert: rReg isTRRealRegister.
+	self assume: vReg isTRRegister.
+	self assume: rReg isTRRealRegister.
 
 	self add: (TRRegisterDependency virtual: vReg real: rReg).
 ]
@@ -30,7 +30,7 @@ TRRegisterDependencyGroup >> addTrashed: rReg [
 	 See class documentation of `TRRegisterDependencies`.
 	"
 
-	self assert: rReg isTRRealRegister.
+	self assume: rReg isTRRealRegister.
 
 	self add: (TRRegisterDependency virtual: nil real: rReg).
 ]

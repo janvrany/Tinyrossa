@@ -67,7 +67,7 @@ TRCFG >> compilation [
 { #category : #accessing }
 TRCFG >> entry [
 	"Return the entry block"
-	self assert: entry notNil.
+	self assume: entry notNil.
 
 	^ entry
 ]
@@ -103,7 +103,7 @@ TRCFG >> linearDo: aBlock [
 	 reachable."
 	| block |        
 
-	self assert: entry notNil.
+	self assume: entry notNil.
 
 	block := entry.
 	[ block notNil ] whileTrue:[
@@ -117,7 +117,7 @@ TRCFG >> linearize [
 	"Order blocks into linear list."
 	| queue seen block |
 
-	self assert: entry notNil.
+	self assume: entry notNil.
 
 	"Linearize blocks"
 	queue := Stack with: entry.
@@ -200,7 +200,7 @@ TRCFG >> preorderDo: aBlock [
 
 	| stack seen |
 
-	self assert: entry notNil.
+	self assume: entry notNil.
 
 	stack := Stack with: entry.
 	seen := Set with: entry.

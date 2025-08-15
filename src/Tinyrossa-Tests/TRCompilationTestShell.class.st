@@ -76,7 +76,7 @@ TRCompilationTestShell class >> shellDirectory [
 
 { #category : #accessing }
 TRCompilationTestShell >> debugger [
-	self assert: debugger notNil.
+	self assume: debugger notNil.
 	^ debugger
 ]
 

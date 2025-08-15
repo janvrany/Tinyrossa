@@ -79,7 +79,7 @@ TRDataType >> constOpcode [
 
 { #category : #testing }
 TRDataType >> isCompatibleWith: anotherType [
-	self assert: (anotherType isKindOf: TRDataType).
+	self assume: (anotherType isKindOf: TRDataType).
 	^ self == anotherType
 ]
 

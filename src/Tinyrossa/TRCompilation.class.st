@@ -148,8 +148,8 @@ TRCompilation >> optimize [
 
 { #category : #initialization }
 TRCompilation >> setFunctionSymbol: aTRFunctionSymbol [
-	self assert: aTRFunctionSymbol isTRFunctionSymbol.
-	self assert: functionSymbol isNil.
+	self assume: aTRFunctionSymbol isTRFunctionSymbol.
+	self assume: functionSymbol isNil.
 
 	functionSymbol := aTRFunctionSymbol
 ]

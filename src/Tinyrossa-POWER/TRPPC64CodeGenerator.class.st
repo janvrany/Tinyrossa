@@ -35,7 +35,8 @@ TRPPC64CodeGenerator >> fitsInDFormImm: anInteger [
 
 { #category : #utilities }
 TRPPC64CodeGenerator >> loadConstant32: value into: reg [
-	self assert: (value between: INT32_MIN and: INT32_MAX).
+	self assume: (value between: INT32_MIN and: INT32_MAX).
+	self assume: (reg isTRRealRegister or: [ reg isTRVirtualRegister ]).
 
 	(value between: INT16_MIN and: INT16_MAX) ifTrue: [ 
 		generate li: reg, value.
@@ -52,12 +53,15 @@ TRPPC64CodeGenerator >> loadConstant32: value into: reg [
 
 { #category : #utilities }
 TRPPC64CodeGenerator >> registerCopyFrom: srcReg to: dstReg [
+	self assume: (srcReg isTRRealRegister or: [ srcReg isTRVirtualRegister ]).
+	self assume: (dstReg isTRRealRegister or: [ dstReg isTRVirtualRegister ]).
+
 	generate mr: dstReg, srcReg
 ]
 
 { #category : #'registers-private' }
 TRPPC64CodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruction do: block [ 
-	self assert: instruction isProcessorInstruction.
+	self assume: instruction isProcessorInstruction.
 	instruction externalBindings 
 		keysAndValuesDo: [:name :value | 
 			name = 'rt' ifTrue: [
@@ -73,7 +77,7 @@ TRPPC64CodeGenerator >> virtualRegistersAssignedByProcessorInstruction: instruct
 
 { #category : #'registers-private' }
 TRPPC64CodeGenerator >> virtualRegistersReadByProcessorInstruction: instruction do: block [
-	self assert: instruction isProcessorInstruction.
+	self assume: instruction isProcessorInstruction.
 
 	instruction externalBindings keysAndValuesDo: [ :name :value |
 		(#('ra' 'rb' 'rc' 'rs') includes: name) ifTrue: [ 

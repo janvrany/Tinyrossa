@@ -43,7 +43,7 @@ TRRegisterLiveInterval >> decodePosition: encodedPosition [
 TRRegisterLiveInterval >> defdAt: position [
 	| positionEncoding |
 
-	self assert: position isInteger.
+	self assume: position isInteger.
 
 	positionEncoding := self encodeDefPosition: position.
 	uses isEmpty ifTrue: [
@@ -113,7 +113,7 @@ TRRegisterLiveInterval >> firstUse [
 
 { #category : #initialization }
 TRRegisterLiveInterval >> initializeWithRegister: aTRVirtualRegister [
-	self assert: aTRVirtualRegister isTRVirtualRegister.
+	self assume: aTRVirtualRegister isTRVirtualRegister.
 
 	register := aTRVirtualRegister.
 	uses := #().
@@ -248,7 +248,7 @@ TRRegisterLiveInterval >> spillSlot [
 
 { #category : #accessing }
 TRRegisterLiveInterval >> spillSlot: aTRAutomaticSymbol [
-	self assert: (aTRAutomaticSymbol isTRAutomaticSymbol and: [spillSlot isNil])
+	self assume: (aTRAutomaticSymbol isTRAutomaticSymbol and: [spillSlot isNil])
 					| (aTRAutomaticSymbol isNil and: [spillSlot isTRAutomaticSymbol]).
 
 	spillSlot := aTRAutomaticSymbol.
@@ -268,7 +268,7 @@ TRRegisterLiveInterval >> stop [
 TRRegisterLiveInterval >> usedAt: position [
 	| positionEncoding |
 
-	self assert: position isInteger.
+	self assume: position isInteger.
 
 	positionEncoding := self encodeUsePosition: position.
 	uses isEmpty ifTrue: [

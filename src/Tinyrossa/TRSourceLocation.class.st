@@ -26,9 +26,9 @@ TRSourceLocation >> file [
 
 { #category : #initialization }
 TRSourceLocation >> initializeWithFile: fileArg line: lineArg column: columnArg [
-	self assert: fileArg isString.
-	self assert: lineArg isInteger.
-	self assert: columnArg isInteger.
+	self assume: fileArg isString.
+	self assume: lineArg isInteger.
+	self assume: columnArg isInteger.
 
 	file := fileArg.
 	line := lineArg.
