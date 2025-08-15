@@ -64,6 +64,20 @@ BaselineOfTinyrossa >> baseline: spec [
 					spec requires: 'Tinyrossa'.
 					spec requires: 'Roassal3'.
 				];
+
+				package: #'Tinyrossa-Formal' with: [
+					spec requires: 'Tinyrossa'.
+				];
+
+				package: #'Tinyrossa-Tests-Formal' with: [
+					spec requires: 'Tinyrossa-Formal'.
+				];
+
+				package: #'Tinyrossa-Demos' with: [
+					spec requires: 'Tinyrossa'.
+					spec requires: 'Tinyrossa-Formal'.
+				];
+
 				yourself.
 		]
 ]
