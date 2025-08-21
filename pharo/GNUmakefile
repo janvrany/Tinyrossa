@@ -90,7 +90,9 @@ test: build
 		$(PROJECT) \
 		$(PROJECT)-Tests \
 		$(PROJECT)-Tests-RISCV \
-		$(PROJECT)-Tests-POWER
+		$(PROJECT)-Tests-POWER \
+		$(PROJECT)-Tests-Formal
+
 
 shells:
 	make -C ../shell
