@@ -72,14 +72,14 @@ TRDominanceAnalysis >> analyze: aTRCFG [
 
 		idomIndex := blocks indexOfAnyOf: (dominance at: block) startingAt: blockIndex + 1 ifAbsent: 0.
 		idomIndex ~= 0 ifTrue: [
-			block setSetImmediateDominator: (blocks at: idomIndex)
+			block setImmediateDominator: (blocks at: idomIndex)
 		] ifFalse:[
 			"This block has no immediate dominator"
 			self assert: block == aTRCFG entry.
 
 			"Set the immediateDominator to the block itself to denote
 			 the block has no immediate dominator. See TRILBlock >> immediateDominator."
-			block setSetImmediateDominator: block
+			block setImmediateDominator: block
 		]
 	].
 ]

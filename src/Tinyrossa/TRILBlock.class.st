@@ -389,19 +389,19 @@ TRILBlock >> replace: oldNode with: newNode [
 ]
 
 { #category : #initialization }
+TRILBlock >> setImmediateDominator: block [
+	self assume: block is: TRILBlock.
+
+	immediateDominator := block
+]
+
+{ #category : #initialization }
 TRILBlock >> setNext: aTRILBlock [ 
 	"Set next block (in sense of linear order). This is used
 	 during block linearization."
 
 	self assume: aTRILBlock is: (TRILBlock | [ :v | self isTerminated or: [ successor1 == v ] ]) | nil.
 	next := aTRILBlock.
-]
-
-{ #category : #initialization }
-TRILBlock >> setSetImmediateDominator: block [
-	self assume: block is: TRILBlock.
-
-	immediateDominator := block
 ]
 
 { #category : #initialization }
