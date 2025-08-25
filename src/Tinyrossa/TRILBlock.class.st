@@ -236,6 +236,48 @@ TRILBlock >> notEmpty [
 	^ self isEmpty not
 ]
 
+{ #category : #'enumerating - private' }
+TRILBlock >> postorderDo: action filter: filter [
+	"Evaluate `action` for all blocks reachable from this node (including)
+	 for which `filter` returns true in depth-first post-order manner.
+
+	 `action` is evaluated exactly once for given reachable block. For unreachable
+	 blocks, `action` is not evaluated at all."
+
+	| stack curr seen |
+
+	"Following implementations uses iterative algorithm using single stack.
+	 `nil` on the stack is used as a marker that successor1 subgraph has been
+	 already traversed."
+
+	stack := Stack new.
+	seen := Set new.
+	curr := self.
+	[ curr notNil or:[ stack notEmpty ]] whileTrue: [
+		[ curr notNil ] whileTrue: [
+			(filter value: curr) ifTrue: [
+				stack push: curr.
+			].
+			seen add: curr.
+			(seen includes: curr successor1) ifTrue: [
+				curr := nil
+			] ifFalse: [
+				curr := curr successor1
+			].
+		].
+
+		curr := stack top.
+		curr isNil ifTrue: [
+			stack pop.
+			action value: stack top.
+			stack pop.
+		] ifFalse: [
+			stack push: nil.
+			curr := curr successor2.
+		].
+	].
+]
+
 { #category : #accessing }
 TRILBlock >> precedessors [
 	^ precedessors copy
@@ -244,6 +286,39 @@ TRILBlock >> precedessors [
 { #category : #enumerating }
 TRILBlock >> precedessorsDo: aBlock [
 	precedessors do: aBlock
+]
+
+{ #category : #'enumerating - private' }
+TRILBlock >> preorderDo: action filter: filter [
+	"Evaluate `action` for all blocks reachable from this node (including)
+	 for which `filter` returns true in depth-first pre-order manner.
+
+	 `action` is evaluated exactly once for given reachable block. For unreachable
+	 blocks, `action` is not evaluated at all."
+
+	| stack seen |
+
+	stack := Stack with: self.
+	seen := Set with: self.
+	[ stack notEmpty ] whileTrue: [
+		| block |
+
+		block := stack pop.
+		action value: block.
+
+		(block successor2 notNil and:[(seen includes: block successor2) not]) ifTrue: [
+			seen add: block successor2.
+			(filter value: block successor2) ifTrue: [
+				stack push: block successor2.
+			].
+		].
+		(block successor1 notNil and:[(seen includes: block successor1) not]) ifTrue: [
+			seen add: block successor1.
+			(filter value: block successor1) ifTrue: [
+				stack push: block successor1.
+			].
+		].
+	].
 ]
 
 { #category : #'printing & storing' }

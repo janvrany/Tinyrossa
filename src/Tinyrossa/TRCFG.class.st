@@ -182,11 +182,8 @@ TRCFG >> postorderDo: aBlock [
 	 from entry. It's not evaluated at all for blocks that are not
 	 reachable."
 
-	| preorder |
-
-	preorder := OrderedCollection new: blocks size.
-	self preorderDo: [ :block | preorder add: block ].
-	preorder reverseDo: aBlock.
+	self assume: entry is: TRILBlock.
+	entry postorderDo: aBlock filter: [ :b | true ]
 ]
 
 { #category : #enumerating }
@@ -198,27 +195,8 @@ TRCFG >> preorderDo: aBlock [
 	 from entry. It's not evaluated at all for blocks that are not
 	 reachable."
 
-	| stack seen |
-
 	self assume: entry is: TRILBlock.
-
-	stack := Stack with: entry.
-	seen := Set with: entry.
-	[ stack notEmpty ] whileTrue: [ 
-		| block |
-
-		block := stack pop.
-		aBlock value: block.
-
-		(block successor2 notNil and:[(seen includes: block successor2) not]) ifTrue: [ 
-			stack push: block successor2.
-			seen add: block successor2.
-		].
-		(block successor1 notNil and:[(seen includes: block successor1) not]) ifTrue: [ 
-			stack push: block successor1.
-			seen add: block successor1.
-		].      
-	].
+	entry preorderDo: aBlock filter: [ :b | true ]
 ]
 
 { #category : #operations }
