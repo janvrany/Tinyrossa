@@ -173,6 +173,11 @@ TRCFG >> linearize [
 	].
 ]
 
+{ #category : #private }
+TRCFG >> modified [
+	"Called whenever a CFG is modified (new edge is added or removed)."
+]
+
 { #category : #enumerating }
 TRCFG >> postorderDo: aBlock [
 	"Traverse the CFG starting with entry block and evaluate 

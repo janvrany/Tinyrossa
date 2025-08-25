@@ -79,10 +79,10 @@ TRILBlock >> add: aTRNode [
 	].
 ]
 
-{ #category : #'adding & removing' }
+{ #category : #'adding & removing - private' }
 TRILBlock >> addPrecedessor: aTRILBlock [
 	(precedessors includes: aTRILBlock) ifFalse: [ 
-			precedessors := precedessors copyWith: aTRILBlock
+		precedessors := precedessors copyWith: aTRILBlock.
 	].
 ]
 
@@ -347,7 +347,7 @@ TRILBlock >> removeAll [
 	treetops copy do:[:node| self remove: node].
 ]
 
-{ #category : #'adding & removing' }
+{ #category : #'adding & removing - private' }
 TRILBlock >> removePrecedessor: aTRILBlock [
 	precedessors notNil ifTrue: [ 
 		precedessors := precedessors copyWithout: aTRILBlock.
@@ -414,7 +414,8 @@ TRILBlock >> setSuccessor1: blockOrNil [
 	successor1 := blockOrNil.
 	successor1 notNil ifTrue: [
 		successor1 addPrecedessor: self.
-	]
+	].
+	cfg modified.
 ]
 
 { #category : #initialization }
@@ -427,7 +428,8 @@ TRILBlock >> setSuccessor2: block [
 	successor2 := block.
 	successor2 notNil ifTrue: [
 		successor2 addPrecedessor: self.
-	]
+	].
+	cfg modified.
 ]
 
 { #category : #'accessing - VM state' }
