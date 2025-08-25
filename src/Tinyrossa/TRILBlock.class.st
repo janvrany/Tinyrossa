@@ -134,7 +134,7 @@ TRILBlock >> dominatorsDo: aBlock [
 
 { #category : #accessing }
 TRILBlock >> immediateDominator [
-	self assert: immediateDominator notNil.
+	self assume: immediateDominator is: TRILBlock.
 
 	"By definition, immediate dominator of a block cannot be the block itself.
 	 Here if immediateDominator == self means that dominator analysis has been
@@ -399,8 +399,7 @@ TRILBlock >> setNext: aTRILBlock [
 
 { #category : #initialization }
 TRILBlock >> setSetImmediateDominator: block [
-	self assert: block isTRILBlock.
-	self assert: immediateDominator isNil.
+	self assume: block is: TRILBlock.
 
 	immediateDominator := block
 ]
