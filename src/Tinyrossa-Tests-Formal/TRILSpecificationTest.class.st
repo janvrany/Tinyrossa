@@ -1,6 +1,9 @@
 Class {
 	#name : #TRILSpecificationTest,
 	#superclass : #SpriteLangTest,
+	#pools : [
+		'TRILOpcodes'
+	],
 	#category : #'Tinyrossa-Tests-Formal'
 }
 
@@ -28,7 +31,7 @@ TRILSpecificationTest >> assertUnsafe: prog [
 TRILSpecificationTest >> test_iadd [
 	| spec test |
 
-	spec := TRILSpecification new prog.
+	spec := TRILSpecification new specify: iadd.
 	test := TRILSpecificationParser parse:'
 	/*@ val check01 : bool[b|b] */
 	    let check01 = {
@@ -55,7 +58,7 @@ TRILSpecificationTest >> test_iadd [
 TRILSpecificationTest >> test_iload [
 	| spec test |
 
-	spec := TRILSpecification new prog.
+	spec := TRILSpecification new specify: iload.
 	test := TRILSpecificationParser parse:'
 	/*@ val check01 : bool[b|b] */
 	    let check01 = {
@@ -83,7 +86,7 @@ TRILSpecificationTest >> test_iload [
 TRILSpecificationTest >> test_imul [
 	| spec test |
 
-	spec := TRILSpecification new prog.
+	spec := TRILSpecification new specify: imul.
 	test := TRILSpecificationParser parse:'
 	/*@ val check01 : bool[b|b] */
 	    let check01 = {
@@ -110,7 +113,7 @@ TRILSpecificationTest >> test_imul [
 TRILSpecificationTest >> test_ireturn [
 	| spec test |
 
-	spec := TRILSpecification new prog.
+	spec := TRILSpecification new specify: ireturn.
 	test := TRILSpecificationParser parse:'
 	/*@ val check01 : bool[b|b] */
 	    let check01 = {
@@ -137,7 +140,7 @@ TRILSpecificationTest >> test_ireturn [
 TRILSpecificationTest >> test_ishl [
 	| spec test |
 
-	spec := TRILSpecification new prog.
+	spec := TRILSpecification new specify: ishl.
 	test := TRILSpecificationParser parse:'
 	/*@ val check01 : bool[b|b] */
 	    let check01 = {
@@ -167,7 +170,7 @@ TRILSpecificationTest >> test_ishl [
 TRILSpecificationTest >> test_istore [
 	| spec test |
 
-	spec := TRILSpecification new prog.
+	spec := TRILSpecification new specify: istore.
 	test := TRILSpecificationParser parse:'
 	/*@ val check01 : bool[b|b] */
 	    let check01 = {
