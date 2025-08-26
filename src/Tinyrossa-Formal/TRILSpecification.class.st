@@ -32,8 +32,8 @@ TRILSpecification class >> initialize [
 			self compile: sel , '
 	self shouldBeImplemented.
 	^self specify: ',sel,' as:''
-	/*@ val ',sel,' : ... */
-	let ',sel,' = (...) => {
+/*@ val ',sel,' : ... */
+    let ',sel,' = (...) => {
 	...
 	};
 	''
@@ -48,8 +48,8 @@ TRILSpecification class >> initialize [
 TRILSpecification >> a2b [
 	self shouldBeImplemented.
 	^self specify: a2b as:'
-	/*@ val a2b : ... */
-	let a2b = (...) => {
+/*@ val a2b : ... */
+    let a2b = (...) => {
 	...
 	};
 	'
@@ -60,8 +60,8 @@ TRILSpecification >> a2b [
 TRILSpecification >> a2i [
 	self shouldBeImplemented.
 	^self specify: a2i as:'
-	/*@ val a2i : ... */
-	let a2i = (...) => {
+/*@ val a2i : ... */
+    let a2i = (...) => {
 	...
 	};
 	'
@@ -72,8 +72,8 @@ TRILSpecification >> a2i [
 TRILSpecification >> a2l [
 	self shouldBeImplemented.
 	^self specify: a2l as:'
-	/*@ val a2l : ... */
-	let a2l = (...) => {
+/*@ val a2l : ... */
+    let a2l = (...) => {
 	...
 	};
 	'
@@ -84,8 +84,8 @@ TRILSpecification >> a2l [
 TRILSpecification >> a2s [
 	self shouldBeImplemented.
 	^self specify: a2s as:'
-	/*@ val a2s : ... */
-	let a2s = (...) => {
+/*@ val a2s : ... */
+    let a2s = (...) => {
 	...
 	};
 	'
@@ -96,8 +96,8 @@ TRILSpecification >> a2s [
 TRILSpecification >> acall [
 	self shouldBeImplemented.
 	^self specify: acall as:'
-	/*@ val acall : ... */
-	let acall = (...) => {
+/*@ val acall : ... */
+    let acall = (...) => {
 	...
 	};
 	'
@@ -108,8 +108,8 @@ TRILSpecification >> acall [
 TRILSpecification >> acalli [
 	self shouldBeImplemented.
 	^self specify: acalli as:'
-	/*@ val acalli : ... */
-	let acalli = (...) => {
+/*@ val acalli : ... */
+    let acalli = (...) => {
 	...
 	};
 	'
@@ -120,8 +120,8 @@ TRILSpecification >> acalli [
 TRILSpecification >> acmpeq [
 	self shouldBeImplemented.
 	^self specify: acmpeq as:'
-	/*@ val acmpeq : ... */
-	let acmpeq = (...) => {
+/*@ val acmpeq : ... */
+    let acmpeq = (...) => {
 	...
 	};
 	'
@@ -132,8 +132,8 @@ TRILSpecification >> acmpeq [
 TRILSpecification >> acmpge [
 	self shouldBeImplemented.
 	^self specify: acmpge as:'
-	/*@ val acmpge : ... */
-	let acmpge = (...) => {
+/*@ val acmpge : ... */
+    let acmpge = (...) => {
 	...
 	};
 	'
@@ -144,8 +144,8 @@ TRILSpecification >> acmpge [
 TRILSpecification >> acmpgt [
 	self shouldBeImplemented.
 	^self specify: acmpgt as:'
-	/*@ val acmpgt : ... */
-	let acmpgt = (...) => {
+/*@ val acmpgt : ... */
+    let acmpgt = (...) => {
 	...
 	};
 	'
@@ -156,8 +156,8 @@ TRILSpecification >> acmpgt [
 TRILSpecification >> acmple [
 	self shouldBeImplemented.
 	^self specify: acmple as:'
-	/*@ val acmple : ... */
-	let acmple = (...) => {
+/*@ val acmple : ... */
+    let acmple = (...) => {
 	...
 	};
 	'
@@ -168,8 +168,8 @@ TRILSpecification >> acmple [
 TRILSpecification >> acmplt [
 	self shouldBeImplemented.
 	^self specify: acmplt as:'
-	/*@ val acmplt : ... */
-	let acmplt = (...) => {
+/*@ val acmplt : ... */
+    let acmplt = (...) => {
 	...
 	};
 	'
@@ -180,8 +180,8 @@ TRILSpecification >> acmplt [
 TRILSpecification >> acmpne [
 	self shouldBeImplemented.
 	^self specify: acmpne as:'
-	/*@ val acmpne : ... */
-	let acmpne = (...) => {
+/*@ val acmpne : ... */
+    let acmpne = (...) => {
 	...
 	};
 	'
@@ -192,8 +192,8 @@ TRILSpecification >> acmpne [
 TRILSpecification >> aconst [
 	self shouldBeImplemented.
 	^self specify: aconst as:'
-	/*@ val aconst : ... */
-	let aconst = (...) => {
+/*@ val aconst : ... */
+    let aconst = (...) => {
 	...
 	};
 	'
@@ -204,8 +204,8 @@ TRILSpecification >> aconst [
 TRILSpecification >> aiadd [
 	self shouldBeImplemented.
 	^self specify: aiadd as:'
-	/*@ val aiadd : ... */
-	let aiadd = (...) => {
+/*@ val aiadd : ... */
+    let aiadd = (...) => {
 	...
 	};
 	'
@@ -216,8 +216,8 @@ TRILSpecification >> aiadd [
 TRILSpecification >> aladd [
 	self shouldBeImplemented.
 	^self specify: aladd as:'
-	/*@ val aladd : ... */
-	let aladd = (...) => {
+/*@ val aladd : ... */
+    let aladd = (...) => {
 	...
 	};
 	'
@@ -228,8 +228,8 @@ TRILSpecification >> aladd [
 TRILSpecification >> allocationfence [
 	self shouldBeImplemented.
 	^self specify: allocationfence as:'
-	/*@ val allocationfence : ... */
-	let allocationfence = (...) => {
+/*@ val allocationfence : ... */
+    let allocationfence = (...) => {
 	...
 	};
 	'
@@ -240,8 +240,8 @@ TRILSpecification >> allocationfence [
 TRILSpecification >> aload [
 	self shouldBeImplemented.
 	^self specify: aload as:'
-	/*@ val aload : ... */
-	let aload = (...) => {
+/*@ val aload : ... */
+    let aload = (...) => {
 	...
 	};
 	'
@@ -252,8 +252,8 @@ TRILSpecification >> aload [
 TRILSpecification >> aloadi [
 	self shouldBeImplemented.
 	^self specify: aloadi as:'
-	/*@ val aloadi : ... */
-	let aloadi = (...) => {
+/*@ val aloadi : ... */
+    let aloadi = (...) => {
 	...
 	};
 	'
@@ -264,8 +264,8 @@ TRILSpecification >> aloadi [
 TRILSpecification >> anewarray [
 	self shouldBeImplemented.
 	^self specify: anewarray as:'
-	/*@ val anewarray : ... */
-	let anewarray = (...) => {
+/*@ val anewarray : ... */
+    let anewarray = (...) => {
 	...
 	};
 	'
@@ -276,8 +276,8 @@ TRILSpecification >> anewarray [
 TRILSpecification >> ardbar [
 	self shouldBeImplemented.
 	^self specify: ardbar as:'
-	/*@ val ardbar : ... */
-	let ardbar = (...) => {
+/*@ val ardbar : ... */
+    let ardbar = (...) => {
 	...
 	};
 	'
@@ -288,8 +288,8 @@ TRILSpecification >> ardbar [
 TRILSpecification >> ardbari [
 	self shouldBeImplemented.
 	^self specify: ardbari as:'
-	/*@ val ardbari : ... */
-	let ardbari = (...) => {
+/*@ val ardbari : ... */
+    let ardbari = (...) => {
 	...
 	};
 	'
@@ -300,8 +300,8 @@ TRILSpecification >> ardbari [
 TRILSpecification >> aregload [
 	self shouldBeImplemented.
 	^self specify: aregload as:'
-	/*@ val aregload : ... */
-	let aregload = (...) => {
+/*@ val aregload : ... */
+    let aregload = (...) => {
 	...
 	};
 	'
@@ -312,8 +312,8 @@ TRILSpecification >> aregload [
 TRILSpecification >> aregstore [
 	self shouldBeImplemented.
 	^self specify: aregstore as:'
-	/*@ val aregstore : ... */
-	let aregstore = (...) => {
+/*@ val aregstore : ... */
+    let aregstore = (...) => {
 	...
 	};
 	'
@@ -324,8 +324,8 @@ TRILSpecification >> aregstore [
 TRILSpecification >> areturn [
 	self shouldBeImplemented.
 	^self specify: areturn as:'
-	/*@ val areturn : ... */
-	let areturn = (...) => {
+/*@ val areturn : ... */
+    let areturn = (...) => {
 	...
 	};
 	'
@@ -336,8 +336,8 @@ TRILSpecification >> areturn [
 TRILSpecification >> arraychk [
 	self shouldBeImplemented.
 	^self specify: arraychk as:'
-	/*@ val arraychk : ... */
-	let arraychk = (...) => {
+/*@ val arraychk : ... */
+    let arraychk = (...) => {
 	...
 	};
 	'
@@ -348,8 +348,8 @@ TRILSpecification >> arraychk [
 TRILSpecification >> arraycmp [
 	self shouldBeImplemented.
 	^self specify: arraycmp as:'
-	/*@ val arraycmp : ... */
-	let arraycmp = (...) => {
+/*@ val arraycmp : ... */
+    let arraycmp = (...) => {
 	...
 	};
 	'
@@ -360,8 +360,8 @@ TRILSpecification >> arraycmp [
 TRILSpecification >> arraycopy [
 	self shouldBeImplemented.
 	^self specify: arraycopy as:'
-	/*@ val arraycopy : ... */
-	let arraycopy = (...) => {
+/*@ val arraycopy : ... */
+    let arraycopy = (...) => {
 	...
 	};
 	'
@@ -372,8 +372,8 @@ TRILSpecification >> arraycopy [
 TRILSpecification >> arraycopybndchk [
 	self shouldBeImplemented.
 	^self specify: arraycopybndchk as:'
-	/*@ val arraycopybndchk : ... */
-	let arraycopybndchk = (...) => {
+/*@ val arraycopybndchk : ... */
+    let arraycopybndchk = (...) => {
 	...
 	};
 	'
@@ -384,8 +384,8 @@ TRILSpecification >> arraycopybndchk [
 TRILSpecification >> arraylength [
 	self shouldBeImplemented.
 	^self specify: arraylength as:'
-	/*@ val arraylength : ... */
-	let arraylength = (...) => {
+/*@ val arraylength : ... */
+    let arraylength = (...) => {
 	...
 	};
 	'
@@ -396,8 +396,8 @@ TRILSpecification >> arraylength [
 TRILSpecification >> arrayset [
 	self shouldBeImplemented.
 	^self specify: arrayset as:'
-	/*@ val arrayset : ... */
-	let arrayset = (...) => {
+/*@ val arrayset : ... */
+    let arrayset = (...) => {
 	...
 	};
 	'
@@ -408,8 +408,8 @@ TRILSpecification >> arrayset [
 TRILSpecification >> arraystorechk [
 	self shouldBeImplemented.
 	^self specify: arraystorechk as:'
-	/*@ val arraystorechk : ... */
-	let arraystorechk = (...) => {
+/*@ val arraystorechk : ... */
+    let arraystorechk = (...) => {
 	...
 	};
 	'
@@ -420,8 +420,8 @@ TRILSpecification >> arraystorechk [
 TRILSpecification >> arraytranslate [
 	self shouldBeImplemented.
 	^self specify: arraytranslate as:'
-	/*@ val arraytranslate : ... */
-	let arraytranslate = (...) => {
+/*@ val arraytranslate : ... */
+    let arraytranslate = (...) => {
 	...
 	};
 	'
@@ -432,8 +432,8 @@ TRILSpecification >> arraytranslate [
 TRILSpecification >> arraytranslateandtest [
 	self shouldBeImplemented.
 	^self specify: arraytranslateandtest as:'
-	/*@ val arraytranslateandtest : ... */
-	let arraytranslateandtest = (...) => {
+/*@ val arraytranslateandtest : ... */
+    let arraytranslateandtest = (...) => {
 	...
 	};
 	'
@@ -444,8 +444,8 @@ TRILSpecification >> arraytranslateandtest [
 TRILSpecification >> aselect [
 	self shouldBeImplemented.
 	^self specify: aselect as:'
-	/*@ val aselect : ... */
-	let aselect = (...) => {
+/*@ val aselect : ... */
+    let aselect = (...) => {
 	...
 	};
 	'
@@ -456,8 +456,8 @@ TRILSpecification >> aselect [
 TRILSpecification >> astore [
 	self shouldBeImplemented.
 	^self specify: astore as:'
-	/*@ val astore : ... */
-	let astore = (...) => {
+/*@ val astore : ... */
+    let astore = (...) => {
 	...
 	};
 	'
@@ -468,8 +468,8 @@ TRILSpecification >> astore [
 TRILSpecification >> astorei [
 	self shouldBeImplemented.
 	^self specify: astorei as:'
-	/*@ val astorei : ... */
-	let astorei = (...) => {
+/*@ val astorei : ... */
+    let astorei = (...) => {
 	...
 	};
 	'
@@ -480,8 +480,8 @@ TRILSpecification >> astorei [
 TRILSpecification >> asub [
 	self shouldBeImplemented.
 	^self specify: asub as:'
-	/*@ val asub : ... */
-	let asub = (...) => {
+/*@ val asub : ... */
+    let asub = (...) => {
 	...
 	};
 	'
@@ -492,8 +492,8 @@ TRILSpecification >> asub [
 TRILSpecification >> asynccheck [
 	self shouldBeImplemented.
 	^self specify: asynccheck as:'
-	/*@ val asynccheck : ... */
-	let asynccheck = (...) => {
+/*@ val asynccheck : ... */
+    let asynccheck = (...) => {
 	...
 	};
 	'
@@ -504,8 +504,8 @@ TRILSpecification >> asynccheck [
 TRILSpecification >> athrow [
 	self shouldBeImplemented.
 	^self specify: athrow as:'
-	/*@ val athrow : ... */
-	let athrow = (...) => {
+/*@ val athrow : ... */
+    let athrow = (...) => {
 	...
 	};
 	'
@@ -516,8 +516,8 @@ TRILSpecification >> athrow [
 TRILSpecification >> awrtbar [
 	self shouldBeImplemented.
 	^self specify: awrtbar as:'
-	/*@ val awrtbar : ... */
-	let awrtbar = (...) => {
+/*@ val awrtbar : ... */
+    let awrtbar = (...) => {
 	...
 	};
 	'
@@ -528,8 +528,8 @@ TRILSpecification >> awrtbar [
 TRILSpecification >> awrtbari [
 	self shouldBeImplemented.
 	^self specify: awrtbari as:'
-	/*@ val awrtbari : ... */
-	let awrtbari = (...) => {
+/*@ val awrtbari : ... */
+    let awrtbari = (...) => {
 	...
 	};
 	'
@@ -540,8 +540,8 @@ TRILSpecification >> awrtbari [
 TRILSpecification >> b2a [
 	self shouldBeImplemented.
 	^self specify: b2a as:'
-	/*@ val b2a : ... */
-	let b2a = (...) => {
+/*@ val b2a : ... */
+    let b2a = (...) => {
 	...
 	};
 	'
@@ -552,8 +552,8 @@ TRILSpecification >> b2a [
 TRILSpecification >> b2d [
 	self shouldBeImplemented.
 	^self specify: b2d as:'
-	/*@ val b2d : ... */
-	let b2d = (...) => {
+/*@ val b2d : ... */
+    let b2d = (...) => {
 	...
 	};
 	'
@@ -564,8 +564,8 @@ TRILSpecification >> b2d [
 TRILSpecification >> b2f [
 	self shouldBeImplemented.
 	^self specify: b2f as:'
-	/*@ val b2f : ... */
-	let b2f = (...) => {
+/*@ val b2f : ... */
+    let b2f = (...) => {
 	...
 	};
 	'
@@ -576,8 +576,8 @@ TRILSpecification >> b2f [
 TRILSpecification >> b2i [
 	self shouldBeImplemented.
 	^self specify: b2i as:'
-	/*@ val b2i : ... */
-	let b2i = (...) => {
+/*@ val b2i : ... */
+    let b2i = (...) => {
 	...
 	};
 	'
@@ -588,8 +588,8 @@ TRILSpecification >> b2i [
 TRILSpecification >> b2l [
 	self shouldBeImplemented.
 	^self specify: b2l as:'
-	/*@ val b2l : ... */
-	let b2l = (...) => {
+/*@ val b2l : ... */
+    let b2l = (...) => {
 	...
 	};
 	'
@@ -600,8 +600,8 @@ TRILSpecification >> b2l [
 TRILSpecification >> b2s [
 	self shouldBeImplemented.
 	^self specify: b2s as:'
-	/*@ val b2s : ... */
-	let b2s = (...) => {
+/*@ val b2s : ... */
+    let b2s = (...) => {
 	...
 	};
 	'
@@ -612,8 +612,8 @@ TRILSpecification >> b2s [
 TRILSpecification >> badd [
 	self shouldBeImplemented.
 	^self specify: badd as:'
-	/*@ val badd : ... */
-	let badd = (...) => {
+/*@ val badd : ... */
+    let badd = (...) => {
 	...
 	};
 	'
@@ -624,8 +624,8 @@ TRILSpecification >> badd [
 TRILSpecification >> band [
 	self shouldBeImplemented.
 	^self specify: band as:'
-	/*@ val band : ... */
-	let band = (...) => {
+/*@ val band : ... */
+    let band = (...) => {
 	...
 	};
 	'
@@ -636,8 +636,8 @@ TRILSpecification >> band [
 TRILSpecification >> bbend [
 	self shouldBeImplemented.
 	^self specify: bbend as:'
-	/*@ val bbend : ... */
-	let bbend = (...) => {
+/*@ val bbend : ... */
+    let bbend = (...) => {
 	...
 	};
 	'
@@ -648,8 +648,8 @@ TRILSpecification >> bbend [
 TRILSpecification >> bbitpermute [
 	self shouldBeImplemented.
 	^self specify: bbitpermute as:'
-	/*@ val bbitpermute : ... */
-	let bbitpermute = (...) => {
+/*@ val bbitpermute : ... */
+    let bbitpermute = (...) => {
 	...
 	};
 	'
@@ -660,8 +660,8 @@ TRILSpecification >> bbitpermute [
 TRILSpecification >> bbstart [
 	self shouldBeImplemented.
 	^self specify: bbstart as:'
-	/*@ val bbstart : ... */
-	let bbstart = (...) => {
+/*@ val bbstart : ... */
+    let bbstart = (...) => {
 	...
 	};
 	'
@@ -672,8 +672,8 @@ TRILSpecification >> bbstart [
 TRILSpecification >> bcmp [
 	self shouldBeImplemented.
 	^self specify: bcmp as:'
-	/*@ val bcmp : ... */
-	let bcmp = (...) => {
+/*@ val bcmp : ... */
+    let bcmp = (...) => {
 	...
 	};
 	'
@@ -684,8 +684,8 @@ TRILSpecification >> bcmp [
 TRILSpecification >> bcmpeq [
 	self shouldBeImplemented.
 	^self specify: bcmpeq as:'
-	/*@ val bcmpeq : ... */
-	let bcmpeq = (...) => {
+/*@ val bcmpeq : ... */
+    let bcmpeq = (...) => {
 	...
 	};
 	'
@@ -696,8 +696,8 @@ TRILSpecification >> bcmpeq [
 TRILSpecification >> bcmpge [
 	self shouldBeImplemented.
 	^self specify: bcmpge as:'
-	/*@ val bcmpge : ... */
-	let bcmpge = (...) => {
+/*@ val bcmpge : ... */
+    let bcmpge = (...) => {
 	...
 	};
 	'
@@ -708,8 +708,8 @@ TRILSpecification >> bcmpge [
 TRILSpecification >> bcmpgt [
 	self shouldBeImplemented.
 	^self specify: bcmpgt as:'
-	/*@ val bcmpgt : ... */
-	let bcmpgt = (...) => {
+/*@ val bcmpgt : ... */
+    let bcmpgt = (...) => {
 	...
 	};
 	'
@@ -720,8 +720,8 @@ TRILSpecification >> bcmpgt [
 TRILSpecification >> bcmple [
 	self shouldBeImplemented.
 	^self specify: bcmple as:'
-	/*@ val bcmple : ... */
-	let bcmple = (...) => {
+/*@ val bcmple : ... */
+    let bcmple = (...) => {
 	...
 	};
 	'
@@ -732,8 +732,8 @@ TRILSpecification >> bcmple [
 TRILSpecification >> bcmplt [
 	self shouldBeImplemented.
 	^self specify: bcmplt as:'
-	/*@ val bcmplt : ... */
-	let bcmplt = (...) => {
+/*@ val bcmplt : ... */
+    let bcmplt = (...) => {
 	...
 	};
 	'
@@ -744,8 +744,8 @@ TRILSpecification >> bcmplt [
 TRILSpecification >> bcmpne [
 	self shouldBeImplemented.
 	^self specify: bcmpne as:'
-	/*@ val bcmpne : ... */
-	let bcmpne = (...) => {
+/*@ val bcmpne : ... */
+    let bcmpne = (...) => {
 	...
 	};
 	'
@@ -756,8 +756,8 @@ TRILSpecification >> bcmpne [
 TRILSpecification >> bconst [
 	self shouldBeImplemented.
 	^self specify: bconst as:'
-	/*@ val bconst : ... */
-	let bconst = (...) => {
+/*@ val bconst : ... */
+    let bconst = (...) => {
 	...
 	};
 	'
@@ -768,8 +768,8 @@ TRILSpecification >> bconst [
 TRILSpecification >> bdiv [
 	self shouldBeImplemented.
 	^self specify: bdiv as:'
-	/*@ val bdiv : ... */
-	let bdiv = (...) => {
+/*@ val bdiv : ... */
+    let bdiv = (...) => {
 	...
 	};
 	'
@@ -780,8 +780,8 @@ TRILSpecification >> bdiv [
 TRILSpecification >> bitopmem [
 	self shouldBeImplemented.
 	^self specify: bitopmem as:'
-	/*@ val bitopmem : ... */
-	let bitopmem = (...) => {
+/*@ val bitopmem : ... */
+    let bitopmem = (...) => {
 	...
 	};
 	'
@@ -792,8 +792,8 @@ TRILSpecification >> bitopmem [
 TRILSpecification >> bload [
 	self shouldBeImplemented.
 	^self specify: bload as:'
-	/*@ val bload : ... */
-	let bload = (...) => {
+/*@ val bload : ... */
+    let bload = (...) => {
 	...
 	};
 	'
@@ -804,8 +804,8 @@ TRILSpecification >> bload [
 TRILSpecification >> bloadi [
 	self shouldBeImplemented.
 	^self specify: bloadi as:'
-	/*@ val bloadi : ... */
-	let bloadi = (...) => {
+/*@ val bloadi : ... */
+    let bloadi = (...) => {
 	...
 	};
 	'
@@ -816,8 +816,8 @@ TRILSpecification >> bloadi [
 TRILSpecification >> bmul [
 	self shouldBeImplemented.
 	^self specify: bmul as:'
-	/*@ val bmul : ... */
-	let bmul = (...) => {
+/*@ val bmul : ... */
+    let bmul = (...) => {
 	...
 	};
 	'
@@ -828,8 +828,8 @@ TRILSpecification >> bmul [
 TRILSpecification >> bndchk [
 	self shouldBeImplemented.
 	^self specify: bndchk as:'
-	/*@ val bndchk : ... */
-	let bndchk = (...) => {
+/*@ val bndchk : ... */
+    let bndchk = (...) => {
 	...
 	};
 	'
@@ -840,8 +840,8 @@ TRILSpecification >> bndchk [
 TRILSpecification >> bndchkwithspinechk [
 	self shouldBeImplemented.
 	^self specify: bndchkwithspinechk as:'
-	/*@ val bndchkwithspinechk : ... */
-	let bndchkwithspinechk = (...) => {
+/*@ val bndchkwithspinechk : ... */
+    let bndchkwithspinechk = (...) => {
 	...
 	};
 	'
@@ -852,8 +852,8 @@ TRILSpecification >> bndchkwithspinechk [
 TRILSpecification >> bneg [
 	self shouldBeImplemented.
 	^self specify: bneg as:'
-	/*@ val bneg : ... */
-	let bneg = (...) => {
+/*@ val bneg : ... */
+    let bneg = (...) => {
 	...
 	};
 	'
@@ -864,8 +864,8 @@ TRILSpecification >> bneg [
 TRILSpecification >> bor [
 	self shouldBeImplemented.
 	^self specify: bor as:'
-	/*@ val bor : ... */
-	let bor = (...) => {
+/*@ val bor : ... */
+    let bor = (...) => {
 	...
 	};
 	'
@@ -876,8 +876,8 @@ TRILSpecification >> bor [
 TRILSpecification >> branch [
 	self shouldBeImplemented.
 	^self specify: branch as:'
-	/*@ val branch : ... */
-	let branch = (...) => {
+/*@ val branch : ... */
+    let branch = (...) => {
 	...
 	};
 	'
@@ -888,8 +888,8 @@ TRILSpecification >> branch [
 TRILSpecification >> brdbar [
 	self shouldBeImplemented.
 	^self specify: brdbar as:'
-	/*@ val brdbar : ... */
-	let brdbar = (...) => {
+/*@ val brdbar : ... */
+    let brdbar = (...) => {
 	...
 	};
 	'
@@ -900,8 +900,8 @@ TRILSpecification >> brdbar [
 TRILSpecification >> brdbari [
 	self shouldBeImplemented.
 	^self specify: brdbari as:'
-	/*@ val brdbari : ... */
-	let brdbari = (...) => {
+/*@ val brdbari : ... */
+    let brdbari = (...) => {
 	...
 	};
 	'
@@ -912,8 +912,8 @@ TRILSpecification >> brdbari [
 TRILSpecification >> bregload [
 	self shouldBeImplemented.
 	^self specify: bregload as:'
-	/*@ val bregload : ... */
-	let bregload = (...) => {
+/*@ val bregload : ... */
+    let bregload = (...) => {
 	...
 	};
 	'
@@ -924,8 +924,8 @@ TRILSpecification >> bregload [
 TRILSpecification >> bregstore [
 	self shouldBeImplemented.
 	^self specify: bregstore as:'
-	/*@ val bregstore : ... */
-	let bregstore = (...) => {
+/*@ val bregstore : ... */
+    let bregstore = (...) => {
 	...
 	};
 	'
@@ -936,8 +936,8 @@ TRILSpecification >> bregstore [
 TRILSpecification >> brem [
 	self shouldBeImplemented.
 	^self specify: brem as:'
-	/*@ val brem : ... */
-	let brem = (...) => {
+/*@ val brem : ... */
+    let brem = (...) => {
 	...
 	};
 	'
@@ -948,8 +948,8 @@ TRILSpecification >> brem [
 TRILSpecification >> bselect [
 	self shouldBeImplemented.
 	^self specify: bselect as:'
-	/*@ val bselect : ... */
-	let bselect = (...) => {
+/*@ val bselect : ... */
+    let bselect = (...) => {
 	...
 	};
 	'
@@ -960,8 +960,8 @@ TRILSpecification >> bselect [
 TRILSpecification >> bshl [
 	self shouldBeImplemented.
 	^self specify: bshl as:'
-	/*@ val bshl : ... */
-	let bshl = (...) => {
+/*@ val bshl : ... */
+    let bshl = (...) => {
 	...
 	};
 	'
@@ -972,8 +972,8 @@ TRILSpecification >> bshl [
 TRILSpecification >> bshr [
 	self shouldBeImplemented.
 	^self specify: bshr as:'
-	/*@ val bshr : ... */
-	let bshr = (...) => {
+/*@ val bshr : ... */
+    let bshr = (...) => {
 	...
 	};
 	'
@@ -984,8 +984,8 @@ TRILSpecification >> bshr [
 TRILSpecification >> bstore [
 	self shouldBeImplemented.
 	^self specify: bstore as:'
-	/*@ val bstore : ... */
-	let bstore = (...) => {
+/*@ val bstore : ... */
+    let bstore = (...) => {
 	...
 	};
 	'
@@ -996,8 +996,8 @@ TRILSpecification >> bstore [
 TRILSpecification >> bstorei [
 	self shouldBeImplemented.
 	^self specify: bstorei as:'
-	/*@ val bstorei : ... */
-	let bstorei = (...) => {
+/*@ val bstorei : ... */
+    let bstorei = (...) => {
 	...
 	};
 	'
@@ -1008,8 +1008,8 @@ TRILSpecification >> bstorei [
 TRILSpecification >> bsub [
 	self shouldBeImplemented.
 	^self specify: bsub as:'
-	/*@ val bsub : ... */
-	let bsub = (...) => {
+/*@ val bsub : ... */
+    let bsub = (...) => {
 	...
 	};
 	'
@@ -1020,8 +1020,8 @@ TRILSpecification >> bsub [
 TRILSpecification >> bu2a [
 	self shouldBeImplemented.
 	^self specify: bu2a as:'
-	/*@ val bu2a : ... */
-	let bu2a = (...) => {
+/*@ val bu2a : ... */
+    let bu2a = (...) => {
 	...
 	};
 	'
@@ -1032,8 +1032,8 @@ TRILSpecification >> bu2a [
 TRILSpecification >> bu2d [
 	self shouldBeImplemented.
 	^self specify: bu2d as:'
-	/*@ val bu2d : ... */
-	let bu2d = (...) => {
+/*@ val bu2d : ... */
+    let bu2d = (...) => {
 	...
 	};
 	'
@@ -1044,8 +1044,8 @@ TRILSpecification >> bu2d [
 TRILSpecification >> bu2f [
 	self shouldBeImplemented.
 	^self specify: bu2f as:'
-	/*@ val bu2f : ... */
-	let bu2f = (...) => {
+/*@ val bu2f : ... */
+    let bu2f = (...) => {
 	...
 	};
 	'
@@ -1056,8 +1056,8 @@ TRILSpecification >> bu2f [
 TRILSpecification >> bu2i [
 	self shouldBeImplemented.
 	^self specify: bu2i as:'
-	/*@ val bu2i : ... */
-	let bu2i = (...) => {
+/*@ val bu2i : ... */
+    let bu2i = (...) => {
 	...
 	};
 	'
@@ -1068,8 +1068,8 @@ TRILSpecification >> bu2i [
 TRILSpecification >> bu2l [
 	self shouldBeImplemented.
 	^self specify: bu2l as:'
-	/*@ val bu2l : ... */
-	let bu2l = (...) => {
+/*@ val bu2l : ... */
+    let bu2l = (...) => {
 	...
 	};
 	'
@@ -1080,8 +1080,8 @@ TRILSpecification >> bu2l [
 TRILSpecification >> bu2s [
 	self shouldBeImplemented.
 	^self specify: bu2s as:'
-	/*@ val bu2s : ... */
-	let bu2s = (...) => {
+/*@ val bu2s : ... */
+    let bu2s = (...) => {
 	...
 	};
 	'
@@ -1092,8 +1092,8 @@ TRILSpecification >> bu2s [
 TRILSpecification >> bucmp [
 	self shouldBeImplemented.
 	^self specify: bucmp as:'
-	/*@ val bucmp : ... */
-	let bucmp = (...) => {
+/*@ val bucmp : ... */
+    let bucmp = (...) => {
 	...
 	};
 	'
@@ -1104,8 +1104,8 @@ TRILSpecification >> bucmp [
 TRILSpecification >> bucmpge [
 	self shouldBeImplemented.
 	^self specify: bucmpge as:'
-	/*@ val bucmpge : ... */
-	let bucmpge = (...) => {
+/*@ val bucmpge : ... */
+    let bucmpge = (...) => {
 	...
 	};
 	'
@@ -1116,8 +1116,8 @@ TRILSpecification >> bucmpge [
 TRILSpecification >> bucmpgt [
 	self shouldBeImplemented.
 	^self specify: bucmpgt as:'
-	/*@ val bucmpgt : ... */
-	let bucmpgt = (...) => {
+/*@ val bucmpgt : ... */
+    let bucmpgt = (...) => {
 	...
 	};
 	'
@@ -1128,8 +1128,8 @@ TRILSpecification >> bucmpgt [
 TRILSpecification >> bucmple [
 	self shouldBeImplemented.
 	^self specify: bucmple as:'
-	/*@ val bucmple : ... */
-	let bucmple = (...) => {
+/*@ val bucmple : ... */
+    let bucmple = (...) => {
 	...
 	};
 	'
@@ -1140,8 +1140,8 @@ TRILSpecification >> bucmple [
 TRILSpecification >> bucmplt [
 	self shouldBeImplemented.
 	^self specify: bucmplt as:'
-	/*@ val bucmplt : ... */
-	let bucmplt = (...) => {
+/*@ val bucmplt : ... */
+    let bucmplt = (...) => {
 	...
 	};
 	'
@@ -1152,8 +1152,8 @@ TRILSpecification >> bucmplt [
 TRILSpecification >> bushr [
 	self shouldBeImplemented.
 	^self specify: bushr as:'
-	/*@ val bushr : ... */
-	let bushr = (...) => {
+/*@ val bushr : ... */
+    let bushr = (...) => {
 	...
 	};
 	'
@@ -1164,8 +1164,8 @@ TRILSpecification >> bushr [
 TRILSpecification >> butest [
 	self shouldBeImplemented.
 	^self specify: butest as:'
-	/*@ val butest : ... */
-	let butest = (...) => {
+/*@ val butest : ... */
+    let butest = (...) => {
 	...
 	};
 	'
@@ -1176,8 +1176,8 @@ TRILSpecification >> butest [
 TRILSpecification >> bwrtbar [
 	self shouldBeImplemented.
 	^self specify: bwrtbar as:'
-	/*@ val bwrtbar : ... */
-	let bwrtbar = (...) => {
+/*@ val bwrtbar : ... */
+    let bwrtbar = (...) => {
 	...
 	};
 	'
@@ -1188,8 +1188,8 @@ TRILSpecification >> bwrtbar [
 TRILSpecification >> bwrtbari [
 	self shouldBeImplemented.
 	^self specify: bwrtbari as:'
-	/*@ val bwrtbari : ... */
-	let bwrtbari = (...) => {
+/*@ val bwrtbari : ... */
+    let bwrtbari = (...) => {
 	...
 	};
 	'
@@ -1200,8 +1200,8 @@ TRILSpecification >> bwrtbari [
 TRILSpecification >> bxor [
 	self shouldBeImplemented.
 	^self specify: bxor as:'
-	/*@ val bxor : ... */
-	let bxor = (...) => {
+/*@ val bxor : ... */
+    let bxor = (...) => {
 	...
 	};
 	'
@@ -1212,8 +1212,8 @@ TRILSpecification >> bxor [
 TRILSpecification >> bztestnset [
 	self shouldBeImplemented.
 	^self specify: bztestnset as:'
-	/*@ val bztestnset : ... */
-	let bztestnset = (...) => {
+/*@ val bztestnset : ... */
+    let bztestnset = (...) => {
 	...
 	};
 	'
@@ -1224,8 +1224,8 @@ TRILSpecification >> bztestnset [
 TRILSpecification >> call [
 	self shouldBeImplemented.
 	^self specify: call as:'
-	/*@ val call : ... */
-	let call = (...) => {
+/*@ val call : ... */
+    let call = (...) => {
 	...
 	};
 	'
@@ -1236,8 +1236,8 @@ TRILSpecification >> call [
 TRILSpecification >> calli [
 	self shouldBeImplemented.
 	^self specify: calli as:'
-	/*@ val calli : ... */
-	let calli = (...) => {
+/*@ val calli : ... */
+    let calli = (...) => {
 	...
 	};
 	'
@@ -1248,8 +1248,8 @@ TRILSpecification >> calli [
 TRILSpecification >> case [
 	self shouldBeImplemented.
 	^self specify: case as:'
-	/*@ val case : ... */
-	let case = (...) => {
+/*@ val case : ... */
+    let case = (...) => {
 	...
 	};
 	'
@@ -1260,8 +1260,8 @@ TRILSpecification >> case [
 TRILSpecification >> checkcast [
 	self shouldBeImplemented.
 	^self specify: checkcast as:'
-	/*@ val checkcast : ... */
-	let checkcast = (...) => {
+/*@ val checkcast : ... */
+    let checkcast = (...) => {
 	...
 	};
 	'
@@ -1272,8 +1272,8 @@ TRILSpecification >> checkcast [
 TRILSpecification >> checkcastandnullchk [
 	self shouldBeImplemented.
 	^self specify: checkcastandnullchk as:'
-	/*@ val checkcastandnullchk : ... */
-	let checkcastandnullchk = (...) => {
+/*@ val checkcastandnullchk : ... */
+    let checkcastandnullchk = (...) => {
 	...
 	};
 	'
@@ -1284,8 +1284,8 @@ TRILSpecification >> checkcastandnullchk [
 TRILSpecification >> compressedrefs [
 	self shouldBeImplemented.
 	^self specify: compressedrefs as:'
-	/*@ val compressedrefs : ... */
-	let compressedrefs = (...) => {
+/*@ val compressedrefs : ... */
+    let compressedrefs = (...) => {
 	...
 	};
 	'
@@ -1296,8 +1296,8 @@ TRILSpecification >> compressedrefs [
 TRILSpecification >> computecc [
 	self shouldBeImplemented.
 	^self specify: computecc as:'
-	/*@ val computecc : ... */
-	let computecc = (...) => {
+/*@ val computecc : ... */
+    let computecc = (...) => {
 	...
 	};
 	'
@@ -1308,8 +1308,8 @@ TRILSpecification >> computecc [
 TRILSpecification >> contigarraylength [
 	self shouldBeImplemented.
 	^self specify: contigarraylength as:'
-	/*@ val contigarraylength : ... */
-	let contigarraylength = (...) => {
+/*@ val contigarraylength : ... */
+    let contigarraylength = (...) => {
 	...
 	};
 	'
@@ -1320,8 +1320,8 @@ TRILSpecification >> contigarraylength [
 TRILSpecification >> d2b [
 	self shouldBeImplemented.
 	^self specify: d2b as:'
-	/*@ val d2b : ... */
-	let d2b = (...) => {
+/*@ val d2b : ... */
+    let d2b = (...) => {
 	...
 	};
 	'
@@ -1332,8 +1332,8 @@ TRILSpecification >> d2b [
 TRILSpecification >> d2bu [
 	self shouldBeImplemented.
 	^self specify: d2bu as:'
-	/*@ val d2bu : ... */
-	let d2bu = (...) => {
+/*@ val d2bu : ... */
+    let d2bu = (...) => {
 	...
 	};
 	'
@@ -1344,8 +1344,8 @@ TRILSpecification >> d2bu [
 TRILSpecification >> d2c [
 	self shouldBeImplemented.
 	^self specify: d2c as:'
-	/*@ val d2c : ... */
-	let d2c = (...) => {
+/*@ val d2c : ... */
+    let d2c = (...) => {
 	...
 	};
 	'
@@ -1356,8 +1356,8 @@ TRILSpecification >> d2c [
 TRILSpecification >> d2f [
 	self shouldBeImplemented.
 	^self specify: d2f as:'
-	/*@ val d2f : ... */
-	let d2f = (...) => {
+/*@ val d2f : ... */
+    let d2f = (...) => {
 	...
 	};
 	'
@@ -1368,8 +1368,8 @@ TRILSpecification >> d2f [
 TRILSpecification >> d2i [
 	self shouldBeImplemented.
 	^self specify: d2i as:'
-	/*@ val d2i : ... */
-	let d2i = (...) => {
+/*@ val d2i : ... */
+    let d2i = (...) => {
 	...
 	};
 	'
@@ -1380,8 +1380,8 @@ TRILSpecification >> d2i [
 TRILSpecification >> d2iu [
 	self shouldBeImplemented.
 	^self specify: d2iu as:'
-	/*@ val d2iu : ... */
-	let d2iu = (...) => {
+/*@ val d2iu : ... */
+    let d2iu = (...) => {
 	...
 	};
 	'
@@ -1392,8 +1392,8 @@ TRILSpecification >> d2iu [
 TRILSpecification >> d2l [
 	self shouldBeImplemented.
 	^self specify: d2l as:'
-	/*@ val d2l : ... */
-	let d2l = (...) => {
+/*@ val d2l : ... */
+    let d2l = (...) => {
 	...
 	};
 	'
@@ -1404,8 +1404,8 @@ TRILSpecification >> d2l [
 TRILSpecification >> d2lu [
 	self shouldBeImplemented.
 	^self specify: d2lu as:'
-	/*@ val d2lu : ... */
-	let d2lu = (...) => {
+/*@ val d2lu : ... */
+    let d2lu = (...) => {
 	...
 	};
 	'
@@ -1416,8 +1416,8 @@ TRILSpecification >> d2lu [
 TRILSpecification >> d2s [
 	self shouldBeImplemented.
 	^self specify: d2s as:'
-	/*@ val d2s : ... */
-	let d2s = (...) => {
+/*@ val d2s : ... */
+    let d2s = (...) => {
 	...
 	};
 	'
@@ -1428,8 +1428,8 @@ TRILSpecification >> d2s [
 TRILSpecification >> dabs [
 	self shouldBeImplemented.
 	^self specify: dabs as:'
-	/*@ val dabs : ... */
-	let dabs = (...) => {
+/*@ val dabs : ... */
+    let dabs = (...) => {
 	...
 	};
 	'
@@ -1440,8 +1440,8 @@ TRILSpecification >> dabs [
 TRILSpecification >> dadd [
 	self shouldBeImplemented.
 	^self specify: dadd as:'
-	/*@ val dadd : ... */
-	let dadd = (...) => {
+/*@ val dadd : ... */
+    let dadd = (...) => {
 	...
 	};
 	'
@@ -1452,8 +1452,8 @@ TRILSpecification >> dadd [
 TRILSpecification >> dbits2l [
 	self shouldBeImplemented.
 	^self specify: dbits2l as:'
-	/*@ val dbits2l : ... */
-	let dbits2l = (...) => {
+/*@ val dbits2l : ... */
+    let dbits2l = (...) => {
 	...
 	};
 	'
@@ -1464,8 +1464,8 @@ TRILSpecification >> dbits2l [
 TRILSpecification >> dcall [
 	self shouldBeImplemented.
 	^self specify: dcall as:'
-	/*@ val dcall : ... */
-	let dcall = (...) => {
+/*@ val dcall : ... */
+    let dcall = (...) => {
 	...
 	};
 	'
@@ -1476,8 +1476,8 @@ TRILSpecification >> dcall [
 TRILSpecification >> dcalli [
 	self shouldBeImplemented.
 	^self specify: dcalli as:'
-	/*@ val dcalli : ... */
-	let dcalli = (...) => {
+/*@ val dcalli : ... */
+    let dcalli = (...) => {
 	...
 	};
 	'
@@ -1488,8 +1488,8 @@ TRILSpecification >> dcalli [
 TRILSpecification >> dceil [
 	self shouldBeImplemented.
 	^self specify: dceil as:'
-	/*@ val dceil : ... */
-	let dceil = (...) => {
+/*@ val dceil : ... */
+    let dceil = (...) => {
 	...
 	};
 	'
@@ -1500,8 +1500,8 @@ TRILSpecification >> dceil [
 TRILSpecification >> dcmpeq [
 	self shouldBeImplemented.
 	^self specify: dcmpeq as:'
-	/*@ val dcmpeq : ... */
-	let dcmpeq = (...) => {
+/*@ val dcmpeq : ... */
+    let dcmpeq = (...) => {
 	...
 	};
 	'
@@ -1512,8 +1512,8 @@ TRILSpecification >> dcmpeq [
 TRILSpecification >> dcmpequ [
 	self shouldBeImplemented.
 	^self specify: dcmpequ as:'
-	/*@ val dcmpequ : ... */
-	let dcmpequ = (...) => {
+/*@ val dcmpequ : ... */
+    let dcmpequ = (...) => {
 	...
 	};
 	'
@@ -1524,8 +1524,8 @@ TRILSpecification >> dcmpequ [
 TRILSpecification >> dcmpg [
 	self shouldBeImplemented.
 	^self specify: dcmpg as:'
-	/*@ val dcmpg : ... */
-	let dcmpg = (...) => {
+/*@ val dcmpg : ... */
+    let dcmpg = (...) => {
 	...
 	};
 	'
@@ -1536,8 +1536,8 @@ TRILSpecification >> dcmpg [
 TRILSpecification >> dcmpge [
 	self shouldBeImplemented.
 	^self specify: dcmpge as:'
-	/*@ val dcmpge : ... */
-	let dcmpge = (...) => {
+/*@ val dcmpge : ... */
+    let dcmpge = (...) => {
 	...
 	};
 	'
@@ -1548,8 +1548,8 @@ TRILSpecification >> dcmpge [
 TRILSpecification >> dcmpgeu [
 	self shouldBeImplemented.
 	^self specify: dcmpgeu as:'
-	/*@ val dcmpgeu : ... */
-	let dcmpgeu = (...) => {
+/*@ val dcmpgeu : ... */
+    let dcmpgeu = (...) => {
 	...
 	};
 	'
@@ -1560,8 +1560,8 @@ TRILSpecification >> dcmpgeu [
 TRILSpecification >> dcmpgt [
 	self shouldBeImplemented.
 	^self specify: dcmpgt as:'
-	/*@ val dcmpgt : ... */
-	let dcmpgt = (...) => {
+/*@ val dcmpgt : ... */
+    let dcmpgt = (...) => {
 	...
 	};
 	'
@@ -1572,8 +1572,8 @@ TRILSpecification >> dcmpgt [
 TRILSpecification >> dcmpgtu [
 	self shouldBeImplemented.
 	^self specify: dcmpgtu as:'
-	/*@ val dcmpgtu : ... */
-	let dcmpgtu = (...) => {
+/*@ val dcmpgtu : ... */
+    let dcmpgtu = (...) => {
 	...
 	};
 	'
@@ -1584,8 +1584,8 @@ TRILSpecification >> dcmpgtu [
 TRILSpecification >> dcmpl [
 	self shouldBeImplemented.
 	^self specify: dcmpl as:'
-	/*@ val dcmpl : ... */
-	let dcmpl = (...) => {
+/*@ val dcmpl : ... */
+    let dcmpl = (...) => {
 	...
 	};
 	'
@@ -1596,8 +1596,8 @@ TRILSpecification >> dcmpl [
 TRILSpecification >> dcmple [
 	self shouldBeImplemented.
 	^self specify: dcmple as:'
-	/*@ val dcmple : ... */
-	let dcmple = (...) => {
+/*@ val dcmple : ... */
+    let dcmple = (...) => {
 	...
 	};
 	'
@@ -1608,8 +1608,8 @@ TRILSpecification >> dcmple [
 TRILSpecification >> dcmpleu [
 	self shouldBeImplemented.
 	^self specify: dcmpleu as:'
-	/*@ val dcmpleu : ... */
-	let dcmpleu = (...) => {
+/*@ val dcmpleu : ... */
+    let dcmpleu = (...) => {
 	...
 	};
 	'
@@ -1620,8 +1620,8 @@ TRILSpecification >> dcmpleu [
 TRILSpecification >> dcmplt [
 	self shouldBeImplemented.
 	^self specify: dcmplt as:'
-	/*@ val dcmplt : ... */
-	let dcmplt = (...) => {
+/*@ val dcmplt : ... */
+    let dcmplt = (...) => {
 	...
 	};
 	'
@@ -1632,8 +1632,8 @@ TRILSpecification >> dcmplt [
 TRILSpecification >> dcmpltu [
 	self shouldBeImplemented.
 	^self specify: dcmpltu as:'
-	/*@ val dcmpltu : ... */
-	let dcmpltu = (...) => {
+/*@ val dcmpltu : ... */
+    let dcmpltu = (...) => {
 	...
 	};
 	'
@@ -1644,8 +1644,8 @@ TRILSpecification >> dcmpltu [
 TRILSpecification >> dcmpne [
 	self shouldBeImplemented.
 	^self specify: dcmpne as:'
-	/*@ val dcmpne : ... */
-	let dcmpne = (...) => {
+/*@ val dcmpne : ... */
+    let dcmpne = (...) => {
 	...
 	};
 	'
@@ -1656,8 +1656,8 @@ TRILSpecification >> dcmpne [
 TRILSpecification >> dcmpneu [
 	self shouldBeImplemented.
 	^self specify: dcmpneu as:'
-	/*@ val dcmpneu : ... */
-	let dcmpneu = (...) => {
+/*@ val dcmpneu : ... */
+    let dcmpneu = (...) => {
 	...
 	};
 	'
@@ -1668,8 +1668,8 @@ TRILSpecification >> dcmpneu [
 TRILSpecification >> dconst [
 	self shouldBeImplemented.
 	^self specify: dconst as:'
-	/*@ val dconst : ... */
-	let dconst = (...) => {
+/*@ val dconst : ... */
+    let dconst = (...) => {
 	...
 	};
 	'
@@ -1680,8 +1680,8 @@ TRILSpecification >> dconst [
 TRILSpecification >> ddiv [
 	self shouldBeImplemented.
 	^self specify: ddiv as:'
-	/*@ val ddiv : ... */
-	let ddiv = (...) => {
+/*@ val ddiv : ... */
+    let ddiv = (...) => {
 	...
 	};
 	'
@@ -1692,8 +1692,8 @@ TRILSpecification >> ddiv [
 TRILSpecification >> dfloor [
 	self shouldBeImplemented.
 	^self specify: dfloor as:'
-	/*@ val dfloor : ... */
-	let dfloor = (...) => {
+/*@ val dfloor : ... */
+    let dfloor = (...) => {
 	...
 	};
 	'
@@ -1704,8 +1704,8 @@ TRILSpecification >> dfloor [
 TRILSpecification >> discontigarraylength [
 	self shouldBeImplemented.
 	^self specify: discontigarraylength as:'
-	/*@ val discontigarraylength : ... */
-	let discontigarraylength = (...) => {
+/*@ val discontigarraylength : ... */
+    let discontigarraylength = (...) => {
 	...
 	};
 	'
@@ -1716,8 +1716,8 @@ TRILSpecification >> discontigarraylength [
 TRILSpecification >> divchk [
 	self shouldBeImplemented.
 	^self specify: divchk as:'
-	/*@ val divchk : ... */
-	let divchk = (...) => {
+/*@ val divchk : ... */
+    let divchk = (...) => {
 	...
 	};
 	'
@@ -1728,8 +1728,8 @@ TRILSpecification >> divchk [
 TRILSpecification >> dload [
 	self shouldBeImplemented.
 	^self specify: dload as:'
-	/*@ val dload : ... */
-	let dload = (...) => {
+/*@ val dload : ... */
+    let dload = (...) => {
 	...
 	};
 	'
@@ -1740,8 +1740,8 @@ TRILSpecification >> dload [
 TRILSpecification >> dloadi [
 	self shouldBeImplemented.
 	^self specify: dloadi as:'
-	/*@ val dloadi : ... */
-	let dloadi = (...) => {
+/*@ val dloadi : ... */
+    let dloadi = (...) => {
 	...
 	};
 	'
@@ -1752,8 +1752,8 @@ TRILSpecification >> dloadi [
 TRILSpecification >> dmax [
 	self shouldBeImplemented.
 	^self specify: dmax as:'
-	/*@ val dmax : ... */
-	let dmax = (...) => {
+/*@ val dmax : ... */
+    let dmax = (...) => {
 	...
 	};
 	'
@@ -1764,8 +1764,8 @@ TRILSpecification >> dmax [
 TRILSpecification >> dmin [
 	self shouldBeImplemented.
 	^self specify: dmin as:'
-	/*@ val dmin : ... */
-	let dmin = (...) => {
+/*@ val dmin : ... */
+    let dmin = (...) => {
 	...
 	};
 	'
@@ -1776,8 +1776,8 @@ TRILSpecification >> dmin [
 TRILSpecification >> dmul [
 	self shouldBeImplemented.
 	^self specify: dmul as:'
-	/*@ val dmul : ... */
-	let dmul = (...) => {
+/*@ val dmul : ... */
+    let dmul = (...) => {
 	...
 	};
 	'
@@ -1788,8 +1788,8 @@ TRILSpecification >> dmul [
 TRILSpecification >> dneg [
 	self shouldBeImplemented.
 	^self specify: dneg as:'
-	/*@ val dneg : ... */
-	let dneg = (...) => {
+/*@ val dneg : ... */
+    let dneg = (...) => {
 	...
 	};
 	'
@@ -1800,8 +1800,8 @@ TRILSpecification >> dneg [
 TRILSpecification >> drdbar [
 	self shouldBeImplemented.
 	^self specify: drdbar as:'
-	/*@ val drdbar : ... */
-	let drdbar = (...) => {
+/*@ val drdbar : ... */
+    let drdbar = (...) => {
 	...
 	};
 	'
@@ -1812,8 +1812,8 @@ TRILSpecification >> drdbar [
 TRILSpecification >> drdbari [
 	self shouldBeImplemented.
 	^self specify: drdbari as:'
-	/*@ val drdbari : ... */
-	let drdbari = (...) => {
+/*@ val drdbari : ... */
+    let drdbari = (...) => {
 	...
 	};
 	'
@@ -1824,8 +1824,8 @@ TRILSpecification >> drdbari [
 TRILSpecification >> dregload [
 	self shouldBeImplemented.
 	^self specify: dregload as:'
-	/*@ val dregload : ... */
-	let dregload = (...) => {
+/*@ val dregload : ... */
+    let dregload = (...) => {
 	...
 	};
 	'
@@ -1836,8 +1836,8 @@ TRILSpecification >> dregload [
 TRILSpecification >> dregstore [
 	self shouldBeImplemented.
 	^self specify: dregstore as:'
-	/*@ val dregstore : ... */
-	let dregstore = (...) => {
+/*@ val dregstore : ... */
+    let dregstore = (...) => {
 	...
 	};
 	'
@@ -1848,8 +1848,8 @@ TRILSpecification >> dregstore [
 TRILSpecification >> drem [
 	self shouldBeImplemented.
 	^self specify: drem as:'
-	/*@ val drem : ... */
-	let drem = (...) => {
+/*@ val drem : ... */
+    let drem = (...) => {
 	...
 	};
 	'
@@ -1860,8 +1860,8 @@ TRILSpecification >> drem [
 TRILSpecification >> dreturn [
 	self shouldBeImplemented.
 	^self specify: dreturn as:'
-	/*@ val dreturn : ... */
-	let dreturn = (...) => {
+/*@ val dreturn : ... */
+    let dreturn = (...) => {
 	...
 	};
 	'
@@ -1872,8 +1872,8 @@ TRILSpecification >> dreturn [
 TRILSpecification >> dselect [
 	self shouldBeImplemented.
 	^self specify: dselect as:'
-	/*@ val dselect : ... */
-	let dselect = (...) => {
+/*@ val dselect : ... */
+    let dselect = (...) => {
 	...
 	};
 	'
@@ -1884,8 +1884,8 @@ TRILSpecification >> dselect [
 TRILSpecification >> dsqrt [
 	self shouldBeImplemented.
 	^self specify: dsqrt as:'
-	/*@ val dsqrt : ... */
-	let dsqrt = (...) => {
+/*@ val dsqrt : ... */
+    let dsqrt = (...) => {
 	...
 	};
 	'
@@ -1896,8 +1896,8 @@ TRILSpecification >> dsqrt [
 TRILSpecification >> dstore [
 	self shouldBeImplemented.
 	^self specify: dstore as:'
-	/*@ val dstore : ... */
-	let dstore = (...) => {
+/*@ val dstore : ... */
+    let dstore = (...) => {
 	...
 	};
 	'
@@ -1908,8 +1908,8 @@ TRILSpecification >> dstore [
 TRILSpecification >> dstorei [
 	self shouldBeImplemented.
 	^self specify: dstorei as:'
-	/*@ val dstorei : ... */
-	let dstorei = (...) => {
+/*@ val dstorei : ... */
+    let dstorei = (...) => {
 	...
 	};
 	'
@@ -1920,8 +1920,8 @@ TRILSpecification >> dstorei [
 TRILSpecification >> dsub [
 	self shouldBeImplemented.
 	^self specify: dsub as:'
-	/*@ val dsub : ... */
-	let dsub = (...) => {
+/*@ val dsub : ... */
+    let dsub = (...) => {
 	...
 	};
 	'
@@ -1932,8 +1932,8 @@ TRILSpecification >> dsub [
 TRILSpecification >> dwrtbar [
 	self shouldBeImplemented.
 	^self specify: dwrtbar as:'
-	/*@ val dwrtbar : ... */
-	let dwrtbar = (...) => {
+/*@ val dwrtbar : ... */
+    let dwrtbar = (...) => {
 	...
 	};
 	'
@@ -1944,8 +1944,8 @@ TRILSpecification >> dwrtbar [
 TRILSpecification >> dwrtbari [
 	self shouldBeImplemented.
 	^self specify: dwrtbari as:'
-	/*@ val dwrtbari : ... */
-	let dwrtbari = (...) => {
+/*@ val dwrtbari : ... */
+    let dwrtbari = (...) => {
 	...
 	};
 	'
@@ -1956,8 +1956,8 @@ TRILSpecification >> dwrtbari [
 TRILSpecification >> exceptionrangefence [
 	self shouldBeImplemented.
 	^self specify: exceptionrangefence as:'
-	/*@ val exceptionrangefence : ... */
-	let exceptionrangefence = (...) => {
+/*@ val exceptionrangefence : ... */
+    let exceptionrangefence = (...) => {
 	...
 	};
 	'
@@ -1968,8 +1968,8 @@ TRILSpecification >> exceptionrangefence [
 TRILSpecification >> f2b [
 	self shouldBeImplemented.
 	^self specify: f2b as:'
-	/*@ val f2b : ... */
-	let f2b = (...) => {
+/*@ val f2b : ... */
+    let f2b = (...) => {
 	...
 	};
 	'
@@ -1980,8 +1980,8 @@ TRILSpecification >> f2b [
 TRILSpecification >> f2bu [
 	self shouldBeImplemented.
 	^self specify: f2bu as:'
-	/*@ val f2bu : ... */
-	let f2bu = (...) => {
+/*@ val f2bu : ... */
+    let f2bu = (...) => {
 	...
 	};
 	'
@@ -1992,8 +1992,8 @@ TRILSpecification >> f2bu [
 TRILSpecification >> f2c [
 	self shouldBeImplemented.
 	^self specify: f2c as:'
-	/*@ val f2c : ... */
-	let f2c = (...) => {
+/*@ val f2c : ... */
+    let f2c = (...) => {
 	...
 	};
 	'
@@ -2004,8 +2004,8 @@ TRILSpecification >> f2c [
 TRILSpecification >> f2d [
 	self shouldBeImplemented.
 	^self specify: f2d as:'
-	/*@ val f2d : ... */
-	let f2d = (...) => {
+/*@ val f2d : ... */
+    let f2d = (...) => {
 	...
 	};
 	'
@@ -2016,8 +2016,8 @@ TRILSpecification >> f2d [
 TRILSpecification >> f2i [
 	self shouldBeImplemented.
 	^self specify: f2i as:'
-	/*@ val f2i : ... */
-	let f2i = (...) => {
+/*@ val f2i : ... */
+    let f2i = (...) => {
 	...
 	};
 	'
@@ -2028,8 +2028,8 @@ TRILSpecification >> f2i [
 TRILSpecification >> f2iu [
 	self shouldBeImplemented.
 	^self specify: f2iu as:'
-	/*@ val f2iu : ... */
-	let f2iu = (...) => {
+/*@ val f2iu : ... */
+    let f2iu = (...) => {
 	...
 	};
 	'
@@ -2040,8 +2040,8 @@ TRILSpecification >> f2iu [
 TRILSpecification >> f2l [
 	self shouldBeImplemented.
 	^self specify: f2l as:'
-	/*@ val f2l : ... */
-	let f2l = (...) => {
+/*@ val f2l : ... */
+    let f2l = (...) => {
 	...
 	};
 	'
@@ -2052,8 +2052,8 @@ TRILSpecification >> f2l [
 TRILSpecification >> f2lu [
 	self shouldBeImplemented.
 	^self specify: f2lu as:'
-	/*@ val f2lu : ... */
-	let f2lu = (...) => {
+/*@ val f2lu : ... */
+    let f2lu = (...) => {
 	...
 	};
 	'
@@ -2064,8 +2064,8 @@ TRILSpecification >> f2lu [
 TRILSpecification >> f2s [
 	self shouldBeImplemented.
 	^self specify: f2s as:'
-	/*@ val f2s : ... */
-	let f2s = (...) => {
+/*@ val f2s : ... */
+    let f2s = (...) => {
 	...
 	};
 	'
@@ -2076,8 +2076,8 @@ TRILSpecification >> f2s [
 TRILSpecification >> fabs [
 	self shouldBeImplemented.
 	^self specify: fabs as:'
-	/*@ val fabs : ... */
-	let fabs = (...) => {
+/*@ val fabs : ... */
+    let fabs = (...) => {
 	...
 	};
 	'
@@ -2088,8 +2088,8 @@ TRILSpecification >> fabs [
 TRILSpecification >> fadd [
 	self shouldBeImplemented.
 	^self specify: fadd as:'
-	/*@ val fadd : ... */
-	let fadd = (...) => {
+/*@ val fadd : ... */
+    let fadd = (...) => {
 	...
 	};
 	'
@@ -2100,8 +2100,8 @@ TRILSpecification >> fadd [
 TRILSpecification >> fbits2i [
 	self shouldBeImplemented.
 	^self specify: fbits2i as:'
-	/*@ val fbits2i : ... */
-	let fbits2i = (...) => {
+/*@ val fbits2i : ... */
+    let fbits2i = (...) => {
 	...
 	};
 	'
@@ -2112,8 +2112,8 @@ TRILSpecification >> fbits2i [
 TRILSpecification >> fcall [
 	self shouldBeImplemented.
 	^self specify: fcall as:'
-	/*@ val fcall : ... */
-	let fcall = (...) => {
+/*@ val fcall : ... */
+    let fcall = (...) => {
 	...
 	};
 	'
@@ -2124,8 +2124,8 @@ TRILSpecification >> fcall [
 TRILSpecification >> fcalli [
 	self shouldBeImplemented.
 	^self specify: fcalli as:'
-	/*@ val fcalli : ... */
-	let fcalli = (...) => {
+/*@ val fcalli : ... */
+    let fcalli = (...) => {
 	...
 	};
 	'
@@ -2136,8 +2136,8 @@ TRILSpecification >> fcalli [
 TRILSpecification >> fceil [
 	self shouldBeImplemented.
 	^self specify: fceil as:'
-	/*@ val fceil : ... */
-	let fceil = (...) => {
+/*@ val fceil : ... */
+    let fceil = (...) => {
 	...
 	};
 	'
@@ -2148,8 +2148,8 @@ TRILSpecification >> fceil [
 TRILSpecification >> fcmpeq [
 	self shouldBeImplemented.
 	^self specify: fcmpeq as:'
-	/*@ val fcmpeq : ... */
-	let fcmpeq = (...) => {
+/*@ val fcmpeq : ... */
+    let fcmpeq = (...) => {
 	...
 	};
 	'
@@ -2160,8 +2160,8 @@ TRILSpecification >> fcmpeq [
 TRILSpecification >> fcmpequ [
 	self shouldBeImplemented.
 	^self specify: fcmpequ as:'
-	/*@ val fcmpequ : ... */
-	let fcmpequ = (...) => {
+/*@ val fcmpequ : ... */
+    let fcmpequ = (...) => {
 	...
 	};
 	'
@@ -2172,8 +2172,8 @@ TRILSpecification >> fcmpequ [
 TRILSpecification >> fcmpg [
 	self shouldBeImplemented.
 	^self specify: fcmpg as:'
-	/*@ val fcmpg : ... */
-	let fcmpg = (...) => {
+/*@ val fcmpg : ... */
+    let fcmpg = (...) => {
 	...
 	};
 	'
@@ -2184,8 +2184,8 @@ TRILSpecification >> fcmpg [
 TRILSpecification >> fcmpge [
 	self shouldBeImplemented.
 	^self specify: fcmpge as:'
-	/*@ val fcmpge : ... */
-	let fcmpge = (...) => {
+/*@ val fcmpge : ... */
+    let fcmpge = (...) => {
 	...
 	};
 	'
@@ -2196,8 +2196,8 @@ TRILSpecification >> fcmpge [
 TRILSpecification >> fcmpgeu [
 	self shouldBeImplemented.
 	^self specify: fcmpgeu as:'
-	/*@ val fcmpgeu : ... */
-	let fcmpgeu = (...) => {
+/*@ val fcmpgeu : ... */
+    let fcmpgeu = (...) => {
 	...
 	};
 	'
@@ -2208,8 +2208,8 @@ TRILSpecification >> fcmpgeu [
 TRILSpecification >> fcmpgt [
 	self shouldBeImplemented.
 	^self specify: fcmpgt as:'
-	/*@ val fcmpgt : ... */
-	let fcmpgt = (...) => {
+/*@ val fcmpgt : ... */
+    let fcmpgt = (...) => {
 	...
 	};
 	'
@@ -2220,8 +2220,8 @@ TRILSpecification >> fcmpgt [
 TRILSpecification >> fcmpgtu [
 	self shouldBeImplemented.
 	^self specify: fcmpgtu as:'
-	/*@ val fcmpgtu : ... */
-	let fcmpgtu = (...) => {
+/*@ val fcmpgtu : ... */
+    let fcmpgtu = (...) => {
 	...
 	};
 	'
@@ -2232,8 +2232,8 @@ TRILSpecification >> fcmpgtu [
 TRILSpecification >> fcmpl [
 	self shouldBeImplemented.
 	^self specify: fcmpl as:'
-	/*@ val fcmpl : ... */
-	let fcmpl = (...) => {
+/*@ val fcmpl : ... */
+    let fcmpl = (...) => {
 	...
 	};
 	'
@@ -2244,8 +2244,8 @@ TRILSpecification >> fcmpl [
 TRILSpecification >> fcmple [
 	self shouldBeImplemented.
 	^self specify: fcmple as:'
-	/*@ val fcmple : ... */
-	let fcmple = (...) => {
+/*@ val fcmple : ... */
+    let fcmple = (...) => {
 	...
 	};
 	'
@@ -2256,8 +2256,8 @@ TRILSpecification >> fcmple [
 TRILSpecification >> fcmpleu [
 	self shouldBeImplemented.
 	^self specify: fcmpleu as:'
-	/*@ val fcmpleu : ... */
-	let fcmpleu = (...) => {
+/*@ val fcmpleu : ... */
+    let fcmpleu = (...) => {
 	...
 	};
 	'
@@ -2268,8 +2268,8 @@ TRILSpecification >> fcmpleu [
 TRILSpecification >> fcmplt [
 	self shouldBeImplemented.
 	^self specify: fcmplt as:'
-	/*@ val fcmplt : ... */
-	let fcmplt = (...) => {
+/*@ val fcmplt : ... */
+    let fcmplt = (...) => {
 	...
 	};
 	'
@@ -2280,8 +2280,8 @@ TRILSpecification >> fcmplt [
 TRILSpecification >> fcmpltu [
 	self shouldBeImplemented.
 	^self specify: fcmpltu as:'
-	/*@ val fcmpltu : ... */
-	let fcmpltu = (...) => {
+/*@ val fcmpltu : ... */
+    let fcmpltu = (...) => {
 	...
 	};
 	'
@@ -2292,8 +2292,8 @@ TRILSpecification >> fcmpltu [
 TRILSpecification >> fcmpne [
 	self shouldBeImplemented.
 	^self specify: fcmpne as:'
-	/*@ val fcmpne : ... */
-	let fcmpne = (...) => {
+/*@ val fcmpne : ... */
+    let fcmpne = (...) => {
 	...
 	};
 	'
@@ -2304,8 +2304,8 @@ TRILSpecification >> fcmpne [
 TRILSpecification >> fcmpneu [
 	self shouldBeImplemented.
 	^self specify: fcmpneu as:'
-	/*@ val fcmpneu : ... */
-	let fcmpneu = (...) => {
+/*@ val fcmpneu : ... */
+    let fcmpneu = (...) => {
 	...
 	};
 	'
@@ -2316,8 +2316,8 @@ TRILSpecification >> fcmpneu [
 TRILSpecification >> fconst [
 	self shouldBeImplemented.
 	^self specify: fconst as:'
-	/*@ val fconst : ... */
-	let fconst = (...) => {
+/*@ val fconst : ... */
+    let fconst = (...) => {
 	...
 	};
 	'
@@ -2328,8 +2328,8 @@ TRILSpecification >> fconst [
 TRILSpecification >> fdiv [
 	self shouldBeImplemented.
 	^self specify: fdiv as:'
-	/*@ val fdiv : ... */
-	let fdiv = (...) => {
+/*@ val fdiv : ... */
+    let fdiv = (...) => {
 	...
 	};
 	'
@@ -2340,8 +2340,8 @@ TRILSpecification >> fdiv [
 TRILSpecification >> fence [
 	self shouldBeImplemented.
 	^self specify: fence as:'
-	/*@ val fence : ... */
-	let fence = (...) => {
+/*@ val fence : ... */
+    let fence = (...) => {
 	...
 	};
 	'
@@ -2352,8 +2352,8 @@ TRILSpecification >> fence [
 TRILSpecification >> ffloor [
 	self shouldBeImplemented.
 	^self specify: ffloor as:'
-	/*@ val ffloor : ... */
-	let ffloor = (...) => {
+/*@ val ffloor : ... */
+    let ffloor = (...) => {
 	...
 	};
 	'
@@ -2364,8 +2364,8 @@ TRILSpecification >> ffloor [
 TRILSpecification >> fload [
 	self shouldBeImplemented.
 	^self specify: fload as:'
-	/*@ val fload : ... */
-	let fload = (...) => {
+/*@ val fload : ... */
+    let fload = (...) => {
 	...
 	};
 	'
@@ -2376,8 +2376,8 @@ TRILSpecification >> fload [
 TRILSpecification >> floadi [
 	self shouldBeImplemented.
 	^self specify: floadi as:'
-	/*@ val floadi : ... */
-	let floadi = (...) => {
+/*@ val floadi : ... */
+    let floadi = (...) => {
 	...
 	};
 	'
@@ -2388,8 +2388,8 @@ TRILSpecification >> floadi [
 TRILSpecification >> fmax [
 	self shouldBeImplemented.
 	^self specify: fmax as:'
-	/*@ val fmax : ... */
-	let fmax = (...) => {
+/*@ val fmax : ... */
+    let fmax = (...) => {
 	...
 	};
 	'
@@ -2400,8 +2400,8 @@ TRILSpecification >> fmax [
 TRILSpecification >> fmin [
 	self shouldBeImplemented.
 	^self specify: fmin as:'
-	/*@ val fmin : ... */
-	let fmin = (...) => {
+/*@ val fmin : ... */
+    let fmin = (...) => {
 	...
 	};
 	'
@@ -2412,8 +2412,8 @@ TRILSpecification >> fmin [
 TRILSpecification >> fmul [
 	self shouldBeImplemented.
 	^self specify: fmul as:'
-	/*@ val fmul : ... */
-	let fmul = (...) => {
+/*@ val fmul : ... */
+    let fmul = (...) => {
 	...
 	};
 	'
@@ -2424,8 +2424,8 @@ TRILSpecification >> fmul [
 TRILSpecification >> fneg [
 	self shouldBeImplemented.
 	^self specify: fneg as:'
-	/*@ val fneg : ... */
-	let fneg = (...) => {
+/*@ val fneg : ... */
+    let fneg = (...) => {
 	...
 	};
 	'
@@ -2436,8 +2436,8 @@ TRILSpecification >> fneg [
 TRILSpecification >> frdbar [
 	self shouldBeImplemented.
 	^self specify: frdbar as:'
-	/*@ val frdbar : ... */
-	let frdbar = (...) => {
+/*@ val frdbar : ... */
+    let frdbar = (...) => {
 	...
 	};
 	'
@@ -2448,8 +2448,8 @@ TRILSpecification >> frdbar [
 TRILSpecification >> frdbari [
 	self shouldBeImplemented.
 	^self specify: frdbari as:'
-	/*@ val frdbari : ... */
-	let frdbari = (...) => {
+/*@ val frdbari : ... */
+    let frdbari = (...) => {
 	...
 	};
 	'
@@ -2460,8 +2460,8 @@ TRILSpecification >> frdbari [
 TRILSpecification >> fregload [
 	self shouldBeImplemented.
 	^self specify: fregload as:'
-	/*@ val fregload : ... */
-	let fregload = (...) => {
+/*@ val fregload : ... */
+    let fregload = (...) => {
 	...
 	};
 	'
@@ -2472,8 +2472,8 @@ TRILSpecification >> fregload [
 TRILSpecification >> fregstore [
 	self shouldBeImplemented.
 	^self specify: fregstore as:'
-	/*@ val fregstore : ... */
-	let fregstore = (...) => {
+/*@ val fregstore : ... */
+    let fregstore = (...) => {
 	...
 	};
 	'
@@ -2484,8 +2484,8 @@ TRILSpecification >> fregstore [
 TRILSpecification >> frem [
 	self shouldBeImplemented.
 	^self specify: frem as:'
-	/*@ val frem : ... */
-	let frem = (...) => {
+/*@ val frem : ... */
+    let frem = (...) => {
 	...
 	};
 	'
@@ -2496,8 +2496,8 @@ TRILSpecification >> frem [
 TRILSpecification >> freturn [
 	self shouldBeImplemented.
 	^self specify: freturn as:'
-	/*@ val freturn : ... */
-	let freturn = (...) => {
+/*@ val freturn : ... */
+    let freturn = (...) => {
 	...
 	};
 	'
@@ -2508,8 +2508,8 @@ TRILSpecification >> freturn [
 TRILSpecification >> fselect [
 	self shouldBeImplemented.
 	^self specify: fselect as:'
-	/*@ val fselect : ... */
-	let fselect = (...) => {
+/*@ val fselect : ... */
+    let fselect = (...) => {
 	...
 	};
 	'
@@ -2520,8 +2520,8 @@ TRILSpecification >> fselect [
 TRILSpecification >> fsqrt [
 	self shouldBeImplemented.
 	^self specify: fsqrt as:'
-	/*@ val fsqrt : ... */
-	let fsqrt = (...) => {
+/*@ val fsqrt : ... */
+    let fsqrt = (...) => {
 	...
 	};
 	'
@@ -2532,8 +2532,8 @@ TRILSpecification >> fsqrt [
 TRILSpecification >> fstore [
 	self shouldBeImplemented.
 	^self specify: fstore as:'
-	/*@ val fstore : ... */
-	let fstore = (...) => {
+/*@ val fstore : ... */
+    let fstore = (...) => {
 	...
 	};
 	'
@@ -2544,8 +2544,8 @@ TRILSpecification >> fstore [
 TRILSpecification >> fstorei [
 	self shouldBeImplemented.
 	^self specify: fstorei as:'
-	/*@ val fstorei : ... */
-	let fstorei = (...) => {
+/*@ val fstorei : ... */
+    let fstorei = (...) => {
 	...
 	};
 	'
@@ -2556,8 +2556,8 @@ TRILSpecification >> fstorei [
 TRILSpecification >> fsub [
 	self shouldBeImplemented.
 	^self specify: fsub as:'
-	/*@ val fsub : ... */
-	let fsub = (...) => {
+/*@ val fsub : ... */
+    let fsub = (...) => {
 	...
 	};
 	'
@@ -2568,8 +2568,8 @@ TRILSpecification >> fsub [
 TRILSpecification >> fullfence [
 	self shouldBeImplemented.
 	^self specify: fullfence as:'
-	/*@ val fullfence : ... */
-	let fullfence = (...) => {
+/*@ val fullfence : ... */
+    let fullfence = (...) => {
 	...
 	};
 	'
@@ -2580,8 +2580,8 @@ TRILSpecification >> fullfence [
 TRILSpecification >> fwrtbar [
 	self shouldBeImplemented.
 	^self specify: fwrtbar as:'
-	/*@ val fwrtbar : ... */
-	let fwrtbar = (...) => {
+/*@ val fwrtbar : ... */
+    let fwrtbar = (...) => {
 	...
 	};
 	'
@@ -2592,8 +2592,8 @@ TRILSpecification >> fwrtbar [
 TRILSpecification >> fwrtbari [
 	self shouldBeImplemented.
 	^self specify: fwrtbari as:'
-	/*@ val fwrtbari : ... */
-	let fwrtbari = (...) => {
+/*@ val fwrtbari : ... */
+    let fwrtbari = (...) => {
 	...
 	};
 	'
@@ -2604,8 +2604,8 @@ TRILSpecification >> fwrtbari [
 TRILSpecification >> glregdeps [
 	self shouldBeImplemented.
 	^self specify: glregdeps as:'
-	/*@ val glregdeps : ... */
-	let glregdeps = (...) => {
+/*@ val glregdeps : ... */
+    let glregdeps = (...) => {
 	...
 	};
 	'
@@ -2616,8 +2616,8 @@ TRILSpecification >> glregdeps [
 TRILSpecification >> goto [
 	self shouldBeImplemented.
 	^self specify: goto as:'
-	/*@ val goto : ... */
-	let goto = (...) => {
+/*@ val goto : ... */
+    let goto = (...) => {
 	...
 	};
 	'
@@ -2628,8 +2628,8 @@ TRILSpecification >> goto [
 TRILSpecification >> i2a [
 	self shouldBeImplemented.
 	^self specify: i2a as:'
-	/*@ val i2a : ... */
-	let i2a = (...) => {
+/*@ val i2a : ... */
+    let i2a = (...) => {
 	...
 	};
 	'
@@ -2640,8 +2640,8 @@ TRILSpecification >> i2a [
 TRILSpecification >> i2b [
 	self shouldBeImplemented.
 	^self specify: i2b as:'
-	/*@ val i2b : ... */
-	let i2b = (...) => {
+/*@ val i2b : ... */
+    let i2b = (...) => {
 	...
 	};
 	'
@@ -2652,8 +2652,8 @@ TRILSpecification >> i2b [
 TRILSpecification >> i2d [
 	self shouldBeImplemented.
 	^self specify: i2d as:'
-	/*@ val i2d : ... */
-	let i2d = (...) => {
+/*@ val i2d : ... */
+    let i2d = (...) => {
 	...
 	};
 	'
@@ -2664,8 +2664,8 @@ TRILSpecification >> i2d [
 TRILSpecification >> i2f [
 	self shouldBeImplemented.
 	^self specify: i2f as:'
-	/*@ val i2f : ... */
-	let i2f = (...) => {
+/*@ val i2f : ... */
+    let i2f = (...) => {
 	...
 	};
 	'
@@ -2676,8 +2676,8 @@ TRILSpecification >> i2f [
 TRILSpecification >> i2l [
 	self shouldBeImplemented.
 	^self specify: i2l as:'
-	/*@ val i2l : ... */
-	let i2l = (...) => {
+/*@ val i2l : ... */
+    let i2l = (...) => {
 	...
 	};
 	'
@@ -2688,8 +2688,8 @@ TRILSpecification >> i2l [
 TRILSpecification >> i2s [
 	self shouldBeImplemented.
 	^self specify: i2s as:'
-	/*@ val i2s : ... */
-	let i2s = (...) => {
+/*@ val i2s : ... */
+    let i2s = (...) => {
 	...
 	};
 	'
@@ -2700,8 +2700,8 @@ TRILSpecification >> i2s [
 TRILSpecification >> iabs [
 	self shouldBeImplemented.
 	^self specify: iabs as:'
-	/*@ val iabs : ... */
-	let iabs = (...) => {
+/*@ val iabs : ... */
+    let iabs = (...) => {
 	...
 	};
 	'
@@ -2711,8 +2711,8 @@ TRILSpecification >> iabs [
 { #category : #opcodes }
 TRILSpecification >> iadd [
 	^self specify: iadd as:'
-	/*@ reflect iadd : Int32 => Int32 => Int32 / [zero] */
-	let         iadd = (c1,c2) => {
+/*@ val iadd : c1:Int32 => c2:Int32 => Int32[v|v === (c1 + c2)] */
+    let iadd = (c1,c2) => {
 		bvadd(c1,c2)
 	};
 '
@@ -2726,8 +2726,8 @@ TRILSpecification >> iadd [
 TRILSpecification >> iand [
 	self shouldBeImplemented.
 	^self specify: iand as:'
-	/*@ val iand : ... */
-	let iand = (...) => {
+/*@ val iand : ... */
+    let iand = (...) => {
 	...
 	};
 	'
@@ -2738,8 +2738,8 @@ TRILSpecification >> iand [
 TRILSpecification >> ibatomicor [
 	self shouldBeImplemented.
 	^self specify: ibatomicor as:'
-	/*@ val ibatomicor : ... */
-	let ibatomicor = (...) => {
+/*@ val ibatomicor : ... */
+    let ibatomicor = (...) => {
 	...
 	};
 	'
@@ -2750,8 +2750,8 @@ TRILSpecification >> ibatomicor [
 TRILSpecification >> ibitpermute [
 	self shouldBeImplemented.
 	^self specify: ibitpermute as:'
-	/*@ val ibitpermute : ... */
-	let ibitpermute = (...) => {
+/*@ val ibitpermute : ... */
+    let ibitpermute = (...) => {
 	...
 	};
 	'
@@ -2762,8 +2762,8 @@ TRILSpecification >> ibitpermute [
 TRILSpecification >> ibits2f [
 	self shouldBeImplemented.
 	^self specify: ibits2f as:'
-	/*@ val ibits2f : ... */
-	let ibits2f = (...) => {
+/*@ val ibits2f : ... */
+    let ibits2f = (...) => {
 	...
 	};
 	'
@@ -2774,8 +2774,8 @@ TRILSpecification >> ibits2f [
 TRILSpecification >> ibyteswap [
 	self shouldBeImplemented.
 	^self specify: ibyteswap as:'
-	/*@ val ibyteswap : ... */
-	let ibyteswap = (...) => {
+/*@ val ibyteswap : ... */
+    let ibyteswap = (...) => {
 	...
 	};
 	'
@@ -2786,8 +2786,8 @@ TRILSpecification >> ibyteswap [
 TRILSpecification >> icall [
 	self shouldBeImplemented.
 	^self specify: icall as:'
-	/*@ val icall : ... */
-	let icall = (...) => {
+/*@ val icall : ... */
+    let icall = (...) => {
 	...
 	};
 	'
@@ -2798,8 +2798,8 @@ TRILSpecification >> icall [
 TRILSpecification >> icalli [
 	self shouldBeImplemented.
 	^self specify: icalli as:'
-	/*@ val icalli : ... */
-	let icalli = (...) => {
+/*@ val icalli : ... */
+    let icalli = (...) => {
 	...
 	};
 	'
@@ -2810,8 +2810,8 @@ TRILSpecification >> icalli [
 TRILSpecification >> icmp [
 	self shouldBeImplemented.
 	^self specify: icmp as:'
-	/*@ val icmp : ... */
-	let icmp = (...) => {
+/*@ val icmp : ... */
+    let icmp = (...) => {
 	...
 	};
 	'
@@ -2822,8 +2822,8 @@ TRILSpecification >> icmp [
 TRILSpecification >> icmpeq [
 	self shouldBeImplemented.
 	^self specify: icmpeq as:'
-	/*@ val icmpeq : ... */
-	let icmpeq = (...) => {
+/*@ val icmpeq : ... */
+    let icmpeq = (...) => {
 	...
 	};
 	'
@@ -2834,8 +2834,8 @@ TRILSpecification >> icmpeq [
 TRILSpecification >> icmpge [
 	self shouldBeImplemented.
 	^self specify: icmpge as:'
-	/*@ val icmpge : ... */
-	let icmpge = (...) => {
+/*@ val icmpge : ... */
+    let icmpge = (...) => {
 	...
 	};
 	'
@@ -2846,8 +2846,8 @@ TRILSpecification >> icmpge [
 TRILSpecification >> icmpgt [
 	self shouldBeImplemented.
 	^self specify: icmpgt as:'
-	/*@ val icmpgt : ... */
-	let icmpgt = (...) => {
+/*@ val icmpgt : ... */
+    let icmpgt = (...) => {
 	...
 	};
 	'
@@ -2858,8 +2858,8 @@ TRILSpecification >> icmpgt [
 TRILSpecification >> icmple [
 	self shouldBeImplemented.
 	^self specify: icmple as:'
-	/*@ val icmple : ... */
-	let icmple = (...) => {
+/*@ val icmple : ... */
+    let icmple = (...) => {
 	...
 	};
 	'
@@ -2870,8 +2870,8 @@ TRILSpecification >> icmple [
 TRILSpecification >> icmplt [
 	self shouldBeImplemented.
 	^self specify: icmplt as:'
-	/*@ val icmplt : ... */
-	let icmplt = (...) => {
+/*@ val icmplt : ... */
+    let icmplt = (...) => {
 	...
 	};
 	'
@@ -2882,8 +2882,8 @@ TRILSpecification >> icmplt [
 TRILSpecification >> icmpne [
 	self shouldBeImplemented.
 	^self specify: icmpne as:'
-	/*@ val icmpne : ... */
-	let icmpne = (...) => {
+/*@ val icmpne : ... */
+    let icmpne = (...) => {
 	...
 	};
 	'
@@ -2894,8 +2894,8 @@ TRILSpecification >> icmpne [
 TRILSpecification >> icmpset [
 	self shouldBeImplemented.
 	^self specify: icmpset as:'
-	/*@ val icmpset : ... */
-	let icmpset = (...) => {
+/*@ val icmpset : ... */
+    let icmpset = (...) => {
 	...
 	};
 	'
@@ -2905,18 +2905,18 @@ TRILSpecification >> icmpset [
 { #category : #opcodes }
 TRILSpecification >> iconst [
 	^self specify: iconst as: '
-	/*@ reflect iconst : Int32 => Int32 / [zero] */
-	let         iconst = (c) => {
-		c
+/*@ val iconst : c1:Int32 => Int32[v|v === c1] */
+    let iconst = (c1) => {
+		c1
 	};'
 ]
 
 { #category : #opcodes }
 TRILSpecification >> idiv [
 	^self specify: idiv as:'
-	/*@ reflect idiv : c1:Int32 => c2:Int32 => Int32[r|r === (c1 / c2)] */
-	let         idiv = (c1,c2) => {
-		bvdiv(c1,c2)
+/*@ val idiv : c1:Int32 => c2:Int32 => Int32[r|r === (c1 / c2)] */
+    let idiv = (c1,c2) => {
+		bvsdiv(c1,c2)
 	};
 '
 
@@ -2929,8 +2929,8 @@ TRILSpecification >> idiv [
 TRILSpecification >> ifacmpeq [
 	self shouldBeImplemented.
 	^self specify: ifacmpeq as:'
-	/*@ val ifacmpeq : ... */
-	let ifacmpeq = (...) => {
+/*@ val ifacmpeq : ... */
+    let ifacmpeq = (...) => {
 	...
 	};
 	'
@@ -2941,8 +2941,8 @@ TRILSpecification >> ifacmpeq [
 TRILSpecification >> ifacmpge [
 	self shouldBeImplemented.
 	^self specify: ifacmpge as:'
-	/*@ val ifacmpge : ... */
-	let ifacmpge = (...) => {
+/*@ val ifacmpge : ... */
+    let ifacmpge = (...) => {
 	...
 	};
 	'
@@ -2953,8 +2953,8 @@ TRILSpecification >> ifacmpge [
 TRILSpecification >> ifacmpgt [
 	self shouldBeImplemented.
 	^self specify: ifacmpgt as:'
-	/*@ val ifacmpgt : ... */
-	let ifacmpgt = (...) => {
+/*@ val ifacmpgt : ... */
+    let ifacmpgt = (...) => {
 	...
 	};
 	'
@@ -2965,8 +2965,8 @@ TRILSpecification >> ifacmpgt [
 TRILSpecification >> ifacmple [
 	self shouldBeImplemented.
 	^self specify: ifacmple as:'
-	/*@ val ifacmple : ... */
-	let ifacmple = (...) => {
+/*@ val ifacmple : ... */
+    let ifacmple = (...) => {
 	...
 	};
 	'
@@ -2977,8 +2977,8 @@ TRILSpecification >> ifacmple [
 TRILSpecification >> ifacmplt [
 	self shouldBeImplemented.
 	^self specify: ifacmplt as:'
-	/*@ val ifacmplt : ... */
-	let ifacmplt = (...) => {
+/*@ val ifacmplt : ... */
+    let ifacmplt = (...) => {
 	...
 	};
 	'
@@ -2989,8 +2989,8 @@ TRILSpecification >> ifacmplt [
 TRILSpecification >> ifacmpne [
 	self shouldBeImplemented.
 	^self specify: ifacmpne as:'
-	/*@ val ifacmpne : ... */
-	let ifacmpne = (...) => {
+/*@ val ifacmpne : ... */
+    let ifacmpne = (...) => {
 	...
 	};
 	'
@@ -3001,8 +3001,8 @@ TRILSpecification >> ifacmpne [
 TRILSpecification >> ifbcmpeq [
 	self shouldBeImplemented.
 	^self specify: ifbcmpeq as:'
-	/*@ val ifbcmpeq : ... */
-	let ifbcmpeq = (...) => {
+/*@ val ifbcmpeq : ... */
+    let ifbcmpeq = (...) => {
 	...
 	};
 	'
@@ -3013,8 +3013,8 @@ TRILSpecification >> ifbcmpeq [
 TRILSpecification >> ifbcmpge [
 	self shouldBeImplemented.
 	^self specify: ifbcmpge as:'
-	/*@ val ifbcmpge : ... */
-	let ifbcmpge = (...) => {
+/*@ val ifbcmpge : ... */
+    let ifbcmpge = (...) => {
 	...
 	};
 	'
@@ -3025,8 +3025,8 @@ TRILSpecification >> ifbcmpge [
 TRILSpecification >> ifbcmpgt [
 	self shouldBeImplemented.
 	^self specify: ifbcmpgt as:'
-	/*@ val ifbcmpgt : ... */
-	let ifbcmpgt = (...) => {
+/*@ val ifbcmpgt : ... */
+    let ifbcmpgt = (...) => {
 	...
 	};
 	'
@@ -3037,8 +3037,8 @@ TRILSpecification >> ifbcmpgt [
 TRILSpecification >> ifbcmple [
 	self shouldBeImplemented.
 	^self specify: ifbcmple as:'
-	/*@ val ifbcmple : ... */
-	let ifbcmple = (...) => {
+/*@ val ifbcmple : ... */
+    let ifbcmple = (...) => {
 	...
 	};
 	'
@@ -3049,8 +3049,8 @@ TRILSpecification >> ifbcmple [
 TRILSpecification >> ifbcmplt [
 	self shouldBeImplemented.
 	^self specify: ifbcmplt as:'
-	/*@ val ifbcmplt : ... */
-	let ifbcmplt = (...) => {
+/*@ val ifbcmplt : ... */
+    let ifbcmplt = (...) => {
 	...
 	};
 	'
@@ -3061,8 +3061,8 @@ TRILSpecification >> ifbcmplt [
 TRILSpecification >> ifbcmpne [
 	self shouldBeImplemented.
 	^self specify: ifbcmpne as:'
-	/*@ val ifbcmpne : ... */
-	let ifbcmpne = (...) => {
+/*@ val ifbcmpne : ... */
+    let ifbcmpne = (...) => {
 	...
 	};
 	'
@@ -3073,8 +3073,8 @@ TRILSpecification >> ifbcmpne [
 TRILSpecification >> ifbucmpge [
 	self shouldBeImplemented.
 	^self specify: ifbucmpge as:'
-	/*@ val ifbucmpge : ... */
-	let ifbucmpge = (...) => {
+/*@ val ifbucmpge : ... */
+    let ifbucmpge = (...) => {
 	...
 	};
 	'
@@ -3085,8 +3085,8 @@ TRILSpecification >> ifbucmpge [
 TRILSpecification >> ifbucmpgt [
 	self shouldBeImplemented.
 	^self specify: ifbucmpgt as:'
-	/*@ val ifbucmpgt : ... */
-	let ifbucmpgt = (...) => {
+/*@ val ifbucmpgt : ... */
+    let ifbucmpgt = (...) => {
 	...
 	};
 	'
@@ -3097,8 +3097,8 @@ TRILSpecification >> ifbucmpgt [
 TRILSpecification >> ifbucmple [
 	self shouldBeImplemented.
 	^self specify: ifbucmple as:'
-	/*@ val ifbucmple : ... */
-	let ifbucmple = (...) => {
+/*@ val ifbucmple : ... */
+    let ifbucmple = (...) => {
 	...
 	};
 	'
@@ -3109,8 +3109,8 @@ TRILSpecification >> ifbucmple [
 TRILSpecification >> ifbucmplt [
 	self shouldBeImplemented.
 	^self specify: ifbucmplt as:'
-	/*@ val ifbucmplt : ... */
-	let ifbucmplt = (...) => {
+/*@ val ifbucmplt : ... */
+    let ifbucmplt = (...) => {
 	...
 	};
 	'
@@ -3121,8 +3121,8 @@ TRILSpecification >> ifbucmplt [
 TRILSpecification >> ifdcmpeq [
 	self shouldBeImplemented.
 	^self specify: ifdcmpeq as:'
-	/*@ val ifdcmpeq : ... */
-	let ifdcmpeq = (...) => {
+/*@ val ifdcmpeq : ... */
+    let ifdcmpeq = (...) => {
 	...
 	};
 	'
@@ -3133,8 +3133,8 @@ TRILSpecification >> ifdcmpeq [
 TRILSpecification >> ifdcmpequ [
 	self shouldBeImplemented.
 	^self specify: ifdcmpequ as:'
-	/*@ val ifdcmpequ : ... */
-	let ifdcmpequ = (...) => {
+/*@ val ifdcmpequ : ... */
+    let ifdcmpequ = (...) => {
 	...
 	};
 	'
@@ -3145,8 +3145,8 @@ TRILSpecification >> ifdcmpequ [
 TRILSpecification >> ifdcmpge [
 	self shouldBeImplemented.
 	^self specify: ifdcmpge as:'
-	/*@ val ifdcmpge : ... */
-	let ifdcmpge = (...) => {
+/*@ val ifdcmpge : ... */
+    let ifdcmpge = (...) => {
 	...
 	};
 	'
@@ -3157,8 +3157,8 @@ TRILSpecification >> ifdcmpge [
 TRILSpecification >> ifdcmpgeu [
 	self shouldBeImplemented.
 	^self specify: ifdcmpgeu as:'
-	/*@ val ifdcmpgeu : ... */
-	let ifdcmpgeu = (...) => {
+/*@ val ifdcmpgeu : ... */
+    let ifdcmpgeu = (...) => {
 	...
 	};
 	'
@@ -3169,8 +3169,8 @@ TRILSpecification >> ifdcmpgeu [
 TRILSpecification >> ifdcmpgt [
 	self shouldBeImplemented.
 	^self specify: ifdcmpgt as:'
-	/*@ val ifdcmpgt : ... */
-	let ifdcmpgt = (...) => {
+/*@ val ifdcmpgt : ... */
+    let ifdcmpgt = (...) => {
 	...
 	};
 	'
@@ -3181,8 +3181,8 @@ TRILSpecification >> ifdcmpgt [
 TRILSpecification >> ifdcmpgtu [
 	self shouldBeImplemented.
 	^self specify: ifdcmpgtu as:'
-	/*@ val ifdcmpgtu : ... */
-	let ifdcmpgtu = (...) => {
+/*@ val ifdcmpgtu : ... */
+    let ifdcmpgtu = (...) => {
 	...
 	};
 	'
@@ -3193,8 +3193,8 @@ TRILSpecification >> ifdcmpgtu [
 TRILSpecification >> ifdcmple [
 	self shouldBeImplemented.
 	^self specify: ifdcmple as:'
-	/*@ val ifdcmple : ... */
-	let ifdcmple = (...) => {
+/*@ val ifdcmple : ... */
+    let ifdcmple = (...) => {
 	...
 	};
 	'
@@ -3205,8 +3205,8 @@ TRILSpecification >> ifdcmple [
 TRILSpecification >> ifdcmpleu [
 	self shouldBeImplemented.
 	^self specify: ifdcmpleu as:'
-	/*@ val ifdcmpleu : ... */
-	let ifdcmpleu = (...) => {
+/*@ val ifdcmpleu : ... */
+    let ifdcmpleu = (...) => {
 	...
 	};
 	'
@@ -3217,8 +3217,8 @@ TRILSpecification >> ifdcmpleu [
 TRILSpecification >> ifdcmplt [
 	self shouldBeImplemented.
 	^self specify: ifdcmplt as:'
-	/*@ val ifdcmplt : ... */
-	let ifdcmplt = (...) => {
+/*@ val ifdcmplt : ... */
+    let ifdcmplt = (...) => {
 	...
 	};
 	'
@@ -3229,8 +3229,8 @@ TRILSpecification >> ifdcmplt [
 TRILSpecification >> ifdcmpltu [
 	self shouldBeImplemented.
 	^self specify: ifdcmpltu as:'
-	/*@ val ifdcmpltu : ... */
-	let ifdcmpltu = (...) => {
+/*@ val ifdcmpltu : ... */
+    let ifdcmpltu = (...) => {
 	...
 	};
 	'
@@ -3241,8 +3241,8 @@ TRILSpecification >> ifdcmpltu [
 TRILSpecification >> ifdcmpne [
 	self shouldBeImplemented.
 	^self specify: ifdcmpne as:'
-	/*@ val ifdcmpne : ... */
-	let ifdcmpne = (...) => {
+/*@ val ifdcmpne : ... */
+    let ifdcmpne = (...) => {
 	...
 	};
 	'
@@ -3253,8 +3253,8 @@ TRILSpecification >> ifdcmpne [
 TRILSpecification >> ifdcmpneu [
 	self shouldBeImplemented.
 	^self specify: ifdcmpneu as:'
-	/*@ val ifdcmpneu : ... */
-	let ifdcmpneu = (...) => {
+/*@ val ifdcmpneu : ... */
+    let ifdcmpneu = (...) => {
 	...
 	};
 	'
@@ -3265,8 +3265,8 @@ TRILSpecification >> ifdcmpneu [
 TRILSpecification >> iffcmpeq [
 	self shouldBeImplemented.
 	^self specify: iffcmpeq as:'
-	/*@ val iffcmpeq : ... */
-	let iffcmpeq = (...) => {
+/*@ val iffcmpeq : ... */
+    let iffcmpeq = (...) => {
 	...
 	};
 	'
@@ -3277,8 +3277,8 @@ TRILSpecification >> iffcmpeq [
 TRILSpecification >> iffcmpequ [
 	self shouldBeImplemented.
 	^self specify: iffcmpequ as:'
-	/*@ val iffcmpequ : ... */
-	let iffcmpequ = (...) => {
+/*@ val iffcmpequ : ... */
+    let iffcmpequ = (...) => {
 	...
 	};
 	'
@@ -3289,8 +3289,8 @@ TRILSpecification >> iffcmpequ [
 TRILSpecification >> iffcmpge [
 	self shouldBeImplemented.
 	^self specify: iffcmpge as:'
-	/*@ val iffcmpge : ... */
-	let iffcmpge = (...) => {
+/*@ val iffcmpge : ... */
+    let iffcmpge = (...) => {
 	...
 	};
 	'
@@ -3301,8 +3301,8 @@ TRILSpecification >> iffcmpge [
 TRILSpecification >> iffcmpgeu [
 	self shouldBeImplemented.
 	^self specify: iffcmpgeu as:'
-	/*@ val iffcmpgeu : ... */
-	let iffcmpgeu = (...) => {
+/*@ val iffcmpgeu : ... */
+    let iffcmpgeu = (...) => {
 	...
 	};
 	'
@@ -3313,8 +3313,8 @@ TRILSpecification >> iffcmpgeu [
 TRILSpecification >> iffcmpgt [
 	self shouldBeImplemented.
 	^self specify: iffcmpgt as:'
-	/*@ val iffcmpgt : ... */
-	let iffcmpgt = (...) => {
+/*@ val iffcmpgt : ... */
+    let iffcmpgt = (...) => {
 	...
 	};
 	'
@@ -3325,8 +3325,8 @@ TRILSpecification >> iffcmpgt [
 TRILSpecification >> iffcmpgtu [
 	self shouldBeImplemented.
 	^self specify: iffcmpgtu as:'
-	/*@ val iffcmpgtu : ... */
-	let iffcmpgtu = (...) => {
+/*@ val iffcmpgtu : ... */
+    let iffcmpgtu = (...) => {
 	...
 	};
 	'
@@ -3337,8 +3337,8 @@ TRILSpecification >> iffcmpgtu [
 TRILSpecification >> iffcmple [
 	self shouldBeImplemented.
 	^self specify: iffcmple as:'
-	/*@ val iffcmple : ... */
-	let iffcmple = (...) => {
+/*@ val iffcmple : ... */
+    let iffcmple = (...) => {
 	...
 	};
 	'
@@ -3349,8 +3349,8 @@ TRILSpecification >> iffcmple [
 TRILSpecification >> iffcmpleu [
 	self shouldBeImplemented.
 	^self specify: iffcmpleu as:'
-	/*@ val iffcmpleu : ... */
-	let iffcmpleu = (...) => {
+/*@ val iffcmpleu : ... */
+    let iffcmpleu = (...) => {
 	...
 	};
 	'
@@ -3361,8 +3361,8 @@ TRILSpecification >> iffcmpleu [
 TRILSpecification >> iffcmplt [
 	self shouldBeImplemented.
 	^self specify: iffcmplt as:'
-	/*@ val iffcmplt : ... */
-	let iffcmplt = (...) => {
+/*@ val iffcmplt : ... */
+    let iffcmplt = (...) => {
 	...
 	};
 	'
@@ -3373,8 +3373,8 @@ TRILSpecification >> iffcmplt [
 TRILSpecification >> iffcmpltu [
 	self shouldBeImplemented.
 	^self specify: iffcmpltu as:'
-	/*@ val iffcmpltu : ... */
-	let iffcmpltu = (...) => {
+/*@ val iffcmpltu : ... */
+    let iffcmpltu = (...) => {
 	...
 	};
 	'
@@ -3385,8 +3385,8 @@ TRILSpecification >> iffcmpltu [
 TRILSpecification >> iffcmpne [
 	self shouldBeImplemented.
 	^self specify: iffcmpne as:'
-	/*@ val iffcmpne : ... */
-	let iffcmpne = (...) => {
+/*@ val iffcmpne : ... */
+    let iffcmpne = (...) => {
 	...
 	};
 	'
@@ -3397,8 +3397,8 @@ TRILSpecification >> iffcmpne [
 TRILSpecification >> iffcmpneu [
 	self shouldBeImplemented.
 	^self specify: iffcmpneu as:'
-	/*@ val iffcmpneu : ... */
-	let iffcmpneu = (...) => {
+/*@ val iffcmpneu : ... */
+    let iffcmpneu = (...) => {
 	...
 	};
 	'
@@ -3409,8 +3409,8 @@ TRILSpecification >> iffcmpneu [
 TRILSpecification >> ificmnno [
 	self shouldBeImplemented.
 	^self specify: ificmnno as:'
-	/*@ val ificmnno : ... */
-	let ificmnno = (...) => {
+/*@ val ificmnno : ... */
+    let ificmnno = (...) => {
 	...
 	};
 	'
@@ -3421,8 +3421,8 @@ TRILSpecification >> ificmnno [
 TRILSpecification >> ificmno [
 	self shouldBeImplemented.
 	^self specify: ificmno as:'
-	/*@ val ificmno : ... */
-	let ificmno = (...) => {
+/*@ val ificmno : ... */
+    let ificmno = (...) => {
 	...
 	};
 	'
@@ -3432,8 +3432,8 @@ TRILSpecification >> ificmno [
 { #category : #opcodes }
 TRILSpecification >> ificmpeq [
 	^self specify: ificmpeq as:'
-	/*@ reflect ificmpeq : Int32 => Int32 => bool */
-	let         ificmpeq = (c1,c2) => {
+/*@ val ificmpeq : c1:Int32 => c2:Int32 => bool[v|v === (c1 = c2)] */
+    let ificmpeq = (c1,c2) => {
 		bveq(c1 , c2)
 	};
 	'
@@ -3446,9 +3446,9 @@ TRILSpecification >> ificmpeq [
 { #category : #opcodes }
 TRILSpecification >> ificmpge [
 	^self specify: ificmpge as:'
-	/*@ reflect ificmpge : Int32 => Int32 => bool */
-	let         ificmpge = (c1,c2) => {
-		bvge(c1 , c2)
+/*@ val ificmpge : c1:Int32 => c2:Int32 => bool[v|v === (c1 >= c2)] */
+    let ificmpge = (c1,c2) => {
+		bvsge(c1 , c2)
 	};
 	'
 
@@ -3457,9 +3457,9 @@ TRILSpecification >> ificmpge [
 { #category : #opcodes }
 TRILSpecification >> ificmpgt [
 	^self specify: ificmpgt as:'
-	/*@ reflect ificmpgt : Int32 => Int32 => bool */
-	let         ificmpgt = (c1,c2) => {
-		bvgt(c1 , c2)
+/*@ val ificmpgt : c1:Int32 => c2:Int32 => bool[v|v === (c1 > c2)] */
+    let ificmpgt = (c1,c2) => {
+		bvsgt(c1 , c2)
 	};
 	'
 
@@ -3468,9 +3468,9 @@ TRILSpecification >> ificmpgt [
 { #category : #opcodes }
 TRILSpecification >> ificmple [
 	^self specify: ificmple as:'
-	/*@ reflect ificmple : Int32 => Int32 => bool */
-	let         ificmple = (c1,c2) => {
-		bvle(c1 , c2)
+/*@ val ificmple : c1:Int32 => c2:Int32 => bool[v|v === (c1 <= c2)] */
+    let ificmple = (c1,c2) => {
+		bvsle(c1 , c2)
 	};
 	'
 
@@ -3479,9 +3479,9 @@ TRILSpecification >> ificmple [
 { #category : #opcodes }
 TRILSpecification >> ificmplt [
 	^self specify: ificmplt as:'
-	/*@ reflect ificmplt : Int32 => Int32 => bool */
-	let         ificmplt = (c1,c2) => {
-		bvlt(c1 , c2)
+/*@ val ificmplt : c1:Int32 => c2:Int32 => bool[v|v === (c1 < c2)] */
+    let ificmplt = (c1,c2) => {
+		bvslt(c1 , c2)
 	};
 	'
 
@@ -3490,8 +3490,8 @@ TRILSpecification >> ificmplt [
 { #category : #opcodes }
 TRILSpecification >> ificmpne [
 	^self specify: ificmpne as:'
-	/*@ reflect ificmpne : Int32 => Int32 => bool */
-	let         ificmpne = (c1,c2) => {
+/*@ val ificmpne : c1:Int32 => c2:Int32 => bool[v|v === (c1 ~= c2)] */
+    let ificmpne = (c1,c2) => {
 		bvne(c1 , c2)
 	};
 	'
@@ -3502,8 +3502,8 @@ TRILSpecification >> ificmpne [
 TRILSpecification >> ificmpno [
 	self shouldBeImplemented.
 	^self specify: ificmpno as:'
-	/*@ val ificmpno : ... */
-	let ificmpno = (...) => {
+/*@ val ificmpno : ... */
+    let ificmpno = (...) => {
 	...
 	};
 	'
@@ -3514,8 +3514,8 @@ TRILSpecification >> ificmpno [
 TRILSpecification >> ificmpo [
 	self shouldBeImplemented.
 	^self specify: ificmpo as:'
-	/*@ val ificmpo : ... */
-	let ificmpo = (...) => {
+/*@ val ificmpo : ... */
+    let ificmpo = (...) => {
 	...
 	};
 	'
@@ -3526,8 +3526,8 @@ TRILSpecification >> ificmpo [
 TRILSpecification >> ifiucmpge [
 	self shouldBeImplemented.
 	^self specify: ifiucmpge as:'
-	/*@ val ifiucmpge : ... */
-	let ifiucmpge = (...) => {
+/*@ val ifiucmpge : ... */
+    let ifiucmpge = (...) => {
 	...
 	};
 	'
@@ -3538,8 +3538,8 @@ TRILSpecification >> ifiucmpge [
 TRILSpecification >> ifiucmpgt [
 	self shouldBeImplemented.
 	^self specify: ifiucmpgt as:'
-	/*@ val ifiucmpgt : ... */
-	let ifiucmpgt = (...) => {
+/*@ val ifiucmpgt : ... */
+    let ifiucmpgt = (...) => {
 	...
 	};
 	'
@@ -3550,8 +3550,8 @@ TRILSpecification >> ifiucmpgt [
 TRILSpecification >> ifiucmple [
 	self shouldBeImplemented.
 	^self specify: ifiucmple as:'
-	/*@ val ifiucmple : ... */
-	let ifiucmple = (...) => {
+/*@ val ifiucmple : ... */
+    let ifiucmple = (...) => {
 	...
 	};
 	'
@@ -3562,8 +3562,8 @@ TRILSpecification >> ifiucmple [
 TRILSpecification >> ifiucmplt [
 	self shouldBeImplemented.
 	^self specify: ifiucmplt as:'
-	/*@ val ifiucmplt : ... */
-	let ifiucmplt = (...) => {
+/*@ val ifiucmplt : ... */
+    let ifiucmplt = (...) => {
 	...
 	};
 	'
@@ -3574,8 +3574,8 @@ TRILSpecification >> ifiucmplt [
 TRILSpecification >> iflcmnno [
 	self shouldBeImplemented.
 	^self specify: iflcmnno as:'
-	/*@ val iflcmnno : ... */
-	let iflcmnno = (...) => {
+/*@ val iflcmnno : ... */
+    let iflcmnno = (...) => {
 	...
 	};
 	'
@@ -3586,8 +3586,8 @@ TRILSpecification >> iflcmnno [
 TRILSpecification >> iflcmno [
 	self shouldBeImplemented.
 	^self specify: iflcmno as:'
-	/*@ val iflcmno : ... */
-	let iflcmno = (...) => {
+/*@ val iflcmno : ... */
+    let iflcmno = (...) => {
 	...
 	};
 	'
@@ -3598,8 +3598,8 @@ TRILSpecification >> iflcmno [
 TRILSpecification >> iflcmpeq [
 	self shouldBeImplemented.
 	^self specify: iflcmpeq as:'
-	/*@ val iflcmpeq : ... */
-	let iflcmpeq = (...) => {
+/*@ val iflcmpeq : ... */
+    let iflcmpeq = (...) => {
 	...
 	};
 	'
@@ -3610,8 +3610,8 @@ TRILSpecification >> iflcmpeq [
 TRILSpecification >> iflcmpge [
 	self shouldBeImplemented.
 	^self specify: iflcmpge as:'
-	/*@ val iflcmpge : ... */
-	let iflcmpge = (...) => {
+/*@ val iflcmpge : ... */
+    let iflcmpge = (...) => {
 	...
 	};
 	'
@@ -3622,8 +3622,8 @@ TRILSpecification >> iflcmpge [
 TRILSpecification >> iflcmpgt [
 	self shouldBeImplemented.
 	^self specify: iflcmpgt as:'
-	/*@ val iflcmpgt : ... */
-	let iflcmpgt = (...) => {
+/*@ val iflcmpgt : ... */
+    let iflcmpgt = (...) => {
 	...
 	};
 	'
@@ -3634,8 +3634,8 @@ TRILSpecification >> iflcmpgt [
 TRILSpecification >> iflcmple [
 	self shouldBeImplemented.
 	^self specify: iflcmple as:'
-	/*@ val iflcmple : ... */
-	let iflcmple = (...) => {
+/*@ val iflcmple : ... */
+    let iflcmple = (...) => {
 	...
 	};
 	'
@@ -3646,8 +3646,8 @@ TRILSpecification >> iflcmple [
 TRILSpecification >> iflcmplt [
 	self shouldBeImplemented.
 	^self specify: iflcmplt as:'
-	/*@ val iflcmplt : ... */
-	let iflcmplt = (...) => {
+/*@ val iflcmplt : ... */
+    let iflcmplt = (...) => {
 	...
 	};
 	'
@@ -3658,8 +3658,8 @@ TRILSpecification >> iflcmplt [
 TRILSpecification >> iflcmpne [
 	self shouldBeImplemented.
 	^self specify: iflcmpne as:'
-	/*@ val iflcmpne : ... */
-	let iflcmpne = (...) => {
+/*@ val iflcmpne : ... */
+    let iflcmpne = (...) => {
 	...
 	};
 	'
@@ -3670,8 +3670,8 @@ TRILSpecification >> iflcmpne [
 TRILSpecification >> iflcmpno [
 	self shouldBeImplemented.
 	^self specify: iflcmpno as:'
-	/*@ val iflcmpno : ... */
-	let iflcmpno = (...) => {
+/*@ val iflcmpno : ... */
+    let iflcmpno = (...) => {
 	...
 	};
 	'
@@ -3682,8 +3682,8 @@ TRILSpecification >> iflcmpno [
 TRILSpecification >> iflcmpo [
 	self shouldBeImplemented.
 	^self specify: iflcmpo as:'
-	/*@ val iflcmpo : ... */
-	let iflcmpo = (...) => {
+/*@ val iflcmpo : ... */
+    let iflcmpo = (...) => {
 	...
 	};
 	'
@@ -3694,8 +3694,8 @@ TRILSpecification >> iflcmpo [
 TRILSpecification >> iflucmpge [
 	self shouldBeImplemented.
 	^self specify: iflucmpge as:'
-	/*@ val iflucmpge : ... */
-	let iflucmpge = (...) => {
+/*@ val iflucmpge : ... */
+    let iflucmpge = (...) => {
 	...
 	};
 	'
@@ -3706,8 +3706,8 @@ TRILSpecification >> iflucmpge [
 TRILSpecification >> iflucmpgt [
 	self shouldBeImplemented.
 	^self specify: iflucmpgt as:'
-	/*@ val iflucmpgt : ... */
-	let iflucmpgt = (...) => {
+/*@ val iflucmpgt : ... */
+    let iflucmpgt = (...) => {
 	...
 	};
 	'
@@ -3718,8 +3718,8 @@ TRILSpecification >> iflucmpgt [
 TRILSpecification >> iflucmple [
 	self shouldBeImplemented.
 	^self specify: iflucmple as:'
-	/*@ val iflucmple : ... */
-	let iflucmple = (...) => {
+/*@ val iflucmple : ... */
+    let iflucmple = (...) => {
 	...
 	};
 	'
@@ -3730,8 +3730,8 @@ TRILSpecification >> iflucmple [
 TRILSpecification >> iflucmplt [
 	self shouldBeImplemented.
 	^self specify: iflucmplt as:'
-	/*@ val iflucmplt : ... */
-	let iflucmplt = (...) => {
+/*@ val iflucmplt : ... */
+    let iflucmplt = (...) => {
 	...
 	};
 	'
@@ -3742,8 +3742,8 @@ TRILSpecification >> iflucmplt [
 TRILSpecification >> ifscmpeq [
 	self shouldBeImplemented.
 	^self specify: ifscmpeq as:'
-	/*@ val ifscmpeq : ... */
-	let ifscmpeq = (...) => {
+/*@ val ifscmpeq : ... */
+    let ifscmpeq = (...) => {
 	...
 	};
 	'
@@ -3754,8 +3754,8 @@ TRILSpecification >> ifscmpeq [
 TRILSpecification >> ifscmpge [
 	self shouldBeImplemented.
 	^self specify: ifscmpge as:'
-	/*@ val ifscmpge : ... */
-	let ifscmpge = (...) => {
+/*@ val ifscmpge : ... */
+    let ifscmpge = (...) => {
 	...
 	};
 	'
@@ -3766,8 +3766,8 @@ TRILSpecification >> ifscmpge [
 TRILSpecification >> ifscmpgt [
 	self shouldBeImplemented.
 	^self specify: ifscmpgt as:'
-	/*@ val ifscmpgt : ... */
-	let ifscmpgt = (...) => {
+/*@ val ifscmpgt : ... */
+    let ifscmpgt = (...) => {
 	...
 	};
 	'
@@ -3778,8 +3778,8 @@ TRILSpecification >> ifscmpgt [
 TRILSpecification >> ifscmple [
 	self shouldBeImplemented.
 	^self specify: ifscmple as:'
-	/*@ val ifscmple : ... */
-	let ifscmple = (...) => {
+/*@ val ifscmple : ... */
+    let ifscmple = (...) => {
 	...
 	};
 	'
@@ -3790,8 +3790,8 @@ TRILSpecification >> ifscmple [
 TRILSpecification >> ifscmplt [
 	self shouldBeImplemented.
 	^self specify: ifscmplt as:'
-	/*@ val ifscmplt : ... */
-	let ifscmplt = (...) => {
+/*@ val ifscmplt : ... */
+    let ifscmplt = (...) => {
 	...
 	};
 	'
@@ -3802,8 +3802,8 @@ TRILSpecification >> ifscmplt [
 TRILSpecification >> ifscmpne [
 	self shouldBeImplemented.
 	^self specify: ifscmpne as:'
-	/*@ val ifscmpne : ... */
-	let ifscmpne = (...) => {
+/*@ val ifscmpne : ... */
+    let ifscmpne = (...) => {
 	...
 	};
 	'
@@ -3814,8 +3814,8 @@ TRILSpecification >> ifscmpne [
 TRILSpecification >> ifsucmpge [
 	self shouldBeImplemented.
 	^self specify: ifsucmpge as:'
-	/*@ val ifsucmpge : ... */
-	let ifsucmpge = (...) => {
+/*@ val ifsucmpge : ... */
+    let ifsucmpge = (...) => {
 	...
 	};
 	'
@@ -3826,8 +3826,8 @@ TRILSpecification >> ifsucmpge [
 TRILSpecification >> ifsucmpgt [
 	self shouldBeImplemented.
 	^self specify: ifsucmpgt as:'
-	/*@ val ifsucmpgt : ... */
-	let ifsucmpgt = (...) => {
+/*@ val ifsucmpgt : ... */
+    let ifsucmpgt = (...) => {
 	...
 	};
 	'
@@ -3838,8 +3838,8 @@ TRILSpecification >> ifsucmpgt [
 TRILSpecification >> ifsucmple [
 	self shouldBeImplemented.
 	^self specify: ifsucmple as:'
-	/*@ val ifsucmple : ... */
-	let ifsucmple = (...) => {
+/*@ val ifsucmple : ... */
+    let ifsucmple = (...) => {
 	...
 	};
 	'
@@ -3850,8 +3850,8 @@ TRILSpecification >> ifsucmple [
 TRILSpecification >> ifsucmplt [
 	self shouldBeImplemented.
 	^self specify: ifsucmplt as:'
-	/*@ val ifsucmplt : ... */
-	let ifsucmplt = (...) => {
+/*@ val ifsucmplt : ... */
+    let ifsucmplt = (...) => {
 	...
 	};
 	'
@@ -3862,8 +3862,8 @@ TRILSpecification >> ifsucmplt [
 TRILSpecification >> igoto [
 	self shouldBeImplemented.
 	^self specify: igoto as:'
-	/*@ val igoto : ... */
-	let igoto = (...) => {
+/*@ val igoto : ... */
+    let igoto = (...) => {
 	...
 	};
 	'
@@ -3874,8 +3874,8 @@ TRILSpecification >> igoto [
 TRILSpecification >> ihbit [
 	self shouldBeImplemented.
 	^self specify: ihbit as:'
-	/*@ val ihbit : ... */
-	let ihbit = (...) => {
+/*@ val ihbit : ... */
+    let ihbit = (...) => {
 	...
 	};
 	'
@@ -3886,8 +3886,8 @@ TRILSpecification >> ihbit [
 TRILSpecification >> iiatomicor [
 	self shouldBeImplemented.
 	^self specify: iiatomicor as:'
-	/*@ val iiatomicor : ... */
-	let iiatomicor = (...) => {
+/*@ val iiatomicor : ... */
+    let iiatomicor = (...) => {
 	...
 	};
 	'
@@ -3898,8 +3898,8 @@ TRILSpecification >> iiatomicor [
 TRILSpecification >> ilatomicor [
 	self shouldBeImplemented.
 	^self specify: ilatomicor as:'
-	/*@ val ilatomicor : ... */
-	let ilatomicor = (...) => {
+/*@ val ilatomicor : ... */
+    let ilatomicor = (...) => {
 	...
 	};
 	'
@@ -3910,8 +3910,8 @@ TRILSpecification >> ilatomicor [
 TRILSpecification >> ilbit [
 	self shouldBeImplemented.
 	^self specify: ilbit as:'
-	/*@ val ilbit : ... */
-	let ilbit = (...) => {
+/*@ val ilbit : ... */
+    let ilbit = (...) => {
 	...
 	};
 	'
@@ -3921,9 +3921,9 @@ TRILSpecification >> ilbit [
 { #category : #opcodes }
 TRILSpecification >> iload [
 	^self specify: iload as:'
-	/*@ reflect iload : Int32 => Int32 / [zero] */
-	let         iload = (s) => {
-		s
+/*@ val iload : c:Int32 => Int32[v|v === c] */
+    let iload = (c) => {
+		c
 	};
 	'
 
@@ -3933,8 +3933,8 @@ TRILSpecification >> iload [
 TRILSpecification >> iloadi [
 	self shouldBeImplemented.
 	^self specify: iloadi as:'
-	/*@ val iloadi : ... */
-	let iloadi = (...) => {
+/*@ val iloadi : ... */
+    let iloadi = (...) => {
 	...
 	};
 	'
@@ -3945,8 +3945,8 @@ TRILSpecification >> iloadi [
 TRILSpecification >> imax [
 	self shouldBeImplemented.
 	^self specify: imax as:'
-	/*@ val imax : ... */
-	let imax = (...) => {
+/*@ val imax : ... */
+    let imax = (...) => {
 	...
 	};
 	'
@@ -3957,8 +3957,8 @@ TRILSpecification >> imax [
 TRILSpecification >> imin [
 	self shouldBeImplemented.
 	^self specify: imin as:'
-	/*@ val imin : ... */
-	let imin = (...) => {
+/*@ val imin : ... */
+    let imin = (...) => {
 	...
 	};
 	'
@@ -3968,8 +3968,8 @@ TRILSpecification >> imin [
 { #category : #opcodes }
 TRILSpecification >> imul [
 	^self specify: imul as:'
-	/*@ reflect imul : Int32 => Int32 => Int32 / [zero] */
-	let         imul = (c1,c2) => {
+/*@ val imul : c1:Int32 => c2:Int32 => Int32[v|v === (c1 * c2)] */
+    let imul = (c1,c2) => {
 		bvmul(c1,c2)
 	};
 	'
@@ -3983,8 +3983,8 @@ TRILSpecification >> imul [
 TRILSpecification >> imulh [
 	self shouldBeImplemented.
 	^self specify: imulh as:'
-	/*@ val imulh : ... */
-	let imulh = (...) => {
+/*@ val imulh : ... */
+    let imulh = (...) => {
 	...
 	};
 	'
@@ -3995,8 +3995,8 @@ TRILSpecification >> imulh [
 TRILSpecification >> ineg [
 	self shouldBeImplemented.
 	^self specify: ineg as:'
-	/*@ val ineg : ... */
-	let ineg = (...) => {
+/*@ val ineg : ... */
+    let ineg = (...) => {
 	...
 	};
 	'
@@ -4021,8 +4021,8 @@ TRILSpecification >> initialize [
 TRILSpecification >> inolz [
 	self shouldBeImplemented.
 	^self specify: inolz as:'
-	/*@ val inolz : ... */
-	let inolz = (...) => {
+/*@ val inolz : ... */
+    let inolz = (...) => {
 	...
 	};
 	'
@@ -4033,8 +4033,8 @@ TRILSpecification >> inolz [
 TRILSpecification >> inotz [
 	self shouldBeImplemented.
 	^self specify: inotz as:'
-	/*@ val inotz : ... */
-	let inotz = (...) => {
+/*@ val inotz : ... */
+    let inotz = (...) => {
 	...
 	};
 	'
@@ -4045,8 +4045,8 @@ TRILSpecification >> inotz [
 TRILSpecification >> instanceof [
 	self shouldBeImplemented.
 	^self specify: instanceof as:'
-	/*@ val instanceof : ... */
-	let instanceof = (...) => {
+/*@ val instanceof : ... */
+    let instanceof = (...) => {
 	...
 	};
 	'
@@ -4057,8 +4057,8 @@ TRILSpecification >> instanceof [
 TRILSpecification >> invalid [
 	self shouldBeImplemented.
 	^self specify: invalid as:'
-	/*@ val invalid : ... */
-	let invalid = (...) => {
+/*@ val invalid : ... */
+    let invalid = (...) => {
 	...
 	};
 	'
@@ -4069,8 +4069,8 @@ TRILSpecification >> invalid [
 TRILSpecification >> ior [
 	self shouldBeImplemented.
 	^self specify: ior as:'
-	/*@ val ior : ... */
-	let ior = (...) => {
+/*@ val ior : ... */
+    let ior = (...) => {
 	...
 	};
 	'
@@ -4081,8 +4081,8 @@ TRILSpecification >> ior [
 TRILSpecification >> ipopcnt [
 	self shouldBeImplemented.
 	^self specify: ipopcnt as:'
-	/*@ val ipopcnt : ... */
-	let ipopcnt = (...) => {
+/*@ val ipopcnt : ... */
+    let ipopcnt = (...) => {
 	...
 	};
 	'
@@ -4093,8 +4093,8 @@ TRILSpecification >> ipopcnt [
 TRILSpecification >> irdbar [
 	self shouldBeImplemented.
 	^self specify: irdbar as:'
-	/*@ val irdbar : ... */
-	let irdbar = (...) => {
+/*@ val irdbar : ... */
+    let irdbar = (...) => {
 	...
 	};
 	'
@@ -4105,8 +4105,8 @@ TRILSpecification >> irdbar [
 TRILSpecification >> irdbari [
 	self shouldBeImplemented.
 	^self specify: irdbari as:'
-	/*@ val irdbari : ... */
-	let irdbari = (...) => {
+/*@ val irdbari : ... */
+    let irdbari = (...) => {
 	...
 	};
 	'
@@ -4117,8 +4117,8 @@ TRILSpecification >> irdbari [
 TRILSpecification >> iregload [
 	self shouldBeImplemented.
 	^self specify: iregload as:'
-	/*@ val iregload : ... */
-	let iregload = (...) => {
+/*@ val iregload : ... */
+    let iregload = (...) => {
 	...
 	};
 	'
@@ -4129,8 +4129,8 @@ TRILSpecification >> iregload [
 TRILSpecification >> iregstore [
 	self shouldBeImplemented.
 	^self specify: iregstore as:'
-	/*@ val iregstore : ... */
-	let iregstore = (...) => {
+/*@ val iregstore : ... */
+    let iregstore = (...) => {
 	...
 	};
 	'
@@ -4141,8 +4141,8 @@ TRILSpecification >> iregstore [
 TRILSpecification >> irem [
 	self shouldBeImplemented.
 	^self specify: irem as:'
-	/*@ val irem : ... */
-	let irem = (...) => {
+/*@ val irem : ... */
+    let irem = (...) => {
 	...
 	};
 	'
@@ -4152,8 +4152,8 @@ TRILSpecification >> irem [
 { #category : #opcodes }
 TRILSpecification >> ireturn [
 	^self specify: ireturn as:'
-	/*@ reflect ireturn : Int32 => Int32 / [zero] */
-	let         ireturn = (c1) => {
+/*@ val ireturn : c1:Int32 => Int32[v|v === c1] */
+    let ireturn = (c1) => {
 		c1
 	};
 	'
@@ -4164,8 +4164,8 @@ TRILSpecification >> ireturn [
 TRILSpecification >> irol [
 	self shouldBeImplemented.
 	^self specify: irol as:'
-	/*@ val irol : ... */
-	let irol = (...) => {
+/*@ val irol : ... */
+    let irol = (...) => {
 	...
 	};
 	'
@@ -4176,8 +4176,8 @@ TRILSpecification >> irol [
 TRILSpecification >> isatomicor [
 	self shouldBeImplemented.
 	^self specify: isatomicor as:'
-	/*@ val isatomicor : ... */
-	let isatomicor = (...) => {
+/*@ val isatomicor : ... */
+    let isatomicor = (...) => {
 	...
 	};
 	'
@@ -4188,8 +4188,8 @@ TRILSpecification >> isatomicor [
 TRILSpecification >> iselect [
 	self shouldBeImplemented.
 	^self specify: iselect as:'
-	/*@ val iselect : ... */
-	let iselect = (...) => {
+/*@ val iselect : ... */
+    let iselect = (...) => {
 	...
 	};
 	'
@@ -4199,8 +4199,8 @@ TRILSpecification >> iselect [
 { #category : #opcodes }
 TRILSpecification >> ishl [
 	^self specify: ishl as:'
-	/*@ reflect ishl : Int32 => Int32 => Int32 / [zero] */
-	let         ishl = (c1,c2) => {
+/*@ val ishl : c1:Int32 => c2:Int32 => Int32[v|v === (c1 bitShiftLeft: c2)] */
+    let ishl = (c1,c2) => {
 		bvshl(c1,c2)
 	};
 '
@@ -4214,8 +4214,8 @@ TRILSpecification >> ishl [
 TRILSpecification >> ishr [
 	self shouldBeImplemented.
 	^self specify: ishr as:'
-	/*@ val ishr : ... */
-	let ishr = (...) => {
+/*@ val ishr : ... */
+    let ishr = (...) => {
 	...
 	};
 	'
@@ -4225,8 +4225,8 @@ TRILSpecification >> ishr [
 { #category : #opcodes }
 TRILSpecification >> istore [
 	^self specify: istore as:'
-	/*@ reflect istore : Int32 => Int32 / [zero] */
-	let         istore = (s) => {
+/*@ val istore : c1:Int32 => Int32[v|v === c1] */
+    let istore = (s) => {
 		s
 	};
 	'
@@ -4237,8 +4237,8 @@ TRILSpecification >> istore [
 TRILSpecification >> istorei [
 	self shouldBeImplemented.
 	^self specify: istorei as:'
-	/*@ val istorei : ... */
-	let istorei = (...) => {
+/*@ val istorei : ... */
+    let istorei = (...) => {
 	...
 	};
 	'
@@ -4248,8 +4248,8 @@ TRILSpecification >> istorei [
 { #category : #opcodes }
 TRILSpecification >> isub [
 	^self specify: isub as:'
-	/*@ reflect isub : Int32 => Int32 => Int32 / [zero] */
-	let         isub = (c1,c2) => {
+/*@ val isub : c1:Int32 => c2:Int32 => Int32[v|v === (c1 - c2)] */
+    let isub = (c1,c2) => {
 		bvsub(c1,c2)
 	};
 '
@@ -4263,8 +4263,8 @@ TRILSpecification >> isub [
 TRILSpecification >> iu2a [
 	self shouldBeImplemented.
 	^self specify: iu2a as:'
-	/*@ val iu2a : ... */
-	let iu2a = (...) => {
+/*@ val iu2a : ... */
+    let iu2a = (...) => {
 	...
 	};
 	'
@@ -4275,8 +4275,8 @@ TRILSpecification >> iu2a [
 TRILSpecification >> iu2d [
 	self shouldBeImplemented.
 	^self specify: iu2d as:'
-	/*@ val iu2d : ... */
-	let iu2d = (...) => {
+/*@ val iu2d : ... */
+    let iu2d = (...) => {
 	...
 	};
 	'
@@ -4287,8 +4287,8 @@ TRILSpecification >> iu2d [
 TRILSpecification >> iu2f [
 	self shouldBeImplemented.
 	^self specify: iu2f as:'
-	/*@ val iu2f : ... */
-	let iu2f = (...) => {
+/*@ val iu2f : ... */
+    let iu2f = (...) => {
 	...
 	};
 	'
@@ -4299,8 +4299,8 @@ TRILSpecification >> iu2f [
 TRILSpecification >> iu2l [
 	self shouldBeImplemented.
 	^self specify: iu2l as:'
-	/*@ val iu2l : ... */
-	let iu2l = (...) => {
+/*@ val iu2l : ... */
+    let iu2l = (...) => {
 	...
 	};
 	'
@@ -4311,8 +4311,8 @@ TRILSpecification >> iu2l [
 TRILSpecification >> iuaddc [
 	self shouldBeImplemented.
 	^self specify: iuaddc as:'
-	/*@ val iuaddc : ... */
-	let iuaddc = (...) => {
+/*@ val iuaddc : ... */
+    let iuaddc = (...) => {
 	...
 	};
 	'
@@ -4323,8 +4323,8 @@ TRILSpecification >> iuaddc [
 TRILSpecification >> iucmp [
 	self shouldBeImplemented.
 	^self specify: iucmp as:'
-	/*@ val iucmp : ... */
-	let iucmp = (...) => {
+/*@ val iucmp : ... */
+    let iucmp = (...) => {
 	...
 	};
 	'
@@ -4335,8 +4335,8 @@ TRILSpecification >> iucmp [
 TRILSpecification >> iucmpge [
 	self shouldBeImplemented.
 	^self specify: iucmpge as:'
-	/*@ val iucmpge : ... */
-	let iucmpge = (...) => {
+/*@ val iucmpge : ... */
+    let iucmpge = (...) => {
 	...
 	};
 	'
@@ -4347,8 +4347,8 @@ TRILSpecification >> iucmpge [
 TRILSpecification >> iucmpgt [
 	self shouldBeImplemented.
 	^self specify: iucmpgt as:'
-	/*@ val iucmpgt : ... */
-	let iucmpgt = (...) => {
+/*@ val iucmpgt : ... */
+    let iucmpgt = (...) => {
 	...
 	};
 	'
@@ -4359,8 +4359,8 @@ TRILSpecification >> iucmpgt [
 TRILSpecification >> iucmple [
 	self shouldBeImplemented.
 	^self specify: iucmple as:'
-	/*@ val iucmple : ... */
-	let iucmple = (...) => {
+/*@ val iucmple : ... */
+    let iucmple = (...) => {
 	...
 	};
 	'
@@ -4371,8 +4371,8 @@ TRILSpecification >> iucmple [
 TRILSpecification >> iucmplt [
 	self shouldBeImplemented.
 	^self specify: iucmplt as:'
-	/*@ val iucmplt : ... */
-	let iucmplt = (...) => {
+/*@ val iucmplt : ... */
+    let iucmplt = (...) => {
 	...
 	};
 	'
@@ -4383,8 +4383,8 @@ TRILSpecification >> iucmplt [
 TRILSpecification >> iudiv [
 	self shouldBeImplemented.
 	^self specify: iudiv as:'
-	/*@ val iudiv : ... */
-	let iudiv = (...) => {
+/*@ val iudiv : ... */
+    let iudiv = (...) => {
 	...
 	};
 	'
@@ -4395,8 +4395,8 @@ TRILSpecification >> iudiv [
 TRILSpecification >> iumax [
 	self shouldBeImplemented.
 	^self specify: iumax as:'
-	/*@ val iumax : ... */
-	let iumax = (...) => {
+/*@ val iumax : ... */
+    let iumax = (...) => {
 	...
 	};
 	'
@@ -4407,8 +4407,8 @@ TRILSpecification >> iumax [
 TRILSpecification >> iumin [
 	self shouldBeImplemented.
 	^self specify: iumin as:'
-	/*@ val iumin : ... */
-	let iumin = (...) => {
+/*@ val iumin : ... */
+    let iumin = (...) => {
 	...
 	};
 	'
@@ -4419,8 +4419,8 @@ TRILSpecification >> iumin [
 TRILSpecification >> iumulh [
 	self shouldBeImplemented.
 	^self specify: iumulh as:'
-	/*@ val iumulh : ... */
-	let iumulh = (...) => {
+/*@ val iumulh : ... */
+    let iumulh = (...) => {
 	...
 	};
 	'
@@ -4431,8 +4431,8 @@ TRILSpecification >> iumulh [
 TRILSpecification >> iurem [
 	self shouldBeImplemented.
 	^self specify: iurem as:'
-	/*@ val iurem : ... */
-	let iurem = (...) => {
+/*@ val iurem : ... */
+    let iurem = (...) => {
 	...
 	};
 	'
@@ -4443,8 +4443,8 @@ TRILSpecification >> iurem [
 TRILSpecification >> iushr [
 	self shouldBeImplemented.
 	^self specify: iushr as:'
-	/*@ val iushr : ... */
-	let iushr = (...) => {
+/*@ val iushr : ... */
+    let iushr = (...) => {
 	...
 	};
 	'
@@ -4455,8 +4455,8 @@ TRILSpecification >> iushr [
 TRILSpecification >> iusubb [
 	self shouldBeImplemented.
 	^self specify: iusubb as:'
-	/*@ val iusubb : ... */
-	let iusubb = (...) => {
+/*@ val iusubb : ... */
+    let iusubb = (...) => {
 	...
 	};
 	'
@@ -4467,8 +4467,8 @@ TRILSpecification >> iusubb [
 TRILSpecification >> iwrtbar [
 	self shouldBeImplemented.
 	^self specify: iwrtbar as:'
-	/*@ val iwrtbar : ... */
-	let iwrtbar = (...) => {
+/*@ val iwrtbar : ... */
+    let iwrtbar = (...) => {
 	...
 	};
 	'
@@ -4479,8 +4479,8 @@ TRILSpecification >> iwrtbar [
 TRILSpecification >> iwrtbari [
 	self shouldBeImplemented.
 	^self specify: iwrtbari as:'
-	/*@ val iwrtbari : ... */
-	let iwrtbari = (...) => {
+/*@ val iwrtbari : ... */
+    let iwrtbari = (...) => {
 	...
 	};
 	'
@@ -4491,8 +4491,8 @@ TRILSpecification >> iwrtbari [
 TRILSpecification >> ixor [
 	self shouldBeImplemented.
 	^self specify: ixor as:'
-	/*@ val ixor : ... */
-	let ixor = (...) => {
+/*@ val ixor : ... */
+    let ixor = (...) => {
 	...
 	};
 	'
@@ -4503,8 +4503,8 @@ TRILSpecification >> ixor [
 TRILSpecification >> l2a [
 	self shouldBeImplemented.
 	^self specify: l2a as:'
-	/*@ val l2a : ... */
-	let l2a = (...) => {
+/*@ val l2a : ... */
+    let l2a = (...) => {
 	...
 	};
 	'
@@ -4515,8 +4515,8 @@ TRILSpecification >> l2a [
 TRILSpecification >> l2b [
 	self shouldBeImplemented.
 	^self specify: l2b as:'
-	/*@ val l2b : ... */
-	let l2b = (...) => {
+/*@ val l2b : ... */
+    let l2b = (...) => {
 	...
 	};
 	'
@@ -4527,8 +4527,8 @@ TRILSpecification >> l2b [
 TRILSpecification >> l2d [
 	self shouldBeImplemented.
 	^self specify: l2d as:'
-	/*@ val l2d : ... */
-	let l2d = (...) => {
+/*@ val l2d : ... */
+    let l2d = (...) => {
 	...
 	};
 	'
@@ -4539,8 +4539,8 @@ TRILSpecification >> l2d [
 TRILSpecification >> l2f [
 	self shouldBeImplemented.
 	^self specify: l2f as:'
-	/*@ val l2f : ... */
-	let l2f = (...) => {
+/*@ val l2f : ... */
+    let l2f = (...) => {
 	...
 	};
 	'
@@ -4551,8 +4551,8 @@ TRILSpecification >> l2f [
 TRILSpecification >> l2i [
 	self shouldBeImplemented.
 	^self specify: l2i as:'
-	/*@ val l2i : ... */
-	let l2i = (...) => {
+/*@ val l2i : ... */
+    let l2i = (...) => {
 	...
 	};
 	'
@@ -4563,8 +4563,8 @@ TRILSpecification >> l2i [
 TRILSpecification >> l2s [
 	self shouldBeImplemented.
 	^self specify: l2s as:'
-	/*@ val l2s : ... */
-	let l2s = (...) => {
+/*@ val l2s : ... */
+    let l2s = (...) => {
 	...
 	};
 	'
@@ -4575,8 +4575,8 @@ TRILSpecification >> l2s [
 TRILSpecification >> labs [
 	self shouldBeImplemented.
 	^self specify: labs as:'
-	/*@ val labs : ... */
-	let labs = (...) => {
+/*@ val labs : ... */
+    let labs = (...) => {
 	...
 	};
 	'
@@ -4587,8 +4587,8 @@ TRILSpecification >> labs [
 TRILSpecification >> ladd [
 	self shouldBeImplemented.
 	^self specify: ladd as:'
-	/*@ val ladd : ... */
-	let ladd = (...) => {
+/*@ val ladd : ... */
+    let ladd = (...) => {
 	...
 	};
 	'
@@ -4599,8 +4599,8 @@ TRILSpecification >> ladd [
 TRILSpecification >> land [
 	self shouldBeImplemented.
 	^self specify: land as:'
-	/*@ val land : ... */
-	let land = (...) => {
+/*@ val land : ... */
+    let land = (...) => {
 	...
 	};
 	'
@@ -4611,8 +4611,8 @@ TRILSpecification >> land [
 TRILSpecification >> lbitpermute [
 	self shouldBeImplemented.
 	^self specify: lbitpermute as:'
-	/*@ val lbitpermute : ... */
-	let lbitpermute = (...) => {
+/*@ val lbitpermute : ... */
+    let lbitpermute = (...) => {
 	...
 	};
 	'
@@ -4623,8 +4623,8 @@ TRILSpecification >> lbitpermute [
 TRILSpecification >> lbits2d [
 	self shouldBeImplemented.
 	^self specify: lbits2d as:'
-	/*@ val lbits2d : ... */
-	let lbits2d = (...) => {
+/*@ val lbits2d : ... */
+    let lbits2d = (...) => {
 	...
 	};
 	'
@@ -4635,8 +4635,8 @@ TRILSpecification >> lbits2d [
 TRILSpecification >> lbyteswap [
 	self shouldBeImplemented.
 	^self specify: lbyteswap as:'
-	/*@ val lbyteswap : ... */
-	let lbyteswap = (...) => {
+/*@ val lbyteswap : ... */
+    let lbyteswap = (...) => {
 	...
 	};
 	'
@@ -4647,8 +4647,8 @@ TRILSpecification >> lbyteswap [
 TRILSpecification >> lcall [
 	self shouldBeImplemented.
 	^self specify: lcall as:'
-	/*@ val lcall : ... */
-	let lcall = (...) => {
+/*@ val lcall : ... */
+    let lcall = (...) => {
 	...
 	};
 	'
@@ -4659,8 +4659,8 @@ TRILSpecification >> lcall [
 TRILSpecification >> lcalli [
 	self shouldBeImplemented.
 	^self specify: lcalli as:'
-	/*@ val lcalli : ... */
-	let lcalli = (...) => {
+/*@ val lcalli : ... */
+    let lcalli = (...) => {
 	...
 	};
 	'
@@ -4671,8 +4671,8 @@ TRILSpecification >> lcalli [
 TRILSpecification >> lcmp [
 	self shouldBeImplemented.
 	^self specify: lcmp as:'
-	/*@ val lcmp : ... */
-	let lcmp = (...) => {
+/*@ val lcmp : ... */
+    let lcmp = (...) => {
 	...
 	};
 	'
@@ -4683,8 +4683,8 @@ TRILSpecification >> lcmp [
 TRILSpecification >> lcmpeq [
 	self shouldBeImplemented.
 	^self specify: lcmpeq as:'
-	/*@ val lcmpeq : ... */
-	let lcmpeq = (...) => {
+/*@ val lcmpeq : ... */
+    let lcmpeq = (...) => {
 	...
 	};
 	'
@@ -4695,8 +4695,8 @@ TRILSpecification >> lcmpeq [
 TRILSpecification >> lcmpge [
 	self shouldBeImplemented.
 	^self specify: lcmpge as:'
-	/*@ val lcmpge : ... */
-	let lcmpge = (...) => {
+/*@ val lcmpge : ... */
+    let lcmpge = (...) => {
 	...
 	};
 	'
@@ -4707,8 +4707,8 @@ TRILSpecification >> lcmpge [
 TRILSpecification >> lcmpgt [
 	self shouldBeImplemented.
 	^self specify: lcmpgt as:'
-	/*@ val lcmpgt : ... */
-	let lcmpgt = (...) => {
+/*@ val lcmpgt : ... */
+    let lcmpgt = (...) => {
 	...
 	};
 	'
@@ -4719,8 +4719,8 @@ TRILSpecification >> lcmpgt [
 TRILSpecification >> lcmple [
 	self shouldBeImplemented.
 	^self specify: lcmple as:'
-	/*@ val lcmple : ... */
-	let lcmple = (...) => {
+/*@ val lcmple : ... */
+    let lcmple = (...) => {
 	...
 	};
 	'
@@ -4731,8 +4731,8 @@ TRILSpecification >> lcmple [
 TRILSpecification >> lcmplt [
 	self shouldBeImplemented.
 	^self specify: lcmplt as:'
-	/*@ val lcmplt : ... */
-	let lcmplt = (...) => {
+/*@ val lcmplt : ... */
+    let lcmplt = (...) => {
 	...
 	};
 	'
@@ -4743,8 +4743,8 @@ TRILSpecification >> lcmplt [
 TRILSpecification >> lcmpne [
 	self shouldBeImplemented.
 	^self specify: lcmpne as:'
-	/*@ val lcmpne : ... */
-	let lcmpne = (...) => {
+/*@ val lcmpne : ... */
+    let lcmpne = (...) => {
 	...
 	};
 	'
@@ -4755,8 +4755,8 @@ TRILSpecification >> lcmpne [
 TRILSpecification >> lcmpset [
 	self shouldBeImplemented.
 	^self specify: lcmpset as:'
-	/*@ val lcmpset : ... */
-	let lcmpset = (...) => {
+/*@ val lcmpset : ... */
+    let lcmpset = (...) => {
 	...
 	};
 	'
@@ -4767,8 +4767,8 @@ TRILSpecification >> lcmpset [
 TRILSpecification >> lconst [
 	self shouldBeImplemented.
 	^self specify: lconst as:'
-	/*@ val lconst : ... */
-	let lconst = (...) => {
+/*@ val lconst : ... */
+    let lconst = (...) => {
 	...
 	};
 	'
@@ -4779,8 +4779,8 @@ TRILSpecification >> lconst [
 TRILSpecification >> ldiv [
 	self shouldBeImplemented.
 	^self specify: ldiv as:'
-	/*@ val ldiv : ... */
-	let ldiv = (...) => {
+/*@ val ldiv : ... */
+    let ldiv = (...) => {
 	...
 	};
 	'
@@ -4791,8 +4791,8 @@ TRILSpecification >> ldiv [
 TRILSpecification >> lhbit [
 	self shouldBeImplemented.
 	^self specify: lhbit as:'
-	/*@ val lhbit : ... */
-	let lhbit = (...) => {
+/*@ val lhbit : ... */
+    let lhbit = (...) => {
 	...
 	};
 	'
@@ -4803,8 +4803,8 @@ TRILSpecification >> lhbit [
 TRILSpecification >> llbit [
 	self shouldBeImplemented.
 	^self specify: llbit as:'
-	/*@ val llbit : ... */
-	let llbit = (...) => {
+/*@ val llbit : ... */
+    let llbit = (...) => {
 	...
 	};
 	'
@@ -4815,8 +4815,8 @@ TRILSpecification >> llbit [
 TRILSpecification >> lload [
 	self shouldBeImplemented.
 	^self specify: lload as:'
-	/*@ val lload : ... */
-	let lload = (...) => {
+/*@ val lload : ... */
+    let lload = (...) => {
 	...
 	};
 	'
@@ -4827,8 +4827,8 @@ TRILSpecification >> lload [
 TRILSpecification >> lloadi [
 	self shouldBeImplemented.
 	^self specify: lloadi as:'
-	/*@ val lloadi : ... */
-	let lloadi = (...) => {
+/*@ val lloadi : ... */
+    let lloadi = (...) => {
 	...
 	};
 	'
@@ -4839,8 +4839,8 @@ TRILSpecification >> lloadi [
 TRILSpecification >> lmax [
 	self shouldBeImplemented.
 	^self specify: lmax as:'
-	/*@ val lmax : ... */
-	let lmax = (...) => {
+/*@ val lmax : ... */
+    let lmax = (...) => {
 	...
 	};
 	'
@@ -4851,8 +4851,8 @@ TRILSpecification >> lmax [
 TRILSpecification >> lmin [
 	self shouldBeImplemented.
 	^self specify: lmin as:'
-	/*@ val lmin : ... */
-	let lmin = (...) => {
+/*@ val lmin : ... */
+    let lmin = (...) => {
 	...
 	};
 	'
@@ -4863,8 +4863,8 @@ TRILSpecification >> lmin [
 TRILSpecification >> lmul [
 	self shouldBeImplemented.
 	^self specify: lmul as:'
-	/*@ val lmul : ... */
-	let lmul = (...) => {
+/*@ val lmul : ... */
+    let lmul = (...) => {
 	...
 	};
 	'
@@ -4875,8 +4875,8 @@ TRILSpecification >> lmul [
 TRILSpecification >> lmulh [
 	self shouldBeImplemented.
 	^self specify: lmulh as:'
-	/*@ val lmulh : ... */
-	let lmulh = (...) => {
+/*@ val lmulh : ... */
+    let lmulh = (...) => {
 	...
 	};
 	'
@@ -4887,8 +4887,8 @@ TRILSpecification >> lmulh [
 TRILSpecification >> lneg [
 	self shouldBeImplemented.
 	^self specify: lneg as:'
-	/*@ val lneg : ... */
-	let lneg = (...) => {
+/*@ val lneg : ... */
+    let lneg = (...) => {
 	...
 	};
 	'
@@ -4899,8 +4899,8 @@ TRILSpecification >> lneg [
 TRILSpecification >> lnolz [
 	self shouldBeImplemented.
 	^self specify: lnolz as:'
-	/*@ val lnolz : ... */
-	let lnolz = (...) => {
+/*@ val lnolz : ... */
+    let lnolz = (...) => {
 	...
 	};
 	'
@@ -4911,8 +4911,8 @@ TRILSpecification >> lnolz [
 TRILSpecification >> lnotz [
 	self shouldBeImplemented.
 	^self specify: lnotz as:'
-	/*@ val lnotz : ... */
-	let lnotz = (...) => {
+/*@ val lnotz : ... */
+    let lnotz = (...) => {
 	...
 	};
 	'
@@ -4923,8 +4923,8 @@ TRILSpecification >> lnotz [
 TRILSpecification >> loadaddr [
 	self shouldBeImplemented.
 	^self specify: loadaddr as:'
-	/*@ val loadaddr : ... */
-	let loadaddr = (...) => {
+/*@ val loadaddr : ... */
+    let loadaddr = (...) => {
 	...
 	};
 	'
@@ -4935,8 +4935,8 @@ TRILSpecification >> loadaddr [
 TRILSpecification >> loadfence [
 	self shouldBeImplemented.
 	^self specify: loadfence as:'
-	/*@ val loadfence : ... */
-	let loadfence = (...) => {
+/*@ val loadfence : ... */
+    let loadfence = (...) => {
 	...
 	};
 	'
@@ -4947,8 +4947,8 @@ TRILSpecification >> loadfence [
 TRILSpecification >> long2string [
 	self shouldBeImplemented.
 	^self specify: long2string as:'
-	/*@ val long2string : ... */
-	let long2string = (...) => {
+/*@ val long2string : ... */
+    let long2string = (...) => {
 	...
 	};
 	'
@@ -4959,8 +4959,8 @@ TRILSpecification >> long2string [
 TRILSpecification >> lookup [
 	self shouldBeImplemented.
 	^self specify: lookup as:'
-	/*@ val lookup : ... */
-	let lookup = (...) => {
+/*@ val lookup : ... */
+    let lookup = (...) => {
 	...
 	};
 	'
@@ -4971,8 +4971,8 @@ TRILSpecification >> lookup [
 TRILSpecification >> lor [
 	self shouldBeImplemented.
 	^self specify: lor as:'
-	/*@ val lor : ... */
-	let lor = (...) => {
+/*@ val lor : ... */
+    let lor = (...) => {
 	...
 	};
 	'
@@ -4983,8 +4983,8 @@ TRILSpecification >> lor [
 TRILSpecification >> lpopcnt [
 	self shouldBeImplemented.
 	^self specify: lpopcnt as:'
-	/*@ val lpopcnt : ... */
-	let lpopcnt = (...) => {
+/*@ val lpopcnt : ... */
+    let lpopcnt = (...) => {
 	...
 	};
 	'
@@ -4995,8 +4995,8 @@ TRILSpecification >> lpopcnt [
 TRILSpecification >> lrdbar [
 	self shouldBeImplemented.
 	^self specify: lrdbar as:'
-	/*@ val lrdbar : ... */
-	let lrdbar = (...) => {
+/*@ val lrdbar : ... */
+    let lrdbar = (...) => {
 	...
 	};
 	'
@@ -5007,8 +5007,8 @@ TRILSpecification >> lrdbar [
 TRILSpecification >> lrdbari [
 	self shouldBeImplemented.
 	^self specify: lrdbari as:'
-	/*@ val lrdbari : ... */
-	let lrdbari = (...) => {
+/*@ val lrdbari : ... */
+    let lrdbari = (...) => {
 	...
 	};
 	'
@@ -5019,8 +5019,8 @@ TRILSpecification >> lrdbari [
 TRILSpecification >> lregload [
 	self shouldBeImplemented.
 	^self specify: lregload as:'
-	/*@ val lregload : ... */
-	let lregload = (...) => {
+/*@ val lregload : ... */
+    let lregload = (...) => {
 	...
 	};
 	'
@@ -5031,8 +5031,8 @@ TRILSpecification >> lregload [
 TRILSpecification >> lregstore [
 	self shouldBeImplemented.
 	^self specify: lregstore as:'
-	/*@ val lregstore : ... */
-	let lregstore = (...) => {
+/*@ val lregstore : ... */
+    let lregstore = (...) => {
 	...
 	};
 	'
@@ -5043,8 +5043,8 @@ TRILSpecification >> lregstore [
 TRILSpecification >> lrem [
 	self shouldBeImplemented.
 	^self specify: lrem as:'
-	/*@ val lrem : ... */
-	let lrem = (...) => {
+/*@ val lrem : ... */
+    let lrem = (...) => {
 	...
 	};
 	'
@@ -5055,8 +5055,8 @@ TRILSpecification >> lrem [
 TRILSpecification >> lreturn [
 	self shouldBeImplemented.
 	^self specify: lreturn as:'
-	/*@ val lreturn : ... */
-	let lreturn = (...) => {
+/*@ val lreturn : ... */
+    let lreturn = (...) => {
 	...
 	};
 	'
@@ -5067,8 +5067,8 @@ TRILSpecification >> lreturn [
 TRILSpecification >> lrol [
 	self shouldBeImplemented.
 	^self specify: lrol as:'
-	/*@ val lrol : ... */
-	let lrol = (...) => {
+/*@ val lrol : ... */
+    let lrol = (...) => {
 	...
 	};
 	'
@@ -5079,8 +5079,8 @@ TRILSpecification >> lrol [
 TRILSpecification >> lselect [
 	self shouldBeImplemented.
 	^self specify: lselect as:'
-	/*@ val lselect : ... */
-	let lselect = (...) => {
+/*@ val lselect : ... */
+    let lselect = (...) => {
 	...
 	};
 	'
@@ -5091,8 +5091,8 @@ TRILSpecification >> lselect [
 TRILSpecification >> lshl [
 	self shouldBeImplemented.
 	^self specify: lshl as:'
-	/*@ val lshl : ... */
-	let lshl = (...) => {
+/*@ val lshl : ... */
+    let lshl = (...) => {
 	...
 	};
 	'
@@ -5103,8 +5103,8 @@ TRILSpecification >> lshl [
 TRILSpecification >> lshr [
 	self shouldBeImplemented.
 	^self specify: lshr as:'
-	/*@ val lshr : ... */
-	let lshr = (...) => {
+/*@ val lshr : ... */
+    let lshr = (...) => {
 	...
 	};
 	'
@@ -5115,8 +5115,8 @@ TRILSpecification >> lshr [
 TRILSpecification >> lstore [
 	self shouldBeImplemented.
 	^self specify: lstore as:'
-	/*@ val lstore : ... */
-	let lstore = (...) => {
+/*@ val lstore : ... */
+    let lstore = (...) => {
 	...
 	};
 	'
@@ -5127,8 +5127,8 @@ TRILSpecification >> lstore [
 TRILSpecification >> lstorei [
 	self shouldBeImplemented.
 	^self specify: lstorei as:'
-	/*@ val lstorei : ... */
-	let lstorei = (...) => {
+/*@ val lstorei : ... */
+    let lstorei = (...) => {
 	...
 	};
 	'
@@ -5139,8 +5139,8 @@ TRILSpecification >> lstorei [
 TRILSpecification >> lsub [
 	self shouldBeImplemented.
 	^self specify: lsub as:'
-	/*@ val lsub : ... */
-	let lsub = (...) => {
+/*@ val lsub : ... */
+    let lsub = (...) => {
 	...
 	};
 	'
@@ -5151,8 +5151,8 @@ TRILSpecification >> lsub [
 TRILSpecification >> lu2a [
 	self shouldBeImplemented.
 	^self specify: lu2a as:'
-	/*@ val lu2a : ... */
-	let lu2a = (...) => {
+/*@ val lu2a : ... */
+    let lu2a = (...) => {
 	...
 	};
 	'
@@ -5163,8 +5163,8 @@ TRILSpecification >> lu2a [
 TRILSpecification >> lu2d [
 	self shouldBeImplemented.
 	^self specify: lu2d as:'
-	/*@ val lu2d : ... */
-	let lu2d = (...) => {
+/*@ val lu2d : ... */
+    let lu2d = (...) => {
 	...
 	};
 	'
@@ -5175,8 +5175,8 @@ TRILSpecification >> lu2d [
 TRILSpecification >> lu2f [
 	self shouldBeImplemented.
 	^self specify: lu2f as:'
-	/*@ val lu2f : ... */
-	let lu2f = (...) => {
+/*@ val lu2f : ... */
+    let lu2f = (...) => {
 	...
 	};
 	'
@@ -5187,8 +5187,8 @@ TRILSpecification >> lu2f [
 TRILSpecification >> luaddc [
 	self shouldBeImplemented.
 	^self specify: luaddc as:'
-	/*@ val luaddc : ... */
-	let luaddc = (...) => {
+/*@ val luaddc : ... */
+    let luaddc = (...) => {
 	...
 	};
 	'
@@ -5199,8 +5199,8 @@ TRILSpecification >> luaddc [
 TRILSpecification >> luaddh [
 	self shouldBeImplemented.
 	^self specify: luaddh as:'
-	/*@ val luaddh : ... */
-	let luaddh = (...) => {
+/*@ val luaddh : ... */
+    let luaddh = (...) => {
 	...
 	};
 	'
@@ -5211,8 +5211,8 @@ TRILSpecification >> luaddh [
 TRILSpecification >> lucmp [
 	self shouldBeImplemented.
 	^self specify: lucmp as:'
-	/*@ val lucmp : ... */
-	let lucmp = (...) => {
+/*@ val lucmp : ... */
+    let lucmp = (...) => {
 	...
 	};
 	'
@@ -5223,8 +5223,8 @@ TRILSpecification >> lucmp [
 TRILSpecification >> lucmpge [
 	self shouldBeImplemented.
 	^self specify: lucmpge as:'
-	/*@ val lucmpge : ... */
-	let lucmpge = (...) => {
+/*@ val lucmpge : ... */
+    let lucmpge = (...) => {
 	...
 	};
 	'
@@ -5235,8 +5235,8 @@ TRILSpecification >> lucmpge [
 TRILSpecification >> lucmpgt [
 	self shouldBeImplemented.
 	^self specify: lucmpgt as:'
-	/*@ val lucmpgt : ... */
-	let lucmpgt = (...) => {
+/*@ val lucmpgt : ... */
+    let lucmpgt = (...) => {
 	...
 	};
 	'
@@ -5247,8 +5247,8 @@ TRILSpecification >> lucmpgt [
 TRILSpecification >> lucmple [
 	self shouldBeImplemented.
 	^self specify: lucmple as:'
-	/*@ val lucmple : ... */
-	let lucmple = (...) => {
+/*@ val lucmple : ... */
+    let lucmple = (...) => {
 	...
 	};
 	'
@@ -5259,8 +5259,8 @@ TRILSpecification >> lucmple [
 TRILSpecification >> lucmplt [
 	self shouldBeImplemented.
 	^self specify: lucmplt as:'
-	/*@ val lucmplt : ... */
-	let lucmplt = (...) => {
+/*@ val lucmplt : ... */
+    let lucmplt = (...) => {
 	...
 	};
 	'
@@ -5271,8 +5271,8 @@ TRILSpecification >> lucmplt [
 TRILSpecification >> ludiv [
 	self shouldBeImplemented.
 	^self specify: ludiv as:'
-	/*@ val ludiv : ... */
-	let ludiv = (...) => {
+/*@ val ludiv : ... */
+    let ludiv = (...) => {
 	...
 	};
 	'
@@ -5283,8 +5283,8 @@ TRILSpecification >> ludiv [
 TRILSpecification >> lumax [
 	self shouldBeImplemented.
 	^self specify: lumax as:'
-	/*@ val lumax : ... */
-	let lumax = (...) => {
+/*@ val lumax : ... */
+    let lumax = (...) => {
 	...
 	};
 	'
@@ -5295,8 +5295,8 @@ TRILSpecification >> lumax [
 TRILSpecification >> lumin [
 	self shouldBeImplemented.
 	^self specify: lumin as:'
-	/*@ val lumin : ... */
-	let lumin = (...) => {
+/*@ val lumin : ... */
+    let lumin = (...) => {
 	...
 	};
 	'
@@ -5307,8 +5307,8 @@ TRILSpecification >> lumin [
 TRILSpecification >> lumulh [
 	self shouldBeImplemented.
 	^self specify: lumulh as:'
-	/*@ val lumulh : ... */
-	let lumulh = (...) => {
+/*@ val lumulh : ... */
+    let lumulh = (...) => {
 	...
 	};
 	'
@@ -5319,8 +5319,8 @@ TRILSpecification >> lumulh [
 TRILSpecification >> lushr [
 	self shouldBeImplemented.
 	^self specify: lushr as:'
-	/*@ val lushr : ... */
-	let lushr = (...) => {
+/*@ val lushr : ... */
+    let lushr = (...) => {
 	...
 	};
 	'
@@ -5331,8 +5331,8 @@ TRILSpecification >> lushr [
 TRILSpecification >> lusubb [
 	self shouldBeImplemented.
 	^self specify: lusubb as:'
-	/*@ val lusubb : ... */
-	let lusubb = (...) => {
+/*@ val lusubb : ... */
+    let lusubb = (...) => {
 	...
 	};
 	'
@@ -5343,8 +5343,8 @@ TRILSpecification >> lusubb [
 TRILSpecification >> lusubh [
 	self shouldBeImplemented.
 	^self specify: lusubh as:'
-	/*@ val lusubh : ... */
-	let lusubh = (...) => {
+/*@ val lusubh : ... */
+    let lusubh = (...) => {
 	...
 	};
 	'
@@ -5355,8 +5355,8 @@ TRILSpecification >> lusubh [
 TRILSpecification >> lwrtbar [
 	self shouldBeImplemented.
 	^self specify: lwrtbar as:'
-	/*@ val lwrtbar : ... */
-	let lwrtbar = (...) => {
+/*@ val lwrtbar : ... */
+    let lwrtbar = (...) => {
 	...
 	};
 	'
@@ -5367,8 +5367,8 @@ TRILSpecification >> lwrtbar [
 TRILSpecification >> lwrtbari [
 	self shouldBeImplemented.
 	^self specify: lwrtbari as:'
-	/*@ val lwrtbari : ... */
-	let lwrtbari = (...) => {
+/*@ val lwrtbari : ... */
+    let lwrtbari = (...) => {
 	...
 	};
 	'
@@ -5379,8 +5379,8 @@ TRILSpecification >> lwrtbari [
 TRILSpecification >> lxor [
 	self shouldBeImplemented.
 	^self specify: lxor as:'
-	/*@ val lxor : ... */
-	let lxor = (...) => {
+/*@ val lxor : ... */
+    let lxor = (...) => {
 	...
 	};
 	'
@@ -5391,8 +5391,8 @@ TRILSpecification >> lxor [
 TRILSpecification >> methodenterhook [
 	self shouldBeImplemented.
 	^self specify: methodenterhook as:'
-	/*@ val methodenterhook : ... */
-	let methodenterhook = (...) => {
+/*@ val methodenterhook : ... */
+    let methodenterhook = (...) => {
 	...
 	};
 	'
@@ -5403,8 +5403,8 @@ TRILSpecification >> methodenterhook [
 TRILSpecification >> methodexithook [
 	self shouldBeImplemented.
 	^self specify: methodexithook as:'
-	/*@ val methodexithook : ... */
-	let methodexithook = (...) => {
+/*@ val methodexithook : ... */
+    let methodexithook = (...) => {
 	...
 	};
 	'
@@ -5415,8 +5415,8 @@ TRILSpecification >> methodexithook [
 TRILSpecification >> monent [
 	self shouldBeImplemented.
 	^self specify: monent as:'
-	/*@ val monent : ... */
-	let monent = (...) => {
+/*@ val monent : ... */
+    let monent = (...) => {
 	...
 	};
 	'
@@ -5427,8 +5427,8 @@ TRILSpecification >> monent [
 TRILSpecification >> monexit [
 	self shouldBeImplemented.
 	^self specify: monexit as:'
-	/*@ val monexit : ... */
-	let monexit = (...) => {
+/*@ val monexit : ... */
+    let monexit = (...) => {
 	...
 	};
 	'
@@ -5439,8 +5439,8 @@ TRILSpecification >> monexit [
 TRILSpecification >> monexitfence [
 	self shouldBeImplemented.
 	^self specify: monexitfence as:'
-	/*@ val monexitfence : ... */
-	let monexitfence = (...) => {
+/*@ val monexitfence : ... */
+    let monexitfence = (...) => {
 	...
 	};
 	'
@@ -5451,8 +5451,8 @@ TRILSpecification >> monexitfence [
 TRILSpecification >> multianewarray [
 	self shouldBeImplemented.
 	^self specify: multianewarray as:'
-	/*@ val multianewarray : ... */
-	let multianewarray = (...) => {
+/*@ val multianewarray : ... */
+    let multianewarray = (...) => {
 	...
 	};
 	'
@@ -5463,8 +5463,8 @@ TRILSpecification >> multianewarray [
 TRILSpecification >> new [
 	self shouldBeImplemented.
 	^self specify: new as:'
-	/*@ val new : ... */
-	let new = (...) => {
+/*@ val new : ... */
+    let new = (...) => {
 	...
 	};
 	'
@@ -5475,8 +5475,8 @@ TRILSpecification >> new [
 TRILSpecification >> newarray [
 	self shouldBeImplemented.
 	^self specify: newarray as:'
-	/*@ val newarray : ... */
-	let newarray = (...) => {
+/*@ val newarray : ... */
+    let newarray = (...) => {
 	...
 	};
 	'
@@ -5487,8 +5487,8 @@ TRILSpecification >> newarray [
 TRILSpecification >> newvalue [
 	self shouldBeImplemented.
 	^self specify: newvalue as:'
-	/*@ val newvalue : ... */
-	let newvalue = (...) => {
+/*@ val newvalue : ... */
+    let newvalue = (...) => {
 	...
 	};
 	'
@@ -5499,8 +5499,8 @@ TRILSpecification >> newvalue [
 TRILSpecification >> nullchk [
 	self shouldBeImplemented.
 	^self specify: nullchk as:'
-	/*@ val nullchk : ... */
-	let nullchk = (...) => {
+/*@ val nullchk : ... */
+    let nullchk = (...) => {
 	...
 	};
 	'
@@ -5511,8 +5511,8 @@ TRILSpecification >> nullchk [
 TRILSpecification >> overflowchk [
 	self shouldBeImplemented.
 	^self specify: overflowchk as:'
-	/*@ val overflowchk : ... */
-	let overflowchk = (...) => {
+/*@ val overflowchk : ... */
+    let overflowchk = (...) => {
 	...
 	};
 	'
@@ -5523,8 +5523,8 @@ TRILSpecification >> overflowchk [
 TRILSpecification >> passthrough [
 	self shouldBeImplemented.
 	^self specify: passthrough as:'
-	/*@ val passthrough : ... */
-	let passthrough = (...) => {
+/*@ val passthrough : ... */
+    let passthrough = (...) => {
 	...
 	};
 	'
@@ -5535,8 +5535,8 @@ TRILSpecification >> passthrough [
 TRILSpecification >> prefetch [
 	self shouldBeImplemented.
 	^self specify: prefetch as:'
-	/*@ val prefetch : ... */
-	let prefetch = (...) => {
+/*@ val prefetch : ... */
+    let prefetch = (...) => {
 	...
 	};
 	'
@@ -5564,8 +5564,8 @@ TRILSpecification >> prog [
 TRILSpecification >> resolveandnullchk [
 	self shouldBeImplemented.
 	^self specify: resolveandnullchk as:'
-	/*@ val resolveandnullchk : ... */
-	let resolveandnullchk = (...) => {
+/*@ val resolveandnullchk : ... */
+    let resolveandnullchk = (...) => {
 	...
 	};
 	'
@@ -5576,8 +5576,8 @@ TRILSpecification >> resolveandnullchk [
 TRILSpecification >> resolvechk [
 	self shouldBeImplemented.
 	^self specify: resolvechk as:'
-	/*@ val resolvechk : ... */
-	let resolvechk = (...) => {
+/*@ val resolvechk : ... */
+    let resolvechk = (...) => {
 	...
 	};
 	'
@@ -5588,8 +5588,8 @@ TRILSpecification >> resolvechk [
 TRILSpecification >> return [
 	self shouldBeImplemented.
 	^self specify: return as:'
-	/*@ val return : ... */
-	let return = (...) => {
+/*@ val return : ... */
+    let return = (...) => {
 	...
 	};
 	'
@@ -5600,8 +5600,8 @@ TRILSpecification >> return [
 TRILSpecification >> s2a [
 	self shouldBeImplemented.
 	^self specify: s2a as:'
-	/*@ val s2a : ... */
-	let s2a = (...) => {
+/*@ val s2a : ... */
+    let s2a = (...) => {
 	...
 	};
 	'
@@ -5612,8 +5612,8 @@ TRILSpecification >> s2a [
 TRILSpecification >> s2b [
 	self shouldBeImplemented.
 	^self specify: s2b as:'
-	/*@ val s2b : ... */
-	let s2b = (...) => {
+/*@ val s2b : ... */
+    let s2b = (...) => {
 	...
 	};
 	'
@@ -5624,8 +5624,8 @@ TRILSpecification >> s2b [
 TRILSpecification >> s2d [
 	self shouldBeImplemented.
 	^self specify: s2d as:'
-	/*@ val s2d : ... */
-	let s2d = (...) => {
+/*@ val s2d : ... */
+    let s2d = (...) => {
 	...
 	};
 	'
@@ -5636,8 +5636,8 @@ TRILSpecification >> s2d [
 TRILSpecification >> s2f [
 	self shouldBeImplemented.
 	^self specify: s2f as:'
-	/*@ val s2f : ... */
-	let s2f = (...) => {
+/*@ val s2f : ... */
+    let s2f = (...) => {
 	...
 	};
 	'
@@ -5648,8 +5648,8 @@ TRILSpecification >> s2f [
 TRILSpecification >> s2i [
 	self shouldBeImplemented.
 	^self specify: s2i as:'
-	/*@ val s2i : ... */
-	let s2i = (...) => {
+/*@ val s2i : ... */
+    let s2i = (...) => {
 	...
 	};
 	'
@@ -5660,8 +5660,8 @@ TRILSpecification >> s2i [
 TRILSpecification >> s2l [
 	self shouldBeImplemented.
 	^self specify: s2l as:'
-	/*@ val s2l : ... */
-	let s2l = (...) => {
+/*@ val s2l : ... */
+    let s2l = (...) => {
 	...
 	};
 	'
@@ -5672,8 +5672,8 @@ TRILSpecification >> s2l [
 TRILSpecification >> sadd [
 	self shouldBeImplemented.
 	^self specify: sadd as:'
-	/*@ val sadd : ... */
-	let sadd = (...) => {
+/*@ val sadd : ... */
+    let sadd = (...) => {
 	...
 	};
 	'
@@ -5684,8 +5684,8 @@ TRILSpecification >> sadd [
 TRILSpecification >> sand [
 	self shouldBeImplemented.
 	^self specify: sand as:'
-	/*@ val sand : ... */
-	let sand = (...) => {
+/*@ val sand : ... */
+    let sand = (...) => {
 	...
 	};
 	'
@@ -5696,8 +5696,8 @@ TRILSpecification >> sand [
 TRILSpecification >> sbitpermute [
 	self shouldBeImplemented.
 	^self specify: sbitpermute as:'
-	/*@ val sbitpermute : ... */
-	let sbitpermute = (...) => {
+/*@ val sbitpermute : ... */
+    let sbitpermute = (...) => {
 	...
 	};
 	'
@@ -5708,8 +5708,8 @@ TRILSpecification >> sbitpermute [
 TRILSpecification >> sbyteswap [
 	self shouldBeImplemented.
 	^self specify: sbyteswap as:'
-	/*@ val sbyteswap : ... */
-	let sbyteswap = (...) => {
+/*@ val sbyteswap : ... */
+    let sbyteswap = (...) => {
 	...
 	};
 	'
@@ -5720,8 +5720,8 @@ TRILSpecification >> sbyteswap [
 TRILSpecification >> scmp [
 	self shouldBeImplemented.
 	^self specify: scmp as:'
-	/*@ val scmp : ... */
-	let scmp = (...) => {
+/*@ val scmp : ... */
+    let scmp = (...) => {
 	...
 	};
 	'
@@ -5732,8 +5732,8 @@ TRILSpecification >> scmp [
 TRILSpecification >> scmpeq [
 	self shouldBeImplemented.
 	^self specify: scmpeq as:'
-	/*@ val scmpeq : ... */
-	let scmpeq = (...) => {
+/*@ val scmpeq : ... */
+    let scmpeq = (...) => {
 	...
 	};
 	'
@@ -5744,8 +5744,8 @@ TRILSpecification >> scmpeq [
 TRILSpecification >> scmpge [
 	self shouldBeImplemented.
 	^self specify: scmpge as:'
-	/*@ val scmpge : ... */
-	let scmpge = (...) => {
+/*@ val scmpge : ... */
+    let scmpge = (...) => {
 	...
 	};
 	'
@@ -5756,8 +5756,8 @@ TRILSpecification >> scmpge [
 TRILSpecification >> scmpgt [
 	self shouldBeImplemented.
 	^self specify: scmpgt as:'
-	/*@ val scmpgt : ... */
-	let scmpgt = (...) => {
+/*@ val scmpgt : ... */
+    let scmpgt = (...) => {
 	...
 	};
 	'
@@ -5768,8 +5768,8 @@ TRILSpecification >> scmpgt [
 TRILSpecification >> scmple [
 	self shouldBeImplemented.
 	^self specify: scmple as:'
-	/*@ val scmple : ... */
-	let scmple = (...) => {
+/*@ val scmple : ... */
+    let scmple = (...) => {
 	...
 	};
 	'
@@ -5780,8 +5780,8 @@ TRILSpecification >> scmple [
 TRILSpecification >> scmplt [
 	self shouldBeImplemented.
 	^self specify: scmplt as:'
-	/*@ val scmplt : ... */
-	let scmplt = (...) => {
+/*@ val scmplt : ... */
+    let scmplt = (...) => {
 	...
 	};
 	'
@@ -5792,8 +5792,8 @@ TRILSpecification >> scmplt [
 TRILSpecification >> scmpne [
 	self shouldBeImplemented.
 	^self specify: scmpne as:'
-	/*@ val scmpne : ... */
-	let scmpne = (...) => {
+/*@ val scmpne : ... */
+    let scmpne = (...) => {
 	...
 	};
 	'
@@ -5804,8 +5804,8 @@ TRILSpecification >> scmpne [
 TRILSpecification >> sconst [
 	self shouldBeImplemented.
 	^self specify: sconst as:'
-	/*@ val sconst : ... */
-	let sconst = (...) => {
+/*@ val sconst : ... */
+    let sconst = (...) => {
 	...
 	};
 	'
@@ -5816,8 +5816,8 @@ TRILSpecification >> sconst [
 TRILSpecification >> sdiv [
 	self shouldBeImplemented.
 	^self specify: sdiv as:'
-	/*@ val sdiv : ... */
-	let sdiv = (...) => {
+/*@ val sdiv : ... */
+    let sdiv = (...) => {
 	...
 	};
 	'
@@ -5828,8 +5828,8 @@ TRILSpecification >> sdiv [
 TRILSpecification >> sload [
 	self shouldBeImplemented.
 	^self specify: sload as:'
-	/*@ val sload : ... */
-	let sload = (...) => {
+/*@ val sload : ... */
+    let sload = (...) => {
 	...
 	};
 	'
@@ -5840,8 +5840,8 @@ TRILSpecification >> sload [
 TRILSpecification >> sloadi [
 	self shouldBeImplemented.
 	^self specify: sloadi as:'
-	/*@ val sloadi : ... */
-	let sloadi = (...) => {
+/*@ val sloadi : ... */
+    let sloadi = (...) => {
 	...
 	};
 	'
@@ -5852,8 +5852,8 @@ TRILSpecification >> sloadi [
 TRILSpecification >> smul [
 	self shouldBeImplemented.
 	^self specify: smul as:'
-	/*@ val smul : ... */
-	let smul = (...) => {
+/*@ val smul : ... */
+    let smul = (...) => {
 	...
 	};
 	'
@@ -5864,8 +5864,8 @@ TRILSpecification >> smul [
 TRILSpecification >> sneg [
 	self shouldBeImplemented.
 	^self specify: sneg as:'
-	/*@ val sneg : ... */
-	let sneg = (...) => {
+/*@ val sneg : ... */
+    let sneg = (...) => {
 	...
 	};
 	'
@@ -5876,8 +5876,8 @@ TRILSpecification >> sneg [
 TRILSpecification >> sor [
 	self shouldBeImplemented.
 	^self specify: sor as:'
-	/*@ val sor : ... */
-	let sor = (...) => {
+/*@ val sor : ... */
+    let sor = (...) => {
 	...
 	};
 	'
@@ -5908,8 +5908,8 @@ TRILSpecification >> specify: opcode as: specification [
 TRILSpecification >> spinechk [
 	self shouldBeImplemented.
 	^self specify: spinechk as:'
-	/*@ val spinechk : ... */
-	let spinechk = (...) => {
+/*@ val spinechk : ... */
+    let spinechk = (...) => {
 	...
 	};
 	'
@@ -5920,8 +5920,8 @@ TRILSpecification >> spinechk [
 TRILSpecification >> srdbar [
 	self shouldBeImplemented.
 	^self specify: srdbar as:'
-	/*@ val srdbar : ... */
-	let srdbar = (...) => {
+/*@ val srdbar : ... */
+    let srdbar = (...) => {
 	...
 	};
 	'
@@ -5932,8 +5932,8 @@ TRILSpecification >> srdbar [
 TRILSpecification >> srdbari [
 	self shouldBeImplemented.
 	^self specify: srdbari as:'
-	/*@ val srdbari : ... */
-	let srdbari = (...) => {
+/*@ val srdbari : ... */
+    let srdbari = (...) => {
 	...
 	};
 	'
@@ -5944,8 +5944,8 @@ TRILSpecification >> srdbari [
 TRILSpecification >> sregload [
 	self shouldBeImplemented.
 	^self specify: sregload as:'
-	/*@ val sregload : ... */
-	let sregload = (...) => {
+/*@ val sregload : ... */
+    let sregload = (...) => {
 	...
 	};
 	'
@@ -5956,8 +5956,8 @@ TRILSpecification >> sregload [
 TRILSpecification >> sregstore [
 	self shouldBeImplemented.
 	^self specify: sregstore as:'
-	/*@ val sregstore : ... */
-	let sregstore = (...) => {
+/*@ val sregstore : ... */
+    let sregstore = (...) => {
 	...
 	};
 	'
@@ -5968,8 +5968,8 @@ TRILSpecification >> sregstore [
 TRILSpecification >> srem [
 	self shouldBeImplemented.
 	^self specify: srem as:'
-	/*@ val srem : ... */
-	let srem = (...) => {
+/*@ val srem : ... */
+    let srem = (...) => {
 	...
 	};
 	'
@@ -5980,8 +5980,8 @@ TRILSpecification >> srem [
 TRILSpecification >> sselect [
 	self shouldBeImplemented.
 	^self specify: sselect as:'
-	/*@ val sselect : ... */
-	let sselect = (...) => {
+/*@ val sselect : ... */
+    let sselect = (...) => {
 	...
 	};
 	'
@@ -5992,8 +5992,8 @@ TRILSpecification >> sselect [
 TRILSpecification >> sshl [
 	self shouldBeImplemented.
 	^self specify: sshl as:'
-	/*@ val sshl : ... */
-	let sshl = (...) => {
+/*@ val sshl : ... */
+    let sshl = (...) => {
 	...
 	};
 	'
@@ -6004,8 +6004,8 @@ TRILSpecification >> sshl [
 TRILSpecification >> sshr [
 	self shouldBeImplemented.
 	^self specify: sshr as:'
-	/*@ val sshr : ... */
-	let sshr = (...) => {
+/*@ val sshr : ... */
+    let sshr = (...) => {
 	...
 	};
 	'
@@ -6016,8 +6016,8 @@ TRILSpecification >> sshr [
 TRILSpecification >> sstore [
 	self shouldBeImplemented.
 	^self specify: sstore as:'
-	/*@ val sstore : ... */
-	let sstore = (...) => {
+/*@ val sstore : ... */
+    let sstore = (...) => {
 	...
 	};
 	'
@@ -6028,8 +6028,8 @@ TRILSpecification >> sstore [
 TRILSpecification >> sstorei [
 	self shouldBeImplemented.
 	^self specify: sstorei as:'
-	/*@ val sstorei : ... */
-	let sstorei = (...) => {
+/*@ val sstorei : ... */
+    let sstorei = (...) => {
 	...
 	};
 	'
@@ -6040,8 +6040,8 @@ TRILSpecification >> sstorei [
 TRILSpecification >> ssub [
 	self shouldBeImplemented.
 	^self specify: ssub as:'
-	/*@ val ssub : ... */
-	let ssub = (...) => {
+/*@ val ssub : ... */
+    let ssub = (...) => {
 	...
 	};
 	'
@@ -6052,8 +6052,8 @@ TRILSpecification >> ssub [
 TRILSpecification >> storefence [
 	self shouldBeImplemented.
 	^self specify: storefence as:'
-	/*@ val storefence : ... */
-	let storefence = (...) => {
+/*@ val storefence : ... */
+    let storefence = (...) => {
 	...
 	};
 	'
@@ -6064,8 +6064,8 @@ TRILSpecification >> storefence [
 TRILSpecification >> su2a [
 	self shouldBeImplemented.
 	^self specify: su2a as:'
-	/*@ val su2a : ... */
-	let su2a = (...) => {
+/*@ val su2a : ... */
+    let su2a = (...) => {
 	...
 	};
 	'
@@ -6076,8 +6076,8 @@ TRILSpecification >> su2a [
 TRILSpecification >> su2d [
 	self shouldBeImplemented.
 	^self specify: su2d as:'
-	/*@ val su2d : ... */
-	let su2d = (...) => {
+/*@ val su2d : ... */
+    let su2d = (...) => {
 	...
 	};
 	'
@@ -6088,8 +6088,8 @@ TRILSpecification >> su2d [
 TRILSpecification >> su2f [
 	self shouldBeImplemented.
 	^self specify: su2f as:'
-	/*@ val su2f : ... */
-	let su2f = (...) => {
+/*@ val su2f : ... */
+    let su2f = (...) => {
 	...
 	};
 	'
@@ -6100,8 +6100,8 @@ TRILSpecification >> su2f [
 TRILSpecification >> su2i [
 	self shouldBeImplemented.
 	^self specify: su2i as:'
-	/*@ val su2i : ... */
-	let su2i = (...) => {
+/*@ val su2i : ... */
+    let su2i = (...) => {
 	...
 	};
 	'
@@ -6112,8 +6112,8 @@ TRILSpecification >> su2i [
 TRILSpecification >> su2l [
 	self shouldBeImplemented.
 	^self specify: su2l as:'
-	/*@ val su2l : ... */
-	let su2l = (...) => {
+/*@ val su2l : ... */
+    let su2l = (...) => {
 	...
 	};
 	'
@@ -6124,8 +6124,8 @@ TRILSpecification >> su2l [
 TRILSpecification >> sucmp [
 	self shouldBeImplemented.
 	^self specify: sucmp as:'
-	/*@ val sucmp : ... */
-	let sucmp = (...) => {
+/*@ val sucmp : ... */
+    let sucmp = (...) => {
 	...
 	};
 	'
@@ -6136,8 +6136,8 @@ TRILSpecification >> sucmp [
 TRILSpecification >> sucmpge [
 	self shouldBeImplemented.
 	^self specify: sucmpge as:'
-	/*@ val sucmpge : ... */
-	let sucmpge = (...) => {
+/*@ val sucmpge : ... */
+    let sucmpge = (...) => {
 	...
 	};
 	'
@@ -6148,8 +6148,8 @@ TRILSpecification >> sucmpge [
 TRILSpecification >> sucmpgt [
 	self shouldBeImplemented.
 	^self specify: sucmpgt as:'
-	/*@ val sucmpgt : ... */
-	let sucmpgt = (...) => {
+/*@ val sucmpgt : ... */
+    let sucmpgt = (...) => {
 	...
 	};
 	'
@@ -6160,8 +6160,8 @@ TRILSpecification >> sucmpgt [
 TRILSpecification >> sucmple [
 	self shouldBeImplemented.
 	^self specify: sucmple as:'
-	/*@ val sucmple : ... */
-	let sucmple = (...) => {
+/*@ val sucmple : ... */
+    let sucmple = (...) => {
 	...
 	};
 	'
@@ -6172,8 +6172,8 @@ TRILSpecification >> sucmple [
 TRILSpecification >> sucmplt [
 	self shouldBeImplemented.
 	^self specify: sucmplt as:'
-	/*@ val sucmplt : ... */
-	let sucmplt = (...) => {
+/*@ val sucmplt : ... */
+    let sucmplt = (...) => {
 	...
 	};
 	'
@@ -6184,8 +6184,8 @@ TRILSpecification >> sucmplt [
 TRILSpecification >> sushr [
 	self shouldBeImplemented.
 	^self specify: sushr as:'
-	/*@ val sushr : ... */
-	let sushr = (...) => {
+/*@ val sushr : ... */
+    let sushr = (...) => {
 	...
 	};
 	'
@@ -6196,8 +6196,8 @@ TRILSpecification >> sushr [
 TRILSpecification >> sutest [
 	self shouldBeImplemented.
 	^self specify: sutest as:'
-	/*@ val sutest : ... */
-	let sutest = (...) => {
+/*@ val sutest : ... */
+    let sutest = (...) => {
 	...
 	};
 	'
@@ -6208,8 +6208,8 @@ TRILSpecification >> sutest [
 TRILSpecification >> swrtbar [
 	self shouldBeImplemented.
 	^self specify: swrtbar as:'
-	/*@ val swrtbar : ... */
-	let swrtbar = (...) => {
+/*@ val swrtbar : ... */
+    let swrtbar = (...) => {
 	...
 	};
 	'
@@ -6220,8 +6220,8 @@ TRILSpecification >> swrtbar [
 TRILSpecification >> swrtbari [
 	self shouldBeImplemented.
 	^self specify: swrtbari as:'
-	/*@ val swrtbari : ... */
-	let swrtbari = (...) => {
+/*@ val swrtbari : ... */
+    let swrtbari = (...) => {
 	...
 	};
 	'
@@ -6232,8 +6232,8 @@ TRILSpecification >> swrtbari [
 TRILSpecification >> sxor [
 	self shouldBeImplemented.
 	^self specify: sxor as:'
-	/*@ val sxor : ... */
-	let sxor = (...) => {
+/*@ val sxor : ... */
+    let sxor = (...) => {
 	...
 	};
 	'
@@ -6244,8 +6244,8 @@ TRILSpecification >> sxor [
 TRILSpecification >> table [
 	self shouldBeImplemented.
 	^self specify: table as:'
-	/*@ val table : ... */
-	let table = (...) => {
+/*@ val table : ... */
+    let table = (...) => {
 	...
 	};
 	'
@@ -6256,8 +6256,8 @@ TRILSpecification >> table [
 TRILSpecification >> tabort [
 	self shouldBeImplemented.
 	^self specify: tabort as:'
-	/*@ val tabort : ... */
-	let tabort = (...) => {
+/*@ val tabort : ... */
+    let tabort = (...) => {
 	...
 	};
 	'
@@ -6268,8 +6268,8 @@ TRILSpecification >> tabort [
 TRILSpecification >> tfinish [
 	self shouldBeImplemented.
 	^self specify: tfinish as:'
-	/*@ val tfinish : ... */
-	let tfinish = (...) => {
+/*@ val tfinish : ... */
+    let tfinish = (...) => {
 	...
 	};
 	'
@@ -6280,8 +6280,8 @@ TRILSpecification >> tfinish [
 TRILSpecification >> treetop [
 	self shouldBeImplemented.
 	^self specify: treetop as:'
-	/*@ val treetop : ... */
-	let treetop = (...) => {
+/*@ val treetop : ... */
+    let treetop = (...) => {
 	...
 	};
 	'
@@ -6292,8 +6292,8 @@ TRILSpecification >> treetop [
 TRILSpecification >> tstart [
 	self shouldBeImplemented.
 	^self specify: tstart as:'
-	/*@ val tstart : ... */
-	let tstart = (...) => {
+/*@ val tstart : ... */
+    let tstart = (...) => {
 	...
 	};
 	'
@@ -6304,8 +6304,8 @@ TRILSpecification >> tstart [
 TRILSpecification >> unsignedoverflowchk [
 	self shouldBeImplemented.
 	^self specify: unsignedoverflowchk as:'
-	/*@ val unsignedoverflowchk : ... */
-	let unsignedoverflowchk = (...) => {
+/*@ val unsignedoverflowchk : ... */
+    let unsignedoverflowchk = (...) => {
 	...
 	};
 	'
@@ -6316,8 +6316,8 @@ TRILSpecification >> unsignedoverflowchk [
 TRILSpecification >> variablenew [
 	self shouldBeImplemented.
 	^self specify: variablenew as:'
-	/*@ val variablenew : ... */
-	let variablenew = (...) => {
+/*@ val variablenew : ... */
+    let variablenew = (...) => {
 	...
 	};
 	'
@@ -6328,8 +6328,8 @@ TRILSpecification >> variablenew [
 TRILSpecification >> variablenewarray [
 	self shouldBeImplemented.
 	^self specify: variablenewarray as:'
-	/*@ val variablenewarray : ... */
-	let variablenewarray = (...) => {
+/*@ val variablenewarray : ... */
+    let variablenewarray = (...) => {
 	...
 	};
 	'
@@ -6340,8 +6340,8 @@ TRILSpecification >> variablenewarray [
 TRILSpecification >> zerochk [
 	self shouldBeImplemented.
 	^self specify: zerochk as:'
-	/*@ val zerochk : ... */
-	let zerochk = (...) => {
+/*@ val zerochk : ... */
+    let zerochk = (...) => {
 	...
 	};
 	'
