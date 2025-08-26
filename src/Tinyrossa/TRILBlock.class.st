@@ -79,10 +79,10 @@ TRILBlock >> add: aTRNode [
 	].
 ]
 
-{ #category : #'adding & removing' }
+{ #category : #'adding & removing - private' }
 TRILBlock >> addPrecedessor: aTRILBlock [
 	(precedessors includes: aTRILBlock) ifFalse: [ 
-			precedessors := precedessors copyWith: aTRILBlock
+		precedessors := precedessors copyWith: aTRILBlock.
 	].
 ]
 
@@ -134,7 +134,19 @@ TRILBlock >> dominatorsDo: aBlock [
 
 { #category : #accessing }
 TRILBlock >> immediateDominator [
-	^ immediateDominator
+	self assume: immediateDominator is: TRILBlock.
+
+	"By definition, immediate dominator of a block cannot be the block itself.
+	 Here if immediateDominator == self means that dominator analysis has been
+	 run but the block has no immediate dominator. In other words, `self` is used
+	 as a special null value different from nil (which means that dominators have
+	 not yet been computed)."
+
+	immediateDominator == self ifTrue: [
+		^ nil
+	] ifFalse: [
+		^ immediateDominator
+	]
 ]
 
 { #category : #initialization }
@@ -224,6 +236,48 @@ TRILBlock >> notEmpty [
 	^ self isEmpty not
 ]
 
+{ #category : #'enumerating - private' }
+TRILBlock >> postorderDo: action filter: filter [
+	"Evaluate `action` for all blocks reachable from this node (including)
+	 for which `filter` returns true in depth-first post-order manner.
+
+	 `action` is evaluated exactly once for given reachable block. For unreachable
+	 blocks, `action` is not evaluated at all."
+
+	| stack curr seen |
+
+	"Following implementations uses iterative algorithm using single stack.
+	 `nil` on the stack is used as a marker that successor1 subgraph has been
+	 already traversed."
+
+	stack := Stack new.
+	seen := Set new.
+	curr := self.
+	[ curr notNil or:[ stack notEmpty ]] whileTrue: [
+		[ curr notNil ] whileTrue: [
+			(filter value: curr) ifTrue: [
+				stack push: curr.
+			].
+			seen add: curr.
+			(seen includes: curr successor1) ifTrue: [
+				curr := nil
+			] ifFalse: [
+				curr := curr successor1
+			].
+		].
+
+		curr := stack top.
+		curr isNil ifTrue: [
+			stack pop.
+			action value: stack top.
+			stack pop.
+		] ifFalse: [
+			stack push: nil.
+			curr := curr successor2.
+		].
+	].
+]
+
 { #category : #accessing }
 TRILBlock >> precedessors [
 	^ precedessors copy
@@ -232,6 +286,39 @@ TRILBlock >> precedessors [
 { #category : #enumerating }
 TRILBlock >> precedessorsDo: aBlock [
 	precedessors do: aBlock
+]
+
+{ #category : #'enumerating - private' }
+TRILBlock >> preorderDo: action filter: filter [
+	"Evaluate `action` for all blocks reachable from this node (including)
+	 for which `filter` returns true in depth-first pre-order manner.
+
+	 `action` is evaluated exactly once for given reachable block. For unreachable
+	 blocks, `action` is not evaluated at all."
+
+	| stack seen |
+
+	stack := Stack with: self.
+	seen := Set with: self.
+	[ stack notEmpty ] whileTrue: [
+		| block |
+
+		block := stack pop.
+		action value: block.
+
+		(block successor2 notNil and:[(seen includes: block successor2) not]) ifTrue: [
+			seen add: block successor2.
+			(filter value: block successor2) ifTrue: [
+				stack push: block successor2.
+			].
+		].
+		(block successor1 notNil and:[(seen includes: block successor1) not]) ifTrue: [
+			seen add: block successor1.
+			(filter value: block successor1) ifTrue: [
+				stack push: block successor1.
+			].
+		].
+	].
 ]
 
 { #category : #'printing & storing' }
@@ -260,7 +347,7 @@ TRILBlock >> removeAll [
 	treetops copy do:[:node| self remove: node].
 ]
 
-{ #category : #'adding & removing' }
+{ #category : #'adding & removing - private' }
 TRILBlock >> removePrecedessor: aTRILBlock [
 	precedessors notNil ifTrue: [ 
 		precedessors := precedessors copyWithout: aTRILBlock.
@@ -302,20 +389,19 @@ TRILBlock >> replace: oldNode with: newNode [
 ]
 
 { #category : #initialization }
+TRILBlock >> setImmediateDominator: block [
+	self assume: block is: TRILBlock | nil.
+
+	immediateDominator := block
+]
+
+{ #category : #initialization }
 TRILBlock >> setNext: aTRILBlock [ 
 	"Set next block (in sense of linear order). This is used
 	 during block linearization."
 
 	self assume: aTRILBlock is: (TRILBlock | [ :v | self isTerminated or: [ successor1 == v ] ]) | nil.
 	next := aTRILBlock.
-]
-
-{ #category : #initialization }
-TRILBlock >> setSetImmediateDominator: block [
-	self assert: block isTRILBlock.
-	self assert: immediateDominator isNil.
-
-	immediateDominator := block
 ]
 
 { #category : #initialization }
@@ -328,7 +414,8 @@ TRILBlock >> setSuccessor1: blockOrNil [
 	successor1 := blockOrNil.
 	successor1 notNil ifTrue: [
 		successor1 addPrecedessor: self.
-	]
+	].
+	cfg modified.
 ]
 
 { #category : #initialization }
@@ -341,7 +428,8 @@ TRILBlock >> setSuccessor2: block [
 	successor2 := block.
 	successor2 notNil ifTrue: [
 		successor2 addPrecedessor: self.
-	]
+	].
+	cfg modified.
 ]
 
 { #category : #'accessing - VM state' }

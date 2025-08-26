@@ -5,7 +5,8 @@ Class {
 		'compilation',
 		'blocks',
 		'entry',
-		'nextBlockId'
+		'nextBlockId',
+		'loops'
 	],
 	#pools : [
 		'TRILOpcodes'
@@ -50,12 +51,13 @@ TRCFG >> addBlockNamed: aStringOrNil [
 
 { #category : #accessing }
 TRCFG >> blocks [
-	"Return the list of all *reachable* blocks"
+	"Return the list of all *reachable* blocks in pre-order"
 
 	| reachable |
 
 	reachable := OrderedCollection new: blocks size.
 	self preorderDo: [ :block | reachable add: block ].
+	self assert: reachable first == entry.
 	^ reachable.
 ]
 
@@ -173,6 +175,35 @@ TRCFG >> linearize [
 	].
 ]
 
+{ #category : #accessing }
+TRCFG >> loops [
+	"Return (possibly empty) list of loops in this CFG.
+	 If loop analysis has not been run yet, return nil."
+
+	^ loops
+]
+
+{ #category : #accessing }
+TRCFG >> loops: loopsCollection [
+	"Set loops found in this CFG to (possibly empty) `loopsCollection`.
+	 This is intended to be called only from loop analysis."
+
+	self assume: loops isNil.
+
+	loops := loopsCollection.
+]
+
+{ #category : #private }
+TRCFG >> modified [
+	"Called whenever a CFG is modified (new edge is added or removed)."
+
+	"When CFG is modified, we need to flush all cached data flow information:"
+
+	"* Loop info"
+	blocks do: [:block | block setImmediateDominator: nil ].
+	loops := nil.
+]
+
 { #category : #enumerating }
 TRCFG >> postorderDo: aBlock [
 	"Traverse the CFG starting with entry block and evaluate 
@@ -182,11 +213,8 @@ TRCFG >> postorderDo: aBlock [
 	 from entry. It's not evaluated at all for blocks that are not
 	 reachable."
 
-	| preorder |
-
-	preorder := OrderedCollection new: blocks size.
-	self preorderDo: [ :block | preorder add: block ].
-	preorder reverseDo: aBlock.
+	self assume: entry is: TRILBlock.
+	entry postorderDo: aBlock filter: [ :b | true ]
 ]
 
 { #category : #enumerating }
@@ -198,27 +226,8 @@ TRCFG >> preorderDo: aBlock [
 	 from entry. It's not evaluated at all for blocks that are not
 	 reachable."
 
-	| stack seen |
-
 	self assume: entry is: TRILBlock.
-
-	stack := Stack with: entry.
-	seen := Set with: entry.
-	[ stack notEmpty ] whileTrue: [ 
-		| block |
-
-		block := stack pop.
-		aBlock value: block.
-
-		(block successor2 notNil and:[(seen includes: block successor2) not]) ifTrue: [ 
-			stack push: block successor2.
-			seen add: block successor2.
-		].
-		(block successor1 notNil and:[(seen includes: block successor1) not]) ifTrue: [ 
-			stack push: block successor1.
-			seen add: block successor1.
-		].      
-	].
+	entry preorderDo: aBlock filter: [ :b | true ]
 ]
 
 { #category : #operations }
