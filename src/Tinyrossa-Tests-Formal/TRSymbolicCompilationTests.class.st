@@ -67,7 +67,7 @@ TRSymbolicCompilationTests >> test_abs_01 [
 	    let verify = (x) => {
 				let got = abs(x);
 				let zer = toBitVector(0);
-				bvge(got, zer)
+				bvsge(got, zer)
 	    };
 	'.
 
@@ -98,7 +98,7 @@ TRSymbolicCompilationTests >> test_add2_01 [
 	verf := TRILSpecificationParser parse:'
 	/*@ val verify : Int32 => bool[b|b] */
 	    let verify = (x) => {
-				let exp = bvadd32(x,bv32(2));
+				let exp = bvadd(x,toBitVector(2));
 				let got = add2(x);
 				got == exp
 	    };
@@ -153,7 +153,7 @@ TRSymbolicCompilationTests >> test_add2_02 [
 	verf := TRILSpecificationParser parse:'
 	/*@ val verify : Int32 => bool[b|b] */
 	    let verify = (x) => {
-				let exp = bvadd32(x,bv32(2));
+				let exp = bvadd(x,toBitVector(2));
 				let got = add2(x);
 				got == exp
 	    };
@@ -243,7 +243,7 @@ TRSymbolicCompilationTests >> test_id_02 [
 
 	prog := spec, code, verf.
 	
-	self assertSafe: prog.
+	self assertUnsafe: prog.
 
 ]
 
@@ -320,8 +320,8 @@ TRSymbolicCompilationTests >> test_mul2_01 [
 	verf := TRILSpecificationParser parse:'
 	/*@ val verify : bool[b|b] */
 	    let verify = {
-				let exp = bvmul32(bv32(10),bv32(2));
-				let got = mul2(bv32(10));
+				let exp = toBitVector(20);
+				let got = mul2(toBitVector(10));
 				got == exp
 	    };
 	'.
@@ -366,8 +366,8 @@ TRSymbolicCompilationTests >> test_mul2_02 [
 	verf := TRILSpecificationParser parse:'
 	/*@ val verify : bool[b|b] */
 	    let verify = {
-				let exp = bvmul32(bv32(10),bv32(2));
-				let got = mul2(bv32(10));
+				let exp = toBitVector(20);
+				let got = mul2(toBitVector(10));
 				got == exp
 	    };
 	'.
@@ -403,7 +403,7 @@ TRSymbolicCompilationTests >> test_mul4_01 [
 	verf := TRILSpecificationParser parse:'
 	/*@ val verify : Int32 => bool[b|b] */
 	    let verify = (x) => {
-				let orig = bvmul32(x, bv32(4));
+				let orig = bvmul(x, toBitVector(4));
 				let opt = mul4(x);
 				orig == opt
 	    };
@@ -437,7 +437,7 @@ TRSymbolicCompilationTests >> test_shl2_01 [
 	verf := TRILSpecificationParser parse:'
 	/*@ val verify : Int32 => bool[b|b] */
 	    let verify = (x) => {
-				let exp = bvshl32(x,bv32(2));
+				let exp = bvshl(x,toBitVector(2));
 				let got = shl2(x);
 				got == exp
 	    };
@@ -484,7 +484,7 @@ TRSymbolicCompilationTests >> test_sum_01 [
 	verf := TRILSpecificationParser parse:'
 	/*@ val verify : Int32 => bool[b|b] */
 	    let verify = (x) => {
-				let exp = bvshl32(x,bv32(2));
+				let exp = bvshl(x,toBitVector(2));
 				let got = sum(x);
 				got == exp
 	    };
