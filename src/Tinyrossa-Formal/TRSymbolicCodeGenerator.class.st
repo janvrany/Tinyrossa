@@ -85,7 +85,7 @@ TRSymbolicCodeGenerator >> generateCodeForBlock: block [
 					into:[:partial :symbol | EFun bind: (SpriteBind id: symbol name) expr: partial ].
 
 	elet := ELet
-					decl: (SpriteRDecl
+					decl: ("SpriteRDecl"SpriteDecl
 									bind: bind
 									expr: (EAnn
 													expr: efun
@@ -100,7 +100,7 @@ TRSymbolicCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	super initializeWithCompilation: aTRCompilation.
 	
 	prog := Prog empty.	
-	metric := TerminationMetric with: (DecidableRefinement text: '(0 toInt)').
+	metric := "TerminationMetric with: (DecidableRefinement text: '0')"nil.
 	
 	"
 	prog := Prog
