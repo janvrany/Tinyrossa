@@ -272,6 +272,11 @@ TRSymbolicEvaluator >> evaluate_isub: node [
 	^self common: node.
 ]
 
+{ #category : #evaluation }
+TRSymbolicEvaluator >> evaluate_treetop: node [
+	^self common: node.
+]
+
 { #category : #accessing }
 TRSymbolicEvaluator >> expr [
 	"Return the head of expression list
