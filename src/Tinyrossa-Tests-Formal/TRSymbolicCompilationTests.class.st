@@ -178,6 +178,73 @@ TRSymbolicCompilationTests >> test_add2_02 [
 ]
 
 { #category : #'tests - examples' }
+TRSymbolicCompilationTests >> test_dead_branch [
+	| bldr spec code verf prog |
+
+	"
+	 1 |
+	 2 | int32_t dead_branch(int32_t x) {
+	 3 |   int32_t i;
+	 4 |   i = 42;
+	 5 |   while (i < 5) {
+	 6 |     i = i + 1;
+	 7 |   }
+	 8 |   return i;
+	 9 | }
+	10 |
+	"
+
+	bldr := compilation builder.
+	bldr defineFile: 'dead_branch.c' line: 2.
+	bldr defineName: 'dead_branch' type: Int32.
+	bldr defineParameter: 'x' type: Int32.
+	bldr defineAutomatic: 'i' type: Int32.
+
+	"i = 42;"
+	bldr file: 'dead_branch.c' line: 4.
+	bldr istore:
+		{ bldr iconst: 42.
+		  "->" 'i' }.
+	"while (i < 5) {"
+	bldr while: ( bldr icmplt: { bldr iload: 'i' . bldr iconst: 5 } ) do: [:loop |
+		"i = i + 1;"
+		loop file: 'dead_branch.c' line: 6.
+		loop istore:
+			{ loop iadd:
+				{ loop iload: 'i' .
+				  loop iconst: 1 } .
+			  "->" 'i' }.
+	].
+	"}"
+	"return i;"
+	bldr file: 'dead_branch.c' line: 8.
+	bldr ireturn:
+		{ bldr iload: 'i' }.
+	compilation optimize.
+	compilation compile.
+
+	self skip: 'Unfinished'.
+
+	spec := TRILSpecification new prog.
+	code := compilation codegen prog.
+	verf := TRILSpecificationParser parse:'
+	/*@ val verify : Int32 => bool[b|b] */
+	    let verify = (x) => {
+				let exp = toBitVector(42);
+				let got = dead_branch(x);
+				got == exp
+	    };
+	'.
+
+	prog := spec , code, verf.
+
+	self skip: 'Unfinished'.
+	self halt.
+
+	self assertSafe: prog.
+]
+
+{ #category : #'tests - examples' }
 TRSymbolicCompilationTests >> test_id_01 [
 	| bldr spec code verf prog |
 
