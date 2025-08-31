@@ -16,6 +16,16 @@ TRSymbolicCodeGenerator >> codeBuffer [
 	^nil
 ]
 
+{ #category : #'instance creation' }
+TRSymbolicCodeGenerator >> createEvaluator [
+	^ self shouldNotImplement. "Use createEvaluatorForBlock: instead"
+]
+
+{ #category : #'instance creation' }
+TRSymbolicCodeGenerator >> createEvaluatorForBlock: aTRILBlock [
+	^ self evaluatorClass forCodeGenerator: self block: aTRILBlock
+]
+
 { #category : #'accessing - config' }
 TRSymbolicCodeGenerator >> evaluatorClass [
 	^ TRSymbolicEvaluator
@@ -58,7 +68,7 @@ TRSymbolicCodeGenerator >> generateCodeForBlock: block [
 	 Note that we need to use fresh evaluator to keep
 	 expressions separated (see use of `head` and `tail`
 	 in symbolic evaluator)"
-	evaluator := self createEvaluator.
+	evaluator := self createEvaluatorForBlock: block.
 	block treetops do:[:node |
 		(node opcode ~~ bbstart and:[node opcode ~~ bbend]) ifTrue:[
 			evaluator evaluate: node.

@@ -3,9 +3,10 @@ Class {
 	#superclass : #TRILEvaluator,
 	#instVars : [
 		'codegen',
+		'block',
 		'head',
 		'tail',
-		'impossible'
+		'fallthrough'
 	],
 	#pools : [
 		'TRDataTypes'
@@ -15,7 +16,12 @@ Class {
 
 { #category : #'instance creation' }
 TRSymbolicEvaluator class >> forCodeGenerator: aTRCodeGenerator [
-	^ self basicNew initializeWithCodeGenerator: aTRCodeGenerator
+	self shouldNotImplement. "Use forCodeGenerator:block: instead"
+]
+
+{ #category : #'instance creation' }
+TRSymbolicEvaluator class >> forCodeGenerator: aTRCodeGenerator block: aTRILBlock [
+	^ self basicNew initializeWithCodeGenerator: aTRCodeGenerator block: aTRILBlock
 ]
 
 { #category : #'instance creation' }
@@ -39,7 +45,7 @@ TRSymbolicEvaluator >> appendLet: name to: expr [
 	| elet |
 
 	elet := ELet decl: (SpriteDecl bind: (SpriteBind id: name) expr: expr)
-						 expr: impossible.
+						 expr: fallthrough.
 	^self append: elet.
 
 ]
@@ -84,7 +90,7 @@ TRSymbolicEvaluator >> commonBranchConditional: node [
 
 	jump := node symbol asΛEApp: (parms , autos).
 	cont := ELet decl: (SpriteDecl bind: (SpriteBind id: '_') expr: (0 asΛExpr: TInt instance))
-						 expr: impossible.
+						 expr: fallthrough.
 
 	self appendLet: 'cond' to: (node opcode asΛEApp: node children).
 
@@ -286,8 +292,19 @@ TRSymbolicEvaluator >> expr [
 ]
 
 { #category : #initialization }
-TRSymbolicEvaluator >> initializeWithCodeGenerator: aTRCodeGenerator [
+TRSymbolicEvaluator >> initializeWithCodeGenerator: aTRCodeGenerator block: aTRILBlock [
 	codegen := aTRCodeGenerator.
+	block := aTRILBlock.
 	head := tail := nil.
-	impossible := ΛEApp mkEApp: (EImm imm: (EVar of: 'impossible')) args: { 0 asExpr: TInt instance }.
+	block successor1 notNil ifTrue:[
+		| parms autos |
+
+		parms := (self compilation symbolManager lookupSymbolsByType: TRParameterSymbol) sorted: #index.
+		autos := (self compilation symbolManager lookupSymbolsByType: TRAutomaticSymbol) sorted: #index.
+
+		fallthrough := block successor1 asΛEApp: (parms , autos).
+	] ifFalse:[
+		fallthrough := ΛEApp mkEApp: (EImm imm: (EVar of: 'impossible')) args: { 0 asExpr: TInt instance }.
+	].
+
 ]
