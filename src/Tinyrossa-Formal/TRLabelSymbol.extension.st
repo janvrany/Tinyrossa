@@ -6,7 +6,11 @@ TRLabelSymbol >> asΛEApp: arguments [
 
 	| cont args |
 
-	cont := EImm imm: (EVar of: name).
+	(block notNil and:[block == block cfg entry]) ifTrue:[
+		cont := EImm imm: (EVar of: block compilation functionSymbol name).
+	] ifFalse: [
+		cont := EImm imm: (EVar of: name).
+	].
 	args := arguments collect:#asExpr.
 
 	^ ΛEApp mkEApp: cont args: args
