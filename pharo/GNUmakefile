@@ -12,8 +12,8 @@ include ../makefiles/mercurial.gmk
 
 ifndef MACHINEARITHMETIC_DIR
 MACHINEARITHMETIC_DIR    := ../3rdparty/MachineArithmetic
-MACHINEARITHMETIC_URL    ?= https://github.com/shingarov/MachineArithmetic
-MACHINEARITHMETIC_BRANCH ?= pure-z3
+MACHINEARITHMETIC_URL    ?= https://github.com/janvrany/MachineArithmetic
+MACHINEARITHMETIC_BRANCH ?= demo-for-matias
 $(eval $(call git-clone-local,MACHINEARITHMETIC_DIR,$(MACHINEARITHMETIC_URL),$(MACHINEARITHMETIC_BRANCH)))
 endif
 
