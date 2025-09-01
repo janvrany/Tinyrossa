@@ -70,6 +70,15 @@ TRLoop >> head [
 	^ head
 ]
 
+{ #category : #queries }
+TRLoop >> includes: block [
+	self assume: block is: TRILBlock.
+
+	^head == block
+		or: [ tail == block
+		or: [ self blockSet includes: block ] ]
+]
+
 { #category : #initialization }
 TRLoop >> initializeWithHead: headBlock tail: tailBlock [
 	self assume: headBlock is: TRILBlock.

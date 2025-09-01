@@ -204,6 +204,11 @@ TRILBlock >> isExtension [
 		and: [ precedessors first next == self ] ]
 ]
 
+{ #category : #queries }
+TRILBlock >> isPartOfLoop [
+	^ cfg loops anySatisfy: [ :loop | loop includes: self ].
+]
+
 { #category : #testing }
 TRILBlock >> isTRILBlock [
 	^ true
