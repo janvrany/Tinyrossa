@@ -6,10 +6,10 @@ Prog >> , another [
 	expr isLet ifTrue:[
 		| last |
 
-		last := expr.
+		expr′:= expr copy.
+		last := expr′.
 		[ last isLet and: [ last expr isLet ]] whileTrue:[last := last expr].
 		last expr: another expr.
-		expr′ := expr.
 	] ifFalse:[
 		expr′ := another expr.
 	].

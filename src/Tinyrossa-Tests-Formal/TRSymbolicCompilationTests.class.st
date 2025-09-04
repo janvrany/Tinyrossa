@@ -1,6 +1,12 @@
 Class {
 	#name : #TRSymbolicCompilationTests,
-	#superclass : #TRCompilationTestCase,
+	#superclass : #TestCaseParametrized,
+	#instVars : [
+		'compilation'
+	],
+	#pools : [
+		'TRDataTypes'
+	],
 	#category : #'Tinyrossa-Tests-Formal'
 }
 
@@ -26,17 +32,7 @@ TRSymbolicCompilationTests >> assertUnsafe: prog [
 
 { #category : #running }
 TRSymbolicCompilationTests >> setUp [
-	self setUpForTarget: self target
-]
-
-{ #category : #running }
-TRSymbolicCompilationTests >> setUpForTarget: aTRCompilationTarget [
-	compilation := TRCompilation forTarget: aTRCompilationTarget.
-]
-
-{ #category : #accessing }
-TRSymbolicCompilationTests >> target [
-	^ TRSymbolic default
+	compilation := TRCompilation forTarget: TRSymbolic default.
 ]
 
 { #category : #'tests - examples' }
@@ -181,12 +177,23 @@ TRSymbolicCompilationTests >> test_add2_02 [
 TRSymbolicCompilationTests >> test_dead_branch [
 	| bldr spec code verf prog |
 
+	"
+	int32_t dead_branch(int32_t x) {
+		int32_t i;
+		i = 42;
+		while (i < 5) {
+			i = i + 1;
+		}
+		return i;
+	}
+	"
+
 	bldr := compilation builder.
 	bldr defineName: 'dead_branch' type: Int32.
 	bldr defineParameter: 'x' type: Int32.
 	bldr defineAutomatic: 'i' type: Int32.
 
-	"i := 42;"
+	"i = 42;"
 	bldr istore:
 		{ bldr iconst: 42.
 		  "->" 'i' }.
@@ -200,12 +207,13 @@ TRSymbolicCompilationTests >> test_dead_branch [
 			  "->" 'i' }.
 	].
 	"}"
+	"return i;"
 	bldr ireturn:
 		{ bldr iload: 'i' }.
+
+
 	compilation optimize.
 	compilation compile.
-
-	self skip: 'Unfinished'.
 
 	spec := TRILSpecification new prog.
 	code := compilation codegen prog.
@@ -218,9 +226,10 @@ TRSymbolicCompilationTests >> test_dead_branch [
 	    };
 	'.
 
-	self halt.
-
 	prog := spec , code, verf.
+
+	self skip: 'Unfinished'.
+	self halt.
 
 	self assertSafe: prog.
 ]
@@ -525,7 +534,7 @@ TRSymbolicCompilationTests >> test_sum_01 [
 	compilation optimize.
 	compilation compile.
 	
-	self skip: 'Unfinished'.
+
 
 	spec := TRILSpecification new prog.
 	code := compilation codegen prog.
@@ -538,6 +547,7 @@ TRSymbolicCompilationTests >> test_sum_01 [
 	    };
 	'.
 
+	self skip: 'Unfinished'.
 	self halt.
 
 	prog := spec , code, verf.

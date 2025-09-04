@@ -9,6 +9,11 @@ TRSymbolic >> codeGeneratorClass [
 	^ TRSymbolicCodeGenerator
 ]
 
+{ #category : #accessing }
+TRSymbolic >> name [
+	^ 'symbolic'
+]
+
 { #category : #'queries - private' }
 TRSymbolic >> sizeInBytesOfAddress [
 	"Return size of address (pointer) in bytes"

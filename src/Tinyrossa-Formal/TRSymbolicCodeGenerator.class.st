@@ -52,7 +52,7 @@ TRSymbolicCodeGenerator >> generateCode [
 	TRDominanceAnalysis analyze: compilation cfg.
 	TRLoopAnalysis analyze: compilation cfg.
 
-	compilation cfg linearDo: [ :block |
+	compilation cfg preorderDo: [ :block |
 		self generateCodeForBlock: block.
 	].
 ]
