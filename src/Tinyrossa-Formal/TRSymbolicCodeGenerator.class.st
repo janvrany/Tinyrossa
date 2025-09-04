@@ -49,6 +49,11 @@ TRSymbolicCodeGenerator >> generateCode [
 	 phases.
 	"
 
+	"Temporary hack: run CFG simplifier again to get rid of
+	 artifical basic block introduced by naive
+	 linearization."
+	(TRCFGSimplifier forCompilation: compilation) run.
+
 	TRDominanceAnalysis analyze: compilation cfg.
 	TRLoopAnalysis analyze: compilation cfg.
 
