@@ -31,10 +31,7 @@ BaselineOfTinyrossa >> baseline: spec [
 			].
 
 			spec baseline: 'Typing' with: [
-				| myRepo |
-
-				myRepo := #IceRepository asClass registry detect:[ :each | each loadedPackages contains: [ :icep | icep name = self class package name ] ].
-				spec repository: 'tonel://' , myRepo location pathString , '/src'
+				spec repository: 'github://janvrany/Typing'
 			].
 
 			spec
