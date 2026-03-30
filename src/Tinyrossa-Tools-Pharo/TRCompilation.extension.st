@@ -54,6 +54,11 @@ TRCompilation >> gtInspectorInstructionsIn: composite [
 		^self.
 	].
 
+	self codeBuffer isNil ifTrue:[
+		"Not yet compiled"
+		^self.
+	].
+
 	^ composite fastTable
 		title: 'Instructions';
 		display: [ 
