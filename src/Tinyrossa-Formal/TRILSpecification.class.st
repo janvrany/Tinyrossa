@@ -2711,8 +2711,8 @@ TRILSpecification >> iabs [
 { #category : #opcodes }
 TRILSpecification >> iadd [
 	^self specify: iadd as:'
-	/*@ reflect iadd : Int32 => Int32 => Int32 / [zero] */
-	let         iadd = (c1,c2) => {
+/*@ val iadd : c1:Int32 => c2:Int32 => Int32[v|v === (c1 + c2)] */
+    let iadd = (c1,c2) => {
 		bvadd(c1,c2)
 	};
 '
@@ -2905,18 +2905,18 @@ TRILSpecification >> icmpset [
 { #category : #opcodes }
 TRILSpecification >> iconst [
 	^self specify: iconst as: '
-	/*@ reflect iconst : Int32 => Int32 / [zero] */
-	let         iconst = (c) => {
-		c
+/*@ val iconst : c1:Int32 => Int32[v|v === c1] */
+    let iconst = (c1) => {
+		c1
 	};'
 ]
 
 { #category : #opcodes }
 TRILSpecification >> idiv [
 	^self specify: idiv as:'
-	/*@ reflect idiv : c1:Int32 => c2:Int32 => Int32[r|r === (c1 / c2)] */
-	let         idiv = (c1,c2) => {
-		bvdiv(c1,c2)
+/*@ val idiv : c1:Int32 => c2:Int32 => Int32[r|r === (c1 / c2)] */
+    let idiv = (c1,c2) => {
+		bvsdiv(c1,c2)
 	};
 '
 
@@ -3432,8 +3432,8 @@ TRILSpecification >> ificmno [
 { #category : #opcodes }
 TRILSpecification >> ificmpeq [
 	^self specify: ificmpeq as:'
-	/*@ reflect ificmpeq : Int32 => Int32 => bool */
-	let         ificmpeq = (c1,c2) => {
+/*@ val ificmpeq : c1:Int32 => c2:Int32 => bool[v|v === (c1 === c2)] */
+    let ificmpeq = (c1,c2) => {
 		bveq(c1 , c2)
 	};
 	'
@@ -3446,9 +3446,9 @@ TRILSpecification >> ificmpeq [
 { #category : #opcodes }
 TRILSpecification >> ificmpge [
 	^self specify: ificmpge as:'
-	/*@ reflect ificmpge : Int32 => Int32 => bool */
-	let         ificmpge = (c1,c2) => {
-		bvge(c1 , c2)
+/*@ val ificmpge : c1:Int32 => c2:Int32 => bool[v|v === (c1 >= c2)] */
+    let ificmpge = (c1,c2) => {
+		bvsge(c1 , c2)
 	};
 	'
 
@@ -3457,9 +3457,9 @@ TRILSpecification >> ificmpge [
 { #category : #opcodes }
 TRILSpecification >> ificmpgt [
 	^self specify: ificmpgt as:'
-	/*@ reflect ificmpgt : Int32 => Int32 => bool */
-	let         ificmpgt = (c1,c2) => {
-		bvgt(c1 , c2)
+/*@ val ificmpgt : c1:Int32 => c2:Int32 => bool[v|v === (c1 > c2)] */
+    let ificmpgt = (c1,c2) => {
+		bvsgt(c1 , c2)
 	};
 	'
 
@@ -3468,9 +3468,9 @@ TRILSpecification >> ificmpgt [
 { #category : #opcodes }
 TRILSpecification >> ificmple [
 	^self specify: ificmple as:'
-	/*@ reflect ificmple : Int32 => Int32 => bool */
-	let         ificmple = (c1,c2) => {
-		bvle(c1 , c2)
+/*@ val ificmple : c1:Int32 => c2:Int32 => bool[v|v === (c1 <= c2)] */
+    let ificmple = (c1,c2) => {
+		bvsle(c1 , c2)
 	};
 	'
 
@@ -3479,9 +3479,9 @@ TRILSpecification >> ificmple [
 { #category : #opcodes }
 TRILSpecification >> ificmplt [
 	^self specify: ificmplt as:'
-	/*@ reflect ificmplt : Int32 => Int32 => bool */
-	let         ificmplt = (c1,c2) => {
-		bvlt(c1 , c2)
+/*@ val ificmplt : c1:Int32 => c2:Int32 => bool[v|v === (c1 < c2)] */
+    let ificmplt = (c1,c2) => {
+		bvslt(c1 , c2)
 	};
 	'
 
@@ -3490,8 +3490,8 @@ TRILSpecification >> ificmplt [
 { #category : #opcodes }
 TRILSpecification >> ificmpne [
 	^self specify: ificmpne as:'
-	/*@ reflect ificmpne : Int32 => Int32 => bool */
-	let         ificmpne = (c1,c2) => {
+/*@ val ificmpne : c1:Int32 => c2:Int32 => bool[v|v === (c1 ~== c2)] */
+    let ificmpne = (c1,c2) => {
 		bvne(c1 , c2)
 	};
 	'
@@ -3921,9 +3921,9 @@ TRILSpecification >> ilbit [
 { #category : #opcodes }
 TRILSpecification >> iload [
 	^self specify: iload as:'
-	/*@ reflect iload : Int32 => Int32 / [zero] */
-	let         iload = (s) => {
-		s
+/*@ val iload : c:Int32 => Int32[v|v === c] */
+    let iload = (c) => {
+		c
 	};
 	'
 
@@ -3968,8 +3968,8 @@ TRILSpecification >> imin [
 { #category : #opcodes }
 TRILSpecification >> imul [
 	^self specify: imul as:'
-	/*@ reflect imul : Int32 => Int32 => Int32 / [zero] */
-	let         imul = (c1,c2) => {
+/*@ val imul : c1:Int32 => c2:Int32 => Int32[v|v === (c1 * c2)] */
+    let imul = (c1,c2) => {
 		bvmul(c1,c2)
 	};
 	'
@@ -4152,8 +4152,8 @@ TRILSpecification >> irem [
 { #category : #opcodes }
 TRILSpecification >> ireturn [
 	^self specify: ireturn as:'
-	/*@ reflect ireturn : Int32 => Int32 / [zero] */
-	let         ireturn = (c1) => {
+/*@ val ireturn : c1:Int32 => Int32[v|v === c1] */
+    let ireturn = (c1) => {
 		c1
 	};
 	'
@@ -4199,8 +4199,8 @@ TRILSpecification >> iselect [
 { #category : #opcodes }
 TRILSpecification >> ishl [
 	^self specify: ishl as:'
-	/*@ reflect ishl : Int32 => Int32 => Int32 / [zero] */
-	let         ishl = (c1,c2) => {
+/*@ val ishl : c1:Int32 => c2:Int32 => Int32[v|v === (c1 bitShiftLeft: c2)] */
+    let ishl = (c1,c2) => {
 		bvshl(c1,c2)
 	};
 '
@@ -4225,8 +4225,8 @@ TRILSpecification >> ishr [
 { #category : #opcodes }
 TRILSpecification >> istore [
 	^self specify: istore as:'
-	/*@ reflect istore : Int32 => Int32 / [zero] */
-	let         istore = (s) => {
+/*@ val istore : c1:Int32 => Int32[v|v === c1] */
+    let istore = (s) => {
 		s
 	};
 	'
@@ -4248,8 +4248,8 @@ TRILSpecification >> istorei [
 { #category : #opcodes }
 TRILSpecification >> isub [
 	^self specify: isub as:'
-	/*@ reflect isub : Int32 => Int32 => Int32 / [zero] */
-	let         isub = (c1,c2) => {
+/*@ val isub : c1:Int32 => c2:Int32 => Int32[v|v === (c1 - c2)] */
+    let isub = (c1,c2) => {
 		bvsub(c1,c2)
 	};
 '
