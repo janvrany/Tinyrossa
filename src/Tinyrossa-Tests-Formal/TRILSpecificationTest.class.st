@@ -28,6 +28,24 @@ TRILSpecificationTest >> assertUnsafe: prog [
 ]
 
 { #category : #doodles }
+TRILSpecificationTest >> test_ALL [
+	"Test that - at the very least - each opcode specification is
+	 in itself safe."
+
+	| spec |
+
+	TRILOpcodes all do:[:opcode |
+		[
+			spec := TRILSpecification new specify: opcode.
+			self assertSafe: spec.
+		] on: ShouldBeImplemented do:[:ex|
+			"Opcode not yet specified, ignore."
+			self assert: true.
+		].
+	].
+]
+
+{ #category : #doodles }
 TRILSpecificationTest >> test_iadd [
 	| spec test |
 
