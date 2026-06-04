@@ -511,6 +511,45 @@ TRCompilationTestCase >> test20_dead_branch [
 	"
 ]
 
+{ #category : #tests }
+TRCompilationTestCase >> test21_iselect [
+	| x y builder |
+
+	<parameter: #x values: #(-10 0 10)>
+	<parameter: #y values: #(-10 0 10)>
+
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since Xselect evaluator is not implemented on POWER'.
+	].
+
+	x := testParameters at: #x.
+	y := testParameters at: #y.
+
+	builder := compilation builder.
+	builder defineName: testSelector asString type: Int32.
+	builder defineParameter: 'x' type: Int32.
+	builder defineParameter: 'y' type: Int32.
+	builder ireturn: {
+		builder
+			iselect: {
+				"cond" builder icmpgt: {
+							builder iload: 'x'.
+							builder iload: 'y' }.
+				"true" builder iload: 'x'.
+				"false"builder iload: 'y' } }.
+
+	compilation optimize.
+	compilation compile.
+
+
+	self assert: (shell inject: compilation andInvokeWith: {x . y}) equals: (x max: y)
+
+	"
+	TRRV64GCompilationTests debug: #test20_iselect
+	TRPPC64CompilationTests debug: #test20_iselect
+	"
+]
+
 { #category : #'tests - examples' }
 TRCompilationTestCase >> test_example01_meaningOfLife [
 	TRCompilationExamples new
