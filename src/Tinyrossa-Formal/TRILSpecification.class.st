@@ -4009,6 +4009,10 @@ TRILSpecification >> initialize [
 	prelude := TRILSpecificationParser parse:'
 	[--check-termination]
 
+type void =
+  | Nil
+  ;
+
 	⟦val zero : int[v | v===0]⟧
 	 let zero = 0;
 	'.
@@ -6274,16 +6278,13 @@ TRILSpecification >> tfinish [
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> treetop [
-	self shouldBeImplemented.
-	^self specify: treetop as:'
-	/*@ val treetop : ... */
-	let treetop = (...) => {
-	...
-	};
-	'
-
+	^self specify: treetop as: '
+	/*@ val treetop : ''a => void[v|v === Nil] */
+	    let treetop = (c1) => {
+	      Nil
+	    };'
 ]
 
 { #category : #'opcodes (not yet specified)' }
