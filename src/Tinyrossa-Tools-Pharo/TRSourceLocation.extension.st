@@ -5,7 +5,7 @@ TRSourceLocation >> gtDisplayOn: aStream [
 	file printOn:aStream.
 	aStream nextPutAll:':'.
 	line printOn:aStream.
-	column notNil ifTrue:[
+	(column notNil and: [column ~= 0]) ifTrue:[
 			aStream nextPutAll:':'.
 			column printOn:aStream.
 	].

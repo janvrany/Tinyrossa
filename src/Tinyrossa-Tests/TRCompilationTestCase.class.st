@@ -453,6 +453,64 @@ TRCompilationTestCase >> test19_abs [
 	"
 ]
 
+{ #category : #tests }
+TRCompilationTestCase >> test20_dead_branch [
+	| x bldr |
+
+	<parameter: #x values: #(-10 0 10)>
+
+	self target name = 'powerpc64le-linux' ifTrue: [
+		self skip: 'Skipped since Xload/Xstore evaluator does not support statics for POWER (see issue #52)'.
+	].
+
+	x := testParameters at: #x.
+
+	"
+	int32_t dead_branch(int32_t x) {
+		int32_t i;
+		i = 42;
+		while (i < 5) {
+			i = i + 1;
+		}
+		return i;
+	}
+	"
+
+	bldr := compilation builder.
+	bldr defineName: 'dead_branch' type: Int32.
+	bldr defineParameter: 'x' type: Int32.
+	bldr defineAutomatic: 'i' type: Int32.
+
+	"i = 42;"
+	bldr istore:
+		{ bldr iconst: 42.
+		  "->" 'i' }.
+	"while (i < 5) {"
+	bldr while: ( bldr icmplt: { bldr iload: 'i' . bldr iconst: 5 } ) do: [:loop |
+		"i = i + 1;"
+		loop istore:
+			{ loop iadd:
+				{ loop iload: 'i' .
+				  loop iconst: 1 } .
+			  "->" 'i' }.
+	].
+	"}"
+	"return i;"
+	bldr ireturn:
+		{ bldr iload: 'i' }.
+
+
+	compilation optimize.
+	compilation compile.
+
+	self assert: (shell inject: compilation andInvokeWith: {x}) equals: 42
+
+	"
+	TRRV64GCompilationTests debug: #test20_dead_branch
+	TRPPC64CompilationTests debug: #test20_dead_branch
+	"
+]
+
 { #category : #'tests - examples' }
 TRCompilationTestCase >> test_example01_meaningOfLife [
 	TRCompilationExamples new
