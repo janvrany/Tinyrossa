@@ -174,6 +174,26 @@ TRRV64GCodeEvaluator >> commonMul: node [
 ]
 
 { #category : #'evaluation-helpers' }
+TRRV64GCodeEvaluator >> commonSelect: node [
+	"Handles iselect, lselect & aselect"
+
+	| condReg trueReg falseReg join |
+
+	condReg := self evaluate: node child1.
+	trueReg := self evaluate: node child2.
+	falseReg := self evaluate: node child3.
+
+	join := codegen allocateLabel.
+
+	generate
+		bne: condReg, zero, join;
+		mv: trueReg, falseReg;
+		label: join.
+
+	^ trueReg
+]
+
+{ #category : #'evaluation-helpers' }
 TRRV64GCodeEvaluator >> commonShl: node [
 	"Handles ishl and lshl"
 	
@@ -407,6 +427,11 @@ TRRV64GCodeEvaluator >> evaluate_aload: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_aloadi: node [
 	^ self evaluate_Xloadi: node
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_aselect: node [
+	^self commonSelect: node
 ]
 
 { #category : #evaluation }
@@ -678,6 +703,11 @@ TRRV64GCodeEvaluator >> evaluate_ior: node [
 ]
 
 { #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_iselect: node [
+	^self commonSelect: node
+]
+
+{ #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_ishl: node [
 	^self commonShl: node
 ]
@@ -774,6 +804,11 @@ TRRV64GCodeEvaluator >> evaluate_loadaddr: node [
 { #category : #evaluation }
 TRRV64GCodeEvaluator >> evaluate_lor: node [
 	^self commonBin: node opcodeR: 'or' opcodeI: 'ori'
+]
+
+{ #category : #evaluation }
+TRRV64GCodeEvaluator >> evaluate_lselect: node [
+	^self commonSelect: node
 ]
 
 { #category : #evaluation }
