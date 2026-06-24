@@ -34,6 +34,7 @@ TRSymbolicCompilationTests >> assertUnsafe: prog [
 TRSymbolicCompilationTests >> setUp [
 	compilation := TRCompilation forTarget: TRSymbolic default.
 ]
+
 { #category : #accessing }
 TRSymbolicCompilationTests >> target [
 	^ TRSymbolic default
@@ -544,20 +545,24 @@ TRSymbolicCompilationTests >> test_sum_01 [
 	compilation optimize.
 	compilation compile.
 	
-	self skip: 'Unfinished'.
-
 	spec := TRILSpecification new prog.
 	code := compilation codegen prog.
+
 	verf := TRILSpecificationParser parse:'
-	/*@ val verify : Int32 => bool[b|b] */
-	    let verify = (x) => {
-				let exp = bvshl(x,toBitVector(2));
-				let got = sum(x);
-				got == exp
-	    };
+	[--check-termination]
+
+	/*@ val thm_sum : n:Int32[v| (0 toBitVector:32) <= v] => Int32[w| (2 toBitVector:32) * (sum value: n) === (n+(1 toBitVector:32) * n)] / [n] */
+	let rec thm_sum = (n) => {
+		let zero = toBitVector(0);
+	  if (bvsle(n, zero)) {
+	    zero
+	  } else {
+		  let one = toBitVector(1);
+	    thm_sum(bvsub(n,one))
+	  }
+	};
 	'.
 
-	self halt.
 
 	prog := spec , code, verf.
 

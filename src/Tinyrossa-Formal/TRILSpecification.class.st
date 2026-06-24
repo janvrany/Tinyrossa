@@ -4005,16 +4005,18 @@ TRILSpecification >> ineg [
 
 { #category : #initialization }
 TRILSpecification >> initialize [
-	prelude := Prog empty.
-	prelude options: #(#'check-termination').
-	"
-	prelude := ΛκParser parse:'
+
+	prelude := TRILSpecificationParser parse:'
 	[--check-termination]
+
+type void =
+  | Nil
+  ;
 
 	⟦val zero : int[v | v===0]⟧
 	 let zero = 0;
 	'.
-	"
+	self assert: prelude isPetitFailure not.
 ]
 
 { #category : #'opcodes (not yet specified)' }
@@ -5550,7 +5552,7 @@ TRILSpecification >> prog [
 	^TRILOpcodes all inject: prelude into: [ :all :opcode |
 		| spec |
 
-		spec := [ self specify: opcode ] on: ShouldBeImplemented do:[:e| Prog empty ].
+		spec := [ self perform: (SpecificationTable at: opcode) ] on: ShouldBeImplemented do:[:e| Prog empty ].
 		all , spec.
 	]
 
@@ -5886,7 +5888,7 @@ TRILSpecification >> sor [
 
 { #category : #private }
 TRILSpecification >> specify: opcode [
-	^self perform: (SpecificationTable at: opcode)
+	^prelude , (self perform: (SpecificationTable at: opcode))
 ]
 
 { #category : #private }
@@ -6276,16 +6278,13 @@ TRILSpecification >> tfinish [
 
 ]
 
-{ #category : #'opcodes (not yet specified)' }
+{ #category : #opcodes }
 TRILSpecification >> treetop [
-	self shouldBeImplemented.
-	^self specify: treetop as:'
-	/*@ val treetop : ... */
-	let treetop = (...) => {
-	...
-	};
-	'
-
+	^self specify: treetop as: '
+	/*@ val treetop : ''a => void[v|v === Nil] */
+	    let treetop = (c1) => {
+	      Nil
+	    };'
 ]
 
 { #category : #'opcodes (not yet specified)' }

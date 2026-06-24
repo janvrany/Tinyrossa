@@ -17,3 +17,12 @@ TRILBlock >> asΛEApp: arguments [
 	^ ΛEApp mkEApp: cont args: args
 
 ]
+
+{ #category : #'*Tinyrossa-Formal' }
+TRILBlock >> isLetRec [
+	self == cfg entry ifTrue:[
+		^self compilation functionSymbol isUsed.
+	].
+
+	^ cfg loops anySatisfy: [ :loop | loop includes: self ].
+]

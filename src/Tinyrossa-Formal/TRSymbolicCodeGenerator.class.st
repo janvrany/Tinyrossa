@@ -98,7 +98,7 @@ TRSymbolicCodeGenerator >> generateCodeForBlock: block [
 					into:[:partial :symbol | EFun bind: (SpriteBind id: symbol name) expr: partial ].
 
 	elet := ELet
-					decl: ((block isPartOfLoop ifTrue:[SpriteRDecl] ifFalse:[SpriteDecl])
+					decl: ((block isLetRec ifTrue:[SpriteRDecl] ifFalse:[SpriteDecl])
 									bind: bind
 									expr: (EAnn
 													expr: efun
