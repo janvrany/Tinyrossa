@@ -35,6 +35,23 @@ TRRegisterDependencyGroup >> addTrashed: rReg [
 	self add: (TRRegisterDependency virtual: nil real: rReg).
 ]
 
+{ #category : #accessing }
+TRRegisterDependencyGroup >> getDependency: vReg [
+	"Return dependency for given virtual register `vReg`.
+	 In other words, for given virtual register, return the
+	 real register which must contain the value. Return nil
+	 if this dependecy group does not contain dependency
+	 for `vReg`
+
+	 See class documentation of `TRRegisterDependencies`.
+	"
+
+	self assume: vReg is: TRVirtualRegister.
+
+	self do: [:dep | dep vreg = vReg ifTrue: [ ^ dep rreg ] ].
+	^ nil
+]
+
 { #category : #utilities }
 TRRegisterDependencyGroup >> replaceVirtualRegistersUsing: replacementMap [
 	(self anySatisfy: [:dep | dep vreg notNil and:[replacementMap includesKey: dep vreg name] ]) ifTrue: [

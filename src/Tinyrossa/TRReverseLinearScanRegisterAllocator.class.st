@@ -42,6 +42,14 @@ Dependencies are satisfied by interval splitting too:
    or splitting. For details, see comments in relevant part of
    allocateRegistersAt:
 
+In order to minimize register moves when satisfing dependencies,
+virtual registers that have dependency on a real register are
+oprimistically pre-allocated to that real register (see step 2. in
+#allocateRegisters). Possible conflicts are solved later in main
+allocation loop by detecting the conflict and dropping the pre-allocation
+for about-to-go-live register that has conflict (see beginning of
+allocateRegistersAt:)
+
 ---
 
 Note that there's no need to deal with virtual registers being used across
@@ -79,13 +87,12 @@ TRReverseLinearScanRegisterAllocator >> allocateRegister: interval [
 
 	| assigned |
 
-	self assume: interval is: TRRegisterLiveInterval | [ :v | v register allocation isNil ].
+	self assume: interval is: TRRegisterLiveInterval.
 
 	assigned := self pickRegister: interval.
 	assigned isNil ifTrue: [
 		"No free registers so pick and split some interval to free
-		 some. Then try to allocate register again (this should succeed)
-		 `interval` and then try to allocate it."
+		 some. Then try to allocate register again (this should succeed)."
 
 		| split |
 
@@ -156,7 +163,16 @@ TRReverseLinearScanRegisterAllocator >> allocateRegisters [
 	todo := intervals values asSortedCollection: [ :a :b | (a stop < b stop) or:[a stop == b stop and:[a start < b start]]].
 
 	"
-	Step 2. Walk instructions in reverse order and allocate
+	Step 2. Pre-allocate virtual registers to their preferred
+	real registers. Possible conflicts will be fixed in Step 3.
+	by spills and/or moves.
+	"
+	intervals do: [:interval |
+		self preallocateRegister: interval.
+	].
+
+	"
+	Step 3. Walk instructions in reverse order and allocate
 	registers. Insert moves / reloads and spills as needed.
 	"
 	instructions size downTo: 1 do: [:i |  
@@ -178,6 +194,34 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 	insn := instructions at: insnIndex.
 	deps := insn dependencies.
 
+	"Compute 'live-across' intervals, that is intervals that are
+	 assigned before this instruction and used after this instruction."
+	liveAcross := Set new: live size.
+	live do: [:i | (i start < insnIndex and: [ i stop > insnIndex ]) ifTrue:[liveAcross add:i] ].
+
+	"Now check if any already live intervals has a conflict with any pre-allocated
+	 interval that is about to go live at this moment. If there's a conflict,
+	 drop the pre-allocation."
+	(liveAcross notEmpty and: [ todo notEmpty ]) ifTrue: [
+		liveAcross do: [:alreadyLive |
+			| i |
+
+			self assert: alreadyLive register allocation notNil.
+
+			i := todo size.
+			[ i > 0 and: [ (todo at:i) stop == insnIndex  ] ] whileTrue: [
+				| aboutToGoLive |
+
+				aboutToGoLive := todo at: i.
+				alreadyLive register allocation = aboutToGoLive register allocation ifTrue: [
+					aboutToGoLive register allocation: nil.
+				].
+
+				i := i - 1.
+			].
+		].
+	].
+
 	"Satisfy post-dependencies, i.e., 
 	  (i) move values from fixed (real) registers to desired 
 		  (virtual) registers and...
@@ -186,11 +230,6 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 	"
 	codegen cursor: insnIndex.
 	deps notEmptyOrNil ifTrue: [
-		"Compute 'live-across' intervals, that is intervals that are
-		 assigned before this instruction and used after this instruction."
-		liveAcross := Set new: live size.
-		live do: [:i | (i start < insnIndex and: [ i stop > insnIndex ]) ifTrue:[liveAcross add:i] ].
-
 		deps post do: [:dep |
 			dep isUnsatisfiedDependency ifTrue:[
 				"Move value from real register to its virtual register but only
@@ -325,7 +364,7 @@ TRReverseLinearScanRegisterAllocator >> allocateRegistersAt: insnIndex [
 						].
 					] ifFalse: [
 						"Ouch, what to do here?"
-						self notYetImplemented.
+						self splitRegister: conflicting at: insnIndex + 1.
 					].
 				] ifFalse: [
 					"There's no conflict, i.e., there's no live register currently allocated
@@ -403,6 +442,16 @@ TRReverseLinearScanRegisterAllocator >> pickRegister: interval [
 	 If there's no available register at this point, return `nil`. Caller
 	 is responsible for handling this case and schedule a spill / reload.
 	"
+
+	| preallocated |
+
+	"If interval is pre-allocated, return the preferred register if
+	 available."
+	preallocated := interval register allocation.
+	(availableRegisters includes: preallocated) ifTrue: [
+		^ preallocated
+	].
+
 	availableRegisters isEmpty ifTrue: [ ^ nil ].
 	allocatableRegisters do: [:rReg | 
 		(availableRegisters includes: rReg) ifTrue: [ 
@@ -427,7 +476,10 @@ TRReverseLinearScanRegisterAllocator >> pickSplit: interval [
 	 (and therefore spill) in order to allocate given (about to go live)
 	 `interval`.
 
-	 Preferably, choose among intervals that are not not defined not
+	 If the interval is pre-allocated then split the live interval
+	 currently allocated to the same physical register.
+
+	 Otherwise, choose among intervals that are not not defined not
 	 used at current position. If there's none such that, choose among
 	 ones that are used but not defined.
 
@@ -441,7 +493,16 @@ TRReverseLinearScanRegisterAllocator >> pickSplit: interval [
 		  in a Linear Scan Register Allocator
 	"
 
-	| candidates candidate candidatePrevUse |
+	| preallocated candidates candidate candidatePrevUse |
+
+	preallocated := interval register allocation.
+	preallocated notNil ifTrue: [
+		"Split the live interval currently allocated to the same register as
+		 pre-allocated interval."
+		candidate := live detect: [:each | each register allocation = preallocated ].
+		^ candidate
+	].
+
 
 	"1. Select candidates"
 	candidates := live reject: [:each | each isDefdOrUsedAt: interval stop ].
@@ -449,7 +510,7 @@ TRReverseLinearScanRegisterAllocator >> pickSplit: interval [
 	candidates := live reject: [:each | each isDefdAt: interval stop ].
 	].
 
-	"2. Among candidates, select the one one whose previous use/def
+	"1. Among candidates, select the one one whose previous use/def
 		is the furthest."
 	candidatePrevUse := SmallInteger maxVal.
 	candidate := nil.
@@ -464,6 +525,42 @@ TRReverseLinearScanRegisterAllocator >> pickSplit: interval [
 	].
 
 	^ candidate
+]
+
+{ #category : #allocation }
+TRReverseLinearScanRegisterAllocator >> preallocateRegister: interval [
+	"Pre-allocate register for given `interval`, that is, set its allocation to
+	 the preferred real register based on dependencies (if any)."
+
+	| deps |
+
+	"A virtual register may be defined (written) but never used
+	 (read). For example, result of an computation is never used
+	 and / or functions is called by the return value is not used."
+	interval lastUse notNil ifTrue: [
+		deps := (instructions at: interval lastUse) dependencies.
+		deps notNil ifTrue: [
+			| preferred |
+
+			preferred := deps pre getDependency: interval register.
+			preferred notNil ifTrue: [
+				self assert: preferred is: TRRealRegister.
+				interval register allocation: preferred.
+				^ self.
+			].
+		].
+	].
+	deps := (instructions at: interval firstDef) dependencies.
+	deps notNil ifTrue: [
+		| preferred |
+
+		preferred := deps post getDependency: interval register.
+		preferred notNil ifTrue: [
+			self assert: preferred is: TRRealRegister.
+			interval register allocation: preferred.
+			^ self.
+		].
+	].
 ]
 
 { #category : #allocation }
