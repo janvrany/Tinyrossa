@@ -30,7 +30,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install libz3-4 libz3-dev crossbuild-essential-riscv64 qemu-user gdb-multiarch crossbuild-essential-ppc64el
+          sudo apt-get install libz3-4 libz3-dev crossbuild-essential-riscv64 qemu-user gdb-multiarch crossbuild-essential-ppc64el mercurial
           # Following is needed because by default, libgdbs uses /usr/bin/gdb
           # which is not multiarch GDB! Nasty workaround, indeed.
           sudo cp /usr/bin/gdb-multiarch /usr/bin/gdb
