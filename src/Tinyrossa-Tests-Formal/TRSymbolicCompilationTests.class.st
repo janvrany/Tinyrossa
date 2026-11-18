@@ -30,10 +30,18 @@ TRSymbolicCompilationTests >> assertUnsafe: prog [
 	] runReader: #bvLengthInference initialState: BvLengthInference new
 ]
 
+{ #category : #accessing }
+TRSymbolicCompilationTests >> parametersIterator [
+	^ super parametersIterator ,
+		(self parameter: #checkTermination  values: { true . false })
+]
+
 { #category : #running }
 TRSymbolicCompilationTests >> setUp [
 	compilation := TRCompilation forTarget: TRSymbolic default.
+	compilation config checkTermination: (testParameters at: #checkTermination)
 ]
+
 { #category : #accessing }
 TRSymbolicCompilationTests >> target [
 	^ TRSymbolic default

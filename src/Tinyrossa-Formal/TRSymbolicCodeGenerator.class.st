@@ -113,16 +113,14 @@ TRSymbolicCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	super initializeWithCompilation: aTRCompilation.
 	
 	prog := Prog new.
-	metric := TerminationMetric with: (DecidableRefinement text: '(100 toInt)').
 	
-	"
-	prog := Prog
-					quals: Set new
-					meas: #()
-					expr: (ΛExpression int: 0)
-					data: #()
-					options: #()
-	"
+	self compilation config checkTermination ifTrue:[
+		prog options: (prog options , #(#'check-termination')).
+
+		metric := TerminationMetric with: (DecidableRefinement text: '(100 toInt)').
+	] ifFalse:[
+		metric := nil.
+	]
 ]
 
 { #category : #accessing }
