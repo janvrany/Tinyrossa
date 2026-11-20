@@ -4005,7 +4005,7 @@ TRILSpecification >> ineg [
 
 { #category : #initialization }
 TRILSpecification >> initialize [
-	prelude := Prog empty.
+	prelude := Prog new.
 	prelude options: #(#'check-termination').
 	"
 	prelude := ΛκParser parse:'
@@ -5550,7 +5550,7 @@ TRILSpecification >> prog [
 	^TRILOpcodes all inject: prelude into: [ :all :opcode |
 		| spec |
 
-		spec := [ self specify: opcode ] on: ShouldBeImplemented do:[:e| Prog empty ].
+		spec := [ self specify: opcode ] on: ShouldBeImplemented do:[:e| Prog new ].
 		all , spec.
 	]
 

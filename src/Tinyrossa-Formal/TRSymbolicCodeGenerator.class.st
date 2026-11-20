@@ -112,7 +112,7 @@ TRSymbolicCodeGenerator >> generateCodeForBlock: block [
 TRSymbolicCodeGenerator >> initializeWithCompilation: aTRCompilation [
 	super initializeWithCompilation: aTRCompilation.
 	
-	prog := Prog empty.	
+	prog := Prog new.
 	metric := TerminationMetric with: (DecidableRefinement text: '(100 toInt)').
 	
 	"
